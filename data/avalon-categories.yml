@@ -1,0 +1,53 @@
+# Config file for scripts/orocos/task_models to categorize the components
+# available for Avalon
+Deprecated:
+    - prosilica_master
+    - frame_multiplexer
+    - manual_logger
+    - speed_controller
+    - avalon_control::SpeedControlTask
+
+Drivers:
+    - low_level_driver
+    - dynamixel
+    - motcon_controller
+    - sonar_driver
+    - acoustic_modem
+
+    - "Image Processing":
+        - camera
+        - frame_demultiplexer
+        - pipeline_detector
+        - buoy_detector
+
+    - IMU:
+        - ifg
+        - igc_raw_driver
+        - igc_driver
+        - dfki_imu
+
+"Experimental Setup":
+    - force_measurment
+    - forcegauge
+
+"Localization and Mapping":
+    - state_estimator
+    - laser_calibration
+    - laser
+
+GUI:
+    - movement_gui
+    - sonar_gui
+    - imu_visualization
+    - image_viewer
+    - frame_viewer
+    - imu_visualisation
+
+Control:
+    - avalon_control::MotionControlTask
+    - laser_servoing
+    - pipeline_follower
+    - sauce_control
+    
+Simulation:
+    - simulation
