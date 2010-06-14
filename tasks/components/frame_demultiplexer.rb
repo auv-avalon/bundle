@@ -1,11 +1,15 @@
 class FrameDemultiplexer::FrameDemultiplexerTask
     provides DServ::ImageSource
     provides DServ::LaserImagePairSource
+
+    def configure
+	orogen_task.used_sequences = State.config.demultiplexer_drop_rate
+    end
 end
 
 composition 'laser_image_demultiplexer' do
     add DServ::ImageSource, :as => 'multiplexed_images'
-    demultiplexer = add FrameDemultiplexer::FrameDemultiplexerTask
+    demultiplexer = add FrameDemultiplexer::FrameDemultiplexerTask, :as => 'demux'
     autoconnect
 
     export demultiplexer.oframe, :as => 'frame'
