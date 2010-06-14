@@ -6,6 +6,8 @@ Deprecated:
     - manual_logger
     - speed_controller
     - avalon_control::SpeedControlTask
+    - igc_raw_driver
+    - igc_driver
 
 Drivers:
     - low_level_driver
@@ -22,8 +24,6 @@ Drivers:
 
     - IMU:
         - ifg
-        - igc_raw_driver
-        - igc_driver
         - dfki_imu
 
 "Experimental Setup":
