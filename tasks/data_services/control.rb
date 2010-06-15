@@ -1,3 +1,5 @@
+import_types_from 'base'
+
 data_service 'Driver'
 data_service 'AUVDriver', :provides => Driver do
     output_port 'motion_commands', '/base/AUVMotionCommand'
