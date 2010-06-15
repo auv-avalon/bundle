@@ -17,11 +17,11 @@ Robot.devices do
     camera_config.height         = 480
 
     device(DfkiImu, :as => 'imu').
-        device_id('/dev/ttyUSB0').
+        device_id('/dev/dfki_imu').
         period(0.01)
 
     device(AvalonLowLevel, :as => 'lowlevel').
-        device_id("/dev/ttyUSB2").
+        device_id("/dev/lowlevel").
         period(0.008).
         configure do |p|
             p.longExposure  = 12000
@@ -29,10 +29,11 @@ Robot.devices do
         end
 
     device(IfgFOG, :as => 'fog').
-        period(0.1)
+        period(0.1).
+        device_id('/dev/ifg')
 
     device(Motcon, :as => 'motors').
-        device_id("/dev/ttyUSB3")
+        device_id("/dev/motcon")
 
     device(Camera, :as => 'front_camera').
         device_id('33186').
