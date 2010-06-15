@@ -2,9 +2,6 @@
 Roby.app.use_deployments_from "avalon_front"
 Roby.app.use_deployments_from "avalon_back" #, :on => 'back'
 
-# TODO: can we derive exposure values from one "master" one ?
-
-
 State.config.demultiplexer_drop_rate = 1
 
 Robot.devices do
