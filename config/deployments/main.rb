@@ -12,3 +12,5 @@ add(LaserImageDemultiplexer, :as => 'front_image_acquisition').
 # Define servoing deployments
 define('pipeline_following', AUVControlLoop).
     use PipelineFollower::Task, 'bottom_camera'
+
+modality_selection AUVControlLoop, 'pipeline_following'
