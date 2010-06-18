@@ -1,7 +1,13 @@
-Orocos::CORBA.name_service = 'avalon-rear'
-Roby.app.orocos_process_server 'back', 'avalon-rear'
-Roby.app.use_deployments_from "avalon_front"
-Roby.app.use_deployments_from "avalon_back", :on => 'back'
+LOCAL = true
+if LOCAL
+    Roby.app.use_deployments_from "avalon_front"
+    Roby.app.use_deployments_from "avalon_back"
+else
+    Orocos::CORBA.name_service = 'avalon-rear'
+    Roby.app.orocos_process_server 'back', 'avalon-rear'
+    Roby.app.use_deployments_from "avalon_front"
+    Roby.app.use_deployments_from "avalon_back", :on => 'back'
+end
 
 State.config.demultiplexer_drop_rate = 1
 
