@@ -1,0 +1,13 @@
+<package>
+    <description brief="Roby controller for the Sauc-E 2010">
+    </description>
+    <author>Sylvain Joyeux/sylvain.joyeux@dfki.de</author>
+    <copyright>
+        DFKI/robotik@dfki.de
+    </copyright>
+    <license>LGPL v2 or later</license>
+
+    <depend package="planning/roby" />
+    <depend package="orocos/orocos.rb" />
+</package>
+
