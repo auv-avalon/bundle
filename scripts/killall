@@ -1,0 +1,7 @@
+#! /bin/sh
+killall -9 front_image_acquisition
+killall -9 bottom_camera
+killall -9 ruby19
+killall -9 pipeline_detector
+killall -9 low_level
+
