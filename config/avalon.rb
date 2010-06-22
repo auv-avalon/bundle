@@ -1,4 +1,4 @@
-LOCAL = true
+LOCAL = false
 if LOCAL
     Roby.app.use_deployments_from "avalon_front"
     Roby.app.use_deployments_from "avalon_back"
@@ -39,6 +39,14 @@ Robot.devices do
     device(Motcon, :as => 'motors').
         device_id("/dev/motcon")
 
+    device(MicronSonar, :as => 'sonar').
+        period(0.1).
+        device_id('/dev/sonar')
+
+    device(TritechModem, :as => 'modem').
+        period(0.1).
+        device_id('/dev/ttyS0')
+
     device(Camera, :as => 'front_camera').
         device_id('33186').
         period(0.03).
@@ -70,6 +78,5 @@ Robot.devices do
             p.log_interval_in_sec = 5
             p.mode = 'Master'
         end
-
 end
 
