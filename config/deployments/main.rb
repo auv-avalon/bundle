@@ -1,8 +1,8 @@
 # Create the pose estimator and define it as being the default for pose
 # estimation
 pose_estimator = add(PoseEstimator).
-    use 'estimator' => StateEstimator::Task,
-        'imu' => DfkiImu::Task
+    use 'estimator' => AvalonPoseEstimator::Task,
+        'imu' => XsensImu::Task
 use Pose => pose_estimator
 
 Roby.app.orocos_engine.robot.devices.each_key do |name|
