@@ -21,7 +21,15 @@ Robot.devices do
 
     device(DfkiImu, :as => 'imu').
         device_id('/dev/dfki_imu').
-        period(0.01)
+        period(0.018)
+
+    device(XsensImu).
+        period(0.010).
+        device_id("/dev/xsens").
+	configure do |p|
+	    p.scenario = 'machine_nomagfield'
+	    p.max_timeouts = 5
+	end
 
     device(AvalonLowLevel, :as => 'lowlevel').
         device_id("/dev/lowlevel").
@@ -32,7 +40,7 @@ Robot.devices do
         end
 
     device(IfgFOG, :as => 'fog').
-        period(0.1).
+        period(0.01).
         device_id('/dev/ifg')
 
     device(Motcon, :as => 'motors').
@@ -42,9 +50,9 @@ Robot.devices do
         period(0.1).
         device_id('/dev/sonar')
 
-    device(TritechModem, :as => 'modem').
-        period(0.1).
-        device_id('/dev/ttyS0')
+    #device(TritechModem, :as => 'modem').
+    #    period(0.1).
+    #    device_id('/dev/ttyS0')
 
     device(Camera, :as => 'front_camera').
         device_id('33186').
