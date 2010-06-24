@@ -3,7 +3,6 @@ if LOCAL
     Roby.app.use_deployments_from "avalon_front"
     Roby.app.use_deployments_from "avalon_back"
 else
-    Orocos::CORBA.name_service = 'avalon-rear'
     Roby.app.orocos_process_server 'back', 'avalon-rear'
     Roby.app.use_deployments_from "avalon_front"
     Roby.app.use_deployments_from "avalon_back", :on => 'back'

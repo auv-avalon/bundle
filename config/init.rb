@@ -5,6 +5,7 @@
 # Roby.app.using 'fault_injection'
 # Roby.app.using 'subsystems'
 Roby.app.using 'orocos'
+Orocos::CORBA.name_service = 'avalon-rear'
 
 ##############################
 # Sets some configuration options
