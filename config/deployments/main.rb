@@ -5,6 +5,10 @@ pose_estimator = add(PoseEstimator).
         'imu' => DfkiImu::Task
 use Pose => pose_estimator
 
+Roby.app.orocos_engine.robot.devices.each_key do |name|
+    add_mission(name)
+end
+
 # Create the demultiplexer for the front camera
 add(LaserImageDemultiplexer, :as => 'front_image_acquisition').
     use 'front_camera'
