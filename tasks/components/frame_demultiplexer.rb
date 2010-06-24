@@ -3,6 +3,7 @@ class FrameDemultiplexer::FrameDemultiplexerTask
     provides DServ::LaserImagePairSource
 
     def configure
+        super
 	orogen_task.used_sequences = State.config.demultiplexer_drop_rate
     end
 end
