@@ -53,6 +53,10 @@ Robot.devices do
         period(0.1).
         device_id('/dev/sonar')
 
+    device(Dynamixel, :as => 'laser_servo').
+        period(0.1).
+        device_id('/dev/dynamixedynamixdynamixel
+
     #device(TritechModem, :as => 'modem').
     #    period(0.1).
     #    device_id('/dev/ttyS0')
