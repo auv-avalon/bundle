@@ -12,7 +12,13 @@ Compositions::PoseEstimator.specialize 'estimator', StateEstimator::Task do
 
     estimator = self['estimator']
 
-    connect imu.orientation_samples => estimator.orientation_samples
-    autoconnect
+    connect fog.rotation => estimator.fog_samples,
+    	:type => :buffer, :size => 20
+    connect imu.orientation_samples => estimator.orientation_samples,
+    	:type => :buffer, :size => 20
+    connect imu_sensors.compensated_sensors => estimator.imu_sensor_samples,
+    	:type => :buffer, :size => 20
+    connect depth.depth_samples => estimator.depth_samples,
+    	:type => :buffer, :size => 20
 end
 

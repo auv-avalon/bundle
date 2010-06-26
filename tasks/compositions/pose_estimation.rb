@@ -1,4 +1,6 @@
 composition 'PoseEstimator' do
+    abstract
+
     # This is an empty shell since we don't have a generic pose estimator. It is
     # specialized for each pose estimator 
 
