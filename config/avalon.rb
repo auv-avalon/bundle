@@ -21,7 +21,10 @@ Robot.devices do
 
     device(DfkiImu, :as => 'imu').
         device_id('/dev/dfki_imu').
-        period(0.018)
+        period(0.018).
+	configure do |p|
+	    p.max_timeouts = 100
+	end
 
     device(XsensImu).
         period(0.010).
