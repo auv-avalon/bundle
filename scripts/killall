@@ -7,4 +7,6 @@ killall -9 low_level
 killall -9 ruby1.9.1
 killall -9 ruby19
 killall -9 ruby18
+killall -9 front_camera
+killall -9 xsens
 
