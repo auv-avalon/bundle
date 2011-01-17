@@ -1,0 +1,147 @@
+0.000 [ Info   ][Logger] No ORO_LOGLEVEL environment variable set.
+0.000 [ Info   ][Logger]  OROCOS version '2.2.0' compiled with GCC 4.4.5. Running in GNU/Linux.
+0.000 [ Info   ][Logger] Orocos Logging Activated at level : [ Warning] ( 4 ) 
+0.000 [ Info   ][Logger] Reference System Time is : 1295255171588375279 ticks ( 1.29526e+09 seconds ).
+0.000 [ Info   ][Logger] Logging is relative to this time.
+0.029 [ Info   ][TypekitRepository::Import] Loading Typekit /orogen/base.
+0.030 [ Info   ][Logger] Loaded RTT Plugin '/orogen/base' from 'base-typekit-gnulinux'
+0.035 [ Info   ][TypekitRepository::Import] Loading Transport CORBA:///orogen/base.
+0.035 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /RTT/extras/ReadOnlyPointer</base/samples/frame/Frame>
+0.035 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /RTT/extras/ReadOnlyPointer</base/samples/frame/FramePair>
+0.035 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /base/AUVMotionCommand
+0.035 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /base/AUVPositionCommand
+0.035 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /base/Matrix4d
+0.035 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /base/MotionCommand2D
+0.035 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /base/Pose
+0.035 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /base/Time
+0.035 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /base/Vector3d
+0.035 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /base/Waypoint
+0.035 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /base/actuators/Command
+0.035 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /base/actuators/Status
+0.035 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /base/geometry/Spline<1>
+0.035 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /base/geometry/Spline<3>
+0.035 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /base/samples/IMUSensors
+0.035 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /base/samples/LaserScan
+0.035 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /base/samples/RigidBodyAcceleration
+0.035 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /base/samples/RigidBodyState
+0.035 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /base/samples/frame/Frame
+0.035 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /base/samples/frame/FramePair
+0.035 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /base/samples/frame/frame_mode_t
+0.035 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /std/string
+0.035 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /std/vector</base/Waypoint>
+0.035 [ Info   ][TypekitRepository::Import] Transport CORBA did not install a fallback handler for 'unknown_t'.
+0.035 [ Info   ][Logger] Loaded RTT Plugin '/orogen/base/CORBA' from 'base-transport-corba-gnulinux'
+0.055 [ Info   ][TypekitRepository::Import] Loading Transport Typelib:///orogen/base.
+0.055 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /RTT/extras/ReadOnlyPointer</base/samples/frame/Frame>
+0.055 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /RTT/extras/ReadOnlyPointer</base/samples/frame/FramePair>
+0.055 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /base/AUVMotionCommand
+0.055 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /base/AUVPositionCommand
+0.055 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /base/Matrix4d
+0.055 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /base/MotionCommand2D
+0.055 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /base/Pose
+0.055 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /base/Time
+0.055 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /base/Vector3d
+0.055 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /base/Waypoint
+0.055 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /base/actuators/Command
+0.055 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /base/actuators/Status
+0.055 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /base/geometry/Spline<1>
+0.055 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /base/geometry/Spline<3>
+0.055 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /base/samples/IMUSensors
+0.055 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /base/samples/LaserScan
+0.055 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /base/samples/RigidBodyAcceleration
+0.055 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /base/samples/RigidBodyState
+0.055 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /base/samples/frame/Frame
+0.055 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /base/samples/frame/FramePair
+0.055 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /base/samples/frame/frame_mode_t
+0.055 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /std/string
+0.055 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /std/vector</base/Waypoint>
+0.055 [ Info   ][TypekitRepository::Import] Transport Typelib did not install a fallback handler for 'unknown_t'.
+0.055 [ Info   ][Logger] Loaded RTT Plugin '/orogen/base/TYPELIB' from 'base-transport-typelib-gnulinux'
+0.078 [ Info   ][TypekitRepository::Import] Loading Typekit /orogen/low_level_driver.
+0.078 [ Info   ][Logger] Loaded RTT Plugin '/orogen/low_level_driver' from 'low_level_driver-typekit-gnulinux'
+0.081 [ Info   ][TypekitRepository::Import] Loading Transport CORBA:///orogen/low_level_driver.
+0.081 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /controlData/DebugLED
+0.081 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /controlData/LightValue
+0.081 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /controlData/LongExposure
+0.081 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /controlData/ShortExposure
+0.081 [ Info   ][TypekitRepository::Import] Transport CORBA did not install a fallback handler for 'unknown_t'.
+0.081 [ Info   ][Logger] Loaded RTT Plugin '/orogen/low_level_driver/CORBA' from 'low_level_driver-transport-corba-gnulinux'
+0.084 [ Info   ][TypekitRepository::Import] Loading Transport Typelib:///orogen/low_level_driver.
+0.084 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /controlData/DebugLED
+0.084 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /controlData/LightValue
+0.084 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /controlData/LongExposure
+0.084 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /controlData/ShortExposure
+0.084 [ Info   ][TypekitRepository::Import] Transport Typelib did not install a fallback handler for 'unknown_t'.
+0.084 [ Info   ][Logger] Loaded RTT Plugin '/orogen/low_level_driver/TYPELIB' from 'low_level_driver-transport-typelib-gnulinux'
+0.100 [ Info   ][TypekitRepository::Import] Loading Typekit /orogen/xsens_imu.
+0.100 [ Info   ][Logger] Loaded RTT Plugin '/orogen/xsens_imu' from 'xsens_imu-typekit-gnulinux'
+0.101 [ Info   ][TypekitRepository::Import] Loading Transport CORBA:///orogen/xsens_imu.
+0.101 [ Info   ][TypekitRepository::Import] Transport CORBA did not install a fallback handler for 'unknown_t'.
+0.101 [ Info   ][Logger] Loaded RTT Plugin '/orogen/xsens_imu/CORBA' from 'xsens_imu-transport-corba-gnulinux'
+0.102 [ Info   ][TypekitRepository::Import] Loading Transport Typelib:///orogen/xsens_imu.
+0.102 [ Info   ][TypekitRepository::Import] Transport Typelib did not install a fallback handler for 'unknown_t'.
+0.102 [ Info   ][Logger] Loaded RTT Plugin '/orogen/xsens_imu/TYPELIB' from 'xsens_imu-transport-typelib-gnulinux'
+0.124 [ Info   ][TypekitRepository::Import] Loading Typekit /orogen/dsp3000.
+0.125 [ Info   ][Logger] Loaded RTT Plugin '/orogen/dsp3000' from 'dsp3000-typekit-gnulinux'
+0.127 [ Info   ][TypekitRepository::Import] Loading Transport CORBA:///orogen/dsp3000.
+0.127 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /sensorData/dsp3000Config
+0.127 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /sensorData/dsp3000Reading
+0.127 [ Info   ][TypekitRepository::Import] Transport CORBA did not install a fallback handler for 'unknown_t'.
+0.127 [ Info   ][Logger] Loaded RTT Plugin '/orogen/dsp3000/CORBA' from 'dsp3000-transport-corba-gnulinux'
+0.144 [ Info   ][TypekitRepository::Import] Loading Transport Typelib:///orogen/dsp3000.
+0.144 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /sensorData/dsp3000Config
+0.144 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /sensorData/dsp3000Reading
+0.144 [ Info   ][TypekitRepository::Import] Transport Typelib did not install a fallback handler for 'unknown_t'.
+0.144 [ Info   ][Logger] Loaded RTT Plugin '/orogen/dsp3000/TYPELIB' from 'dsp3000-transport-typelib-gnulinux'
+0.184 [ Info   ][TypekitRepository::Import] Loading Typekit /orogen/sonar_driver.
+0.184 [ Info   ][Logger] Loaded RTT Plugin '/orogen/sonar_driver' from 'sonar_driver-typekit-gnulinux'
+0.187 [ Info   ][TypekitRepository::Import] Loading Transport CORBA:///orogen/sonar_driver.
+0.187 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /sensorConfig/SonarConfig
+0.187 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /sensorData/GroundDistanceReading
+0.187 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /sensorData/Sonar
+0.187 [ Info   ][TypekitRepository::Import] Transport CORBA did not install a fallback handler for 'unknown_t'.
+0.187 [ Info   ][Logger] Loaded RTT Plugin '/orogen/sonar_driver/CORBA' from 'sonar_driver-transport-corba-gnulinux'
+0.191 [ Info   ][TypekitRepository::Import] Loading Transport Typelib:///orogen/sonar_driver.
+0.191 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /sensorConfig/SonarConfig
+0.191 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /sensorData/GroundDistanceReading
+0.191 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /sensorData/Sonar
+0.191 [ Info   ][TypekitRepository::Import] Transport Typelib did not install a fallback handler for 'unknown_t'.
+0.191 [ Info   ][Logger] Loaded RTT Plugin '/orogen/sonar_driver/TYPELIB' from 'sonar_driver-transport-typelib-gnulinux'
+0.286 [ Info   ][TypekitRepository::Import] Loading Typekit /orogen/avalon_control.
+0.286 [ Info   ][Logger] Loaded RTT Plugin '/orogen/avalon_control' from 'avalon_control-typekit-gnulinux'
+0.292 [ Info   ][TypekitRepository::Import] Loading Transport CORBA:///orogen/avalon_control.
+0.292 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /avalon_control/MotionControllerState
+0.292 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /motor_controller/PIDSettings
+0.292 [ Info   ][TypekitRepository::Import] Transport CORBA did not install a fallback handler for 'unknown_t'.
+0.292 [ Info   ][Logger] Loaded RTT Plugin '/orogen/avalon_control/CORBA' from 'avalon_control-transport-corba-gnulinux'
+0.295 [ Info   ][TypekitRepository::Import] Loading Transport Typelib:///orogen/avalon_control.
+0.295 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /avalon_control/MotionControllerState
+0.295 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /motor_controller/PIDSettings
+0.295 [ Info   ][TypekitRepository::Import] Transport Typelib did not install a fallback handler for 'unknown_t'.
+0.295 [ Info   ][Logger] Loaded RTT Plugin '/orogen/avalon_control/TYPELIB' from 'avalon_control-transport-typelib-gnulinux'
+0.298 [ Info   ][TypekitRepository::Import] Loading Typekit /orogen/hbridge.
+0.298 [ Info   ][Logger] Loaded RTT Plugin '/orogen/hbridge' from 'hbridge-typekit-gnulinux'
+0.298 [ Info   ][TypekitRepository::Import] Loading Transport CORBA:///orogen/hbridge.
+0.298 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /hbridge/Error
+0.298 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /hbridge/FullConfiguration
+0.298 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /std/vector</int32_t>
+0.298 [ Info   ][TypekitRepository::Import] Transport CORBA did not install a fallback handler for 'unknown_t'.
+0.298 [ Info   ][Logger] Loaded RTT Plugin '/orogen/hbridge/CORBA' from 'hbridge-transport-corba-gnulinux'
+0.303 [ Info   ][TypekitRepository::Import] Loading Transport Typelib:///orogen/hbridge.
+0.303 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /hbridge/Error
+0.303 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /hbridge/FullConfiguration
+0.303 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /std/vector</int32_t>
+0.303 [ Info   ][TypekitRepository::Import] Transport Typelib did not install a fallback handler for 'unknown_t'.
+0.303 [ Info   ][Logger] Loaded RTT Plugin '/orogen/hbridge/TYPELIB' from 'hbridge-transport-typelib-gnulinux'
+0.354 [ Info   ][TypekitRepository::Import] Loading Typekit /orogen/canbus.
+0.354 [ Info   ][Logger] Loaded RTT Plugin '/orogen/canbus' from 'canbus-typekit-gnulinux'
+0.357 [ Info   ][TypekitRepository::Import] Loading Transport CORBA:///orogen/canbus.
+0.357 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /canbus/Message
+0.357 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /canbus/Statistics
+0.357 [ Info   ][TypekitRepository::Import] Transport CORBA did not install a fallback handler for 'unknown_t'.
+0.357 [ Info   ][Logger] Loaded RTT Plugin '/orogen/canbus/CORBA' from 'canbus-transport-corba-gnulinux'
+0.361 [ Info   ][TypekitRepository::Import] Loading Transport Typelib:///orogen/canbus.
+0.361 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /canbus/Message
+0.361 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /canbus/Statistics
+0.361 [ Info   ][TypekitRepository::Import] Transport Typelib did not install a fallback handler for 'unknown_t'.
+0.361 [ Info   ][Logger] Loaded RTT Plugin '/orogen/canbus/TYPELIB' from 'canbus-transport-typelib-gnulinux'
