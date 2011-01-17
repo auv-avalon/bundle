@@ -4,29 +4,32 @@ add_mission Minimal
 class LowLevelDriver::LowLevelTask
   driver_for "LowLevel"
   def configure
+    robot_def = robot_device
     orogen_task.port = "/dev/lowlevel"
     period = (robot_def.period * 1000).round
-    orogen_task.device_period = period
+    #orogen_task.device_period = period
   end
 end
 
 class XsensImu::Task 
   driver_for "Xsens"
   def configure
+    robot_def = robot_device
     orogen_task.port = "/dev/xsens"
     orogen_task.scenario = "human"
     orogen_task.max_timeouts = 5
     period = (robot_def.period * 1000).round
-    orogen_task.device_period = period
+    #orogen_task.device_period = period
   end
 end
 
 class Dsp3000::Task 
   driver_for "Dsp3000"
   def configure
+    robot_def = robot_device
     orogen_task.port = "/dev/fog"
     period = (robot_def.period * 1000).round
-    orogen_task.device_period = period
+    #orogen_task.device_period = period
   end
 end
 
