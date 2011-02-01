@@ -3,6 +3,7 @@
 
 Roby.app.use_deployments_from "avalon_back"
 
+State.orocos.disable_logging
 
 Robot.devices do
   device(LowLevel, :as => 'depth').
