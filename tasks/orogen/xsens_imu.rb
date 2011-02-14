@@ -1,5 +1,9 @@
-class DfkiImu::Task
-    driver_for 'DfkiImu',  :provides => [Orientation, CompensatedIMUSensors]
+class XsensImu::Task
+    driver_for 'Dev::XsensImu' do
+        provides Srv::Orientation
+        provides Srv::CalibratedIMUSensors
+    end
+
     def configure
         super
         orogen_task.port = robot_device.device_id
@@ -17,16 +21,14 @@ class DfkiImu::Task
 
     poll do
         if sample = orientation
-            State.dfki_imu.orientation = sample
+            State.xsens_imu.orientation = sample
         end
     end
 
     on :stop do |_|
-        if State.dfki_imu.orientation?
-            State.dfki_imu.delete(:orientation)
+        if State.xsens_imu.orientation?
+            State.xsens_imu.delete(:orientation)
         end
     end
 end
-
-
 

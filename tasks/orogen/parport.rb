@@ -1,7 +1,11 @@
 com_bus_type 'HardwareTimestamps', :message_type => '/parport/StateChange', :override_policy => false
+com_bus_type 'Parport' do
+    provides Dev::HardwareTimestamps
+end
 
 class Parport::Task
-    driver_for 'Parport', :provides => HardwareTimestamps
+    driver_for Dev::Parport
+
     def configure
         super
         bus_name = self.parport_name

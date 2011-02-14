@@ -1,5 +1,7 @@
 class Vicon::Task
-    driver_for 'Vicon', :provides => Pose
+    driver_for 'Vicon' do
+        provides Srv::Pose
+    end
 
     def configure
         super

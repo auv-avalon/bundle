@@ -1,5 +1,5 @@
 class VisualServoing::Task
-    provides DataServices::Navigator
+    provides Srv::Navigator
 
     def configure
         super

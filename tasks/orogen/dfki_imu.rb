@@ -1,5 +1,8 @@
-class XsensImu::Task
-    driver_for 'XsensImu', :provides => [Orientation, CalibratedIMUSensors]
+class DfkiImu::Task
+    driver_for 'Dev::DfkiImu' do
+        provides Srv::Orientation
+        provides Srv::CompensatedIMUSensors
+    end
 
     def configure
         super
@@ -18,14 +21,16 @@ class XsensImu::Task
 
     poll do
         if sample = orientation
-            State.xsens_imu.orientation = sample
+            State.dfki_imu.orientation = sample
         end
     end
 
     on :stop do |_|
-        if State.xsens_imu.orientation?
-            State.xsens_imu.delete(:orientation)
+        if State.dfki_imu.orientation?
+            State.dfki_imu.delete(:orientation)
         end
     end
 end
+
+
 

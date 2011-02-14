@@ -20,7 +20,7 @@ log:
   #
   # The default is stats
   #
-  # events: true
+  events: true
   
   # Set to false to disables the log server and true to enable it (it is enabled by
   # default). The log server allows to display the controller state remotely by using the

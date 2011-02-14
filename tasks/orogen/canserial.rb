@@ -1,8 +1,16 @@
 class Canserial::Task
     canserial = driver_for 'CanSerial'
-    gpios = canserial.dynamic_slaves 'GPIOWatch' do
-        output_port name, "/canserial/GpioInput"
+    gpios = canserial.dynamic_slaves 'GPIOWatch'
+
+    canserial.dynamic_slaves 'GPIOWatchFE' do
+        output_port "f#{name}", "/base/Time"
+        provides Srv::HWTimestamp, 'timestamps' => "f#{name}"
     end
+    canserial.dynamic_slaves 'GPIOWatchRE' do
+        output_port "r#{name}", "/base/Time"
+        provides Srv::HWTimestamp, 'timestamps' => "r#{name}"
+    end
+
     gpios.extend_device_configuration do
         dsl_attribute 'pin' do |value|
             value = value.to_str
@@ -12,13 +20,16 @@ class Canserial::Task
             value
         end
 
-        def on_both_edges
+        def on_falling_edge(name)
             @on_falling_edge = true
-            @on_rising_edge = true
+            master_device.slave(Devices::GPIOWatchFE, :as => name)
             self
         end
-        def on_falling_edge; @on_falling_edge = true; self end
-        def on_rising_edge; @on_rising_edge = true; self end
+        def on_rising_edge(name)
+            @on_rising_edge = true
+            master_device.slave(Devices::GPIOWatchRE, :as => name)
+            self
+        end
 
         def pull_none; @pull = 'PullNone'; self end
         def pull_up;   @pull = 'PullUp';   self end

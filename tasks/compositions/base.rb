@@ -1,12 +1,12 @@
 composition 'ControlLoop' do
     abstract
 
-    add Actuators
-    add ActuatorController, :as => 'controller'
-    add Command
+    add Srv::Actuators
+    add Srv::ActuatorController, :as => 'controller'
+    add Srv::Command
 
     # Specialize for the controller types that are defined in base
-    specialize 'controller' => Motion2DController, 'command' => Motion2DCommand
+    specialize 'controller' => Srv::Motion2DController, 'command' => Srv::Motion2DCommand
     autoconnect
 end
 

@@ -1,6 +1,6 @@
 class Control::PIVController
-    data_service Motion2DController
-    data_service FourWheelController
+    provides Srv::Motion2DController
+    provides Srv::FourWheelController
 end
 
 class Control::PIVController

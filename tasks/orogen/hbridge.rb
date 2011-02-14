@@ -6,7 +6,7 @@ class Hbridge::Task
         output_port "errors_#{name}", "/hbridge/Error"
         input_port  "cmd_#{name}",    "/base/actuators/Command"
         output_port "status_#{name}", "/base/actuators/Status"
-        provides Actuators, "status" => "status_#{name}", "command" => "cmd_#{name}"
+        provides Srv::Actuators, "status" => "status_#{name}", "command" => "cmd_#{name}"
     end
     hbridges.extend_device_configuration do
         dsl_attribute :select_ids do |*args|

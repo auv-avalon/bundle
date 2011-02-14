@@ -22,9 +22,9 @@ class CorridorNavigation::ServoingTask
 end
 
 composition 'CorridorServoing' do
-    add LaserRangeFinder
+    add Srv::LaserRangeFinder
     add(Compositions::ControlLoop).use('command' => TrajectoryFollower::Task)
-    add RelativePose, :as => 'pose'
+    add Srv::RelativePose, :as => 'pose'
     add CorridorNavigation::ServoingTask
     autoconnect
 end

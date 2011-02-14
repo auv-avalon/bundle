@@ -1,9 +1,9 @@
 class Skid4Control::Controller
-    data_service ActuatorController
+    provides Srv::ActuatorController
 end
 
 class Skid4Control::SimpleController
-    data_service Motion2DController
+    provides Srv::Motion2DController
 
     def configure
         super
@@ -14,7 +14,7 @@ class Skid4Control::SimpleController
 end
 
 class Skid4Control::FourWheelController
-    data_service FourWheelController
+    provides Srv::FourWheelController
 end
 
 

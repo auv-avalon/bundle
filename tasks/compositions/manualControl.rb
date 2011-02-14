@@ -9,13 +9,15 @@ using_task_library "sonar_driver"
 using_task_library "avalon_control"
 using_task_library "canbus"
 using_task_library "hbridge"
-
+using_task_library "sysmon"
+using_task_library "controldev"
+using_task_library "raw_control_command_converter"
 
 composition "PoseEstimation" do
 	
 	lowlevel = add LowLevelDriver::LowLevelTask, :as => 'lowlevel'
 	#xsens = add XsensImu::Task, :as => 'imu'
-	add Orientation#, :as => 'imu'
+	add Srv::Orientation#, :as => 'imu'
 	fog = add Dsp3000::Task, :as => 'fog'
 	stateestimator = add StateEstimator::Task, :as => 'stateestimator'
 
@@ -36,7 +38,10 @@ end
 composition "ControlLoopAvalon" do
 	add DataServices::Pose
 	motion = add AvalonControl::MotionControlTask, :as => 'motioncontrol'
-	hbridge = add Hbridge::Task, :as => 'hbridge'
+	hbridge = add Hbridge::Task, :as => "HBridge"
+	add DataServices::RawCommand 
+	#controldev = add Controldev::Remote 
+	rcc = add RawControlCommandConverter::Task, :as => "controlconverter"
 	autoconnect
 end
 

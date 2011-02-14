@@ -1,5 +1,5 @@
 class TrajectoryFollower::Task
-    provides Motion2DCommand
+    provides Srv::Motion2DCommand
 
     def configure
         super
@@ -45,9 +45,9 @@ class TrajectoryFollower::Task
     end
 end
 
-Compositions::ControlLoop.specialize Command => TrajectoryFollower::Task do
-    add Pose
-    export self['command'].trajectory
+Compositions::ControlLoop.specialize Srv::Command => TrajectoryFollower::Task do
+    add Srv::Pose
+    export command.trajectory
     autoconnect
 end
 

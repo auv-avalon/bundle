@@ -56,7 +56,9 @@ end
 #         set('dynamics_model', :WALKING)
 #
 class Gps::MB500Task
-    driver_for 'MB500', :provides => Position
+    driver_for 'Dev::MB500' do
+        provides Srv::Position
+    end
 
     def configure
         super

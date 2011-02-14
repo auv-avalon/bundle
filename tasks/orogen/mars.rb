@@ -1,6 +1,12 @@
 
 class Mars::Task
-    driver_for 'Mars', :provides => [Actuators, Position, Orientation, CalibratedIMUSensors, LaserRangeFinder]
+    driver_for 'Mars' do
+        provides Srv::Actuators
+        provides Srv::Position
+        provides Srv::Orientation
+        provides Srv::CalibratedIMUSensors
+        provides Srv::LaserRangeFinder
+    end
 
     def configure        
         super

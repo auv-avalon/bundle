@@ -1,5 +1,5 @@
 class PoseEstimator::Task
-    provides Pose
+    provides Srv::Pose
 
     orogen_spec.find_output_port('pose_samples').
         triggered_on('odometry_delta_samples')
