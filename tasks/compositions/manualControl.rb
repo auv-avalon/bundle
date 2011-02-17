@@ -18,6 +18,8 @@ composition "PoseEstimation" do
 	lowlevel = add LowLevelDriver::LowLevelTask, :as => 'lowlevel'
 	#xsens = add XsensImu::Task, :as => 'imu'
 	add Srv::Orientation#, :as => 'imu'
+	add Srv::CalibratedIMUSensors # Raw imu readings
+
 	fog = add Dsp3000::Task, :as => 'fog'
 	stateestimator = add StateEstimator::Task, :as => 'stateestimator'
 
@@ -26,20 +28,21 @@ composition "PoseEstimation" do
 
 	fog.orientation_samples.ignore
 	stateestimator.position_samples.ignore
-        stateestimator.imu_sensor_samples.ignore
-	#connect xsens.orientation_samples => stateestimator.orientation_samples#,  :type => :buffer, :size => 1
-	connect lowlevel.depth_samples => stateestimator.depth_samples#,  :type => buffer, :size => 1
+	
 	connect fog.rotation => stateestimator.fog_samples#, :type => :buffer, :size => 1
-	#connect stateestimator.pose_samples => motion.pose_samples#, :type => :buffer, :size => 1
 
 	autoconnect
 end
 
 composition "ControlLoopAvalon" do
 	add DataServices::Pose
-	motion = add AvalonControl::MotionControlTask, :as => 'motioncontrol'
-	hbridge = add Hbridge::Task, :as => "HBridge"
 	add DataServices::RawCommand 
+	add Srv::Actuators 
+	#add Srv::ActuatorController, :as => 'controller'
+	add Srv::Command
+
+	motion = add AvalonControl::MotionControlTask
+	#hbridge = add Hbridge::Task, :as => "HBridge"
 	#controldev = add Controldev::Remote 
 	rcc = add RawControlCommandConverter::Task, :as => "controlconverter"
 	autoconnect

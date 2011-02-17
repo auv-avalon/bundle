@@ -6,6 +6,8 @@ Roby.app.apply_orocos_deployment 'avalon' #From config/deployments
 
 navigation_mode = nil 
 
+Orocos.log_all_ports :exclude_types => '/can/Message'
+
 Roby.every(0.1, :on_error => :disable) do
     if State.lowlevel_state?
         if State.lowlevel_state != 3

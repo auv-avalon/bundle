@@ -1,0 +1,57 @@
+#using_task_library "AvalonControl"
+
+class AvalonControl::MotionControlTask 
+    driver_for "MotionControl"
+
+    USE_INTEGRAL=false
+    USE_DEPTH_CONTROLLER=true
+
+    def configure
+        super
+	pp "hallooooooooooooooooooooooooooooooooooooooooooooooooo"
+	pp "hallooooooooooooooooooooooooooooooooooooooooooooooooo"
+	orogen_task.z_coupling_factor = 0.19
+	orogen_task.y_coupling_factor = 0.10
+	orogen_task.y_factor = 1 
+	orogen_task.x_factor = 1 
+	
+	pid_settings = orogen_task.z_pid
+	pid_settings.zero!
+	if USE_DEPTH_CONTROLLER
+	pid_settings.p = 3 
+	if USE_INTEGRAL
+		pid_settings.i = 0.05
+	end
+	pid_settings.d = 1 
+	pid_settings.min = -1#-0.5
+	pid_settings.max = 1#0.5
+	end
+	orogen_task.z_pid = pid_settings
+	
+	pid_settings.zero!
+	#pid_settings.p = 2
+	pid_settings.p = 0.5
+	if USE_INTEGRAL
+	    #pid_settings.i = 0.01
+	end
+	pid_settings.d = 0.001
+	pid_settings.min = -0.8
+	pid_settings.max = 0.8
+	orogen_task.heading_pid = pid_settings
+	
+	pid_settings.zero!
+	pid_settings.p = -0.60
+	pid_settings.p = -0.60
+	if USE_INTEGRAL
+		pid_settings.i = -0.1
+	end
+	pid_settings.d = 0.0
+	pid_settings.min = -1
+	pid_settings.max = 1
+	orogen_task.pitch_pid = pid_settings
+
+
+    end
+
+end
+

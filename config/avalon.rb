@@ -3,7 +3,7 @@
 
 Roby.app.use_deployments_from "avalon_back"
 
-State.orocos.disable_logging
+#State.orocos.disable_logging
 
 State.navigation_mode = 'drive_simple' #should load simpleControl
 
@@ -20,15 +20,16 @@ Robot.devices do
   com_bus(Dev::Canbus, :as => 'can0').
     device_id 'can0'
 
+  device(Dev::MotionControl, :as => 'motionControl')
 
   through 'can0' do
     hbridge = device(Dev::HbridgeSet).
-        can_id(0,0x7FF).
+        can_id(0,0x700).
 	period(0.001).
 	sample_size(4)
 
     hbridge.slave(Dev::Hbridges).
-  	select_ids(1,2,3,4,5,6)
+  	select_ids(0,1,2,3,4,5)
 
     device(Dev::SystemStatus).
 	can_id(0x101,0x7FF).
@@ -46,4 +47,5 @@ Robot.devices do
 end
 
 
-
+Roby::State.update do |s|
+end

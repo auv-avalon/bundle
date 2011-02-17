@@ -28,7 +28,7 @@ class Hbridge::Task
         
         # Set timeout and static external encoder calibration
         current_config = orogen_task.configuration
-        4.times do |i|
+        6.times do |i|
             current_config.config[i].base_config.timeout = Integer(BOARD_TIMEOUT * 1000)
         end
         current_config.config[0].encoder_config_extern.zeroPosition = -2690
@@ -38,7 +38,7 @@ class Hbridge::Task
         orogen_task.configuration = current_config
 
         # We do an encoder calibration each time the module is started
-        orogen_task.do_encoder_calibration = true
+        #orogen_task.do_encoder_calibration = true
 
         # Create dispatchers
         each_slave_device('hbridge_set') do |slave_service, slave_device|
