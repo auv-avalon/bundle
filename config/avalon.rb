@@ -1,5 +1,5 @@
-#Roby.app.orocos_process_server 'front','192.168.128.50'
-#Roby.app.use_deployments_from "avalon_front", :on => 'front'
+Roby.app.orocos_process_server 'front','192.168.128.50'
+Roby.app.use_deployments_from "avalon_front", :on => 'front'
 
 Roby.app.use_deployments_from "avalon_back"
 
@@ -16,6 +16,19 @@ Robot.devices do
   device(Dev::Dsp3000, :as => 'fog').
     period(0.01)
   device(Dev::Micron, :as => 'sonar')
+  
+  device(Dev::Dynamixel, :as => 'dynamixel').
+    device_id("/dev/ttyUSB0")
+
+  device(Dev::Camera, :as => "front_camera").
+    period(0.1).
+    device_id("45050").
+    configure do |p|
+    end
+
+  device(Dev::Camera, :as => "bottom_camera").
+    period(0.3).
+    device_id("33186")
 
   com_bus(Dev::Canbus, :as => 'can0').
     device_id 'can0'

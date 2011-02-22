@@ -8,8 +8,7 @@ class Camera::CameraTask
 
     def configure
     	super
-        orogen_task.camera_id = robot_device.camera_id
-	orogen_task.width = robot_device.width
+        orogen_task.camera_id = robot_device.device_id
     end
 
     #on :start do |event|
