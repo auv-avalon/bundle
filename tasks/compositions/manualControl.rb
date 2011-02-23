@@ -13,6 +13,21 @@ using_task_library "sysmon"
 using_task_library "controldev"
 using_task_library "raw_control_command_converter"
 
+composition "Cameras" do
+	add Srv::ImageProvider, :as => "bottom_camera"
+	add Srv::ImageProvider, :as => "front_camera"
+end
+
+#add_mission(Camera::CameraTask).
+#	use "front_camera"
+
+#add_mission("front_camera")
+#add_mission("bottom_camera")
+#add_mission(Camera::CameraTask).
+#	use 'bottom_camera'
+
+
+
 composition "PoseEstimation" do
 	
 	lowlevel = add LowLevelDriver::LowLevelTask, :as => 'lowlevel'

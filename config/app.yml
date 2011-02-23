@@ -49,7 +49,7 @@ log:
   # Roby::Distributed, do
   #
   # levels:
-  #     roby: DEBUG
+  #     orocos/roby_plugin: DEBUG
   #     roby/distributed: INFO
   #
   # The available logging levels are DEBUG, INFO, WARN and FATAL. The output can be

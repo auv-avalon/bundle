@@ -8,6 +8,16 @@ navigation_mode = nil
 
 Orocos.log_all_ports :exclude_types => '/can/Message'
 
+#Roby.every(1, :on_error => :disable) do
+#	task = Roby.plan.find_tasks(Orocos::RobyPlugin::Dynamixel::Task).running.find { true }
+#	if(task)
+#		writer = task.cmd_angle.writer
+#		writer.write(1)
+#	end
+#end
+
+
+
 Roby.every(0.1, :on_error => :disable) do
     if State.lowlevel_state?
         if State.lowlevel_state != 3
