@@ -29,39 +29,40 @@ end
 
 
 composition "PoseEstimation" do
-	
-	lowlevel = add LowLevelDriver::LowLevelTask, :as => 'lowlevel'
-	#xsens = add XsensImu::Task, :as => 'imu'
-	add Srv::Orientation#, :as => 'imu'
-	add Srv::CalibratedIMUSensors # Raw imu readings
+	add LowLevelDriver::LowLevelTask, :as => 'lowlevel'
+	add XsensImu::Task, :as => 'imu'
 
-	fog = add Dsp3000::Task, :as => 'fog'
-	stateestimator = add StateEstimator::Task, :as => 'stateestimator'
+	add Dsp3000::Task, :as => 'fog'
+	add StateEstimator::Task, :as => 'stateestimator'
 
 	export stateestimator.pose_samples #do this before provides
 	provides DataServices::Pose
 
 	fog.orientation_samples.ignore
 	stateestimator.position_samples.ignore
-	
 	connect fog.rotation => stateestimator.fog_samples#, :type => :buffer, :size => 1
 
 	autoconnect
 end
 
-composition "ControlLoopAvalon" do
-	add DataServices::Pose
+composition 'RawCommandInput' do
 	add DataServices::RawCommand 
-	add Srv::Actuators 
-	#add Srv::ActuatorController, :as => 'controller'
-	add Srv::Command
+	add RawControlCommandConverter::Task, :as => "controlconverter"
+	add DataServices::Pose
 
-	motion = add AvalonControl::MotionControlTask
-	#hbridge = add Hbridge::Task, :as => "HBridge"
-	#controldev = add Controldev::Remote 
-	rcc = add RawControlCommandConverter::Task, :as => "controlconverter"
+	export controlconverter.motion_command
+	provides Srv::AUVMotionCommand
 	autoconnect
 end
+
+Cmp::ControlLoop.specialize 'controller' => AvalonControl::MotionControlTask do
+	overload 'command', Srv::AUVMotionCommand
+	add DataServices::Pose
+
+	autoconnect
+end
+
+
 
 #composition "Scanning-Sonar" do # not useful for only one task
 #	sonar = add SonarDriver::SonarDriverMicronTask, :as => 'sonar'

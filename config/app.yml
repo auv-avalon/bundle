@@ -41,8 +41,9 @@ log:
   # Logging in Roby is controlled per-module in a hierarchical way. It means that to get
   # debugging output for the whole framework, set
   #
-  # levels:
-  #     orocos/roby_plugin: INFO
+  levels:
+        robot: DEBUG
+        orocos/roby_plugin: INFO
   #     roby/execution_engine: DEBUG
   #
   # now, if you want to have it do debug for everything but the classes in

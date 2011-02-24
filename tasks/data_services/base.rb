@@ -14,8 +14,6 @@ end
 
 # Base interfaces for control
 data_service_type 'ActuatorController' do
-    input_port("actuator_status", "base/actuators/Status").
-        doc("Actuator status")
     output_port("actuator_command", "base/actuators/Command").
       doc("Actuator command")
 end
@@ -33,6 +31,19 @@ end
 data_service_type 'Motion2DCommand' do
     provides Srv::Command
     output_port 'command', 'base/MotionCommand2D'
+end
+
+# This is separated from Controller as other type of control exist in the
+# components (as for instance FourWheelController in controldev)
+data_service_type 'AUVMotionController' do
+    provides Srv::ActuatorController
+    input_port('command', 'base/AUVMotionCommand').
+        doc('input command in rotation and translation.')
+end
+
+data_service_type 'AUVMotionCommand' do
+    provides Srv::Command
+    output_port 'command', 'base/AUVMotionCommand'
 end
 
 ####################################

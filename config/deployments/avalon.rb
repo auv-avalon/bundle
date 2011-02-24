@@ -4,16 +4,17 @@
 #add_mission(Canbus::Task)
 #add_mission(Hbridge::Task)
 
-define('drive_simple',Cmp::ControlLoopAvalon).
-	use 'imu'
+define('drive_simple',Cmp::ControlLoop).
+	use 'imu', 'hbridge_set.motors', AvalonControl::MotionControlTask
 
 #Make definitions public because we are in an deployment, and the defiintions need on model
 model.data_service_type "NavigationMode"
-Compositions::ControlLoopAvalon.provides Srv::NavigationMode
+Cmp::ControlLoop.provides Srv::NavigationMode
 modality_selection Srv::NavigationMode, "drive_simple"
 
 add_mission(Sysmon::Task)
-add_mission(Dynamixel::Task)
+add_mission(Hbridge::Task)
+#add_mission(Dynamixel::Task)
 
 #add_mission(Compositions::Cameras).
 #	use "front_camera", "bottom_camera"

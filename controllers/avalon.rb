@@ -6,7 +6,8 @@ Roby.app.apply_orocos_deployment 'avalon' #From config/deployments
 
 navigation_mode = nil 
 
-Orocos.log_all_ports :exclude_types => '/can/Message'
+#Orocos.log_all_ports :exclude_types => '/can/Message'#, :exclude_ports => 'can.hbridge_set'
+#Orocos.log_all_ports :exclude_types => '/canbus/Message'#, :exclude_ports => 'can.hbridge_set'
 
 #Roby.every(1, :on_error => :disable) do
 #	task = Roby.plan.find_tasks(Orocos::RobyPlugin::Dynamixel::Task).running.find { true }

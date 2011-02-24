@@ -1,15 +1,11 @@
-#using_task_library "AvalonControl"
-
 class AvalonControl::MotionControlTask 
-    driver_for "MotionControl"
+    provides Srv::AUVMotionController
 
     USE_INTEGRAL=false
     USE_DEPTH_CONTROLLER=true
 
     def configure
         super
-	pp "hallooooooooooooooooooooooooooooooooooooooooooooooooo"
-	pp "hallooooooooooooooooooooooooooooooooooooooooooooooooo"
 	orogen_task.z_coupling_factor = 0.19
 	orogen_task.y_coupling_factor = 0.10
 	orogen_task.y_factor = 1 

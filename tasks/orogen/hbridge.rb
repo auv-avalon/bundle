@@ -8,6 +8,7 @@ class Hbridge::Task
         output_port "status_#{name}", "/base/actuators/Status"
         provides Srv::Actuators, "status" => "status_#{name}", "command" => "cmd_#{name}"
     end
+
     hbridges.extend_device_configuration do
         dsl_attribute :select_ids do |*args|
             args.map do |i|
@@ -31,10 +32,6 @@ class Hbridge::Task
         6.times do |i|
             current_config.config[i].base_config.timeout = Integer(BOARD_TIMEOUT * 1000)
         end
-        current_config.config[0].encoder_config_extern.zeroPosition = -2690
-        current_config.config[1].encoder_config_extern.zeroPosition = 2839
-        current_config.config[2].encoder_config_extern.zeroPosition = 2616
-        current_config.config[3].encoder_config_extern.zeroPosition = -1829
         orogen_task.configuration = current_config
 
         # We do an encoder calibration each time the module is started
@@ -59,8 +56,8 @@ end
 require 'roby/tasks/timeout'
 Compositions::ControlLoop.specialize 'actuators' => Hbridge::Task do
     add Hbridge::Task, :as => 'actuators',
-        :consider_in_pending => false,
-        :failure => [:read_only.not_followed_by(:read_write), :stop]
+        :consider_in_pending => false #,
+        #:failure => [:read_only.not_followed_by(:read_write), :stop]
 
     on :start do |ev|
         hbridge = child_from_role 'actuators'
@@ -74,8 +71,12 @@ Compositions::ControlLoop.specialize 'actuators' => Hbridge::Task do
         hbridge.read_only_event.handle_with(timeout)
         timeout.start!
 
+      Robot.info "hb is of class #{hbridge.class}"
+
+        Robot.info  "timout started"
         # But resume error handling as soon as read_write is emitted
         hbridge.read_write_event.on do |event|
+            Robot.info "Event: #{event} is calles"
             Robot.info "hbridge switched to read_write, resuming handling of hbridge errors"
         end
         hbridge.read_write_event.signals timeout.stop_event
