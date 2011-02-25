@@ -46,6 +46,7 @@ composition "PoseEstimation" do
 	autoconnect
 end
 
+#AP Navigation: Experiment von Allan Conquest
 composition 'MovementExperiment' do
 	#add DataServices::RawCommand 
 	#add RawControlCommandConverter::Task, :as => "controlconverter"
