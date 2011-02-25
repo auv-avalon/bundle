@@ -12,6 +12,7 @@ using_task_library "hbridge"
 using_task_library "sysmon"
 using_task_library "controldev"
 using_task_library "raw_control_command_converter"
+using_task_library "movement_experiment"
 
 composition "Cameras" do
 	add Srv::ImageProvider, :as => "bottom_camera"
@@ -43,6 +44,16 @@ composition "PoseEstimation" do
 	connect fog.rotation => stateestimator.fog_samples#, :type => :buffer, :size => 1
 
 	autoconnect
+end
+
+composition 'MovementExperiment' do
+	#add DataServices::RawCommand 
+	#add RawControlCommandConverter::Task, :as => "controlconverter"
+	#add DataServices::Pose
+	add MovementExperiment::Task, :as => "control"
+	export control.motion_command
+	provides Srv::AUVMotionCommand
+	#autoconnect
 end
 
 composition 'RawCommandInput' do

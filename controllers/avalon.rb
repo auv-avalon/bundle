@@ -30,9 +30,9 @@ Roby.every(0.1, :on_error => :disable) do
             if !State.navigation_mode?
                 Robot.warn "switched to mode 3, but no navigation mode is selected in State.navigation_mode"
             elsif !navigation_mode
-                Robot.info "starting navigation mode #{State.navigation_mode}"
-                navigation_mode, _ = Robot.send("#{State.navigation_mode}!")
-                navigation_mode = navigation_mode.as_service
+                Robot.info "starting navigation mode #{State.navigation_mode[State.lowlevel_substate]}, we are currently at #{navigation_mode}"
+		navigation_mode, _ = Robot.send("#{State.navigation_mode[State.lowlevel_substate]}!")
+               	navigation_mode = navigation_mode.as_service
             end
         end
     end
