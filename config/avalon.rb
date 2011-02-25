@@ -9,7 +9,7 @@ Roby.app.use_deployments_from "avalon_back"
 State.orocos.exclude_from_log '/canbus/Message'
 
 
-State.navigation_mode = 'drive_simple' #should load simpleControl
+State.navigation_mode = ['drive_simple',"drive_experiment"]#should load simpleControl
 
 Robot.devices do
   device(Dev::LowLevel, :as => 'depth').
