@@ -48,6 +48,7 @@ end
 
 #AP Navigation: Experiment von Allan Conquest
 composition 'MovementExperiment' do
+	#add DataServices::Pose
 	#add DataServices::RawCommand 
 	#add RawControlCommandConverter::Task, :as => "controlconverter"
 	#add DataServices::Pose
