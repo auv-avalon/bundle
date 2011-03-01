@@ -56,8 +56,8 @@ end
 require 'roby/tasks/timeout'
 Compositions::ControlLoop.specialize 'actuators' => Hbridge::Task do
     add Hbridge::Task, :as => 'actuators',
-        :consider_in_pending => false #,
-        #:failure => [:read_only.not_followed_by(:read_write), :stop]
+        :consider_in_pending => false,
+        :failure => [:read_only.not_followed_by(:read_write), :stop]
 
     on :start do |ev|
         hbridge = child_from_role 'actuators'
