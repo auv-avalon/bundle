@@ -23,8 +23,8 @@ Roby.every(0.1, :on_error => :disable) do
     if State.lowlevel_state?
         if State.lowlevel_state != 3
             if navigation_mode
-                navigation_mode.stop!
-                navigation_mode = nil
+                Roby.plan.unmark_mission(navigation_mode.task)
+		navigation_mode = nil
             end
         elsif State.lowlevel_state == 3
             if !State.navigation_mode?
