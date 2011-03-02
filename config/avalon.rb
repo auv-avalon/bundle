@@ -26,7 +26,7 @@ Robot.devices do
 
   device(Dev::Camera, :as => "front_camera").
     period(0.1).
-    device_id("53093")#.
+    device_id("53093").
     configure do |task|
 	task.binning_x = 1
 	task.binning_y = 1
@@ -41,7 +41,7 @@ Robot.devices do
 	task.fps = 30
 	task.gain = 0
 	task.gain_mode_auto = 0
-	task.output_format = colorspace
+	#task.output_format = colorspace
 	task.log_interval_in_sec = 5
 	task.mode = 'Master'
 	task.synchronize_time_interval = 2000000
