@@ -27,26 +27,26 @@ Robot.devices do
   device(Dev::Camera, :as => "front_camera").
     period(0.1).
     device_id("53093")#.
-#    configure do |task|
-#	task.binning_x = 1
-#	task.binning_y = 1
-#	task.region_x = 9
-#	task.region_y = 7
-#	task.width =640
-#	task.height =480
-#	task.trigger_mode = 'sync_in1'
-#	task.exposure_mode = 'external'
-#	task.whitebalance_mode = 'manual'
-#	task.exposure = 15000
-#	task.fps = 30
-#	task.gain = 0
-#	task.gain_mode_auto = 0
-#	task.output_format = colorspace
-#	task.log_interval_in_sec = 5
-#	task.mode = 'Master'
-#	task.synchronize_time_interval = 2000000
-#	task.frame_start_trigger_event = 'EdgeRising'
-#    end
+    configure do |task|
+	task.binning_x = 1
+	task.binning_y = 1
+	task.region_x = 9
+	task.region_y = 7
+	task.width =640
+	task.height =480
+	task.trigger_mode = 'sync_in1'
+	task.exposure_mode = 'external'
+	task.whitebalance_mode = 'manual'
+	task.exposure = 15000
+	task.fps = 30
+	task.gain = 0
+	task.gain_mode_auto = 0
+	task.output_format = colorspace
+	task.log_interval_in_sec = 5
+	task.mode = 'Master'
+	task.synchronize_time_interval = 2000000
+	task.frame_start_trigger_event = 'EdgeRising'
+    end
 
   device(Dev::Camera, :as => "bottom_camera").
     period(0.3).
