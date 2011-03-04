@@ -9,7 +9,7 @@ Roby.app.use_deployments_from "avalon_back"
 State.orocos.exclude_from_log '/canbus/Message'
 
 
-State.navigation_mode = ['drive_simple',"drive_experiment"]#should load simpleControl
+State.navigation_mode = ['drive_simple',"drive_slam","drive_experiment"]#should load simpleControl
 
 Robot.devices do
   device(Dev::LowLevel, :as => 'depth').
@@ -71,7 +71,10 @@ Robot.devices do
   
 
   com_bus(Dev::Canbus, :as => 'can0').
-    device_id 'can0'
+    device_id('can0').
+    configure do |task|
+    	task.deviceType = :SOCKET
+    end
 
   through 'can0' do
     hbridge = device(Dev::HbridgeSet).

@@ -13,6 +13,7 @@ using_task_library "sysmon"
 using_task_library "controldev"
 using_task_library "raw_control_command_converter"
 using_task_library "movement_experiment"
+using_task_library "ekf_slam"
 
 composition "Cameras" do
 	add Srv::ImageProvider, :as => "bottom_camera"
@@ -36,8 +37,10 @@ composition "PoseEstimation" do
 	add Dsp3000::Task, :as => 'fog'
 	add StateEstimator::Task, :as => 'stateestimator'
 
-	export stateestimator.pose_samples #do this before provides
-	provides DataServices::Pose
+	export stateestimator.orientation_samples #do this before provides
+	export imu.calibrated_sensors
+	provides DataServices::Orientation
+	provides DataServices::CalibratedIMUSensors 
 
 	fog.orientation_samples.ignore
 	stateestimator.position_samples.ignore
@@ -45,6 +48,8 @@ composition "PoseEstimation" do
 
 	autoconnect
 end
+
+
 
 #AP Navigation: Experiment von Allan Conquest
 composition 'MovementExperiment' do
@@ -60,22 +65,55 @@ end
 
 composition 'RawCommandInput' do
 	add DataServices::RawCommand 
-	add RawControlCommandConverter::Task, :as => "controlconverter"
-	add DataServices::Pose
+	add RawControlCommandConverter::Movement, :as => "controlconverter"
 
+	#add DataServices::Orientation
+	add Cmp::PoseEstimation
+	
 	export controlconverter.motion_command
 	provides Srv::AUVMotionCommand
 	autoconnect
 end
 
-Cmp::ControlLoop.specialize 'controller' => AvalonControl::MotionControlTask do
-	overload 'command', Srv::AUVMotionCommand
-	add DataServices::Pose
+#composition 'PositionCommandInput' do
+#	add DataServices::RawCommand 
+#	export controlconverter.motion_command
+#	provides Srv::AUVMotionCommand
+#	autoconnect
+#end
+
+composition 'SlamManualInput' do
+	# Why cannot use Orientation as abstract and define pose estimation with use
+	
+	#add DataServices::Orientation
+	add Cmp::PoseEstimation
+	
+	add DataServices::RawCommand 
+
+	add EkfSlam::Task, :as => 'slam'
+	add SonarDriver::Micron 
+	add RawControlCommandConverter::Position, :as => "positionconverter"
+	add AvalonControl::PositionControlTask, :as => "positionControl"
+	export positionControl.motion_commands
+	provides Srv::AUVMotionCommand
+	
+	#Not used by filter, should be removed soon
+	slam.orientation_samples_reference.ignore
+	slam.acceleration_samples.ignore
+	#slam.acceleration_samples_imu.ignore
 
 	autoconnect
 end
 
+Cmp::ControlLoop.specialize 'controller' => AvalonControl::MotionControlTask do
+	overload 'command', Srv::AUVMotionCommand
+	
+	
+	#add DataServices::Orientation
+	add Cmp::PoseEstimation
 
+	autoconnect
+end
 
 #composition "Scanning-Sonar" do # not useful for only one task
 #	sonar = add SonarDriver::SonarDriverMicronTask, :as => 'sonar'
