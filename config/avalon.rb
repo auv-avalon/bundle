@@ -19,7 +19,13 @@ Robot.devices do
     device_id("/dev/xsens")
   device(Dev::Dsp3000, :as => 'fog').
     period(0.01)
-  device(Dev::Micron, :as => 'sonar')
+  device(Dev::Micron, :as => 'sonar').
+    configure do |task|
+    	config = task.config
+	config.numberOfBins 600
+	config.adInterval 60
+	task.config = config
+    end
   
   device(Dev::Dynamixel, :as => 'dynamixel').
     device_id("/dev/ttyUSB0")
