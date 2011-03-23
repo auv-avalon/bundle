@@ -21,12 +21,12 @@ navigation_mode = nil
 
 Roby.every(0.1, :on_error => :disable) do
     if State.lowlevel_state?
-        if State.lowlevel_state != 3
+        if State.lowlevel_state != 3 and State.lowlevel_state != 5
             if navigation_mode
                 Roby.plan.unmark_mission(navigation_mode.task)
 		navigation_mode = nil
             end
-        elsif State.lowlevel_state == 3
+        elsif State.lowlevel_state == 3 or State.lowlevel_state == 5
             if !State.navigation_mode?
                 Robot.warn "switched to mode 3, but no navigation mode is selected in State.navigation_mode"
             elsif !navigation_mode

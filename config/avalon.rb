@@ -3,13 +3,13 @@ Roby.app.use_deployments_from "avalon_front", :on => 'front'
 
 Roby.app.use_deployments_from "avalon_back"
 
-#State.orocos.disable_logging
+State.orocos.disable_logging
 
 
 State.orocos.exclude_from_log '/canbus/Message'
 
 
-State.navigation_mode = ['drive_simple',"drive_slam","drive_experiment"]#should load simpleControl
+State.navigation_mode = ['drive_simple',"drive_slam","drive_testbed"]#should load simpleControl
 
 Robot.devices do
   device(Dev::LowLevel, :as => 'depth').
@@ -22,8 +22,9 @@ Robot.devices do
   device(Dev::Micron, :as => 'sonar').
     configure do |task|
     	config = task.config
-	config.numberOfBins 600
-	config.adInterval 60
+	config.numberOfBins 300
+	config.adInterval 30
+	config.initialGain 50
 	task.config = config
     end
   
@@ -34,24 +35,27 @@ Robot.devices do
     period(0.1).
     device_id("53093").
     configure do |task|
-	task.binning_x = 1
+	task.binning_x = 1 
 	task.binning_y = 1
-	task.region_x = 9
-	task.region_y = 7
-	task.width =640
-	task.height =480
-	task.trigger_mode = 'sync_in1'
-	task.exposure_mode = 'external'
-	task.whitebalance_mode = 'manual'
-	task.exposure = 15000
-	task.fps = 30
-	task.gain = 0
-	task.gain_mode_auto = 0
-	#task.output_format = colorspace
-	task.log_interval_in_sec = 5
-	task.mode = 'Master'
-	task.synchronize_time_interval = 2000000
-	task.frame_start_trigger_event = 'EdgeRising'
+	task.region_x = 712 
+	task.region_y = 641
+	task.width = 1024 
+	task.height = 768
+	task.trigger_mode = 'freerun'
+	task.exposure_mode = 'auto'
+	#task.trigger_mode = 'sync_in1'
+	#task.exposure_mode = 'external'
+	#task.whitebalance_mode = 'manual'
+	#task.exposure = 15000
+	task.fps = 10
+	#task.gain = 0
+	#task.gain_mode_auto = 0
+	task.output_format = 'bayer8'
+	#task.log_interval_in_sec = 5
+	#task.mode = 'Master'
+	#task.synchronize_time_interval = 2000000
+#	task.frame_start_trigger_event = 'EdgeRising'
+#	task.frame_start_trigger_event = 'FixedRate'
     end
 
   device(Dev::Camera, :as => "bottom_camera").

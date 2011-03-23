@@ -2,7 +2,7 @@ class BuoyDetector::Task
     def configure
         super
 	orogen_task.image_size_x = 1024 / 2
-	orogen_task.image_size_x = 786 / 2
+	orogen_task.image_size_y = 768 / 2
 	orogen_task.hueMin = 0
 	orogen_task.hueMax = 40
 	orogen_task.saturationMin = 120

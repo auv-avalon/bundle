@@ -13,15 +13,15 @@ class AvalonControl::MotionControlTask
 	
 	pid_settings = orogen_task.z_pid
 	pid_settings.zero!
-	if USE_DEPTH_CONTROLLER
+	#if USE_DEPTH_CONTROLLER
 	pid_settings.p = 3 
-	if USE_INTEGRAL
-		pid_settings.i = 0.05
-	end
-	pid_settings.d = 1 
+	#if USE_INTEGRAL
+	#	pid_settings.i = 0.05
+	#end
+	pid_settings.d = 0#1 
 	pid_settings.min = -1#-0.5
 	pid_settings.max = 1#0.5
-	end
+	#end
 	orogen_task.z_pid = pid_settings
 	
 	pid_settings.zero!
@@ -39,7 +39,7 @@ class AvalonControl::MotionControlTask
 	pid_settings.p = -0.60
 	pid_settings.p = -0.60
 	if USE_INTEGRAL
-		pid_settings.i = -0.1
+#		pid_settings.i = -0.1
 	end
 	pid_settings.d = 0.0
 	pid_settings.min = -1
@@ -51,3 +51,27 @@ class AvalonControl::MotionControlTask
 
 end
 
+
+class AvalonControl::PositionControlTask 
+#    provides Srv::AUVMotionController
+
+    def configure
+        super
+	pid_settings = orogen_task.x_pid
+	pid_settings.zero!
+	pid_settings.p = 0.1
+#	pid_settings.d = 0.0025
+    	pid_settings.min = -0.2
+	pid_settings.max = 0.2
+	orogen_task.x_pid = pid_settings
+
+	pid_settings = orogen_task.y_pid
+	pid_settings.zero!
+	pid_settings.p = -0.2
+#	pid_settings.d = 0.05
+    	pid_settings.min =  -0.4
+	pid_settings.max = 0.4
+	orogen_task.y_pid = pid_settings
+
+    end
+end

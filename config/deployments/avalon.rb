@@ -5,10 +5,13 @@
 #add_mission(Hbridge::Task)
 
 define('drive_simple',Cmp::ControlLoop).
-	use 'hbridge_set.motors', AvalonControl::MotionControlTask, Cmp::RawCommandInput
+	use 'hbridge_set.motors',Cmp::PoseEstimation, AvalonControl::MotionControlTask, Cmp::RawCommandInput
 
 define('drive_slam',Cmp::ControlLoop).
 	use 'hbridge_set.motors', AvalonControl::MotionControlTask, Cmp::SlamManualInput
+
+define('drive_testbed',Cmp::ControlLoop).
+	use 'hbridge_set.motors', AvalonControl::MotionControlTask, Cmp::Testbed, 'front_camera'
 
 define('drive_experiment',Cmp::ControlLoop).
 	use Cmp::PoseEstimation,'hbridge_set.motors', AvalonControl::MotionControlTask, Cmp::MovementExperiment
@@ -16,13 +19,16 @@ define('drive_experiment',Cmp::ControlLoop).
 #Make definitions public because we are in an deployment, and the defiintions need on model
 model.data_service_type "NavigationMode"
 Cmp::ControlLoop.provides Srv::NavigationMode
-modality_selection Srv::NavigationMode, "drive_simple","drive_slam","drive_experiment"
+modality_selection Srv::NavigationMode, "drive_simple","drive_slam","drive_testbed"
 
 add_mission(Sysmon::Task)
 add_mission(Hbridge::Task)
 add_mission(Dynamixel::Task)
 add_mission(SonarDriver::Micron)
 add_mission(ModemCan::Task)
+
+add_mission(Cmp::BuoyDetector).
+	use "front_camera"
 
 #add_mission(Compositions::Cameras).
 #	use "front_camera", "bottom_camera"
