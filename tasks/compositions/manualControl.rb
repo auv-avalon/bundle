@@ -66,6 +66,18 @@ composition 'MovementExperiment' do
 	#autoconnect
 end
 
+composition 'RawCommandInputLocal' do
+	add Controldev::Local 
+	add RawControlCommandConverter::Movement, :as => "controlconverter"
+
+	add DataServices::Orientation
+	
+	export controlconverter.motion_command
+	provides Srv::AUVMotionCommand
+	autoconnect
+end
+
+
 composition 'RawCommandInput' do
 	add DataServices::RawCommand 
 	add RawControlCommandConverter::Movement, :as => "controlconverter"
@@ -153,6 +165,17 @@ Cmp::ControlLoop.specialize 'controller' => AvalonControl::MotionControlTask do
 	
 	#add DataServices::Orientation
 	add Cmp::PoseEstimation
+	#add XsensImu::Task, :as => 'imu'
+
+	autoconnect
+end
+
+Cmp::ControlLoopGeneric.specialize 'controller' => AvalonControl::MotionControlTask do
+	overload 'command', Srv::AUVMotionCommand
+	
+	
+	add DataServices::Orientation
+	#add Cmp::PoseEstimation
 	#add XsensImu::Task, :as => 'imu'
 
 	autoconnect
