@@ -3,13 +3,13 @@ Roby.app.use_deployments_from "avalon_front", :on => 'front'
 
 Roby.app.use_deployments_from "avalon_back"
 
-State.orocos.disable_logging
+#State.orocos.disable_logging
 
 
 State.orocos.exclude_from_log '/canbus/Message'
 
 
-State.navigation_mode = ['drive_simple',"drive_slam","drive_testbed"]#should load simpleControl
+State.navigation_mode = ['drive_simple',"drive_slam","drive_testbed","drive_uwmodem"]#should load simpleControl
 
 Robot.devices do
   device(Dev::LowLevel, :as => 'depth').
@@ -29,7 +29,7 @@ Robot.devices do
     end
   
   device(Dev::Dynamixel, :as => 'dynamixel').
-    device_id("/dev/ttyUSB0")
+    device_id("/dev/ttyS3")
 
   device(Dev::Camera, :as => "front_camera").
     period(0.1).

@@ -11,6 +11,7 @@ using_task_library "canbus"
 using_task_library "hbridge"
 using_task_library "sysmon"
 using_task_library "controldev"
+using_task_library "modem_can"
 using_task_library "raw_control_command_converter"
 using_task_library "movement_experiment"
 using_task_library "ekf_slam"
@@ -97,6 +98,39 @@ end
 #	autoconnect
 #end
 
+
+composition "Slam" do
+	add Cmp::PoseEstimation
+	add EkfSlam::Task, :as => 'slam'
+	add SonarDriver::Micron 
+	export slam.pose_samples 	
+
+	provides DataServices::Pose
+	provides DataServices::Orientation	
+
+	slam.acceleration_samples.ignore
+	autoconnect
+end
+
+composition "SlamModemInput" do
+	add ModemCan::Task, :as => "modem"
+	add Cmp::Slam
+	add AvalonControl::PositionControlTask, :as => "positionControl"
+	#connect modem.position_commands positionControl.position_commands
+	export positionControl.motion_commands
+	provides Srv::AUVMotionCommand
+	autoconnect
+end
+
+composition 'PoseEstimationEKF' do
+	add Cmp::PoseEstimation
+	add EkfSlam::Task, :as => 'slam'
+	add SonarDriver::Micron 
+	export slam.pose_samples
+	provides DataServices::Pose
+	autoconnect
+end
+
 composition 'SlamManualInput' do
 	# Why cannot use Orientation as abstract and define pose estimation with use
 	
@@ -111,7 +145,6 @@ composition 'SlamManualInput' do
 	add AvalonControl::PositionControlTask, :as => "positionControl"
 	export positionControl.motion_commands
 	provides Srv::AUVMotionCommand
-	
 	#Not used by filter, should be removed soon
 	#slam.orientation_samples_reference.ignore
 	#slam.speed_samples.ignore
