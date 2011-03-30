@@ -1,11 +1,12 @@
 class AvalonSimulation::Task 
     provides Srv::Orientation
-    bla_l = driver_for('Simulator')
-    bla    = bla_l.dynamic_slaves 'Simulation' do
-      #  output_port "errors_#{name}", "/hbridge/Error"
+    task = driver_for('Simulator')
+    
+    control = task.dynamic_slaves 'SimulatorControl' do
+        #output_port "errors_#{name}", "/hbridge/Error"
         input_port  "cmd_#{name}",    "/base/actuators/Command"
-       # output_port "status_#{name}", "/base/actuators/Status"
-        provides Srv::Actuators, "command" => "cmd_#{name}"
+        output_port "status_#{name}", "/base/actuators/Status"
+        provides Srv::Actuators, "status" => "status_#{name}", "command" => "cmd_#{name}"
     end
 
     def configure

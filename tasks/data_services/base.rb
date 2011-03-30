@@ -5,7 +5,7 @@ import_types_from 'base'
 
 data_service_type 'Actuators' do
     input_port("command", "base/actuators/Command")
-#    output_port("status", "base/actuators/Status")
+    output_port("status", "base/actuators/Status")
 end
 
 data_service_type 'FourWheelPlatform' do
