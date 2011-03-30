@@ -7,7 +7,7 @@ class TestbedServoing::Task
 
 	pid_settings = orogen_task.x_pid
 	pid_settings.zero!
-	pid_settings.p = 100 
+	pid_settings.p = 10 
 #	pid_settings.d = 0.0025
     	pid_settings.min = -1 #-0.2
 	pid_settings.max = 1 #0.2
@@ -15,7 +15,7 @@ class TestbedServoing::Task
 
 	pid_settings = orogen_task.y_pid
 	pid_settings.zero!
-	pid_settings.p = 100 
+	pid_settings.p = -10 
 #	pid_settings.d = 0.05
     	pid_settings.min = -1 # -0.4
 	pid_settings.max = 1 #0.4
@@ -23,7 +23,7 @@ class TestbedServoing::Task
 	
 	pid_settings = orogen_task.z_pid
 	pid_settings.zero!
-	pid_settings.p = 100
+	pid_settings.p = 10
 #	pid_settings.d = 0.05
     	pid_settings.min = -1 # -0.4
 	pid_settings.max = 1 #0.4
