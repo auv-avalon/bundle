@@ -1,7 +1,7 @@
 Roby.app.use_deployments_from "avalon_simulation"
-Roby.app.use_deployments_from "avalon_back"
+#Roby.app.use_deployments_from "avalon_back"
 
-State.orocos.disable_logging
+#State.orocos.disable_logging
 
 
 State.orocos.exclude_from_log '/canbus/Message'
@@ -10,9 +10,12 @@ State.orocos.exclude_from_log '/canbus/Message'
 State.navigation_mode = ['drive_simple',"drive_slam","drive_testbed"]#should load simpleControl
 
 Robot.devices do
-   device(Dev::Joystick)
-   device(Dev::Simulator, :as => "Simulator").
-   	slave(Dev::SimulatorControl)
+   joystick = device(Dev::Joystick)
+   joystick. period(0.1)
+
+   sim = device(Dev::Simulator, :as => "Simulator")
+   sim.slave(Dev::SimulatorControl)
+   sim.period(0.1)
 #
 #
 #  device(Dev::LowLevel, :as => 'depth').
