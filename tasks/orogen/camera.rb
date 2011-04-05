@@ -2,15 +2,8 @@ using_task_library "camera"
 
 
 class Camera::CameraTask
-    find_output_port('frame').
-        triggered_once_per_update
-
     driver_for 'Camera' do
     	provides Srv::ImageProvider
-    end
-
-    driver_for 'StructuredLight' do
-    	provides Srv::StructuredLightImage
     end
 
     def configure

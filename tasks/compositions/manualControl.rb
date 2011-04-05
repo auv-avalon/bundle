@@ -169,15 +169,21 @@ composition 'BuoyDetector' do
 end
 
 composition 'StructuredLight' do
-    add Srv::StructuredLightImage
+    add Srv::ImageProvider
     add StructuredLight::Task, :as => 'structuredLight'
     add FrameDemultiplexer::Task, :as => 'frameDemultiplexer'
     structuredLight.frame.ignore
     export structuredLight.laser_scan
     export frameDemultiplexer.oframe
     provides DataServices::ImageProvider
-  #  provides DataServices::LaserRangeFinder
- #   frameDemultiplexer.frame.ignore
+    autoconnect
+end
+
+composition 'PipelineFollower' do
+    add Srv::ImageProvider
+    add OffshorePipelineDetector::Task, :as => 'offshorePipelineDetector'
+   # export offshorePipelineDetector.pipeline
+   # provides 
     autoconnect
 end
 

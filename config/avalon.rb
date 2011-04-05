@@ -31,7 +31,7 @@ Robot.devices do
   device(Dev::Dynamixel, :as => 'dynamixel').
     device_id("/dev/ttyS3")
 
-  device(Dev::StructuredLight, :as => "front_camera").
+  device(Dev::Camera, :as => "front_camera").
     period(0.1).
     device_id("53093").
     configure do |task|
