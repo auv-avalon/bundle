@@ -31,12 +31,14 @@ add_mission(SonarDriver::Micron)
 add_mission(ModemCan::Task)
 
 add_mission(Cmp::PoseEstimationEKF)
+add_mission(Cmp::StructuredLight)
 
+#add_mission(Cmp::BuoyDetector)
 #add_mission(Cmp::BuoyDetector).
-#	use "front_camera"
+#	use Cmp::StructuredLight
 
 #add_mission(Cmp::Testbed).
-#	use "front_camera"
+#	use Cmp::StructuredLight
 
 #add_mission(Compositions::Cameras).
 #	use "front_camera", "bottom_camera"
@@ -44,7 +46,7 @@ add_mission(Cmp::PoseEstimationEKF)
 #add_mission(Camera::CameraTask).
 #	use "front_camera"
 
-add_mission("front_camera")
+#add_mission("front_camera")
 #add_mission("bottom_camera")
 
 

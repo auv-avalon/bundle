@@ -106,6 +106,10 @@ data_service_type 'ImageProvider' do
     output_port 'images', ro_ptr('/base/samples/frame/Frame')
 end
 
+data_service_type 'StructuredLightImage' do 
+    output_port 'images', ro_ptr('/base/samples/frame/Frame')
+end
+
 data_service_type 'StereoPairProvider' do
     output_port 'images', ro_ptr('/base/samples/frame/FramePair')
 end

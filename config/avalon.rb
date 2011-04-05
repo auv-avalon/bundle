@@ -31,7 +31,7 @@ Robot.devices do
   device(Dev::Dynamixel, :as => 'dynamixel').
     device_id("/dev/ttyS3")
 
-  device(Dev::Camera, :as => "front_camera").
+  device(Dev::StructuredLight, :as => "front_camera").
     period(0.1).
     device_id("53093").
     configure do |task|
@@ -59,7 +59,7 @@ Robot.devices do
     end
 
   device(Dev::Camera, :as => "bottom_camera").
-    period(0.3).
+    period(0.1).
     device_id("33186").
     configure do |task|
 	task.binning_x = 1
@@ -78,7 +78,6 @@ Robot.devices do
 	task.log_interval_in_sec = 5
 	task.mode = 'Master'
     end
-  
 
   com_bus(Dev::Canbus, :as => 'can0').
     device_id('can0').
@@ -113,7 +112,6 @@ Robot.devices do
 
     end
 end
-
 
 Roby::State.update do |s|
 end

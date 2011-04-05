@@ -18,11 +18,14 @@ using_task_library "ekf_slam"
 using_task_library "testbed_servoing"
 using_task_library "image_preprocessing"
 using_task_library "buoy_detector"
+using_task_library "structured_light"
+using_task_library "offshore_pipeline_detector"
+using_task_library "frame_demultiplexer"
 
-composition "Cameras" do
-	add Srv::ImageProvider, :as => "bottom_camera"
-	add Srv::ImageProvider, :as => "front_camera"
-end
+#composition "Cameras" do
+#	add Srv::ImageProvider, :as => "bottom_camera"
+#	add Srv::ImageProvider, :as => "front_camera"
+#end
 
 #add_mission(Camera::CameraTask).
 #	use "front_camera"
@@ -163,6 +166,19 @@ composition 'BuoyDetector' do
 	imagePreprocessing.sync_in.ignore
 	export buoyDetector.buoy 
 	autoconnect
+end
+
+composition 'StructuredLight' do
+    add Srv::StructuredLightImage
+    add StructuredLight::Task, :as => 'structuredLight'
+    add FrameDemultiplexer::Task, :as => 'frameDemultiplexer'
+    structuredLight.frame.ignore
+    export structuredLight.laser_scan
+    export frameDemultiplexer.oframe
+    provides DataServices::ImageProvider
+  #  provides DataServices::LaserRangeFinder
+ #   frameDemultiplexer.frame.ignore
+    autoconnect
 end
 
 composition 'Testbed' do
