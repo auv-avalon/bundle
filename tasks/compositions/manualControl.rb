@@ -21,6 +21,7 @@ using_task_library "buoy_detector"
 using_task_library "structured_light"
 using_task_library "offshore_pipeline_detector"
 using_task_library "frame_demultiplexer"
+using_task_library "motion_estimation"
 
 #composition "Cameras" do
 #	add Srv::ImageProvider, :as => "bottom_camera"
@@ -60,6 +61,7 @@ end
 
 #AP Navigation: Experiment von Allan Conquest
 composition 'MovementExperiment' do
+	add MotionEstimation::Task
 	#add DataServices::Pose
 	#add DataServices::RawCommand 
 	#add RawControlCommandConverter::Task, :as => "controlconverter"

@@ -13,16 +13,20 @@ define('drive_slam',Cmp::ControlLoop).
 define('drive_testbed',Cmp::ControlLoop).
 	use 'hbridge_set.motors', AvalonControl::MotionControlTask, Cmp::Testbed, 'front_camera'
 
-define('drive_experiment',Cmp::ControlLoop).
+define('allan',Cmp::ControlLoop).
 	use Cmp::PoseEstimation,'hbridge_set.motors', AvalonControl::MotionControlTask, Cmp::MovementExperiment
 
 define('drive_uwmodem',Cmp::ControlLoop).
 	use 'hbridge_set.motors', AvalonControl::MotionControlTask, Cmp::SlamModemInput
 
+define('dennis',Cmp::ControlLoop).
+	use 'hbridge_set.motors', AvalonControl::MotionControlTask, Cmp::SlamModemInput
+
+
 #Make definitions public because we are in an deployment, and the defiintions need on model
 model.data_service_type "NavigationMode"
 Cmp::ControlLoop.provides Srv::NavigationMode
-modality_selection Srv::NavigationMode, "drive_simple","drive_slam","drive_testbed","drive_uwmodem"
+modality_selection Srv::NavigationMode, "drive_simple","drive_slam","drive_testbed","drive_uwmodem","allan","dennis"
 
 add_mission(Sysmon::Task)
 add_mission(Hbridge::Task)
