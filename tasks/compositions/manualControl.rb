@@ -22,6 +22,7 @@ using_task_library "structured_light"
 using_task_library "offshore_pipeline_detector"
 using_task_library "frame_demultiplexer"
 using_task_library "motion_estimation"
+using_task_library "avalon_simulation"
 
 #composition "Cameras" do
 #	add Srv::ImageProvider, :as => "bottom_camera"
@@ -76,7 +77,8 @@ composition 'RawCommandInputLocal' do
 	add Controldev::Local 
 	add RawControlCommandConverter::Movement, :as => "controlconverter"
 
-	add DataServices::Orientation
+	#add DataServices::Orientation
+	add AvalonSimulation::Task
 	
 	export controlconverter.motion_command
 	provides Srv::AUVMotionCommand
