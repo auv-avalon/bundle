@@ -13,14 +13,14 @@ define('drive_slam',Cmp::ControlLoop).
 define('drive_testbed',Cmp::ControlLoop).
 	use AvalonSimulation::Task, AvalonControl::MotionControlTask, Cmp::Testbed
 
-define('drive_experiment',Cmp::ControlLoop).
-	use Cmp::PoseEstimation,AvalonSimulation::Task, AvalonControl::MotionControlTask, Cmp::MovementExperiment
+define('drive_experiment',Cmp::ControlLoopGeneric).
+	use AvalonSimulation::Task, AvalonControl::MotionControlTask, Cmp::MovementExperiment
 
 #Make definitions public because we are in an deployment, and the defiintions need on model
 model.data_service_type "NavigationMode"
 Cmp::ControlLoopGeneric.provides Srv::NavigationMode
 Cmp::ControlLoop.provides Srv::NavigationMode
-modality_selection Srv::NavigationMode, "drive_simple","drive_slam","drive_testbed"
+modality_selection Srv::NavigationMode, "drive_simple","drive_slam","drive_testbed","drive_experiment"
 
 #add_mission(Sysmon::Task)
 #add_mission(Hbridge::Task)
