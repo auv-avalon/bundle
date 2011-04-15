@@ -14,7 +14,8 @@ State.navigation_mode = ['drive_simple',"drive_slam","drive_testbed","drive_uwmo
 
 Robot.devices do
   device(Dev::LowLevel, :as => 'depth').
-    period(0.3)
+    period(0.3).
+    device_id("/dev/ttyS0")
   device(Dev::XsensImu, :as => 'imu').
     period(0.01).
     device_id("/dev/xsens")
