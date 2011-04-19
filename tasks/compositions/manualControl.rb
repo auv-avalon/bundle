@@ -15,9 +15,9 @@ using_task_library "modem_can"
 using_task_library "raw_control_command_converter"
 using_task_library "movement_experiment"
 using_task_library "ekf_slam"
-using_task_library "testbed_servoing"
+#using_task_library "testbed_servoing"
 using_task_library "image_preprocessing"
-using_task_library "buoy_detector"
+#using_task_library "buoy_detector"
 using_task_library "structured_light"
 using_task_library "offshore_pipeline_detector"
 using_task_library "frame_demultiplexer"
@@ -161,16 +161,16 @@ composition 'SlamManualInput' do
 	autoconnect
 end
 
-composition 'BuoyDetector' do
-	#add DataServices::RawCommand 
-	add Srv::ImageProvider
-	add ImagePreprocessing::Task, :as => 'imagePreprocessing'
-	add BuoyDetector::Task, :as => 'buoyDetector'
-	connect imagePreprocessing.out_frame_half_rgb =>  buoyDetector.frame
-	imagePreprocessing.sync_in.ignore
-	export buoyDetector.buoy 
-	autoconnect
-end
+#composition 'BuoyDetector' do
+#	#add DataServices::RawCommand 
+#	add Srv::ImageProvider
+#	add ImagePreprocessing::Task, :as => 'imagePreprocessing'
+#	add BuoyDetector::Task, :as => 'buoyDetector'
+#	connect imagePreprocessing.out_frame_half_rgb =>  buoyDetector.frame
+#	imagePreprocessing.sync_in.ignore
+#	export buoyDetector.buoy 
+#	autoconnect
+#end
 
 composition 'StructuredLight' do
     add Srv::ImageProvider
@@ -192,30 +192,30 @@ composition 'PipelineFollower' do
 end
 
 composition 'Testbed' do
-	# Why cannot use Orientation as abstract and define pose estimation with use
-	
-	#add DataServices::Orientation
-	add Cmp::PoseEstimation
-
-	add Cmp::BuoyDetector
-
-	add TestbedServoing::Task, :as => 'testbedServoing'
-
-	add EkfSlam::Task, :as => 'slam'
-	add SonarDriver::Micron 
-	#add RawControlCommandConverter::Position, :as => "positionconverter"
-	add AvalonControl::PositionControlTask, :as => "positionControl"
-	export positionControl.motion_commands
-	provides Srv::AUVMotionCommand
-	
-
-	#Not used by filter, should be removed soon
-	#slam.orientation_samples_reference.ignore
-	#slam.speed_samples.ignore
-	slam.acceleration_samples.ignore
-	#slam.acceleration_samples_imu.ignore
-
-	autoconnect
+#	# Why cannot use Orientation as abstract and define pose estimation with use
+#	
+#	#add DataServices::Orientation
+#	add Cmp::PoseEstimation
+#
+#	add Cmp::BuoyDetector
+#
+#	add TestbedServoing::Task, :as => 'testbedServoing'
+#
+#	add EkfSlam::Task, :as => 'slam'
+#	add SonarDriver::Micron 
+#	#add RawControlCommandConverter::Position, :as => "positionconverter"
+#	add AvalonControl::PositionControlTask, :as => "positionControl"
+#	export positionControl.motion_commands
+#	provides Srv::AUVMotionCommand
+#	
+#
+#	#Not used by filter, should be removed soon
+#	#slam.orientation_samples_reference.ignore
+#	#slam.speed_samples.ignore
+#	slam.acceleration_samples.ignore
+#	#slam.acceleration_samples_imu.ignore
+#
+#	autoconnect
 end
 
 Cmp::ControlLoop.specialize 'controller' => AvalonControl::MotionControlTask do
