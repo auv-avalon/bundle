@@ -22,11 +22,20 @@ Robot.devices do
   device(Dev::Dsp3000, :as => 'fog').
     period(0.01)
   device(Dev::Micron, :as => 'sonar').
+    device_id("/dev/micron").
     configure do |task|
     	config = task.config
 	config.numberOfBins 300
 	config.adInterval 30
 	config.initialGain 50
+	task.config = config
+    end
+  device(Dev::Profiling, :as => 'profiler').
+    device_id("/dev/modem").
+    configure do |task|
+    	config = task.config
+	config.leftLimit 0
+	config.rightLimit 6399
 	task.config = config
     end
   
