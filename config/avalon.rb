@@ -1,5 +1,5 @@
-Roby.app.orocos_process_server 'front','127.0.0.1'
-#Roby.app.orocos_process_server 'front','192.168.128.50'
+#Roby.app.orocos_process_server 'front','127.0.0.1'
+Roby.app.orocos_process_server 'front','192.168.128.50'
 Roby.app.use_deployments_from "avalon_front", :on => 'front'
 
 Roby.app.use_deployments_from "avalon_back"
@@ -22,12 +22,21 @@ Robot.devices do
   device(Dev::Dsp3000, :as => 'fog').
     period(0.01)
   device(Dev::Micron, :as => 'sonar').
+    device_id("/dev/sonar").
     configure do |task|
     	config = task.config
-	config.numberOfBins 300
-	config.adInterval 30
-	config.initialGain 50
+	config.numberOfBins  300
+	config.adInterval  30
+	config.initialGain  50
 	task.config = config
+    end
+  device(Dev::Profiling, :as => 'profiler').
+    device_id("/dev/ttyS1").
+    configure do |task|
+        c = task.config
+	c.config.leftLimit 0
+        c.config.rightLimit 6399
+        task.config = c
     end
   
   device(Dev::Dynamixel, :as => 'dynamixel').
