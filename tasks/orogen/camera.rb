@@ -1,9 +1,9 @@
-using_task_library "camera"
+using_task_library "camera_prosilica"
 
 
-class Camera::CameraTask
+class CameraProsilica::Task
     driver_for 'Camera' do
-    	provides Srv::ImageProvider
+    	provides Srv::ImageProvider, "images" => "frame" 
     end
 
     def configure

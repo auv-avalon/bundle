@@ -18,11 +18,12 @@ Robot.devices do
     device_id("/dev/ttyS0")
   device(Dev::XsensImu, :as => 'imu').
     period(0.01).
-    device_id("/dev/xsens")
+    device_id("/dev/ttyS2")
   device(Dev::Dsp3000, :as => 'fog').
+    device_id("/dev/ttyS3").
     period(0.01)
   device(Dev::Micron, :as => 'sonar').
-    device_id("/dev/sonar").
+    device_id("/dev/ttyS0").
     configure do |task|
     	config = task.config
 	config.numberOfBins  300
@@ -41,6 +42,19 @@ Robot.devices do
   
   device(Dev::Dynamixel, :as => 'dynamixel').
     device_id("/dev/ttyS3")
+  
+  device(Dev::Micron, :as => "sonar_rear").
+    device_id("/dev/ttyUSB0").
+    configure do |task|
+    	config = task.config
+	config.leftLimit 0
+	config.rightLimit 6399
+	config.pingPong true
+	config.numberOfBins  300
+	config.adInterval  30
+	config.initialGain  50
+	task.config = config
+    end
 
   device(Dev::Camera, :as => "front_camera").
     period(0.1).
@@ -52,11 +66,11 @@ Robot.devices do
 	task.region_y = 641
 	task.width = 1024 
 	task.height = 768
-	task.trigger_mode = 'freerun'
-	task.exposure_mode = 'auto'
-	#task.trigger_mode = 'sync_in1'
-	#task.exposure_mode = 'external'
-	#task.whitebalance_mode = 'manual'
+	#task.trigger_mode = 'freerun'
+	#task.exposure_mode = 'auto'
+	task.trigger_mode = 'sync_in1'
+	task.exposure_mode = 'external'
+	task.whitebalance_mode = 'manual'
 	#task.exposure = 15000
 	task.fps = 10
 	#task.gain = 0
@@ -103,7 +117,7 @@ Robot.devices do
 	sample_size(4)
 
     hbridge.slave(Dev::Hbridges, :as => 'motors').
-  	select_ids(0,1,2,3,4,5)
+  	select_ids(6,1,2,3,4,5)
 
     device(Dev::Modem, :as => 'modem').
     	can_id(0x1E0, 0x7FF).
