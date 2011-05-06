@@ -1,5 +1,5 @@
-#Roby.app.orocos_process_server 'front','127.0.0.1'
-Roby.app.orocos_process_server 'front','192.168.128.50'
+Roby.app.orocos_process_server 'front','127.0.0.1'
+#Roby.app.orocos_process_server 'front','192.168.128.50'
 Roby.app.use_deployments_from "avalon_front", :on => 'front'
 
 Roby.app.use_deployments_from "avalon_back"
@@ -49,7 +49,7 @@ Robot.devices do
     	config = task.config
 	config.leftLimit 0
 	config.rightLimit 6399
-	config.pingPong true
+	config.pingpong true
 	config.numberOfBins  300
 	config.adInterval  30
 	config.initialGain  50
@@ -75,7 +75,8 @@ Robot.devices do
 	task.fps = 10
 	#task.gain = 0
 	#task.gain_mode_auto = 0
-	task.output_format = 'bayer8'
+	task.camera_format = :MODE_BAYER
+	task.output_format = :MODE_RGB 
 	#task.log_interval_in_sec = 5
 	#task.mode = 'Master'
 	#task.synchronize_time_interval = 2000000
@@ -99,7 +100,8 @@ Robot.devices do
 	task.fps = 20
 	task.gain = 15
 	task.gain_mode_auto = 0
-	#task.output_format = colorspace
+	task.camera_format = :MODE_BAYER
+	task.output_format = :MODE_RGB 
 	task.log_interval_in_sec = 5
 	task.mode = 'Master'
     end

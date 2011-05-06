@@ -32,11 +32,11 @@ add_mission(Sysmon::Task)
 add_mission(Hbridge::Task)
 add_mission(Dynamixel::Task)
 add_mission(SonarDriver::Profiling)
-add_mission(SonarDriver::Micron)
+#add_mission(SonarDriver::Micron)
 add_mission(ModemCan::Task)
 add_mission("sonar_rear")
 
-add_mission(Cmp::PoseEstimationEKF)
+add_mission(Cmp::PoseEstimationEKF). use "sonar"
 add_mission(Cmp::StructuredLight).
     use 'front_camera'
 
