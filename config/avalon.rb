@@ -47,12 +47,13 @@ Robot.devices do
     device_id("/dev/ttyUSB0").
     configure do |task|
     	config = task.config
-	config.leftLimit 0
-	config.rightLimit 6399
+	config.leftLimit 1000 
+	config.rightLimit 4000
 	config.pingpong true
+#	config.continues false
 	config.numberOfBins  300
-	config.adInterval  30
-	config.initialGain  50
+	config.adInterval  50
+	config.initialGain  30
 	task.config = config
     end
 
@@ -77,7 +78,11 @@ Robot.devices do
 	#task.gain = 0
 	#task.gain_mode_auto = 0
 	task.camera_format = :MODE_BAYER
-	task.output_format = :MODE_RGB 
+#	task.scale_x = 0.5
+#	task.scale_y = 0.5
+#	task.resize_algorithm = :BAYER_RESIZE
+#	task.output_format = :MODE_RGB 
+#
 	#task.log_interval_in_sec = 5
 	#task.mode = 'Master'
 	#task.synchronize_time_interval = 2000000

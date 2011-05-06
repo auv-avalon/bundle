@@ -1,12 +1,12 @@
 class AvalonControl::MotionControlTask 
     provides Srv::AUVMotionController
 
-    USE_INTEGRAL=false
+    USE_INTEGRAL=true
     USE_DEPTH_CONTROLLER=true
 
     def configure
         super
-	orogen_task.z_coupling_factor = 0.19
+	orogen_task.z_coupling_factor = -0.19
 	orogen_task.y_coupling_factor = 0.10
 	orogen_task.y_factor = 1 
 	orogen_task.x_factor = 1 
@@ -14,10 +14,10 @@ class AvalonControl::MotionControlTask
 	pid_settings = orogen_task.z_pid
 	pid_settings.zero!
 	#if USE_DEPTH_CONTROLLER
-	pid_settings.p = 3 
-	#if USE_INTEGRAL
-	#	pid_settings.i = 0.05
-	#end
+	pid_settings.p = -3 
+	if USE_INTEGRAL
+		pid_settings.i = -0.05
+	end
 	pid_settings.d = 0#1 
 	pid_settings.min = -1#-0.5
 	pid_settings.max = 1#0.5
@@ -25,7 +25,7 @@ class AvalonControl::MotionControlTask
 	orogen_task.z_pid = pid_settings
 	
 	pid_settings.zero!
-	pid_settings.p = 2
+	pid_settings.p = 5 
 	#pid_settings.p = 0.5
 	if USE_INTEGRAL
 	    #pid_settings.i = 0.01
@@ -36,9 +36,9 @@ class AvalonControl::MotionControlTask
 	orogen_task.heading_pid = pid_settings
 	
 	pid_settings.zero!
-	pid_settings.p = 10 
+	pid_settings.p = 1 
 	if USE_INTEGRAL
-#		pid_settings.i = -0.1
+		pid_settings.i = 0.1
 	end
 	pid_settings.d = 0.0
 	pid_settings.min = -1

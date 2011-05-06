@@ -36,7 +36,7 @@ add_mission(SonarDriver::Profiling)
 add_mission(ModemCan::Task)
 add_mission("sonar_rear")
 
-add_mission(Cmp::PoseEstimationEKF). use "sonar"
+#add_mission(Cmp::PoseEstimationEKF). use "sonar"
 
 add_mission('front_camera')
 add_mission('bottom_camera')
