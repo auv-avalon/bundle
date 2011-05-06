@@ -1,5 +1,5 @@
-Roby.app.orocos_process_server 'front','127.0.0.1'
-#Roby.app.orocos_process_server 'front','192.168.128.50'
+#Roby.app.orocos_process_server 'front','127.0.0.1'
+Roby.app.orocos_process_server 'front','192.168.128.50'
 Roby.app.use_deployments_from "avalon_front", :on => 'front'
 
 Roby.app.use_deployments_from "avalon_back"
@@ -66,10 +66,11 @@ Robot.devices do
 	task.region_y = 641
 	task.width = 1024 
 	task.height = 768
+	task.trigger_mode = 'fixed'
 	#task.trigger_mode = 'freerun'
-	#task.exposure_mode = 'auto'
-	task.trigger_mode = 'sync_in1'
-	task.exposure_mode = 'external'
+	task.exposure_mode = 'auto'
+	#task.trigger_mode = 'sync_in1'
+	#task.exposure_mode = 'external'
 	task.whitebalance_mode = 'manual'
 	#task.exposure = 15000
 	task.fps = 10
@@ -81,7 +82,7 @@ Robot.devices do
 	#task.mode = 'Master'
 	#task.synchronize_time_interval = 2000000
 #	task.frame_start_trigger_event = 'EdgeRising'
-#	task.frame_start_trigger_event = 'FixedRate'
+	task.frame_start_trigger_event = 'FixedRate'
     end
 
   device(Dev::Camera, :as => "bottom_camera").

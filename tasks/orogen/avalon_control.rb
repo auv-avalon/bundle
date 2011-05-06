@@ -25,8 +25,8 @@ class AvalonControl::MotionControlTask
 	orogen_task.z_pid = pid_settings
 	
 	pid_settings.zero!
-	#pid_settings.p = 2
-	pid_settings.p = 0.5
+	pid_settings.p = 2
+	#pid_settings.p = 0.5
 	if USE_INTEGRAL
 	    #pid_settings.i = 0.01
 	end

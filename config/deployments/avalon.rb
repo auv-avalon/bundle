@@ -37,11 +37,14 @@ add_mission(ModemCan::Task)
 add_mission("sonar_rear")
 
 add_mission(Cmp::PoseEstimationEKF). use "sonar"
-add_mission(Cmp::StructuredLight).
-    use 'front_camera'
 
-add_mission(Cmp::PipelineFollower).
-    use 'bottom_camera'
+add_mission('front_camera')
+add_mission('bottom_camera')
+#add_mission(Cmp::StructuredLight).
+#    use 'front_camera'
+
+#add_mission(Cmp::PipelineFollower).
+#    use 'bottom_camera'
 
 #add_mission(Cmp::BuoyDetector)
 #add_mission(Cmp::BuoyDetector).
