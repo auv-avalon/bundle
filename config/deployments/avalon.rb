@@ -29,7 +29,7 @@ define('wall_servoing',Cmp::ControlLoop).
 #Make definitions public because we are in an deployment, and the defiintions need on model
 model.data_service_type "NavigationMode"
 Cmp::ControlLoop.provides Srv::NavigationMode
-modality_selection Srv::NavigationMode, "drive_simple","drive_slam","drive_testbed","drive_uwmodem","allan","dennis"
+modality_selection Srv::NavigationMode, "drive_simple","drive_slam","drive_testbed","drive_uwmodem","allan","dennis","wall_servoing"
 
 add_mission(Sysmon::Task)
 add_mission(Hbridge::Task)

@@ -31,14 +31,14 @@ Robot.devices do
 	config.initialGain  50
 	task.config = config
     end
-  device(Dev::Profiling, :as => 'profiler').
-    device_id("/dev/ttyS1").
-    configure do |task|
-        c = task.config
-	c.config.leftLimit 0
-        c.config.rightLimit 6399
-        task.config = c
-    end
+  #device(Dev::Profiling, :as => 'profiler').
+  #  device_id("/dev/ttyS1").
+  #  configure do |task|
+  #      c = task.config
+#	c.config.leftLimit 0
+ #       c.config.rightLimit 6399
+  #      task.config = c
+  #  end
   
   device(Dev::Dynamixel, :as => 'dynamixel').
     device_id("/dev/ttyS3")
@@ -55,7 +55,7 @@ Robot.devices do
 	config.adInterval  50
 	config.initialGain  30
 	task.config = config
-    end
+   end
 
   device(Dev::Camera, :as => "front_camera").
     period(0.1).
