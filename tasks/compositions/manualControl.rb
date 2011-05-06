@@ -23,6 +23,9 @@ using_task_library "offshore_pipeline_detector"
 using_task_library "frame_demultiplexer"
 using_task_library "motion_estimation"
 using_task_library "avalon_simulation"
+using_task_library "sonardetector"
+using_task_library "object_servoing"
+using_task_library "auv_rel_pos_controller"
 
 #composition "Cameras" do
 #	add Srv::ImageProvider, :as => "bottom_camera"
@@ -58,6 +61,18 @@ composition "PoseEstimation" do
 	autoconnect
 end
 
+composition "WallServoing" do
+    add AuvRelPosController::Task , :as => 'relposcontroller'
+    add Sonardetector::Task , :as => 'sonardetector'
+    add ObjectServoing::Task , :as => 'objectservoing'
+    add SonarDriver::Micron
+    add Cmp::PoseEstimation
+
+    export relposcontroller.motion_command
+    provides Srv::AUVMotionCommand
+
+    autoconnect
+end
 
 
 #AP Navigation: Experiment von Allan Conquest

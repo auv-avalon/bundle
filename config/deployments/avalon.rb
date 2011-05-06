@@ -22,6 +22,9 @@ define('drive_uwmodem',Cmp::ControlLoop).
 define('dennis',Cmp::ControlLoop).
 	use 'hbridge_set.motors', AvalonControl::MotionControlTask, Cmp::SlamModemInput
 
+define('wall_servoing',Cmp::ControlLoop).
+	use 'hbridge_set.motors', AvalonControl::MotionControlTask, Cmp::WallServoing.use('sonar')
+
 
 #Make definitions public because we are in an deployment, and the defiintions need on model
 model.data_service_type "NavigationMode"
