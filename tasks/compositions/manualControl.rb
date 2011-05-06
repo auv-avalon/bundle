@@ -165,7 +165,7 @@ composition 'SlamManualInput' do
 	add SonarDriver::Micron 
 	add RawControlCommandConverter::Position, :as => "positionconverter"
 	add AvalonControl::PositionControlTask, :as => "positionControl"
-	export positionControl.motion_commands
+	export positionControl.motion_commands, :as => 'command'
 	provides Srv::AUVMotionCommand
 	#Not used by filter, should be removed soon
 	#slam.orientation_samples_reference.ignore

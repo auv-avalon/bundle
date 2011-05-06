@@ -8,7 +8,7 @@ define('drive_simple',Cmp::ControlLoop).
 	use 'hbridge_set.motors',Cmp::PoseEstimation, AvalonControl::MotionControlTask, Cmp::RawCommandInput
 
 define('drive_slam',Cmp::ControlLoop).
-	use 'hbridge_set.motors', AvalonControl::MotionControlTask, Cmp::SlamManualInput
+	use 'hbridge_set.motors', AvalonControl::MotionControlTask, Cmp::SlamManualInput.use('sonar_rear')
 
 define('drive_testbed',Cmp::ControlLoop).
 	use 'hbridge_set.motors', AvalonControl::MotionControlTask, Cmp::Testbed, 'front_camera'
