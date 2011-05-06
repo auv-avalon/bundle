@@ -68,7 +68,7 @@ composition "WallServoing" do
     add SonarDriver::Micron
     add Cmp::PoseEstimation
 
-    export relposcontroller.motion_command
+    export relposcontroller.motion_command, :as => 'command'
     provides Srv::AUVMotionCommand
 
     autoconnect
