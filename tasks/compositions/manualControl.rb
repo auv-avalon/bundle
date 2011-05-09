@@ -201,8 +201,10 @@ end
 composition 'PipelineFollower' do
     add Srv::ImageProvider
     add OffshorePipelineDetector::Task, :as => 'offshorePipelineDetector'
-   # export offshorePipelineDetector.pipeline
-   # provides 
+    add AuvRelPosController::Task, :as => 'controller'
+    add Cmp::PoseEstimation
+    export controller.motion_command, :as => 'command'
+    provides Srv::AUVMotionCommand
     autoconnect
 end
 

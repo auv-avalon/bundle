@@ -1,7 +1,7 @@
-#Roby.app.orocos_process_server 'front','127.0.0.1'
-Roby.app.orocos_process_server 'front','192.168.128.50'
-Roby.app.use_deployments_from "avalon_front", :on => 'front'
+#Roby.app.orocos_process_server 'front','192.168.128.50'
+#Roby.app.use_deployments_from "avalon_front", :on => 'front'
 
+Roby.app.use_deployments_from "avalon_front"
 Roby.app.use_deployments_from "avalon_back"
 
 #State.orocos.disable_logging
@@ -10,7 +10,7 @@ Roby.app.use_deployments_from "avalon_back"
 State.orocos.exclude_from_log '/canbus/Message'
 
 
-State.navigation_mode = ['drive_simple',"drive_slam","drive_testbed","drive_uwmodem","allan","dennis","wall_servoing"]#should load simpleControl
+State.navigation_mode = ['drive_simple',"drive_slam","drive_testbed","drive_uwmodem","allan","dennis","wall_servoing","pipeline"]#should load simpleControl
 
 Robot.devices do
   device(Dev::LowLevel, :as => 'depth').
