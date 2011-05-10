@@ -1,7 +1,7 @@
-#Roby.app.orocos_process_server 'front','192.168.128.50'
-#Roby.app.use_deployments_from "avalon_front", :on => 'front'
+Roby.app.orocos_process_server 'front','192.168.128.50'
+Roby.app.use_deployments_from "avalon_front", :on => 'front'
 
-Roby.app.use_deployments_from "avalon_front"
+#Roby.app.use_deployments_from "avalon_front"
 Roby.app.use_deployments_from "avalon_back"
 
 #State.orocos.disable_logging
@@ -9,7 +9,14 @@ Roby.app.use_deployments_from "avalon_back"
 
 State.orocos.exclude_from_log '/canbus/Message'
 
-
+#drive_simple = 0
+#drive_slam = 1
+#drive_testbed = 2
+#drive_uwmodem = 3
+#drive_allen = 4
+#drive_dennis = 5
+#drive_wall_servoing = 6
+#pipeline = 7
 State.navigation_mode = ['drive_simple',"drive_slam","drive_testbed","drive_uwmodem","allan","dennis","wall_servoing","pipeline"]#should load simpleControl
 
 Robot.devices do
@@ -69,6 +76,9 @@ Robot.devices do
     period(0.1).
     device_id("53093").
     configure do |task|
+	task.camera_format = :MODE_BAYER
+	task.log_interval_in_sec = 5
+	task.mode = 'Master'
 	task.binning_x = 1 
 	task.binning_y = 1
 	task.region_x = 712 
@@ -76,26 +86,20 @@ Robot.devices do
 	task.width = 1024 
 	task.height = 768
 	task.trigger_mode = 'fixed'
-	#task.trigger_mode = 'freerun'
-	task.exposure_mode = 'auto'
-	#task.trigger_mode = 'sync_in1'
-	#task.exposure_mode = 'external'
+	task.exposure_mode = 'manual'
 	task.whitebalance_mode = 'manual'
-	#task.exposure = 15000
+	task.exposure = 5000
 	task.fps = 10
 	#task.gain = 0
-	#task.gain_mode_auto = 0
-	task.camera_format = :MODE_BAYER
-#	task.scale_x = 0.5
-#	task.scale_y = 0.5
-#	task.resize_algorithm = :BAYER_RESIZE
-#	task.output_format = :MODE_RGB 
-#
-	#task.log_interval_in_sec = 5
-	#task.mode = 'Master'
+
+	#task.trigger_mode = 'sync_in1'
+	#task.exposure_mode = 'external'
+	#task.frame_start_trigger_event = 'EdgeRising'
+	task.scale_x = 0.5
+	task.scale_y = 0.5
+	task.resize_algorithm = :BAYER_RESIZE
+
 	#task.synchronize_time_interval = 2000000
-#	task.frame_start_trigger_event = 'EdgeRising'
-	task.frame_start_trigger_event = 'FixedRate'
     end
 
   device(Dev::Camera, :as => "bottom_camera").
@@ -110,12 +114,11 @@ Robot.devices do
 	task.height =480
 	task.trigger_mode = 'fixed'
 	task.exposure = 5000
-	task.exposure_mode = 'manual'
+	task.exposure_mode = 'auto'
 	task.fps = 20
 	task.gain = 15
 	task.gain_mode_auto = 0
 	task.camera_format = :MODE_BAYER
-	task.output_format = :MODE_RGB 
 	task.log_interval_in_sec = 5
 	task.mode = 'Master'
     end
