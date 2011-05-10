@@ -29,6 +29,14 @@ Robot.devices do
 	config.numberOfBins  300
 	config.adInterval  30
 	config.initialGain  50
+		
+	#for front scanning
+	config.pingpong=true
+	config.cont = false
+	config.leftLimit = 2399
+	config.rightLimit = 3999
+	#front scanning end
+	#
 	task.config = config
     end
   #device(Dev::Profiling, :as => 'profiler').
