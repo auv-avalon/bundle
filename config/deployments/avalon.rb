@@ -25,11 +25,13 @@ define('dennis',Cmp::ControlLoop).
 define('wall_servoing',Cmp::ControlLoop).
 	use 'hbridge_set.motors', AvalonControl::MotionControlTask, Cmp::WallServoing.use('sonar')
 
+define('pipeline',Cmp::ControlLoop).
+	use 'hbridge_set.motors', AvalonControl::MotionControlTask, Cmp::PipelineFollower.use('bottom_camera')
 
 #Make definitions public because we are in an deployment, and the defiintions need on model
 model.data_service_type "NavigationMode"
 Cmp::ControlLoop.provides Srv::NavigationMode
-modality_selection Srv::NavigationMode, "drive_simple","drive_slam","drive_testbed","drive_uwmodem","allan","dennis","wall_servoing"
+modality_selection Srv::NavigationMode, "drive_simple","drive_slam","drive_testbed","drive_uwmodem","allan","dennis","wall_servoing","pipeline"
 
 add_mission(Sysmon::Task)
 add_mission(Hbridge::Task)
