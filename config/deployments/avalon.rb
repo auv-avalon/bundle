@@ -4,17 +4,27 @@
 #add_mission(Canbus::Task)
 #add_mission(Hbridge::Task)
 
+
+#We use Matthias EKF For orientation estimation
+
+use DataServices::Orientation => Cmp::OrientationEstimator
+use Srv::Pose => Cmp::PoseEstimation.use('sonar')
+
 define('drive_simple',Cmp::ControlLoop).
-	use 'hbridge_set.motors',Cmp::PoseEstimation, AvalonControl::MotionControlTask, Cmp::RawCommandInput
+	use 'hbridge_set.motors',
+#	Cmp::OrientationEstimator, 
+#	AvalonControl::MotionControlTask, 
+	Cmp::RawCommandInput
 
 define('drive_slam',Cmp::ControlLoop).
-	use 'hbridge_set.motors', AvalonControl::MotionControlTask, Cmp::SlamManualInput.use('sonar_rear')
+	use Cmp::SlamManualInput.use('sonar'),
+	DataServices::Orientation => Cmp::OrientationEstimator
 
 define('drive_testbed',Cmp::ControlLoop).
 	use 'hbridge_set.motors', AvalonControl::MotionControlTask, Cmp::Testbed, 'front_camera'
 
 define('allan',Cmp::ControlLoop).
-	use Cmp::PoseEstimation,'hbridge_set.motors', AvalonControl::MotionControlTask, Cmp::MovementExperiment
+	use Cmp::OrientationEstimator,'hbridge_set.motors', AvalonControl::MotionControlTask, Cmp::MovementExperiment
 
 define('drive_uwmodem',Cmp::ControlLoop).
 	use 'hbridge_set.motors', AvalonControl::MotionControlTask, Cmp::SlamModemInput
@@ -33,20 +43,20 @@ model.data_service_type "NavigationMode"
 Cmp::ControlLoop.provides Srv::NavigationMode
 modality_selection Srv::NavigationMode, "drive_simple","drive_slam","drive_testbed","drive_uwmodem","allan","dennis","wall_servoing","pipeline"
 
-add_mission(Sysmon::Task)
-add_mission(Hbridge::Task)
-add_mission(Dynamixel::Task)
-add_mission(SonarDriver::Profiling)
-#add_mission(SonarDriver::Micron)
-add_mission(ModemCan::Task)
-add_mission("sonar_rear")
-add_mission("sonar")
-
-add_mission(Cmp::PoseEstimationEKF). use "sonar"
-
-add_mission('front_camera')
-add_mission('bottom_camera')
-add_mission(Cmp::PipelineDetector).use('bottom_camera')
+# # add_mission(Sysmon::Task)
+# # add_mission(Hbridge::Task)
+# # add_mission(Dynamixel::Task)
+# # add_mission(SonarDriver::Profiling)
+# # #add_mission(SonarDriver::Micron)
+# # add_mission(ModemCan::Task)
+# # add_mission("sonar_rear")
+# # add_mission("sonar")
+# # 
+# # add_mission(Cmp::OrientationEstimator). use "sonar"
+# # 
+# # add_mission('front_camera')
+# # add_mission('bottom_camera')
+# # add_mission(Cmp::PipelineDetector).use('bottom_camera')
 
 #add_mission(Cmp::StructuredLight).
 #    use 'front_camera'

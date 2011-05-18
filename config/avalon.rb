@@ -4,7 +4,7 @@ Roby.app.use_deployments_from "avalon_front", :on => 'front'
 #Roby.app.use_deployments_from "avalon_front"
 Roby.app.use_deployments_from "avalon_back"
 
-#State.orocos.disable_logging
+State.orocos.disable_logging
 
 
 State.orocos.exclude_from_log '/canbus/Message'
@@ -17,7 +17,7 @@ State.orocos.exclude_from_log '/canbus/Message'
 #drive_dennis = 5
 #drive_wall_servoing = 6
 #pipeline = 7
-State.navigation_mode = ['drive_simple',"drive_slam","drive_testbed","drive_uwmodem","allan","dennis","wall_servoing","pipeline"]#should load simpleControl
+State.navigation_mode = ['drive_simple',"drive_slam","pipeline","drive_testbed","drive_uwmodem","allan","dennis","wall_servoing"]#should load simpleControl
 
 Robot.devices do
   device(Dev::LowLevel, :as => 'depth').

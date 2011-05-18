@@ -20,7 +20,7 @@ navigation_mode = nil
 
 
 Roby.every(0.1, :on_error => :disable) do
-    State.lowlevel_substate = 7
+#    State.lowlevel_substate = 7
     if State.lowlevel_state?
         if State.lowlevel_state != 3 and State.lowlevel_state != 5
             if navigation_mode

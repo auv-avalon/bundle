@@ -42,7 +42,7 @@ using_task_library "auv_rel_pos_controller"
 
 
 
-composition "PoseEstimation" do
+composition "OrientationEstimator" do
 	add LowLevelDriver::LowLevelTask, :as => 'lowlevel'
 	add XsensImu::Task, :as => 'imu'
 
@@ -66,7 +66,7 @@ composition "WallServoing" do
     add Sonardetector::Task , :as => 'sonardetector'
     add ObjectServoing::Task , :as => 'objectservoing'
     add SonarDriver::Micron
-    add Cmp::PoseEstimation
+    add DataServices::Orientation
 
     export relposcontroller.motion_command, :as => 'command'
     provides Srv::AUVMotionCommand
@@ -106,7 +106,7 @@ composition 'RawCommandInput' do
 	add RawControlCommandConverter::Movement, :as => "controlconverter"
 
 	#add DataServices::Orientation
-	add Cmp::PoseEstimation
+	add DataServices::Orientation
 	
 	export controlconverter.motion_command
 	provides Srv::AUVMotionCommand
@@ -121,22 +121,36 @@ end
 #end
 
 
-composition "Slam" do
-	add Cmp::PoseEstimation
+#composition "Slam" do
+#	add Cmp::OrientationEstimator
+#	add EkfSlam::Task, :as => 'slam'
+#	add SonarDriver::Micron 
+#	export slam.pose_samples 	
+#
+#	provides DataServices::Pose
+#	provides DataServices::Orientation	
+#
+#	slam.acceleration_samples.ignore
+#	autoconnect
+#end
+
+composition 'PoseEstimation' do
+        add Srv::Orientation
+	#add Srv::CalibratedIMUSensors
 	add EkfSlam::Task, :as => 'slam'
 	add SonarDriver::Micron 
-	export slam.pose_samples 	
+	slam.acceleration_samples.ignore
+
+	export slam.pose_samples
 
 	provides DataServices::Pose
 	provides DataServices::Orientation	
-
-	slam.acceleration_samples.ignore
 	autoconnect
 end
 
 composition "SlamModemInput" do
 	add ModemCan::Task, :as => "modem"
-	add Cmp::Slam
+	add Cmp::PoseEstimation
 	add AvalonControl::PositionControlTask, :as => "positionControl"
 	#connect modem.position_commands positionControl.position_commands
 	export positionControl.motion_commands
@@ -144,25 +158,17 @@ composition "SlamModemInput" do
 	autoconnect
 end
 
-composition 'PoseEstimationEKF' do
-	add Cmp::PoseEstimation
-	add EkfSlam::Task, :as => 'slam'
-	add SonarDriver::Micron 
-	export slam.pose_samples
-	provides DataServices::Pose
-	autoconnect
-end
+
+
 
 composition 'SlamManualInput' do
-	# Why cannot use Orientation as abstract and define pose estimation with use
-	
-	#add DataServices::Orientation
-	add Cmp::PoseEstimation
+	add DataServices::Pose
+#	add Cmp::OrientationEstimator
 	
 	add DataServices::RawCommand 
 
-	add EkfSlam::Task, :as => 'slam'
-	add SonarDriver::Micron 
+#	add EkfSlam::Task, :as => 'slam'
+#	add SonarDriver::Micron 
 	add RawControlCommandConverter::Position, :as => "positionconverter"
 	add AvalonControl::PositionControlTask, :as => "positionControl"
 	export positionControl.motion_commands, :as => 'command'
@@ -170,7 +176,7 @@ composition 'SlamManualInput' do
 	#Not used by filter, should be removed soon
 	#slam.orientation_samples_reference.ignore
 	#slam.speed_samples.ignore
-	slam.acceleration_samples.ignore
+	#slam.acceleration_samples.ignore
 	#slam.acceleration_samples_imu.ignore
 
 	autoconnect
@@ -210,7 +216,7 @@ composition 'PipelineFollower' do
     add Srv::ImageProvider
     add OffshorePipelineDetector::Task, :as => 'offshorePipelineDetector'
     add AuvRelPosController::Task, :as => 'controller'
-    add Cmp::PoseEstimation
+    add DataServices::Orientation
     export controller.motion_command, :as => 'command'
     provides Srv::AUVMotionCommand
     autoconnect
@@ -247,19 +253,8 @@ Cmp::ControlLoop.specialize 'controller' => AvalonControl::MotionControlTask do
 	overload 'command', Srv::AUVMotionCommand
 	
 	
-	#add DataServices::Orientation
-	add Cmp::PoseEstimation
-	#add XsensImu::Task, :as => 'imu'
-
-	autoconnect
-end
-
-Cmp::ControlLoopGeneric.specialize 'controller' => AvalonControl::MotionControlTask do
-	overload 'command', Srv::AUVMotionCommand
-	
-	
 	add DataServices::Orientation
-	#add Cmp::PoseEstimation
+	#add Cmp::OrientationEstimator
 	#add XsensImu::Task, :as => 'imu'
 
 	autoconnect
