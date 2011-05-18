@@ -198,6 +198,14 @@ composition 'StructuredLight' do
     autoconnect
 end
 
+composition 'PipelineDetector' do
+    add Srv::ImageProvider
+    add OffshorePipelineDetector::Task, :as => 'offshorePipelineDetector'
+    autoconnect
+    export offshorePipelineDetector.position_command
+end
+
+
 composition 'PipelineFollower' do
     add Srv::ImageProvider
     add OffshorePipelineDetector::Task, :as => 'offshorePipelineDetector'

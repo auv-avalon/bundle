@@ -8,7 +8,7 @@ class MoveCommand < Roby::Task
 		if motion_control_tasks.size > 1
 			raise ArgumentError, "Cannot handle multiple Motioncontrollers"
 		elsif
-			@motion motion_control_tasks.first
+			@motion =  motion_control_tasks.first
 			@motion_writer = data_writer 'motion_commands', 'motion'
 			@motion_sample = data.writer.new_sample
 			@motion_sample.x_speed = command[0]

@@ -39,21 +39,23 @@ Robot.devices do
 		
 	#for front scanning
 	config.pingpong=true
-	config.cont = false
+	config.cont = 0
 	config.leftLimit = 2399
 	config.rightLimit = 3999
 	#front scanning end
 	#
 	task.config = config
     end
-  #device(Dev::Profiling, :as => 'profiler').
-  #  device_id("/dev/ttyS1").
-  #  configure do |task|
-  #      c = task.config
-#	c.config.leftLimit 0
- #       c.config.rightLimit 6399
-  #      task.config = c
-  #  end
+  device(Dev::Profiling, :as => 'profiler').
+    device_id("/dev/ttyS1").
+    configure do |task|
+        c = task.config
+	start = (6400.0/4.0)*1.0
+	ende = start + (6400.0/4.0)
+	c.config.leftLimit start
+        c.config.rightLimit ende
+        task.config = c
+  end
   
   device(Dev::Dynamixel, :as => 'dynamixel').
     device_id("/dev/ttyS3")
@@ -115,12 +117,15 @@ Robot.devices do
 	task.trigger_mode = 'fixed'
 	task.exposure = 5000
 	task.exposure_mode = 'auto'
-	task.fps = 20
+	task.fps = 12
 	task.gain = 15
 	task.gain_mode_auto = 0
 	task.camera_format = :MODE_BAYER
 	task.log_interval_in_sec = 5
 	task.mode = 'Master'
+	task.scale_x = 0.5
+	task.scale_y = 0.5
+	task.resize_algorithm = :BAYER_RESIZE
     end
 
   com_bus(Dev::Canbus, :as => 'can0').

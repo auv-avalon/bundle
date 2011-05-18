@@ -17,7 +17,7 @@ class AvalonControl::MotionControlTask
 	#if USE_DEPTH_CONTROLLER
 	pid_settings.p = -1.5
 	if USE_INTEGRAL
-		pid_settings.i = -0.01
+		pid_settings.i = -0.05
 	end
 	pid_settings.d = 1 
 	pid_settings.min = -1
@@ -26,11 +26,11 @@ class AvalonControl::MotionControlTask
 	orogen_task.z_pid = pid_settings
 	
 	pid_settings.zero!
-	pid_settings.p = -0.8 
+	pid_settings.p = -0.6 # -0.8 
 	if USE_INTEGRAL
 	    pid_settings.i = -0.001
 	end
-	pid_settings.d = -1
+	pid_settings.d = -2
 	pid_settings.min = -0.8
 	pid_settings.max = 0.8
 	orogen_task.heading_pid = pid_settings
