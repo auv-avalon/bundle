@@ -5,7 +5,7 @@ require 'controllers/common_controller'
 Roby.app.apply_orocos_deployment 'avalon' #From config/deployments
 
 navigation_mode = nil 
-
+last_substate = 0 
 #Orocos.log_all_ports :exclude_types => '/can/Message'#, :exclude_ports => 'can.hbridge_set'
 #Orocos.log_all_ports :exclude_types => '/canbus/Message'#, :exclude_ports => 'can.hbridge_set'
 
@@ -24,18 +24,26 @@ Roby.every(0.1, :on_error => :disable) do
     if State.lowlevel_state?
         if State.lowlevel_state != 3 and State.lowlevel_state != 5
             if navigation_mode
+	    	Robot.info "Stopping current mode because we are not autonomoues"
                 Roby.plan.unmark_mission(navigation_mode.task)
 		navigation_mode = nil
             end
         elsif State.lowlevel_state == 3 or State.lowlevel_state == 5
             if !State.navigation_mode?
-                Robot.warn "switched to mode 3, but no navigation mode is selected in State.navigation_mode"
-            elsif !navigation_mode
-	    	Robot.info "Starting mode number: #{State.lowlevel_substate}"
+                Robot.warn "switched to mode 3, but no navigation mode is selected in State.navigation_mode, means array in config/avalon.rb empty"
+            elsif !navigation_mode or last_substate != State.lowlevel_substate
+		if navigation_mode and last_substate != State.lowlevel_substate
+			Robot.warn "Stopping current navigation mode becase we switched"
+			Roby.plan.unmark_mission(navigation_mode.task)
+			navigation_mode = nil
+		end
+	    	
+		Robot.info "Starting mode number: #{State.lowlevel_substate}"
                 if(State.navigation_mode[State.lowlevel_substate])
 			Robot.info "starting navigation mode #{State.navigation_mode[State.lowlevel_substate]}, we are currently at #{navigation_mode}"
 			navigation_mode, _ = Robot.send("#{State.navigation_mode[State.lowlevel_substate]}!")
 	               	navigation_mode = navigation_mode.as_service
+			last_substate = State.lowlevel_substate
 		elsif
 			Robot.info "Cannot Start unknown substate!!!!! -#{State.navigation_mode[State.lowlevel_substate]}-"
 		end
@@ -45,9 +53,8 @@ Roby.every(0.1, :on_error => :disable) do
 end
 
 Roby.every(1, :on_error => :disable) do
-	#pp "Current State is:"
-	#a = State.lowlevel_state
-	#pp a 
+	a = State.lowlevel_substate
+	pp "Current State is: #{a}"
 end
 
 #    if State.milestone1_mode? && State.milestone1_mode == :from_the_pond

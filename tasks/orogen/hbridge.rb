@@ -105,7 +105,6 @@ Compositions::ControlLoopGeneric.specialize 'actuators' => Hbridge::Task do
         Robot.info  "timout started"
         # But resume error handling as soon as read_write is emitted
         hbridge.read_write_event.on do |event|
-            Robot.info "Event: #{event} is calles"
             Robot.info "hbridge switched to read_write, resuming handling of hbridge errors"
         end
         hbridge.read_write_event.signals timeout.stop_event

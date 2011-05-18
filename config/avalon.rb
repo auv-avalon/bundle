@@ -17,7 +17,9 @@ State.orocos.exclude_from_log '/canbus/Message'
 #drive_dennis = 5
 #drive_wall_servoing = 6
 #pipeline = 7
-State.navigation_mode = ['drive_simple',"drive_slam","pipeline","drive_testbed","drive_uwmodem","allan","dennis","wall_servoing"]#should load simpleControl
+#State.nagation_mode = ['drive_simple',"drive_slam","pipeline","drive_testbed","drive_uwmodem","allan","dennis","wall_servoing"]#should load simpleControl
+
+State.navigation_mode = ['drive_simple',"drive_slam","pipeline"]
 
 Robot.devices do
   device(Dev::LowLevel, :as => 'depth').
@@ -33,7 +35,7 @@ Robot.devices do
     device_id("/dev/ttyS0").
     configure do |task|
     	config = task.config
-	config.numberOfBins  300
+	config.numberOfBins  301
 	config.adInterval  30
 	config.initialGain  50
 		
@@ -68,7 +70,7 @@ Robot.devices do
 	config.rightLimit 4000
 	config.pingpong true
 #	config.continues false
-	config.numberOfBins  300
+	config.numberOfBins  500
 	config.adInterval  50
 	config.initialGain  30
 	task.config = config
