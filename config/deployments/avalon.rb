@@ -7,8 +7,10 @@
 
 #We use Matthias EKF For orientation estimation
 
+#use DataServices::Orientation => Dev::XsensImu 
 use DataServices::Orientation => Cmp::OrientationEstimator
 use Srv::Pose => Cmp::PoseEstimation.use('sonar')
+use Cmp::GroundDistanceEstimation => Cmp::GroundDistanceEstimation.use('sonar_rear')
 
 define('drive_simple',Cmp::ControlLoop).
 	use Cmp::RawCommandInput
@@ -48,14 +50,14 @@ add_mission(Hbridge::Task)
 
 ###Sonare
 
-#add_mission(SonarDriver::Profiling)
+add_mission(SonarDriver::Profiling)
 add_mission("sonar_rear")
 add_mission("sonar")
 
 
 add_mission(ModemCan::Task)
 add_mission(Cmp::OrientationEstimator). use "sonar"
-
+add_mission(Cmp::GroundDistanceEstimation).use("sonar_rear")
 
 add_mission('front_camera')
 add_mission('bottom_camera')

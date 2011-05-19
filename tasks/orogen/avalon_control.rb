@@ -44,7 +44,7 @@ class AvalonControl::MotionControlTask
 	pid_settings.min = -1
 	pid_settings.max = 1
 	orogen_task.pitch_pid = pid_settings
-	orogen_task.pitch_target = 7.0/180.0*Math::PI
+	orogen_task.pitch_target = 0.0/180.0*Math::PI
 
 
     end

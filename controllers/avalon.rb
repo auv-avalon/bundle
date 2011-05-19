@@ -53,8 +53,8 @@ Roby.every(0.1, :on_error => :disable) do
 end
 
 Roby.every(1, :on_error => :disable) do
-	a = State.lowlevel_substate
-	pp "Current State is: #{a}"
+#	a = State.lowlevel_substate
+#	pp "Current State is: #{a}"
 end
 
 #    if State.milestone1_mode? && State.milestone1_mode == :from_the_pond

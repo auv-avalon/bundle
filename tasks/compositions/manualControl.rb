@@ -26,6 +26,7 @@ using_task_library "avalon_simulation"
 using_task_library "sonardetector"
 using_task_library "object_servoing"
 using_task_library "auv_rel_pos_controller"
+using_task_library "rear_sonar_distance_estimator"
 
 #composition "Cameras" do
 #	add Srv::ImageProvider, :as => "bottom_camera"
@@ -42,12 +43,30 @@ using_task_library "auv_rel_pos_controller"
 
 
 
-composition "OrientationEstimator" do
+composition "GroundDistanceEstimation" do
 	add LowLevelDriver::LowLevelTask, :as => 'lowlevel'
-	add XsensImu::Task, :as => 'imu'
+	add RearSonarDistanceEstimator::Task, :as => 'dist_est'
+    	add SonarDriver::Micron
+	export dist_est.ground_distance
+	autoconnect
+end
 
-	add Dsp3000::Task, :as => 'fog'
+composition "OrientationEstimator" do
+	
 	add StateEstimator::Task, :as => 'stateestimator'
+	add XsensImu::Task, :as => 'imu'
+	add Dsp3000::Task, :as => 'fog'
+
+	## Use Depth Readings
+	#add LowLevelDriver::LowLevelTask, :as => 'lowlevel'
+	## End Depth
+	
+	## Or Use Ground Distance
+	add Cmp::GroundDistanceEstimation, :as => 'groundDistance'
+	connect groundDistance.ground_distance => stateestimator.depth_samples 
+	## End Ground
+
+
 
 	export stateestimator.orientation_samples #do this before provides
 	export imu.calibrated_sensors

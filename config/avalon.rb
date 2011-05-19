@@ -35,17 +35,19 @@ Robot.devices do
     device_id("/dev/ttyS0").
     configure do |task|
     	config = task.config
-	config.numberOfBins  301
-	config.adInterval  30
-	config.initialGain  50
+	config.numberOfBins = 301
+	config.adInterval = 30
+	config.initialGain = 50
 		
-	#for front scanning
-	config.pingpong=true
-	config.cont = 0
-	config.leftLimit = 2399
-	config.rightLimit = 3999
+	## for front scanning
+	
+	#config.pingpong=true
+	#config.cont = false 
+	#config.leftLimit = 2399
+	#config.rightLimit = 3999
 	#front scanning end
-	#
+	
+	## End Front Scannig
 	task.config = config
     end
   device(Dev::Profiling, :as => 'profiler').
@@ -54,8 +56,8 @@ Robot.devices do
         c = task.config
 	start = (6400.0/4.0)*1.0
 	ende = start + (6400.0/4.0)
-	c.config.leftLimit start
-        c.config.rightLimit ende
+	c.config.leftLimit = start
+        c.config.rightLimit =  ende
         task.config = c
   end
   
@@ -66,13 +68,13 @@ Robot.devices do
     device_id("/dev/ttyUSB0").
     configure do |task|
     	config = task.config
-	config.leftLimit 1000 
-	config.rightLimit 4000
-	config.pingpong true
-#	config.continues false
-	config.numberOfBins  500
-	config.adInterval  50
-	config.initialGain  30
+	config.leftLimit = 1000 
+	config.rightLimit = 2000
+	config.pingpong = true
+	config.cont = false
+	config.numberOfBins = 300
+	config.adInterval = 70
+	config.initialGain = 50
 	task.config = config
    end
 
