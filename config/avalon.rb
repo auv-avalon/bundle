@@ -35,9 +35,12 @@ Robot.devices do
     device_id("/dev/ttyS0").
     configure do |task|
     	config = task.config
-	config.numberOfBins = 301
-	config.adInterval = 30
-	config.initialGain = 50
+	config.numberOfBins = 600 
+	config.adInterval = 60
+	config.initialGain = 100
+	config.cont = true
+	config.leftLimit = 0
+	config.rightLimit = 6399
 		
 	## for front scanning
 	
@@ -55,7 +58,7 @@ Robot.devices do
     configure do |task|
         c = task.config
 	start = (6400.0/4.0)*1.0
-	ende = start + (6400.0/4.0)
+	ende = start + ((6400.0/4.0)*2.0)
 	c.config.leftLimit = start
         c.config.rightLimit =  ende
         task.config = c
@@ -72,7 +75,7 @@ Robot.devices do
 	config.rightLimit = 2000
 	config.pingpong = true
 	config.cont = false
-	config.numberOfBins = 300
+	config.numberOfBins = 600
 	config.adInterval = 70
 	config.initialGain = 50
 	task.config = config
@@ -91,10 +94,11 @@ Robot.devices do
 	task.region_y = 641
 	task.width = 1024 
 	task.height = 768
-	task.trigger_mode = 'fixed'
-	task.exposure_mode = 'manual'
-	task.whitebalance_mode = 'manual'
-	task.exposure = 5000
+	#task.trigger_mode = 'fixed'
+	task.exposure_mode = 'auto'
+	#task.exposure_mode = 'manual'
+	#task.whitebalance_mode = 'manual'
+	#task.exposure = 5000
 	task.fps = 10
 	#task.gain = 0
 
