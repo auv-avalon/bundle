@@ -23,6 +23,11 @@ define('pipeline',Cmp::ControlLoop).
 	use Cmp::PipelineFollower.use('bottom_camera')
 
 
+#define('pipe',Cmp::ControlLoop).
+#	use Cmp::PiplineFollowingComp
+
+
+
 
 #define('drive_testbed',Cmp::ControlLoop).
 #	use 'hbridge_set.motors', AvalonControl::MotionControlTask, Cmp::Testbed, 'front_camera'
@@ -43,6 +48,7 @@ define('pipeline',Cmp::ControlLoop).
 #Make definitions public because we are in an deployment, and the defiintions need on model
 model.data_service_type "NavigationMode"
 Cmp::ControlLoop.provides Srv::NavigationMode
+#modality_selection Srv::NavigationMode, "drive_simple","drive_slam","pipeline","pipe"
 modality_selection Srv::NavigationMode, "drive_simple","drive_slam","pipeline"
 
 add_mission(Sysmon::Task)
@@ -50,7 +56,7 @@ add_mission(Hbridge::Task)
 
 ###Sonare
 
-add_mission(SonarDriver::Profiling)
+#add_mission(SonarDriver::Profiling)
 add_mission("sonar_rear")
 add_mission("sonar")
 

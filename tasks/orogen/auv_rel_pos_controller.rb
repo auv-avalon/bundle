@@ -11,9 +11,9 @@ class AuvRelPosController::Task
     pid_settings = orogen_task.controller_x
     pid_settings.zero!
     pid_settings.Ts = 0.01
-    pid_settings.K = 0.5
+    pid_settings.K = 1
     pid_settings.Ti = 0.0
-    pid_settings.Td = 1
+    pid_settings.Td = 0
     pid_settings.YMin = -0.8 #-0.2
     pid_settings.YMax = 0.8 #0.2
     orogen_task.controller_x = pid_settings
@@ -21,11 +21,11 @@ class AuvRelPosController::Task
     pid_settings = orogen_task.controller_y
     pid_settings.zero!
     pid_settings.Ts = 0.01
-    pid_settings.K = 6
+    pid_settings.K = 8
     pid_settings.Ti = 0.0
-    pid_settings.Td = 10 
-    pid_settings.YMin = -0.8 #-0.2
-    pid_settings.YMax = 0.8 #0.2
+    pid_settings.Td = 1 
+    pid_settings.YMin = -2 #-0.2
+    pid_settings.YMax = 2  #0.2
     orogen_task.controller_y = pid_settings
     end
 

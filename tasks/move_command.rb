@@ -1,7 +1,12 @@
 class MoveCommand < Roby::Task
 	#give command as vector3d
-	arguments :command
 	
+	
+	#arguments :command
+	command = Array.new
+	command[0] = 0
+	command[1] = 0
+	command[2] = 0
 	event :start do |context|
 		motion_control_tasks = plan.find_tasks(AvalonControl::MotionControlTask).
 			with_child(self).to_value_set

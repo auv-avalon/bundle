@@ -1,8 +1,8 @@
-Roby.app.orocos_process_server 'front','192.168.128.50'
-Roby.app.use_deployments_from "avalon_front", :on => 'front'
+Roby.app.orocos_process_server 'back','192.168.128.51'
+Roby.app.use_deployments_from "avalon_back", :on => 'back'
 
 #Roby.app.use_deployments_from "avalon_front"
-Roby.app.use_deployments_from "avalon_back"
+Roby.app.use_deployments_from "avalon_front"
 
 State.orocos.disable_logging
 
@@ -120,8 +120,8 @@ Robot.devices do
 	task.binning_y = 1
 	task.region_x = 9
 	task.region_y = 7
-	task.width =640
-	task.height =480
+	task.width =400
+	task.height =400
 	task.trigger_mode = 'fixed'
 	task.exposure = 5000
 	task.exposure_mode = 'auto'

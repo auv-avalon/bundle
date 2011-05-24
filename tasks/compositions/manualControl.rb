@@ -241,6 +241,13 @@ composition 'PipelineFollower' do
     autoconnect
 end
 
+=begin
+composition 'PiplineFollowingComp' do
+	add PiplineFollowing
+    	provides Srv::AUVMotionCommand
+end
+=end
+
 composition 'Testbed' do
 #	# Why cannot use Orientation as abstract and define pose estimation with use
 #	
