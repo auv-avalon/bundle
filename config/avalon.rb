@@ -118,7 +118,8 @@ Robot.devices do
     configure do |task|
 	task.binning_x = 1
 	task.binning_y = 1
-	task.region_x = 9
+#	task.region_x = 9
+	task.region_x = 129
 	task.region_y = 7
 	task.width =400
 	task.height =400
@@ -131,8 +132,8 @@ Robot.devices do
 	task.camera_format = :MODE_BAYER
 	task.log_interval_in_sec = 5
 	task.mode = 'Master'
-	task.scale_x = 0.5
-	task.scale_y = 0.5
+#	task.scale_x = 0.5
+#	task.scale_y = 0.5
 	task.resize_algorithm = :BAYER_RESIZE
     end
 
