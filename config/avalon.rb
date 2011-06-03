@@ -29,15 +29,15 @@ Robot.devices do
     period(0.01).
     device_id("/dev/ttyS2")
   device(Dev::Dsp3000, :as => 'fog').
-    device_id("/dev/ttyS3").
+    device_id("/dev/ttyS0").
     period(0.01)
   device(Dev::Micron, :as => 'sonar').
-    device_id("/dev/ttyS0").
+    device_id("/dev/ttyS3").
     configure do |task|
     	config = task.config
 	config.numberOfBins = 600 
-	config.adInterval = 60
-	config.initialGain = 100
+	config.adInterval = 100
+	config.initialGain = 150 
 	config.cont = true
 	config.leftLimit = 0
 	config.rightLimit = 6399
@@ -57,10 +57,15 @@ Robot.devices do
     device_id("/dev/ttyS1").
     configure do |task|
         c = task.config
-	start = (6400.0/4.0)*1.0
-	ende = start + ((6400.0/4.0)*2.0)
-	c.config.leftLimit = start
-        c.config.rightLimit =  ende
+	cc = c.config
+	start = (6400.0/4.0) - 200
+	ende = start + ((6400.0/4.0)) + 200
+	#start = (6400.0/4.0)*1.0
+	#ende = start + ((6400.0/4.0)*2.0)
+	cc.leftLimit = start
+        cc.rightLimit =  ende
+	cc.stepSize = 1
+	c.config = cc
         task.config = c
   end
   
@@ -119,10 +124,10 @@ Robot.devices do
 	task.binning_x = 1
 	task.binning_y = 1
 #	task.region_x = 9
-	task.region_x = 129
+	task.region_x = 89
 	task.region_y = 7
-	task.width =400
-	task.height =400
+	task.width =480
+	task.height =480
 	task.trigger_mode = 'fixed'
 	task.exposure = 5000
 	task.exposure_mode = 'auto'
