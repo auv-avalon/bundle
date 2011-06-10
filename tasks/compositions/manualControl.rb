@@ -83,7 +83,6 @@ end
 composition "WallServoing" do
     add AuvRelPosController::Task , :as => 'relposcontroller'
     add Sonardetector::Task , :as => 'sonardetector'
-    add ObjectServoing::Task , :as => 'objectservoing'
     add SonarDriver::Micron
     add DataServices::Orientation
 

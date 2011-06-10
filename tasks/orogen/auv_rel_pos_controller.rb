@@ -3,7 +3,7 @@ class AuvRelPosController::Task
     def configure
         super
 
-    orogen_task.rel_heading = 1
+    orogen_task.rel_heading = 0
     orogen_task.rel_z = 0
     orogen_task.timeout = 30
 

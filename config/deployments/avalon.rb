@@ -49,7 +49,7 @@ define('pipeline',Cmp::ControlLoop).
 model.data_service_type "NavigationMode"
 Cmp::ControlLoop.provides Srv::NavigationMode
 #modality_selection Srv::NavigationMode, "drive_simple","drive_slam","pipeline","pipe"
-modality_selection Srv::NavigationMode, "drive_simple","drive_slam","pipeline"
+modality_selection Srv::NavigationMode, "drive_simple","drive_slam","pipeline","wall_servoing"
 
 add_mission(Sysmon::Task)
 add_mission(Hbridge::Task)
@@ -71,6 +71,8 @@ add_mission(Cmp::PipelineDetector).use('bottom_camera')
 
 
 add_mission(Dynamixel::Task)
+
+add_mission(Cmp::WallServoing). use "sonar"
 
 #add_mission(Cmp::StructuredLight).
 #    use 'front_camera'
