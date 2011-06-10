@@ -1,4 +1,5 @@
-Roby.app.orocos_process_server 'back','192.168.128.51'
+#Roby.app.orocos_process_server 'back','192.168.128.51'
+Roby.app.orocos_process_server 'back','localhost'
 Roby.app.use_deployments_from "avalon_back", :on => 'back'
 
 #Roby.app.use_deployments_from "avalon_front"
