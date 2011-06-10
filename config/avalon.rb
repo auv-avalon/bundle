@@ -20,7 +20,7 @@ State.orocos.exclude_from_log '/canbus/Message'
 #pipeline = 7
 #State.nagation_mode = ['drive_simple',"drive_slam","pipeline","drive_testbed","drive_uwmodem","allan","dennis","wall_servoing"]#should load simpleControl
 
-State.navigation_mode = ['drive_simple',"drive_slam","pipeline"]
+State.navigation_mode = ['drive_simple',"drive_slam","pipeline","wall_servoing"]
 
 Robot.devices do
   device(Dev::LowLevel, :as => 'depth').
