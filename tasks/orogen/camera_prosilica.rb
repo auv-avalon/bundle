@@ -1,13 +1,8 @@
 using_task_library "camera_prosilica"
 
-device_type 'Camera' do
-    provides Srv::ImageProvider
-end
-
-
-
 class CameraProsilica::Task
-    driver_for Dev::Camera, 'images' => 'frame'
+    driver_for 'Dev::Camera'
+    provides Srv::ImageProvider, "images" => "frame"
 
     def configure
     	super

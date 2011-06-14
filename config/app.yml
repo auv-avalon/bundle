@@ -6,8 +6,8 @@ engine:
 # Logging configuration
 log:
   # Where log files go
-  dir: /mnt/logs/log/
-  autosave: /mnt/logs/results/
+#  dir: /mnt/logs/log/
+#  autosave: /mnt/logs/results/
   
   # Log system events. It can be either true, false or stats. If true, all
   # plan-level events are logged, allowing to use the roby-log GUI to replay

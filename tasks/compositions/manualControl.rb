@@ -22,7 +22,6 @@ using_task_library "structured_light"
 using_task_library "offshore_pipeline_detector"
 using_task_library "frame_demultiplexer"
 using_task_library "motion_estimation"
-using_task_library "avalon_simulation"
 using_task_library "sonardetector"
 using_task_library "object_servoing"
 using_task_library "auv_rel_pos_controller"
@@ -95,29 +94,29 @@ end
 
 
 #AP Navigation: Experiment von Allan Conquest
-composition 'MovementExperiment' do
-	add MotionEstimation::Task
-	#add DataServices::Pose
-	#add DataServices::RawCommand 
-	#add RawControlCommandConverter::Task, :as => "controlconverter"
-	#add DataServices::Pose
-	add MovementExperiment::Task, :as => "control"
-	export control.motion_command
-	provides Srv::AUVMotionCommand
-	#autoconnect
-end
+#composition 'MovementExperiment' do
+#	add MotionEstimation::Task
+#	#add DataServices::Pose
+#	#add DataServices::RawCommand 
+#	#add RawControlCommandConverter::Task, :as => "controlconverter"
+#	#add DataServices::Pose
+#	add MovementExperiment::Task, :as => "control"
+#	export control.motion_command
+#	provides Srv::AUVMotionCommand
+#	#autoconnect
+#end
 
-composition 'RawCommandInputLocal' do
-	add Controldev::Local 
-	add RawControlCommandConverter::Movement, :as => "controlconverter"
-
-	#add DataServices::Orientation
-	add AvalonSimulation::Task
-	
-	export controlconverter.motion_command
-	provides Srv::AUVMotionCommand
-	autoconnect
-end
+#composition 'RawCommandInputLocal' do
+#	add Controldev::Local 
+#	add RawControlCommandConverter::Movement, :as => "controlconverter"
+#
+#	#add DataServices::Orientation
+#	add AvalonSimulation::Task
+#	
+#	export controlconverter.motion_command
+#	provides Srv::AUVMotionCommand
+#	autoconnect
+#end
 
 
 composition 'RawCommandInput' do
