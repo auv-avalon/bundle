@@ -20,7 +20,7 @@ State.orocos.exclude_from_log '/canbus/Message'
 #pipeline = 7
 #State.nagation_mode = ['drive_simple',"drive_slam","pipeline","drive_testbed","drive_uwmodem","allan","dennis","wall_servoing"]#should load simpleControl
 
-State.navigation_mode = ['drive_simple',"drive_slam","pipeline","wall_servoing"]
+State.navigation_mode = ['drive_simple',"drive_slam","pipeline"]
 
 Robot.devices do
   device(Dev::LowLevel, :as => 'depth').
@@ -36,19 +36,19 @@ Robot.devices do
     device_id("/dev/ttyS3").
     configure do |task|
     	config = task.config
-	config.numberOfBins = 600 
-	config.adInterval = 100
-	config.initialGain = 150 
-	config.cont = true
-	config.leftLimit = 0
-	config.rightLimit = 6399
+	config.numberOfBins = 300 
+	config.adInterval = 50
+	config.initialGain = 10
+	#config.cont = true
+	#config.leftLimit = 0
+	#config.rightLimit = 6399
 		
 	## for front scanning
 	
-	#config.pingpong=true
-	#config.cont = false 
-	#config.leftLimit = 2399
-	#config.rightLimit = 3999
+	config.pingpong=true
+	config.cont = false 
+	config.leftLimit = 2399
+	config.rightLimit = 3999
 	#front scanning end
 	
 	## End Front Scannig

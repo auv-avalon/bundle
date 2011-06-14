@@ -5,7 +5,7 @@ class AuvRelPosController::Task
 
     orogen_task.rel_heading = 0
     orogen_task.rel_z = 0
-    orogen_task.timeout = 30
+    orogen_task.timeout = 100
 
     pid_settings = orogen_task.controller_x
     pid_settings.zero!
