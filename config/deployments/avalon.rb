@@ -70,7 +70,7 @@ add_mission('bottom_camera')
 add_mission(Cmp::PipelineDetector).use('bottom_camera')
 
 
-# # add_mission(Dynamixel::Task)
+add_mission(Dynamixel::Task)
 
 #add_mission(Cmp::StructuredLight).
 #    use 'front_camera'

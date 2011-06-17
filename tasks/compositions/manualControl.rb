@@ -58,12 +58,12 @@ composition "OrientationEstimator" do
 	add Dsp3000::Task, :as => 'fog'
 
 	## Use Depth Readings
-	#add LowLevelDriver::LowLevelTask, :as => 'lowlevel'
+	add LowLevelDriver::LowLevelTask, :as => 'lowlevel'
 	## End Depth
 	
 	## Or Use Ground Distance
-	add Cmp::GroundDistanceEstimation, :as => 'groundDistance'
-	connect groundDistance.ground_distance => stateestimator.depth_samples 
+	#add Cmp::GroundDistanceEstimation, :as => 'groundDistance'
+	#connect groundDistance.ground_distance => stateestimator.depth_samples 
 	## End Ground
 
 
@@ -248,12 +248,10 @@ composition 'PipelineFollower' do
     autoconnect
 end
 
-=begin
-composition 'PiplineFollowingComp' do
-	add PiplineFollowing
-    	provides Srv::AUVMotionCommand
-end
-=end
+#composition 'PiplineFollowingComp' do
+#	add PiplineFollowing
+ #   	provides Srv::AUVMotionCommand
+#end
 
 composition 'Testbed' do
 #	# Why cannot use Orientation as abstract and define pose estimation with use

@@ -1,10 +1,11 @@
-Roby.app.orocos_process_server 'back','192.168.128.51'
+#Roby.app.orocos_process_server 'back','192.168.128.51'
+Roby.app.orocos_process_server 'back','localhost'
 Roby.app.use_deployments_from "avalon_back", :on => 'back'
 
 #Roby.app.use_deployments_from "avalon_front"
 Roby.app.use_deployments_from "avalon_front"
 
-State.orocos.disable_logging
+#State.orocos.disable_logging
 
 
 State.orocos.exclude_from_log '/canbus/Message'
@@ -105,14 +106,15 @@ Robot.devices do
 	#task.whitebalance_mode = 'manual'
 	#task.exposure = 5000
 	task.fps = 10
-	#task.gain = 0
+	task.gain = 15
+	task.gain_mode_auto = 0
 
 	#task.trigger_mode = 'sync_in1'
 	#task.exposure_mode = 'external'
 	#task.frame_start_trigger_event = 'EdgeRising'
-	task.scale_x = 0.5
-	task.scale_y = 0.5
-	task.resize_algorithm = :BAYER_RESIZE
+	#task.scale_x = 0.5
+	#task.scale_y = 0.5
+	#task.resize_algorithm = :BAYER_RESIZE
 
 	#task.synchronize_time_interval = 2000000
     end
