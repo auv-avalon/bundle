@@ -69,7 +69,7 @@ add_mission('front_camera')
 add_mission('bottom_camera')
 add_mission(Cmp::PipelineDetector).use('bottom_camera')
 
-
+add_mission(Cmp::MotionEstimation)
 add_mission(Dynamixel::Task)
 
 #add_mission(Cmp::WallServoing). use "sonar"
