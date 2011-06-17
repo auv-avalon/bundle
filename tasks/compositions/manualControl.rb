@@ -230,6 +230,13 @@ composition 'PipelineDetector' do
     export offshorePipelineDetector.position_command
 end
 
+composition 'RelPosControlLoop' do
+    add AuvRelPosController::Task, :as => 'controller'
+    add DataServices::Orientation
+    export controller.motion_command, :as => 'command'
+    provides Srv::AUVMotionCommand
+    autoconnect
+end
 
 composition 'PipelineFollower' do
     add Srv::ImageProvider
