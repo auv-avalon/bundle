@@ -1,0 +1,6 @@
+results/*
+log/*
+*.png
+*.svg
+*.log
+*.dot
