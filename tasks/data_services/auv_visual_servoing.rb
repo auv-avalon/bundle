@@ -18,7 +18,7 @@ end
 using_task_library 'auv_rel_pos_controller'
 using_task_library 'object_servoing'
 
-Cmp::VisualServoing.specialize 'detector' => Srv::AUVRelativePositionCommand do
+Cmp::VisualServoing.specialize 'detector' => Srv::RelativePositionDetector do
     overload('control', Cmp::ControlLoop).
         use(AuvRelPosController::Task)
 

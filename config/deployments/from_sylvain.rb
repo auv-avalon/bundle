@@ -5,4 +5,3 @@ define('wall', Cmp::VisualServoing).
 
 define('pipeline', Cmp::VisualServoing).
     use Cmp::PipelineDetector.use('bottom_camera')
-

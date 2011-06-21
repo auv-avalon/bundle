@@ -15,7 +15,8 @@ composition 'StructuredLightCamera' do
     add Srv::ImageProvider
     add FrameDemultiplexer::Task, :as => 'demux'
     export demux.oframe
-    add Srv::ImageProvider
+    provides Srv::ImageProvider
+    autoconnect
 end
 
 # Composition that extracts the stream out of a "structured light"
@@ -25,6 +26,7 @@ composition 'StructuredLightInput' do
     add FrameDemultiplexer::Task, :as => 'demux'
     export demux.oframe_pair
     provides Srv::StructuredLightPair
+    autoconnect
 end
 
 composition 'PoseEstimation' do
