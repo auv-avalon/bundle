@@ -1,3 +1,5 @@
+#Anything shared by the robot and the simulator
+
 use DataServices::OrientationWithZ => Cmp::OrientationEstimator
 
 define('wall', Cmp::VisualServoing).

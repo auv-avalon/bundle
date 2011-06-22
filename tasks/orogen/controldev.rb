@@ -25,6 +25,7 @@ device_type 'RemoteSliderbox' do
 end
 device_type 'Joystick' do
     provides Srv::Motion2DCommand
+    provides Srv::RawCommand
 end
 
 

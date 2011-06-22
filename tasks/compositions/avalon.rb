@@ -8,6 +8,8 @@ using_task_library 'structured_light'
 using_task_library 'offshore_pipeline_detector'
 using_task_library 'sonardetector'
 using_task_library 'frame_demultiplexer'
+using_task_library 'controldev'
+using_task_library 'raw_control_command_converter'
 
 # Composition that extracts the normal camera stream out of a "structured light"
 # stream
