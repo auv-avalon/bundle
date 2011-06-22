@@ -1,3 +1,4 @@
+Roby.app.load_orocos_deployment 'main'
 #Roby.app.load_orocos_deployment 'avalon_back'
 #Roby.app.use_deployments_from "avalon_back"
 
