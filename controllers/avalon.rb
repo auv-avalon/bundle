@@ -2,7 +2,7 @@
 # fully set up. If you have to initialize some services at startup, to it here
 
 require 'controllers/common_controller'
-Roby.app.apply_orocos_deployment 'avalon' #From config/deployments
+Roby.app.apply_orocos_deployment 'avalon' # load config/deployments/avalon.rb
 
 navigation_mode = nil 
 
