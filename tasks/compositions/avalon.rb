@@ -78,7 +78,7 @@ composition 'WallDetector' do
     add Sonardetector::Task , :as => 'detector'
     connect sonar.BaseScan => detector.sonar_input
 
-    export detector.virtual_point
-    provides Srv::ObjectPointDetector
+    export detector.position_command
+    provides Srv::RelativePositionDetector
 end
 
