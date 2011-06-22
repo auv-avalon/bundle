@@ -1,8 +1,8 @@
-require 'highline'
-CONSOLE = HighLine.new
-def color(string, *args)
-    CONSOLE.color(string, *args)
-end
+# require 'highline'
+# CONSOLE = HighLine.new
+# def color(string, *args)
+#     CONSOLE.color(string, *args)
+# end
 
 def q_to_yaw(q)
     q0, q1, q2, q3 = q.re, *q.im
