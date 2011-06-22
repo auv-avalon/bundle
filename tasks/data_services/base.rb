@@ -1,51 +1,5 @@
 import_types_from 'base'
-
-####################################
-## Control related services
-
-data_service_type 'Actuators' do
-    input_port("command", "base/actuators/Command")
-    output_port("status", "base/actuators/Status")
-end
-
-data_service_type 'FourWheelPlatform' do
-    provides Srv::Actuators
-end
-
-# Base interfaces for control
-data_service_type 'ActuatorController' do
-    output_port("actuator_command", "base/actuators/Command").
-      doc("Actuator command")
-end
-
-data_service_type 'Command'
-
-# This is separated from Controller as other type of control exist in the
-# components (as for instance FourWheelController in controldev)
-data_service_type 'Motion2DController' do
-    provides Srv::ActuatorController
-    input_port('command', 'base/MotionCommand2D').
-        doc('input command in rotation and translation.')
-end
-
-data_service_type 'Motion2DCommand' do
-    provides Srv::Command
-    output_port 'command', 'base/MotionCommand2D'
-end
-
-# This is separated from Controller as other type of control exist in the
-# components (as for instance FourWheelController in controldev)
-data_service_type 'AUVMotionController' do
-    provides Srv::ActuatorController
-    input_port('command', 'base/AUVMotionCommand').
-        doc('input command in rotation and translation.')
-end
-
-data_service_type 'AUVMotionCommand' do
-    provides Srv::Command
-    output_port 'command', 'base/AUVMotionCommand'
-end
-
+#
 ####################################
 ## Services related to pose estimation
 
@@ -106,8 +60,8 @@ data_service_type 'ImageProvider' do
     output_port 'images', ro_ptr('/base/samples/frame/Frame')
 end
 
-data_service_type 'StructuredLightImage' do 
-    output_port 'images', ro_ptr('/base/samples/frame/Frame')
+data_service_type 'StructuredLightPair' do 
+    output_port 'images', ro_ptr('/base/samples/frame/FramePair')
 end
 
 data_service_type 'StereoPairProvider' do
@@ -118,3 +72,53 @@ data_service_type 'LaserRangeFinder' do
     output_port 'scans', '/base/samples/LaserScan'
 end
 
+
+####################################
+## Control related services
+
+data_service_type 'Actuators' do
+    input_port("command", "base/actuators/Command")
+    output_port("status", "base/actuators/Status")
+end
+
+# Base interfaces for control
+data_service_type 'ActuatorController' do
+    output_port("actuator_command", "base/actuators/Command").
+      doc("Actuator command")
+end
+
+data_service_type 'Command'
+
+# This is separated from Controller as other type of control exist in the
+# components (as for instance FourWheelController in controldev)
+
+composition 'ControlLoop' do
+    abstract
+
+    def self.controller_type(name, command_type, &block)
+        controller = system_model.data_service_type "#{name}Controller" do
+            provides Srv::ActuatorController
+            input_port 'command', command_type
+        end
+
+        command = system_model.data_service_type "#{name}Command" do
+            provides Srv::Command
+            output_port 'command', command_type
+        end
+
+        specialize 'controller' => controller, 'command' => command do
+            instance_eval(&block) if block
+            autoconnect
+        end
+        return controller, command
+    end
+
+    add Srv::Actuators
+    add Srv::ActuatorController, :as => 'controller'
+    add Srv::Command, :as => 'command'
+
+    autoconnect
+end
+
+Cmp::ControlLoop.controller_type 'Motion2D', '/base/MotionCommand2D'
+Cmp::ControlLoop.controller_type 'AUVMotion', '/base/AUVMotionCommand'
