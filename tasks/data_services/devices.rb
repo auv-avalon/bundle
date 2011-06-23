@@ -5,5 +5,5 @@ device_type 'Camera' do
 end
 
 device_type 'SimulatedMotionActuator' do
-  provides Srv::MotionInput
+  provides Srv::MotionController
 end

@@ -20,8 +20,8 @@ end
 
 data_service_type 'Command'
 
-data_service_type 'MotionInput' do
-  input_port('pose_samples', '/base/samples/RigidBodyState')
+data_service_type 'MotionController' do
+  provides Srv::ActuatorController
   input_port('motion_commands', '/base/AUVMotionCommand')
 end
 
