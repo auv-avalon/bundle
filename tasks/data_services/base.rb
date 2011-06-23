@@ -11,18 +11,17 @@ data_service_type 'Orientation' do
     output_port 'orientation_samples', '/base/samples/RigidBodyState'
 end
 
-data_service_type 'Pose' do
-    output_port 'pose_samples', '/base/samples/RigidBodyState'
-    provides Srv::Position,    'position_samples' => 'pose_samples'
-    provides Srv::Orientation, 'orientation_samples' => 'pose_samples'
-end
-
 data_service_type 'OrientationWithZ' do
     output_port 'orientation_z_samples', '/base/samples/RigidBodyState'
     provides Srv::Orientation, 'orientation_samples' => 'orientation_z_samples'
 end
 
-Srv::Pose.provides Srv::OrientationWithZ, 'orientation_z_samples' => 'pose_samples'
+data_service_type 'Pose' do
+    output_port 'pose_samples', '/base/samples/RigidBodyState'
+    provides Srv::Position,    'position_samples' => 'pose_samples'
+    provides Srv::Orientation, 'orientation_samples' => 'pose_samples'
+    provides Srv::OrientationWithZ, 'orientation_z_samples' => 'pose_samples'
+end
 
 # This data service can be used to represent estimators that provide a pose that
 # is a best estimate of the global pose of the system. Because it is a best
