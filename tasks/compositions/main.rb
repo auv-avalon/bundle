@@ -1,6 +1,7 @@
 # This is separated from Controller as other type of control exist in the
 # components (as for instance FourWheelController in controldev)
 
+
 composition 'ControlLoop' do
     abstract
 
@@ -32,17 +33,14 @@ end
 Cmp::ControlLoop.controller_type 'Motion2D', '/base/MotionCommand2D'
 Cmp::ControlLoop.controller_type 'AUVMotion', '/base/AUVMotionCommand'
 
-composition 'VisualServoing' do
-    add Srv::VisualServoingDetector, :as => 'detector'
-    add Cmp::ControlLoop, :as => 'control'
-end
-
 using_task_library 'auv_rel_pos_controller'
 
-Cmp::VisualServoing.specialize 'detector' => Srv::RelativePositionDetector do
-    overload('control', Cmp::ControlLoop).
-        use(AuvRelPosController::Task)
+composition 'VisualServoing' do
+    add Srv::RelativePositionDetector, :as => 'detector'
+    add(Cmp::ControlLoop, :as => 'control').
+      use('command' => AuvRelPosController::Task)
 
     autoconnect
 end
+
 
