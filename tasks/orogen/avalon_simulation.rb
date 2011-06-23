@@ -33,3 +33,6 @@ class AvalonSimulation::Actuators
   provides Srv::Actuators
 end
 
+class AvalonSimulation::StateEstimator
+  provides Srv::Pose
+end
