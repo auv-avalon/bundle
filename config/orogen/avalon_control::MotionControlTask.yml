@@ -1,0 +1,48 @@
+--- name:default
+# Maximum allowed Value between 0 and 1 that is an cutoff for maximum pwm value 0.8 means 80% PWM
+cutoff: 0.8
+# no documentation available for this property
+heading_pid: 
+  max: 0.8
+  d: -2.0
+  p: -0.6
+  min: -0.8
+  i: -0.001
+# no documentation available for this property
+pitch_pid: 
+  max: 1.0
+  d: 1.0
+  p: 2.0
+  min: -1.0
+  i: 0.2
+# no documentation available for this property
+pitch_target: 0.122173047639603
+# no documentation available for this property
+timeout: 1.0
+# no documentation available for this property
+x_factor: 1.0
+# no documentation available for this property
+y_coupling_factor: 0.1
+# no documentation available for this property
+y_factor: 1.0
+# no documentation available for this property
+z_coupling_factor: -0.19
+# no documentation available for this property
+z_pid: 
+  max: 1.0
+  d: 1.0
+  p: -1.5
+  min: -1.0
+  i: -0.05
+--- name:simulation
+z_coupling_factor: 0.0
+y_coupling_factor: 0.0
+pitch_target: 0.0
+timeout: 0.0
+pitch_pid:
+  i: 0.0
+heading_pid:
+  i: 0.0
+z_pid:
+  i: 0.0
+

@@ -20,11 +20,6 @@ end
 
 data_service_type 'Command'
 
-data_service_type 'MotionController' do
-  provides Srv::ActuatorController
-  input_port('motion_commands', '/base/AUVMotionCommand')
-end
-
 data_service_type 'RelativePositionCommand' do
   output_port 'relative_position_command', 'base/AUVPositionCommand'
 end
