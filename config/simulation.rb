@@ -8,7 +8,6 @@ Robot.devices do
     device(Dev::Camera, :as => 'bottom_camera', :using => AvalonSimulation::BottomCamera).
       period(0.1)
 
-    device(Dev::SimulatedMotionActuator)
     device(Dev::Camera, :as => 'front_camera', :using => AvalonSimulation::FrontCamera).
       period(0.1)
 end

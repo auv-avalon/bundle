@@ -29,7 +29,7 @@ class AvalonSimulation::FrontCamera
   driver_for Dev::Camera
 end
 
-class AvalonSimulation::MotionControl
-  driver_for Dev::SimulatedMotionActuator
+class AvalonSimulation::Actuators
+  provides Srv::Actuators
 end
 
