@@ -7,6 +7,7 @@ using_task_library 'state_estimator'
 using_task_library 'structured_light'
 using_task_library 'offshore_pipeline_detector'
 using_task_library 'sonardetector'
+using_task_library 'buoydetector'
 using_task_library 'frame_demultiplexer'
 using_task_library 'controldev'
 using_task_library 'raw_control_command_converter'
@@ -73,6 +74,15 @@ composition 'PipelineDetector' do
     autoconnect
 
     export offshorePipelineDetector.position_command
+    provides Srv::RelativePositionDetector
+end
+
+composition 'BuoyDetector' do
+    add Srv::ImageProvider
+    add Buoydetector::Task, :as => 'detector'
+    autoconnect
+
+    export detector.relative_position
     provides Srv::RelativePositionDetector
 end
 
