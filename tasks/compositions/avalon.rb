@@ -87,9 +87,9 @@ composition 'BuoyDetector' do
 end
 
 composition 'WallDetector' do
-    add SonarDriver::Micron, :as => "sonar"
+    add Srv::SonarScanProvider
     add Sonardetector::Task , :as => 'detector'
-    connect sonar.BaseScan => detector.sonar_input
+    autoconnect
 
     export detector.position_command
     provides Srv::RelativePositionDetector

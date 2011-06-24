@@ -4,6 +4,6 @@ device_type 'Camera' do
   provides Srv::ImageProvider
 end
 
-device_type 'Imu' do
-  provides Srv::Pose
+device_type 'Sonar' do
+  provides Srv::SonarScanProvider
 end

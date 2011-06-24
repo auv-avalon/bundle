@@ -13,3 +13,7 @@ define('pipeline', Cmp::VisualServoing.
 
 define('buoy', Cmp::VisualServoing.
   use(Cmp::BuoyDetector.use('front_camera')))
+
+define('wall', Cmp::VisualServoing.
+  use(Cmp::WallDetector.use('top_sonar')))
+ 

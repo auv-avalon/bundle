@@ -1,0 +1,2 @@
+class Buoydetector::Task
+end

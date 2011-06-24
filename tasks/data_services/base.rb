@@ -77,7 +77,10 @@ data_service_type 'StereoPairProvider' do
 end
 
 data_service_type 'LaserRangeFinder' do
-    output_port 'scans', '/base/samples/LaserScan'
+    output_port 'laserscan', '/base/samples/LaserScan'
 end
 
+data_service_type 'SonarScanProvider' do
+    output_port 'sonarscan', '/base/samples/SonarScan'
+end
 
