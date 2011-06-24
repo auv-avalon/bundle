@@ -1,0 +1,31 @@
+--- name:default
+# no documentation available for this property
+controller_x: 
+  Tt: 0.0
+  K: 0.5
+  YMax: 0.8
+  B: 0.0
+  N: 0.0
+  YMin: -0.8
+  Td: 1.0
+  Ts: 0.01
+  Ti: 0.0
+# no documentation available for this property
+controller_y: 
+  Tt: 0.0
+  K: 0.1
+  YMax: 0.4
+  B: 0.0
+  N: 0.0
+  YMin: -0.4
+  Td: 2.0
+  Ts: 0.01
+  Ti: 0.001
+# if set to false the heading is interpreated as absolute heading
+rel_heading: 1
+# if set to false z is interpreated as absolute depth
+rel_z: 0
+# The task is going into fatal if it was not able to generate a non zero MotionCommand for longer than n secs
+timeout: 0.0
+# Timespan a meassage is considered to be valid.
+valid_timespan: 2.0

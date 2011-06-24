@@ -37,13 +37,6 @@ end
 
 class Controldev::Local
     driver_for Dev::Joystick
-    def configure
-        super
-
-        orogen_task.minSpeed = 0.1
-        orogen_task.maxSpeed = 1.5
-        orogen_task.maxRotationSpeed = 3.14
-    end
 end
 
 Compositions::ControlLoop.

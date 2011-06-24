@@ -1,0 +1,23 @@
+--- name:default
+# maximum distance for sonar responses in a beam
+beam_threshold_max: 5.0
+# minimum distance for sonar responses in a beam
+beam_threshold_min: 1.0
+# print debug output
+debug_output: 0
+# if set to true the threshold for the sonar beams is enabled
+enable_beam_threshold: 1
+# reference depth
+fixed_depth: -1.0
+# modulates the heading to the wall with a fixed degree, default is 0 than the wall in in front
+heading_modulation: 0.0
+# minimum value for responses in a beam, everything below will be ignored
+min_response_value: 10.0
+# reference distance to wall
+wall_distance: 2.0
+# end angle for the wall estimation
+wall_estimation_end_angle: 3.93
+# start angle for the wall estimation
+wall_estimation_start_angle: 2.36
+# set distance for the y axis, witch will result in a certain speed
+y_distance: 0.0

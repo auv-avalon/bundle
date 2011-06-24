@@ -1,0 +1,33 @@
+--- name:default
+# no documentation available for this property
+debugging: 1
+# default value of x
+default_x: 0.0
+# default depth of operation [meter]
+depth: -1.0
+# distance to pipe [meter], 0 = disabled
+distance_to_pipe: 0.0
+# minimum confidence for finding a pipeline
+find_confidence: 0.2
+# no documentation available for this property
+invert_colors: 0
+# minimum confidence before losing a pipeline
+lose_confidence: 0.1
+# maximal depth of operation [meter], 0 = disabled
+max_depth: -10.0
+# maximal width of the pipe [m] 0 = disabled
+max_width: 1.0
+# number of images where a valid pipeline must be pressent to switch to follow
+min_count: 10
+# minimal depth of operation [meter], 0 = disabled
+min_depth: -0.2
+# minimal width of the pipe [m] 0 = disabled
+min_width: 0.1
+# distance between center of gravity and camera
+out_of_center: 0.0
+# tries to follow the pipeline in this direction [rad], > PI = disabled
+prefered_heading: 9999.0
+# no documentation available for this property
+rel_pos_x: 0.0
+# no documentation available for this property
+use_channel: 0
