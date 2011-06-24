@@ -31,16 +31,16 @@ composition 'StructuredLightInput' do
     autoconnect
 end
 
-composition 'PoseEstimation' do
-    add Srv::Orientation
-    add EkfSlam::Task, :as => 'slam'
-    add SonarDriver::Micron 
-    slam.acceleration_samples.ignore
-
-    export slam.pose_samples
-    provides DataServices::Pose
-    autoconnect
-end
+#composition 'PoseEstimation' do
+#    add Srv::Orientation
+#    add EkfSlam::Task, :as => 'slam'
+#    add SonarDriver::Micron 
+#    slam.acceleration_samples.ignore
+#
+#    export slam.pose_samples
+#    provides DataServices::Pose
+#    autoconnect
+#end
 
 composition "OrientationEstimator" do
     add LowLevelDriver::LowLevelTask, :as => 'lowlevel'
@@ -69,6 +69,7 @@ end
 composition 'PipelineDetector' do
     add Srv::ImageProvider
     add OffshorePipelineDetector::Task, :as => 'offshorePipelineDetector'
+    add Srv::OrientationWithZ
     autoconnect
 
     export offshorePipelineDetector.position_command

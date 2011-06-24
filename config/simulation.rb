@@ -1,4 +1,4 @@
-Roby.app.use_deployments_from "avalon_simulation_deployment"
+Roby.app.use_deployments_from "avalon_simulation_deployments"
 # Roby.app.use_deployments_from "avalon_back"
 # Roby.app.use_deployments_from "avalon_front"
 Roby.app.use_deployments_from "controldev" # Joystick

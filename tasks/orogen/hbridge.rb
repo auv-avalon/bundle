@@ -1,4 +1,4 @@
-load_system_model 'tasks/data_services/base'
+load_system_model 'tasks/compositions/main'
 
 class Hbridge::Task
     hbridge_set = driver_for('HbridgeSet')
