@@ -1,7 +1,7 @@
 Roby.app.use_deployments_from "avalon_simulation_deployment"
 Roby.app.use_deployments_from "controldev" # Joystick
 
-Robot.devices do    
+Robot.devices do
     device(Dev::Joystick, :as => 'joystick')
 
     device(Dev::Camera, :as => 'bottom_camera', :using => AvalonSimulation::BottomCamera).
