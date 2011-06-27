@@ -2,7 +2,7 @@
 # no documentation available for this property
 debugging: 1
 # default value of x
-default_x: 0.0
+default_x: 1.0
 # default depth of operation [meter]
 depth: -1.0
 # distance to pipe [meter], 0 = disabled
@@ -27,7 +27,5 @@ min_width: 0.1
 out_of_center: 0.0
 # tries to follow the pipeline in this direction [rad], > PI = disabled
 prefered_heading: 9999.0
-# no documentation available for this property
-rel_pos_x: 0.0
 # no documentation available for this property
 use_channel: 0
