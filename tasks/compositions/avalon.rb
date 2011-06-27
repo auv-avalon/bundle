@@ -67,8 +67,12 @@ composition 'StructuredLight' do
     autoconnect
 end
 
-composition 'PipelineDetector' do
+composition 'PipelineDetector' do#
+    event :check_candidate
     event :follow_pipe
+    event :align_auv
+    event :lost_pipe
+    event :search_pipe
     event :end_of_pipe
 
     add Srv::ImageProvider

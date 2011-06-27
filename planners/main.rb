@@ -7,6 +7,8 @@ class MainPlanner < Roby::Planning::Planner
 
     GATE_TURN_DIRECTION = 1
 
+    CHECKING_CANDIDATE_SPEED = 0.0001
+
     method(:find_and_follow_pipeline) do
         z     = arguments[:z]
         speed = arguments[:speed]
@@ -38,21 +40,34 @@ class MainPlanner < Roby::Planning::Planner
             #         control_child.command_child.motion_command_port => returns motion_command_port from the AUVMotionController
 
             execute do
-                control_child.command_child.motion_command_port.disconnect_from \
-                    control_child.controller_child.command_port
+                control_child.command_child.motion_command_port.disconnect_from control_child.controller_child.command_port
             end
+                        
             poll do
                 if orientation
                     motion_command.heading = orientation.orientation.yaw
                     transition!
                 end
             end
-            # Go forward until the component reports FOLLOW_PIPE
-            poll_until detector_child.follow_pipe_event do
-                motion_command.z = z
-                motion_command.x_speed = speed
-                motion_command.y_speed = 0
-                write_motion_command
+
+            poll_until detector_child.check_candidate_event do
+              motion_command.z = z
+              motion_command.x_speed = speed
+              motion_command.y_speed = 0
+              write_motion_command
+            end
+           
+            Robot.info "Slow AUV down for checking candidates on pipeline detection"
+
+            poll_until detector_child.align_auv_event do
+              motion_command.x_speed = CHECKING_CANDIDATE_SPEED
+              write_motion_command
+            end
+
+            Robot.info "Now visual servoing for pipeline"
+
+            execute do 
+                control_child.command_child.motion_command_port.connect_to control_child.controller_child.command_port
             end
 
             emit :success
