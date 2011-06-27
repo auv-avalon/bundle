@@ -6,6 +6,8 @@ Roby.app.load_orocos_deployment 'main'
 #add(Cmp::AUVJoystickCommand).
 #    use(Controldev::Local)
 
+add_mission(Taskmon::Task)
+
 use DataServices::OrientationWithZ => AvalonSimulation::StateEstimator
 
 use AvalonControl::MotionControlTask => AvalonControl::MotionControlTask.
