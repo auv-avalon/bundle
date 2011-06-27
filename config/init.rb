@@ -29,7 +29,7 @@
 # per-robot by setting it in config/#{ROBOT}.rb)
 
 Roby.app.using 'orocos'
-require 'roby/schedulers/basic'
-Roby.scheduler = Roby::Schedulers::Basic.new(true)
+require 'roby/schedulers/temporal'
+Roby.scheduler = Roby::Schedulers::Temporal.new
 
 
