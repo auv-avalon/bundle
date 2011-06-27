@@ -68,8 +68,11 @@ composition 'StructuredLight' do
 end
 
 composition 'PipelineDetector' do
+    event :follow_pipe
+    event :end_of_pipe
+
     add Srv::ImageProvider
-    add OffshorePipelineDetector::Task, :as => 'offshorePipelineDetector'
+    add_main OffshorePipelineDetector::Task, :as => 'offshorePipelineDetector'
     add Srv::OrientationWithZ
     autoconnect
 
