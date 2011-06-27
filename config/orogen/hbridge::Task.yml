@@ -1,0 +1,294 @@
+--- name:default
+# pwm used during the encoder calibration process
+calibration_pwm: 80
+# number of complete states the calibration should wait, where the motor does not move, until the calibration in one direction is taken as done
+calibration_wait_time: 300
+# Configuration for all hbridges (initial values)
+configuration: 
+  config: 
+  - mode: DM_UNINITIALIZED
+    encoder_config_extern: 
+      zeroPosition: 0
+      ticksPerTurnDivided: 4096
+      tickDivider: 1
+      ticksPerTurn: 4096
+    encoder_config_intern: 
+      zeroPosition: 0
+      ticksPerTurnDivided: 23328
+      tickDivider: 4
+      ticksPerTurn: 93312
+    base_config: 
+      maxCurrent: 5000
+      maxMotorTempCount: 200
+      maxBoardTemp: 60
+      timeout: 1000
+      maxBoardTempCount: 200
+      pidDebugActive: 0
+      cascadedPositionController: 1
+      externalTempSensor: 0
+      activeFieldCollapse: 0
+      maxMotorTemp: 60
+      maxCurrentCount: 250
+      pwmStepPerMs: 20
+      openCircuit: 1
+    pid_speed: 
+      maxPWM: 1800.0
+      kd: 0.0
+      kp: 400.0
+      ki: 5.0
+    pid_position: 
+      maxPWM: 0.0
+      kd: 0.0
+      kp: 0.0
+      ki: 0.0
+  - mode: DM_UNINITIALIZED
+    encoder_config_extern: 
+      zeroPosition: 0
+      ticksPerTurnDivided: 4096
+      tickDivider: 1
+      ticksPerTurn: 4096
+    encoder_config_intern: 
+      zeroPosition: 0
+      ticksPerTurnDivided: 23328
+      tickDivider: 4
+      ticksPerTurn: 93312
+    base_config: 
+      maxCurrent: 5000
+      maxMotorTempCount: 200
+      maxBoardTemp: 60
+      timeout: 1000
+      maxBoardTempCount: 200
+      pidDebugActive: 0
+      cascadedPositionController: 1
+      externalTempSensor: 0
+      activeFieldCollapse: 0
+      maxMotorTemp: 60
+      maxCurrentCount: 250
+      pwmStepPerMs: 20
+      openCircuit: 1
+    pid_speed: 
+      maxPWM: 1800.0
+      kd: 0.0
+      kp: 400.0
+      ki: 5.0
+    pid_position: 
+      maxPWM: 0.0
+      kd: 0.0
+      kp: 0.0
+      ki: 0.0
+  - mode: DM_UNINITIALIZED
+    encoder_config_extern: 
+      zeroPosition: 0
+      ticksPerTurnDivided: 4096
+      tickDivider: 1
+      ticksPerTurn: 4096
+    encoder_config_intern: 
+      zeroPosition: 0
+      ticksPerTurnDivided: 23328
+      tickDivider: 4
+      ticksPerTurn: 93312
+    base_config: 
+      maxCurrent: 5000
+      maxMotorTempCount: 200
+      maxBoardTemp: 60
+      timeout: 1000
+      maxBoardTempCount: 200
+      pidDebugActive: 0
+      cascadedPositionController: 1
+      externalTempSensor: 0
+      activeFieldCollapse: 0
+      maxMotorTemp: 60
+      maxCurrentCount: 250
+      pwmStepPerMs: 20
+      openCircuit: 1
+    pid_speed: 
+      maxPWM: 1800.0
+      kd: 0.0
+      kp: 400.0
+      ki: 5.0
+    pid_position: 
+      maxPWM: 0.0
+      kd: 0.0
+      kp: 0.0
+      ki: 0.0
+  - mode: DM_UNINITIALIZED
+    encoder_config_extern: 
+      zeroPosition: 0
+      ticksPerTurnDivided: 4096
+      tickDivider: 1
+      ticksPerTurn: 4096
+    encoder_config_intern: 
+      zeroPosition: 0
+      ticksPerTurnDivided: 23328
+      tickDivider: 4
+      ticksPerTurn: 93312
+    base_config: 
+      maxCurrent: 5000
+      maxMotorTempCount: 200
+      maxBoardTemp: 60
+      timeout: 1000
+      maxBoardTempCount: 200
+      pidDebugActive: 0
+      cascadedPositionController: 1
+      externalTempSensor: 0
+      activeFieldCollapse: 0
+      maxMotorTemp: 60
+      maxCurrentCount: 250
+      pwmStepPerMs: 20
+      openCircuit: 1
+    pid_speed: 
+      maxPWM: 1800.0
+      kd: 0.0
+      kp: 400.0
+      ki: 5.0
+    pid_position: 
+      maxPWM: 0.0
+      kd: 0.0
+      kp: 0.0
+      ki: 0.0
+  - mode: DM_UNINITIALIZED
+    encoder_config_extern: 
+      zeroPosition: 0
+      ticksPerTurnDivided: 4096
+      tickDivider: 1
+      ticksPerTurn: 4096
+    encoder_config_intern: 
+      zeroPosition: 0
+      ticksPerTurnDivided: 23328
+      tickDivider: 4
+      ticksPerTurn: 93312
+    base_config: 
+      maxCurrent: 5000
+      maxMotorTempCount: 200
+      maxBoardTemp: 60
+      timeout: 1000
+      maxBoardTempCount: 200
+      pidDebugActive: 0
+      cascadedPositionController: 1
+      externalTempSensor: 0
+      activeFieldCollapse: 0
+      maxMotorTemp: 60
+      maxCurrentCount: 250
+      pwmStepPerMs: 20
+      openCircuit: 1
+    pid_speed: 
+      maxPWM: 1800.0
+      kd: 0.0
+      kp: 400.0
+      ki: 5.0
+    pid_position: 
+      maxPWM: 0.0
+      kd: 0.0
+      kp: 0.0
+      ki: 0.0
+  - mode: DM_UNINITIALIZED
+    encoder_config_extern: 
+      zeroPosition: 0
+      ticksPerTurnDivided: 4096
+      tickDivider: 1
+      ticksPerTurn: 4096
+    encoder_config_intern: 
+      zeroPosition: 0
+      ticksPerTurnDivided: 23328
+      tickDivider: 4
+      ticksPerTurn: 93312
+    base_config: 
+      maxCurrent: 5000
+      maxMotorTempCount: 200
+      maxBoardTemp: 60
+      timeout: 1000
+      maxBoardTempCount: 200
+      pidDebugActive: 0
+      cascadedPositionController: 1
+      externalTempSensor: 0
+      activeFieldCollapse: 0
+      maxMotorTemp: 60
+      maxCurrentCount: 250
+      pwmStepPerMs: 20
+      openCircuit: 1
+    pid_speed: 
+      maxPWM: 1800.0
+      kd: 0.0
+      kp: 400.0
+      ki: 5.0
+    pid_position: 
+      maxPWM: 0.0
+      kd: 0.0
+      kp: 0.0
+      ki: 0.0
+  - mode: DM_UNINITIALIZED
+    encoder_config_extern: 
+      zeroPosition: 0
+      ticksPerTurnDivided: 4096
+      tickDivider: 1
+      ticksPerTurn: 4096
+    encoder_config_intern: 
+      zeroPosition: 0
+      ticksPerTurnDivided: 23328
+      tickDivider: 4
+      ticksPerTurn: 93312
+    base_config: 
+      maxCurrent: 5000
+      maxMotorTempCount: 200
+      maxBoardTemp: 60
+      timeout: 50
+      maxBoardTempCount: 200
+      pidDebugActive: 0
+      cascadedPositionController: 1
+      externalTempSensor: 0
+      activeFieldCollapse: 0
+      maxMotorTemp: 60
+      maxCurrentCount: 250
+      pwmStepPerMs: 20
+      openCircuit: 1
+    pid_speed: 
+      maxPWM: 1800.0
+      kd: 0.0
+      kp: 400.0
+      ki: 5.0
+    pid_position: 
+      maxPWM: 0.0
+      kd: 0.0
+      kp: 0.0
+      ki: 0.0
+  - mode: DM_UNINITIALIZED
+    encoder_config_extern: 
+      zeroPosition: 0
+      ticksPerTurnDivided: 4096
+      tickDivider: 1
+      ticksPerTurn: 4096
+    encoder_config_intern: 
+      zeroPosition: 0
+      ticksPerTurnDivided: 23328
+      tickDivider: 4
+      ticksPerTurn: 93312
+    base_config: 
+      maxCurrent: 5000
+      maxMotorTempCount: 200
+      maxBoardTemp: 60
+      timeout: 50
+      maxBoardTempCount: 200
+      pidDebugActive: 0
+      cascadedPositionController: 1
+      externalTempSensor: 0
+      activeFieldCollapse: 0
+      maxMotorTemp: 60
+      maxCurrentCount: 250
+      pwmStepPerMs: 20
+      openCircuit: 1
+    pid_speed: 
+      maxPWM: 1800.0
+      kd: 0.0
+      kp: 400.0
+      ki: 5.0
+    pid_position: 
+      maxPWM: 0.0
+      kd: 0.0
+      kp: 0.0
+      ki: 0.0
+# set to true if hbridge-module should calibrate internal to external encoders on next change to RW-Mode, note, will be set to false by the module after the calibration
+do_encoder_calibration: 0
+# If true, the task will go into error if one tries to switch into R/W mode while the position is not 'close' to 0. Otherwise, the check is disabled
+only_calibrate_in_zero_position: 1
+
+use_external_encoders: 0

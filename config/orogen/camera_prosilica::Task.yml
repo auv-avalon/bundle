@@ -1,0 +1,123 @@
+--- name:default
+# horizontal binning. 1=no binning.
+binning_x: 1
+# vertical binning. 1=no binning.
+binning_y: 1
+# true => undistort the image before it is writen to the output port
+undistort: 0
+# parameter for undistort
+calibration_parameters: 
+  cy: 0.0
+  d0: 0.0
+  d1: 0.0
+  d2: 0.0
+  tx: 0.0
+  d3: 0.0
+  ty: 0.0
+  rx: 1.0
+  tz: 0.0
+  ry: 1.0
+  fx: 0.0
+  rz: 1.0
+  fy: 0.0
+  cx: 0.0
+# size of the frame buffer
+frame_buffer_size: 10
+# External trigger event, allowed values:  EdgeRising, EdgeFalling, EdgeAny, LevelHigh, LevelLow, none
+frame_start_trigger_event: none
+# if the queue is empty because retrieve was called too rarely clear buffer
+clear_buffer_if_frame_drop: 0
+# no data are written to frame_raw if set to true
+disable_frame_raw: 1
+# interval for logging a statistic about valid and invalid frames per second (0= logging of) -> it is saved as frame attrib StatFrameRate
+log_interval_in_sec: 5
+# time interval in micro seconds which is used to synchronize camera time with system time. 0 == no synchronization
+synchronize_time_interval: 0
+# trigger mode of the camera, allowed values: freerun, fixed, sync_in1, none
+trigger_mode: fixed
+# How fast the Auto white balance will update.
+whitebalance_auto_rate: 100
+# Sets a range of scene color changes in which the automatic whitebalance will not respond.
+whitebalance_auto_threshold: 5
+# Blue gain expressed as a percentage of the camera default setting.
+whitebalance_blue: 100
+# Red gain expressed as a percentage of the camera default setting.
+whitebalance_red: 100
+# opening mode (Master, Monitor, MasterMulticast)
+mode: Master
+# whitebalance mode (auto, manual, auto_once, none)
+whitebalance_mode: auto
+# The camera_format is converted into this format before it is written to the output port 
+output_format: MODE_UNDEFINED
+# output format of the camera --> not the output port! see below
+camera_format: MODE_BAYER
+# resize algorithm which is used to scale the frame before it is written to the output port. 
+resize_algorithm: :BAYER_RESIZE
+# In Bytes. Size of image data packet. This size includes the GVSP, UDP, and IP headers. (0 == max possible)
+package_size: 0
+
+
+
+
+--- name:front_camera
+# unique camerea id
+camera_id: "53093"
+# frames per second
+fps: 10
+# exposure value if exposure mode is not auto
+exposure: 5000
+# exposure mode (auto, manual, external, none)
+exposure_mode: manual
+# gain value
+gain: 0
+# gain mode
+gain_mode_auto: 1
+# width of the camera frame
+width: 1024
+# height of the camera frame
+height: 768
+# the offset to be used on the left margin in case of scaling
+offset_x: 0
+# the offset to be used on the left margin in case of scaling
+offset_y: 0
+# start of region readout, in pixels; left edge.
+region_x: 712
+# start of region readout, in pixels; top edge.
+region_y: 641
+# scale factor for the x direction which is used to scale the image before it is written to the output_port. 
+scale_x: 0.5
+# scale factor for the y direction which is used to scale the image before it is written to the output_port. 
+scale_y: 0.5
+
+
+
+--- name:bottom_camera
+# unique camerea id
+camera_id: "33186"
+# exposure value if exposure mode is not auto
+exposure: 5000
+# exposure mode (auto, manual, external, none)
+exposure_mode: auto
+# frames per second
+fps: 12
+# gain value
+gain: 15
+# gain mode
+gain_mode_auto: 0
+# width of the camera frame
+width: 640
+# height of the camera frame
+height: 480
+# the offset to be used on the left margin in case of scaling
+offset_x: 0
+# the offset to be used on the left margin in case of scaling
+offset_y: 0
+# start of region readout, in pixels; left edge.
+region_x: 9
+# start of region readout, in pixels; top edge.
+region_y: 7
+# scale factor for the x direction which is used to scale the image before it is written to the output_port. 
+scale_x: 0.5
+# scale factor for the y direction which is used to scale the image before it is written to the output_port. 
+scale_y: 0.5
+

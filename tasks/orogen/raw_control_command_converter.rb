@@ -9,7 +9,6 @@ composition 'AUVJoystickCommand' do
 end
 
 Cmp::ControlLoop.specialize 'command' => Cmp::AUVJoystickCommand do
-
     overload 'controller', Srv::AUVMotionController
     export command.motion_command
     # connect command.motion_command => controller.command

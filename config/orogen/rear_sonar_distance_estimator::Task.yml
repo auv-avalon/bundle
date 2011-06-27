@@ -1,0 +1,5 @@
+--- name:default
+# no documentation available for this property
+depth_timeout: 10
+# no documentation available for this property
+sonar_timeout: 30

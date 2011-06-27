@@ -1,0 +1,17 @@
+--- name:default
+# config file to calibrate sensor
+config_file: ""
+# debug_level 0=off 
+debug_level: 1
+# lut file to calibrate laser scan
+lut_file: ""
+# no documentation available for this property
+settings: 
+  max_width: 0
+  min_confidence: 0.0
+  fluctuation: 0
+  cut_percentage: 0.0
+  min_snr: 0.0
+  min_delta_start: 0
+  min_width: 0
+  min_delta_end: 0

@@ -1,0 +1,54 @@
+--- name:sonar_rear
+# Configuration Values for Sonar
+config: 
+  rightLimit: 6399
+  adInterval: 30
+  motorStepAngleSize: 32
+  pingpong: 0
+  adc8on: 1
+  adSpan: 81
+  rangeScale: 30
+  chan2: 1
+  numberOfBins: 300
+  applyoffset: 0
+  invert: 0
+  initialGain: 50
+  motorStepDelayTime: 25
+  adLow: 8
+  cont: 1
+  stamp: 
+    microseconds: 0
+  leftLimit: 1
+  scanright: 0
+  adcSetpointCh: 0
+# the device port
+port: /dev/ttyUSB0
+# timeout on the distance readings in milliseconds
+timeout: 200
+--- name:sonar
+# Configuration Values for Sonar
+config: 
+  rightLimit: 3999
+  adInterval: 30
+  motorStepAngleSize: 32
+  pingpong: 1
+  adc8on: 1
+  adSpan: 81
+  rangeScale: 30
+  chan2: 1
+  numberOfBins: 300
+  applyoffset: 0
+  invert: 0
+  initialGain: 50
+  motorStepDelayTime: 25
+  adLow: 8
+  cont: 0
+  stamp: 
+    microseconds: 0
+  leftLimit: 2399
+  scanright: 0
+  adcSetpointCh: 0
+# the device port
+port: /dev/ttyS0
+# timeout on the distance readings in milliseconds
+timeout: 200

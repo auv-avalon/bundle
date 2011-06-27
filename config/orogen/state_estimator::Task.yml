@@ -1,0 +1,9 @@
+--- name:default
+# no documentation available for this property
+fog_period: 0.01
+# no documentation available for this property
+imu_period: 0.018
+# no documentation available for this property
+max_delay: 0.1
+# Use xsens initial orientation for north alignment
+use_initial_orientation: 0

@@ -1,0 +1,17 @@
+--- name:default
+# no documentation available for this property
+timeout: 1.0
+# no documentation available for this property
+x_pid: 
+  max: 0.005
+  d: 0.0
+  p: 0.1
+  min: -0.005
+  i: 0.0
+# no documentation available for this property
+y_pid: 
+  max: 0.08
+  d: 0.0
+  p: -0.2
+  min: -0.08
+  i: 0.0

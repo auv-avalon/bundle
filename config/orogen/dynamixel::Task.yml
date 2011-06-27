@@ -1,0 +1,31 @@
+--- name:default
+# the dynamixel margin C (see RX-28 manual)
+ccw_margin: 1
+# the dynamixel slope D (see RX-28 manual)
+ccw_slope: 32
+# the dynamixel margin B (see RX-28 manual)
+cw_margin: 1
+# the dynamixel slope A (see RX-28 manual)
+cw_slope: 32
+# the device file used to connect to the RS485 bus
+device: /dev/ttyS3
+# The name of the frame, where the lower part (fixed) of the servo is mounted
+lowerFrameName: lower_dynamixel
+# lower bound of the sweep
+lower_sweep_angle: 0.0
+# mode of the module, 0 is hold position, 1 is contious sweep
+mode: :POSITION
+# turning speed in rad/sec
+moving_speed: 0.0
+# the dynamixel punch E (see RX-28 manual)
+punch: 32
+# the dynamixel id off the tilt angle
+servo_id: 1
+# the dynamixel punch E (see RX-28 manual)
+torque_limit: 512
+# The name of the frame, where the upper part (rotating) of the servo is mounted
+upperFrameName: upper_dynamixel
+# upper bound of the sweep
+upper_sweep_angle: 0.0
+# offset between the servo zero and the mounting zero
+zero_offset: 0.0

@@ -1,7 +1,6 @@
 class Sysmon::Task
     driver_for 'ExperimentMarkers'
     driver_for 'SystemStatus'
-    #driver_for 'LEDSignal'
 
     on :start do |event|
         @system_status = data_reader :system_status
