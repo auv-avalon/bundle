@@ -7,7 +7,7 @@ class MainPlanner < Roby::Planning::Planner
 
     GATE_TURN_DIRECTION = 1
 
-    CHECKING_CANDIDATE_SPEED = 0.0001
+    CHECKING_CANDIDATE_SPEED = 0.1
 
     method(:find_and_follow_pipeline) do
         z     = arguments[:z]
@@ -15,6 +15,12 @@ class MainPlanner < Roby::Planning::Planner
 
         # Get a task representing the define('pipeline')
         pipeline = self.pipeline
+
+        # Get (orocos) task context of pipeline detector
+        #pipeline_detector_task = pipeline.detector_child
+
+        # Set default speed
+        #pipeline_detector_task.orogen_task.default_x = speed
 
         # Code the actual actions
         pipeline.script do
@@ -42,7 +48,7 @@ class MainPlanner < Roby::Planning::Planner
             execute do
                 control_child.command_child.motion_command_port.disconnect_from control_child.controller_child.command_port
             end
-                        
+
             poll do
                 if orientation
                     motion_command.heading = orientation.orientation.yaw
@@ -56,7 +62,7 @@ class MainPlanner < Roby::Planning::Planner
               motion_command.y_speed = 0
               write_motion_command
             end
-           
+
             Robot.info "Slow AUV down for checking candidates on pipeline detection"
 
             poll_until detector_child.align_auv_event do
@@ -64,10 +70,35 @@ class MainPlanner < Roby::Planning::Planner
               write_motion_command
             end
 
-            Robot.info "Now visual servoing for pipeline"
-
-            execute do 
+            execute do
+                Robot.info "Now visual servoing for pipeline"
                 control_child.command_child.motion_command_port.connect_to control_child.controller_child.command_port
+                Robot.info "Robot is aligning. Wait until done."
+            end
+
+            wait detector_child.follow_pipe_event
+
+            execute do
+                Robot.info "Following the pipe."
+            end
+
+            wait detector_child.end_of_pipe_event
+
+            execute do
+                Robot.info "Pipeline end reached."
+            end
+
+            # Stop after end of pipeline. Hold heading 0 (-> debug).
+            poll do
+              motion_command.z = z
+              motion_command.x_speed = 0
+              motion_command.y_speed = 0
+              motion_command.heading = 0
+              write_motion_command
+            end
+
+            execute do
+                Robot.info "Pipeline Servoing completed!"
             end
 
             emit :success
