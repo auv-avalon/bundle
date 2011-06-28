@@ -1,0 +1,16 @@
+configuration: [--no-loggers, --no-compositions, --debug, -osvg]
+default_deployment: simulation
+default_robot: simulation
+
+base:
+    deployment: simulation
+
+# Everything in this section is tested separately
+simple_tests:
+    - testing
+    - pipeline
+    - drive_simple
+    - buoy
+    - wall
+
+

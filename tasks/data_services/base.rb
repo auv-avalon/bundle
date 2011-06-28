@@ -11,9 +11,21 @@ data_service_type 'Orientation' do
     output_port 'orientation_samples', '/base/samples/RigidBodyState'
 end
 
+# This service is mainly used in underwater system, where measuring depth alone
+# is easily done, while measuring a full position is pretty hard. On ground
+# systems, measuring Z and position are usually done together.
+data_service_type 'ZProvider' do
+    output_port 'z_samples', '/base/samples/RigidBodyState'
+end
+
+# See comment on top of ZProvider
+#
+# Orientation and depth are values that are easy to measure in underwater
+# systems, that's why we define this service
 data_service_type 'OrientationWithZ' do
     output_port 'orientation_z_samples', '/base/samples/RigidBodyState'
     provides Srv::Orientation, 'orientation_samples' => 'orientation_z_samples'
+    provides Srv::ZProvider, 'z_samples' => 'orientation_z_samples'
 end
 
 data_service_type 'Pose' do
@@ -21,6 +33,7 @@ data_service_type 'Pose' do
     provides Srv::Position,    'position_samples' => 'pose_samples'
     provides Srv::Orientation, 'orientation_samples' => 'pose_samples'
     provides Srv::OrientationWithZ, 'orientation_z_samples' => 'pose_samples'
+    provides Srv::ZProvider, 'z_samples' => 'pose_samples'
 end
 
 # This data service can be used to represent estimators that provide a pose that

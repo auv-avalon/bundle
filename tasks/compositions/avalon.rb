@@ -32,30 +32,33 @@ composition 'StructuredLightInput' do
     autoconnect
 end
 
-#composition 'PoseEstimation' do
-#    add Srv::Orientation
-#    add EkfSlam::Task, :as => 'slam'
-#    add SonarDriver::Micron 
-#    slam.acceleration_samples.ignore
-#
-#    export slam.pose_samples
-#    provides DataServices::Pose
-#    autoconnect
-#end
+composition 'PoseEstimator' do
+    add EkfSlam::Task, :as => 'slam'
+
+    add Srv::Orientation
+    connect orientation => slam.orientation_samples
+    add Srv::ZProvider
+    connect z_provider => slam.depth_samples
+    add Srv::SonarScanProvider
+    connect sonar_scan_provider => slam.SonarScan
+
+    export slam.pose_samples
+    provides DataServices::Pose
+end
 
 composition "OrientationEstimator" do
-    add LowLevelDriver::LowLevelTask, :as => 'lowlevel'
+    add StateEstimator::Task, :as => 'estimator'
+
+    add Srv::ZProvider
+    connect z_provider => estimator.depth_samples
     add XsensImu::Task, :as => 'imu'
+    connect imu => estimator.orientation_samples_imu
+    connect imu => estimator.imu_sensor_samples
     add Dsp3000::Task, :as => 'fog'
-    add StateEstimator::Task, :as => 'stateestimator'
+    connect fog => estimator.fog_samples
 
-    export stateestimator.orientation_samples #do this before provides
+    export estimator.orientation_samples
     provides Srv::OrientationWithZ
-
-    fog.orientation_samples.ignore
-    stateestimator.position_samples.ignore
-    connect fog.rotation => stateestimator.fog_samples
-    autoconnect
 end
 
 composition 'StructuredLight' do

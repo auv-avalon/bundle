@@ -12,11 +12,11 @@ define('pipeline', Cmp::VisualServoing.
   use(Cmp::PipelineDetector.use('bottom_camera')))
 
 define('drive_simple', Cmp::ControlLoop).
-  use(Cmp::AUVJoystickCommand.use(Controldev::Local))
+  use(Cmp::AUVJoystickCommand)
 
 define('buoy', Cmp::VisualServoing.
   use(Cmp::BuoyDetector.use('front_camera')))
 
 define('wall', Cmp::VisualServoing.
-  use(Cmp::WallDetector.use('top_sonar')))
+  use(Cmp::WallDetector.use('sonar')))
  

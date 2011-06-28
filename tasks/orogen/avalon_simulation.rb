@@ -15,7 +15,9 @@ class AvalonSimulation::FrontCamera
 end
 
 class AvalonSimulation::SonarTop
-    driver_for 'MarsSonar'
+    driver_for 'MarsSonar' do
+        provides Srv::SonarScanProvider
+    end
 end
 
 class AvalonSimulation::Actuators
