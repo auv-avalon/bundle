@@ -70,9 +70,10 @@ composition 'StructuredLight' do
     autoconnect
 end
 
-composition 'PipelineDetector' do#
+composition 'PipelineDetector' do
     event :check_candidate
     event :follow_pipe
+    event :found_pipe
     event :align_auv
     event :lost_pipe
     event :search_pipe
@@ -81,6 +82,7 @@ composition 'PipelineDetector' do#
     add Srv::ImageProvider
     add_main OffshorePipelineDetector::Task, :as => 'offshorePipelineDetector'
     add Srv::OrientationWithZ
+    offshorePipelineDetector.altitude_samples.ignore
     autoconnect
 
     export offshorePipelineDetector.position_command
