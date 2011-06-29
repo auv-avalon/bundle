@@ -141,7 +141,6 @@ class MainPlanner < Roby::Planning::Planner
 
             execute do 
             end
-        control.script do
         end
     end
 
@@ -155,37 +154,13 @@ class MainPlanner < Roby::Planning::Planner
         speed = arguments[:speed]
         duration = arguments[:duration]
 
-        control = Cmp::ControlLoop.use("AUVMotion").as_plan
+        control = Cmp::ControlLoop.use(AuvRelPosController::Task).as_plan
 
         control.script do
         end
     end
 
-    # -------------------------------------------------------------------------
-
-    describe("simple rotate with a given speed for a specific angle").
-        required_arg("speed", "set the current rotation speed"). 
-        required_arg("angle", "set the angle of rotate")
-    method(:rotate) do
-        speed = arguments[:speed]
-        angle = arguments[:angle]
-
-        control = Cmp::ControlLoop.use("AUVMotion").as_plan
-
-        control.script do
-            # TODO: get control ports and rotate 
-            data_writer 'motion_command', ['control', 'controller', 'command']
-
-            execute do 
-            end
-
-            end
-
-        end
-    end
-
-    # -------------------------------------------------------------------------
-
+   # -------------------------------------------------------------------------
 end
 
 # Other operations
