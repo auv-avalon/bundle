@@ -1,14 +1,12 @@
 # The main planner. A planner of this model is automatically added in the
 # Interface planner list.
 class MainPlanner < Roby::Planning::Planner
+    GATE_TURN_DIRECTION = 1
+    CHECKING_CANDIDATE_SPEED = 0.1
+
     describe("moves forward and turns on pipeline following if a pipeline is detected").
         required_arg("z", "the Z value at which we should search for the pipeline").
         required_arg("speed", "the forward speed at which we should search for the pipeline")
-
-    GATE_TURN_DIRECTION = 1
-
-    CHECKING_CANDIDATE_SPEED = 0.1
-
     method(:find_and_follow_pipeline) do
         z     = arguments[:z]
         speed = arguments[:speed]
@@ -25,6 +23,8 @@ class MainPlanner < Roby::Planning::Planner
         # Code the actual actions
         pipeline.script do
             setup_logger(Robot)
+
+
 
             # Define a 'orientation_reader' and 'orientation' methods that allow
             # access to control.pose.orientation_z_samples
@@ -102,6 +102,35 @@ class MainPlanner < Roby::Planning::Planner
             end
 
             emit :success
+        end
+    end
+
+    describe("rotate to a specific direction in focus of the end of pipeline").
+        required_arg("rotation_speed", "speed of the current rotation").
+        required_arg("angle", "rotate to a specific angle of degree (no radiant)")
+    method(:rotate_on_pipeline_end) do
+        rotation_speed = arguments[:rotation_speed]
+        angle = arguments[:angle]
+
+        # we need the pipeline definition for visual servoing on the end of pipeline
+        pipeline = self.pipeline
+
+        pipeline.script do 
+            # TODO: rotate on the pipeline
+        end
+    end
+
+    describe("simple move forward with a given speed for a specific duration").
+        required_arg("speed", "set the current speed of this movement").
+        required_arg("duration", "set the current duration in s for the movement")
+    method(:move_forward) do
+        speed = arguments[:speed]
+        duration = arguments[:duration]
+
+        control = Cmp::ControlLoop.use("AUVMotion").as_plan
+
+        control.script do
+            # TODO: get control ports and move forward ... stop at the end
         end
     end
 end
