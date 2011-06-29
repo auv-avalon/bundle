@@ -76,13 +76,6 @@ class MainPlanner < Roby::Planning::Planner
                 Robot.info "Robot is aligning. Wait until done."
             end
 
-            wait detector_child.end_of_pipe_event
-no radiant)")
-    method(:rotate_on_pipeline_end) do
-        rotation_speed = arguments[:rotation_speed]
-
-
-
             wait detector_child.follow_pipe_event
 
             execute do
@@ -90,10 +83,7 @@ no radiant)")
             end
 
             wait detector_child.end_of_pipe_event
-no radiant)")
-    method(:rotate_on_pipeline_end) do
-        rotation_speed = arguments[:rotation_speed]
-
+            
             execute do
                 Robot.info "Pipeline end reached."
             end
@@ -130,12 +120,14 @@ no radiant)")
         pipeline.script do 
             # TODO: rotate on the pipeline
         end
+
+        emit :success
     end
     # -------------------------------------------------------------------------
 
     describe("simple rotate with a given speed for a specific angle").
         required_arg("speed", "set the current rotation speed"). 
-        required_arg("angle", "set the angle of rotate").
+        required_arg("angle", "set the angle of rotate")
     method(:rotate) do
         speed = arguments[:speed]
         angle = arguments[:angle]
@@ -173,7 +165,7 @@ no radiant)")
 
     describe("simple rotate with a given speed for a specific angle").
         required_arg("speed", "set the current rotation speed"). 
-        required_arg("angle", "set the angle of rotate").
+        required_arg("angle", "set the angle of rotate")
     method(:rotate) do
         speed = arguments[:speed]
         angle = arguments[:angle]
