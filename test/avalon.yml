@@ -1,4 +1,4 @@
-configuration: [--no-loggers, --no-compositions, --debug, -osvg]
+configuration: [--no-loggers, --no-compositions, --debug, -opng]
 default_deployment: avalon
 default_robot: avalon
 
@@ -11,8 +11,11 @@ simple_tests:
     - orientation_estimator
     - testing
     - pipeline
+    - pipeline_detector
     - drive_simple
     - buoy
+    - buoy_detector
     - wall
+    - wall_detector
 
 

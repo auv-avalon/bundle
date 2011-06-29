@@ -1,4 +1,4 @@
-configuration: [--no-loggers, --no-compositions, --debug, -osvg]
+configuration: [--no-loggers, --debug, -opng]
 default_deployment: simulation
 default_robot: simulation
 
@@ -7,10 +7,15 @@ base:
 
 # Everything in this section is tested separately
 simple_tests:
+    - pose_estimator
+    - orientation_estimator
     - testing
     - pipeline
+    - pipeline_detector
     - drive_simple
     - buoy
+    - buoy_detector
     - wall
+    - wall_detector
 
 
