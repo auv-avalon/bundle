@@ -3,6 +3,7 @@
 class MainPlanner < Roby::Planning::Planner
     GATE_TURN_DIRECTION = 1
     CHECKING_CANDIDATE_SPEED = 0.1
+    STOPPING_DURATION = 4 # Seconds needed to stop the vehicle from max speed
 
     describe("moves forward and turns on pipeline following if a pipeline is detected").
         required_arg("z", "the Z value at which we should search for the pipeline").
@@ -83,7 +84,7 @@ class MainPlanner < Roby::Planning::Planner
             end
 
             wait detector_child.end_of_pipe_event
-            
+
             execute do
                 Robot.info "Pipeline end reached."
             end
@@ -117,7 +118,7 @@ class MainPlanner < Roby::Planning::Planner
         # we need the pipeline definition for visual servoing on the end of pipeline
         pipeline = self.pipeline
 
-        pipeline.script do 
+        pipeline.script do
             # TODO: rotate on the pipeline
         end
 
@@ -126,8 +127,10 @@ class MainPlanner < Roby::Planning::Planner
     # -------------------------------------------------------------------------
 
     describe("simple rotate with a given speed for a specific angle").
-        required_arg("speed", "set the current rotation speed"). 
+
+        required_arg("speed", "set the current rotation speed").
         required_arg("angle", "set the angle of rotate")
+
     method(:rotate) do
         speed = arguments[:speed]
         angle = arguments[:angle]
@@ -136,20 +139,22 @@ class MainPlanner < Roby::Planning::Planner
         # control.depends_on(Srv::Orientation)
 
         control.script do
-            # TODO: get control ports and rotate 
+            # TODO: get control ports and rotate
             data_writer 'motion_command', ['controller', 'command']
 
-            execute do 
+            execute do
             end
         end
     end
 
 
     # -------------------------------------------------------------------------
-    
+
     describe("simple move forward with a given speed for a specific duration").
         required_arg("speed", "set the current speed of this movement").
-        required_arg("duration", "set the current duration in s for the movement")
+        required_arg("duration", "set the current duration in s for the movement").
+        required_arg("z", "the Z value at which we should move forward")
+
     method(:move_forward) do
         speed = arguments[:speed]
         duration = arguments[:duration]
@@ -157,6 +162,37 @@ class MainPlanner < Roby::Planning::Planner
         control = Cmp::ControlLoop.use(AuvRelPosController::Task).as_plan
 
         control.script do
+
+            # Define 'motion_command_writer', 'motion_command' and 'write_motion_command'
+            data_writer 'motion_command', ['control', 'controller', 'command']
+
+            # Determine end time of moving forward
+            endTime = Time.now + duration
+
+            poll do
+                if(Time.now >= endTime)
+                    transition!
+                end
+                motion_command.z = z
+                motion_command.x_speed = speed
+                motion_command.y_speed = 0
+                write_motion_command
+            end
+
+            # Stop the vehicle
+            endTime = Time.now + STOPPING_DURATION
+            poll do
+                if(Time.now >= endTime)
+                    transition!
+                end
+                motion_command.z = z
+                motion_command.x_speed = speed
+                motion_command.y_speed = 0
+                write_motion_command
+            end
+
+            emit :success
+
         end
     end
 
