@@ -76,6 +76,13 @@ class MainPlanner < Roby::Planning::Planner
                 Robot.info "Robot is aligning. Wait until done."
             end
 
+            wait detector_child.end_of_pipe_event
+no radiant)")
+    method(:rotate_on_pipeline_end) do
+        rotation_speed = arguments[:rotation_speed]
+
+
+
             wait detector_child.follow_pipe_event
 
             execute do
@@ -83,6 +90,9 @@ class MainPlanner < Roby::Planning::Planner
             end
 
             wait detector_child.end_of_pipe_event
+no radiant)")
+    method(:rotate_on_pipeline_end) do
+        rotation_speed = arguments[:rotation_speed]
 
             execute do
                 Robot.info "Pipeline end reached."
@@ -105,10 +115,12 @@ class MainPlanner < Roby::Planning::Planner
         end
     end
 
+    # -------------------------------------------------------------------------
+
     describe("rotate to a specific direction in focus of the end of pipeline").
         required_arg("rotation_speed", "speed of the current rotation").
         required_arg("angle", "rotate to a specific angle of degree (no radiant)")
-    method(:rotate_on_pipeline_end) do
+    method(:pipeline_hovering) do
         rotation_speed = arguments[:rotation_speed]
         angle = arguments[:angle]
 
@@ -119,7 +131,31 @@ class MainPlanner < Roby::Planning::Planner
             # TODO: rotate on the pipeline
         end
     end
+    # -------------------------------------------------------------------------
 
+    describe("simple rotate with a given speed for a specific angle").
+        required_arg("speed", "set the current rotation speed"). 
+        required_arg("angle", "set the angle of rotate").
+    method(:rotate) do
+        speed = arguments[:speed]
+        angle = arguments[:angle]
+
+        control = Cmp::ControlLoop.use(AuvRelPosController::Task).as_plan
+        # control.depends_on(Srv::Orientation)
+
+        control.script do
+            # TODO: get control ports and rotate 
+            data_writer 'motion_command', ['controller', 'command']
+
+            execute do 
+            end
+        control.script do
+        end
+    end
+
+
+    # -------------------------------------------------------------------------
+    
     describe("simple move forward with a given speed for a specific duration").
         required_arg("speed", "set the current speed of this movement").
         required_arg("duration", "set the current duration in s for the movement")
@@ -130,9 +166,34 @@ class MainPlanner < Roby::Planning::Planner
         control = Cmp::ControlLoop.use("AUVMotion").as_plan
 
         control.script do
-            # TODO: get control ports and move forward ... stop at the end
         end
     end
+
+    # -------------------------------------------------------------------------
+
+    describe("simple rotate with a given speed for a specific angle").
+        required_arg("speed", "set the current rotation speed"). 
+        required_arg("angle", "set the angle of rotate").
+    method(:rotate) do
+        speed = arguments[:speed]
+        angle = arguments[:angle]
+
+        control = Cmp::ControlLoop.use("AUVMotion").as_plan
+
+        control.script do
+            # TODO: get control ports and rotate 
+            data_writer 'motion_command', ['control', 'controller', 'command']
+
+            execute do 
+            end
+
+            end
+
+        end
+    end
+
+    # -------------------------------------------------------------------------
+
 end
 
 # Other operations
