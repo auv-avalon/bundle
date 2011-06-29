@@ -2,6 +2,12 @@ Roby.app.use_deployments_from "avalon_simulation_deployment"
 Roby.app.use_deployments_from "controldev" # Joystick
 Roby.app.use_deployment "taskmon_back"
 
+# Selectively get deployments from avalonFront / avalonBack
+Roby.app.use_deployment "pipeline_follower"
+Roby.app.use_deployment "buoy_detector"
+Roby.app.use_deployment "auv_rel_pos_controller"
+Roby.app.use_deployment "sonardetector"
+
 Robot.devices do
     device(Dev::Joystick, :as => 'joystick')
 
