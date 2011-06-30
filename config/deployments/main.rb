@@ -12,6 +12,15 @@ define('pipeline_detector', Cmp::PipelineDetector.use('bottom_camera'))
 define('buoy', Cmp::VisualServoing.use(Cmp::BuoyDetector.use('front_camera')))
 define('buoy_detector', Cmp::BuoyDetector.use('front_camera'))
 
-define('wall', Cmp::VisualServoing.use(Cmp::WallDetector.use('sonar')))
+wall_detector_right = Cmp::WallDetector.use('sonar').
+	use("sonar",Sonardetector::Task.use_conf("default","drive-right"))
+
+wall_detector_left = Cmp::WallDetector.use('sonar').
+	use("sonar",Sonardetector::Task.use_conf("default","drive-left"))
+
+define('wall_right', Cmp::VisualServoing.use(wall_detector_right))
+define('wall_left', Cmp::VisualServoing.use(wall_detector_left))
+
+
 define('wall_detector', Cmp::WallDetector.use('sonar'))
  
