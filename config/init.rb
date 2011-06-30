@@ -36,3 +36,8 @@ if Roby.app.robot_name == "avalon"
   Orocos::CORBA.name_service = "avalon-front"
 end
 
+if Orocos::MQueue.available?
+    Robot.warn "turning ON MQueue usage"
+    Orocos::MQueue.auto = true
+end
+
