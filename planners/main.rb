@@ -25,8 +25,6 @@ class MainPlanner < Roby::Planning::Planner
         pipeline.script do
             setup_logger(Robot)
 
-
-
             # Define a 'orientation_reader' and 'orientation' methods that allow
             # access to control.pose.orientation_z_samples
             data_reader 'orientation', ['control', 'orientation_with_z', 'orientation_z_samples']
@@ -98,6 +96,7 @@ class MainPlanner < Roby::Planning::Planner
               write_motion_command
             end
 
+
             execute do
                 Robot.info "Pipeline Servoing completed!"
             end
@@ -158,13 +157,13 @@ class MainPlanner < Roby::Planning::Planner
     method(:move_forward) do
         speed = arguments[:speed]
         duration = arguments[:duration]
+        z = arguments[:z]
 
-        control = Cmp::ControlLoop.use(AuvRelPosController::Task).as_plan
+        control = Cmp::ControlLoop.use('command' => AuvRelPosController::Task).as_plan
 
         control.script do
-
             # Define 'motion_command_writer', 'motion_command' and 'write_motion_command'
-            data_writer 'motion_command', ['control', 'controller', 'command']
+            data_writer 'motion_command', ['controller', 'command']
 
             # Determine end time of moving forward
             endTime = Time.now + duration
