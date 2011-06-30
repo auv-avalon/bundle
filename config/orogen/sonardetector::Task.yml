@@ -8,7 +8,7 @@ debug_output: 0
 # if set to true the threshold for the sonar beams is enabled
 enable_beam_threshold: 1
 # reference depth
-fixed_depth: -1.0
+fixed_depth: -1.5
 # modulates the heading to the wall with a fixed degree, default is 0 than the wall in in front
 heading_modulation: 0.0
 # minimum value for responses in a beam, everything below will be ignored
@@ -21,3 +21,14 @@ wall_estimation_end_angle: 3.93
 wall_estimation_start_angle: 2.36
 # set distance for the y axis, witch will result in a certain speed
 y_distance: 0.0
+
+wall_estimation_ransac_threshold:  0.5
+wall_estimation_ransac_min_inliers: 0.7
+
+--- name:drive-left
+y_distance: 0.2
+heading_modulation: 0.78538
+
+--- name:drive-right
+y_distance: -0.2
+heading_modulation: -0.75838
