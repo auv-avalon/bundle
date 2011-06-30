@@ -28,7 +28,8 @@ Robot.devices do
     period(0.01)
   device(Dev::Micron, :as => 'sonar').
     device_id("/dev/ttyS0").
-    period(0.1)
+    period(0.1).
+    use_conf("sonar","wall_following")
   device(Dev::Profiling, :as => 'profiler').
     device_id("/dev/ttyS1").
     period(0.1)
@@ -41,10 +42,12 @@ Robot.devices do
     period(0.1)
 
   device(Dev::CameraProsilica, :as => "front_camera").
-    period(0.1)
+    period(0.1).
+    use_conf("default", "front_camera")
 
   device(Dev::CameraProsilica, :as => "bottom_camera").
-    period(0.1)
+    period(0.1).
+    use_conf("default", "bottom_camera")
 
   com_bus(Dev::Canbus, :as => 'can0').
     device_id('can0')
