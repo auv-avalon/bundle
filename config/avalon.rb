@@ -7,7 +7,6 @@ end
 
 Roby.app.use_deployments_from "avalon_back"
 
-State.orocos.disable_logging
 State.orocos.exclude_from_log '/canbus/Message'
 
 #drive_simple = 0
