@@ -101,6 +101,7 @@ end
 composition 'WallDetector' do
     add Srv::SonarScanProvider
     add Sonardetector::Task , :as => 'detector'
+    add Srv::Orientation
     autoconnect
 
     export detector.position_command
