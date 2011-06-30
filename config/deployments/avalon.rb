@@ -10,6 +10,10 @@ use Cmp::PoseEstimator        => Cmp::PoseEstimator.use('sonar', Cmp::Orientatio
 define('pose_estimator', Cmp::PoseEstimator)
 define('orientation_estimator', Cmp::OrientationEstimator)
 
+# Predeploy a few things to keep them always running
+add_mission(Hbridge::Task)
+add_mission(Cmp::OrientationEstimator)
+
 # Add system monitoring
 add_mission(Sysmon::Task)
 # Add modem-can, to get a com channel to the base station
