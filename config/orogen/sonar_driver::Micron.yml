@@ -49,6 +49,6 @@ config:
   scanright: 0
   adcSetpointCh: 0
 # the device port
-port: /dev/ttyS0
+port: /dev/ttyS3
 # timeout on the distance readings in milliseconds
 timeout: 200
