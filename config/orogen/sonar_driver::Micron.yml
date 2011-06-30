@@ -52,3 +52,13 @@ config:
 port: /dev/ttyS3
 # timeout on the distance readings in milliseconds
 timeout: 200
+--- name:wall_following
+#Special sonar settings for wall following. Front Sonar.
+config:
+  rightLimit: 3999
+  adInterval: 30
+  pingpong: 1
+  numberOfBins: 300
+  initialGain: 50
+  cont: 0
+  leftLimit: 2399
