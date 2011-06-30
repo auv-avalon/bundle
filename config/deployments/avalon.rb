@@ -12,7 +12,7 @@ define('orientation_estimator', Cmp::OrientationEstimator)
 
 # Predeploy a few things to keep them always running
 add_mission(Hbridge::Task)
-add_mission(Cmp::OrientationEstimator)
+#add_mission(Cmp::OrientationEstimator)
 
 # Add system monitoring
 add_mission(Sysmon::Task)
@@ -21,4 +21,7 @@ add_mission(ModemCan::Task)
 
 add_mission(Taskmon::Task).on_server('localhost')
 add_mission(Taskmon::Task).on_server('front')
+
+add_mission('bottom_camera')
+add_mission('front_camera')
 
