@@ -1,10 +1,5 @@
-if !Roby.app.single?
-    Roby.app.orocos_process_server 'front','192.168.128.50'
-    Roby.app.use_deployments_from "avalon_front", :on => 'front'
-else
-    Roby.app.use_deployments_from "avalon_front"
-end
-
+Roby.app.orocos_process_server 'front','192.168.128.50'
+Roby.app.use_deployments_from "avalon_front", :on => 'front'
 Roby.app.use_deployments_from "avalon_back"
 
 State.orocos.exclude_from_log '/canbus/Message'
