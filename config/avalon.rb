@@ -8,6 +8,8 @@ end
 Roby.app.use_deployments_from "avalon_back"
 
 State.orocos.exclude_from_log '/canbus/Message'
+# Uncomment to disable logging cameras
+State.orocos.exclude_from_log '/base/samples/frame/Frame'
 
 #drive_simple = 0
 #drive_slam = 1
