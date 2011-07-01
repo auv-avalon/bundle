@@ -52,7 +52,7 @@ config:
 port: /dev/ttyS3
 # timeout on the distance readings in milliseconds
 timeout: 200
---- name:wall_following
+--- name:narrow
 #Special sonar settings for wall following. Front Sonar.
 config:
   rightLimit: 3999

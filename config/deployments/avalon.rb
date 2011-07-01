@@ -5,7 +5,9 @@ use Srv::OrientationWithZ => Cmp::OrientationEstimator
 use Srv::Pose             => Cmp::PoseEstimator
 
 use Cmp::OrientationEstimator => Cmp::OrientationEstimator.use('low_level_board')
-use Cmp::PoseEstimator        => Cmp::PoseEstimator.use('sonar', Cmp::OrientationEstimator)
+
+wide_sonar = device('sonar').use_conf('sonar')
+use Cmp::PoseEstimator        => Cmp::PoseEstimator.use(wide_sonar, Cmp::OrientationEstimator)
 
 define('pose_estimator', Cmp::PoseEstimator)
 define('orientation_estimator', Cmp::OrientationEstimator)
