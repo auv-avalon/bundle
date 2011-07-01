@@ -65,11 +65,11 @@ camera_id: "53093"
 # frames per second
 fps: 10
 # exposure value if exposure mode is not auto
-exposure: 5000
+exposure: 20000
 # exposure mode (auto, manual, external, none)
 exposure_mode: manual
 # gain value
-gain: 0
+gain: 5
 # gain mode
 gain_mode_auto: 1
 # width of the camera frame
@@ -95,7 +95,7 @@ scale_y: 0.5
 # unique camerea id
 camera_id: "33186"
 # exposure value if exposure mode is not auto
-exposure: 5000
+exposure: 20000
 # exposure mode (auto, manual, external, none)
 exposure_mode: auto
 # frames per second
