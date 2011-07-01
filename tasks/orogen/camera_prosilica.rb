@@ -6,10 +6,5 @@ end
 
 class CameraProsilica::Task
     provides Dev::CameraProsilica, 'images' => 'frame'
-
-    def configure
-    	super
-        orogen_task.camera_id = robot_device.device_id
-    end
 end
 

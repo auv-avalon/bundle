@@ -1,9 +1,15 @@
---- name:buoydetector
+--- name:default
 # number of frames a buoy is not detected in order to set BUOY_LOST
 buoy_timeout: 10
-# set high hue value to reduce color space
-hue_high: 200
-# set low hue value to recude color space
-hue_low: 56
 # maximum buoy distance in m
 max_buoy_distance: 0.5
+
+houghTh: 100
+
+hValue: 60
+
+vValue: 20
+
+steps: 10
+
+edgeTh: 35
