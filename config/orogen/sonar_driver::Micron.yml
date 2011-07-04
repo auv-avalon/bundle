@@ -29,23 +29,23 @@ timeout: 200
 # Configuration Values for Sonar
 config: 
   rightLimit: 3999
-  adInterval: 30
+  adInterval: 200
   motorStepAngleSize: 32
   pingpong: 1
   adc8on: 1
   adSpan: 81
   rangeScale: 30
   chan2: 1
-  numberOfBins: 300
+  numberOfBins: 600
   applyoffset: 0
   invert: 0
   initialGain: 50
   motorStepDelayTime: 25
   adLow: 8
-  cont: 0
+  cont: true
   stamp: 
     microseconds: 0
-  leftLimit: 2399
+  leftLimit: 1
   scanright: 0
   adcSetpointCh: 0
 # the device port
@@ -56,7 +56,7 @@ timeout: 200
 #Special sonar settings for wall following. Front Sonar.
 config:
   rightLimit: 3999
-  adInterval: 30
+  adInterval: 50
   pingpong: 1
   numberOfBins: 300
   initialGain: 50
