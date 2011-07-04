@@ -19,27 +19,23 @@ State.navigation_mode = ['drive_simple',"drive_slam","pipeline","drive_testbed",
 
 Robot.devices do
   device(Dev::LowLevel, :as => 'low_level_board').
-    period(0.3).
-    device_id("/dev/ttyS0")
+    period(0.3)
   device(Dev::XsensImu, :as => 'imu').
     period(0.01)
   device(Dev::Dsp3000, :as => 'fog').
-    device_id("/dev/ttyS3").
     period(0.01)
   device(Dev::Micron, :as => 'sonar').
-    device_id("/dev/ttyS0").
     period(0.1).
-    use_conf("sonar","wall_following")
+    use_conf("sonar")
   device(Dev::Profiling, :as => 'profiler').
-    device_id("/dev/ttyS1").
     period(0.1)
   
   device(Dev::Dynamixel, :as => 'dynamixel').
     device_id("/dev/ttyS3")
   
   device(Dev::Micron, :as => "sonar_rear").
-    device_id("/dev/ttyUSB0").
-    period(0.1)
+    period(0.1).
+    use_conf('sonar_rear')
 
   device(Dev::CameraProsilica, :as => "front_camera").
     period(0.1).
