@@ -8,6 +8,21 @@ Roby.app.use_deployment "buoy_detector"
 Roby.app.use_deployment "auv_rel_pos_controller"
 Roby.app.use_deployment "sonardetector"
 
+Roby.app.orocos_start_all_deployments = true
+
+Conf.orocos.log_group "images" do
+    add "/RTT/extras/ReadOnlyPointer</base/samples/frame/Frame>"
+end
+
+Conf.orocos.log_group "raw_camera" do
+    add "front_camera.frame_raw"
+    add "front_camera.frame"
+    add "bottom_camera.frame"
+end
+
+Conf.orocos.disable_log_group "images"
+Conf.orocos.disable_log_group "raw_camera"
+
 Robot.devices do
     device(Dev::Joystick, :as => 'joystick')
 
