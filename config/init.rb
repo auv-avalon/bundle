@@ -33,7 +33,7 @@ require 'roby/schedulers/temporal'
 Roby.scheduler = Roby::Schedulers::Temporal.new
 
 if Roby.app.robot_name == "avalon"
-  Orocos::CORBA.name_service = "avalon-front"
+  Orocos::CORBA.name_service = "avalon.local"
 end
 
 if Orocos::MQueue.available?
