@@ -49,6 +49,14 @@ Robot.devices do
     period(0.1).
     use_conf("default", "bottom_camera")
 
+  device(Dev::CameraUnicap, :as => "left_unicap_camera").
+      period(0.1).
+      use_conf("default", "left_unicap_camera")
+
+  device(Dev::CameraUnicap, :as => "right_unicap_camera").
+      period(0.1).
+      use_conf("default", "right_unicap_camera")
+
   com_bus(Dev::Canbus, :as => 'can0').
     device_id('can0')
 
