@@ -11,6 +11,17 @@ add_mission(Taskmon::Task)
 use DataServices::Orientation => AvalonSimulation::StateEstimator
 use DataServices::OrientationWithZ => AvalonSimulation::StateEstimator
 
+class AvalonSimulation::StateEstimator
+    on :start do |event|
+        @reader = data_reader :pose_samples
+    end
+    poll do
+        if samples = @reader.read
+            State.pose = samples
+        end
+    end
+end
+
 use AvalonControl::MotionControlTask => AvalonControl::MotionControlTask.
   use_conf("default", "simulation")
 
