@@ -67,11 +67,11 @@ fps: 10
 # exposure value if exposure mode is not auto
 exposure: 20000
 # exposure mode (auto, manual, external, none)
-exposure_mode: manual
+exposure_mode: auto
 # gain value
-gain: 5
+gain: 0
 # gain mode
-gain_mode_auto: 1
+gain_mode_auto: 0
 # width of the camera frame
 width: 1024
 # height of the camera frame
