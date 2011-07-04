@@ -8,6 +8,7 @@ Roby.app.load_orocos_deployment 'main'
 
 add_mission(Taskmon::Task)
 
+use DataServices::Orientation => AvalonSimulation::StateEstimator
 use DataServices::OrientationWithZ => AvalonSimulation::StateEstimator
 
 use AvalonControl::MotionControlTask => AvalonControl::MotionControlTask.
