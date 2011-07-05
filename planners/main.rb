@@ -263,9 +263,10 @@ class MainPlanner < Roby::Planning::Planner
         PIPELINE_SEARCH_SPEED = 0.1
         PIPELINE_SEARCH_Z = -4.5
         PIPELINE_EXPECTED_HEADING = 0.0
-        FIRST_GATE_HEADING = Math::PI / 2
+        FIRST_GATE_HEADING = 0
         FIRST_GATE_PASSING_SPEED = 0.5 
         FIRST_GATE_PASSING_Z = PIPELINE_SEARCH_Z
+        GATE_PASSING_DURATION = 5
     else
     end
 
