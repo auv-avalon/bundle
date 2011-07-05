@@ -8,12 +8,14 @@ class MainPlanner < Roby::Planning::Planner
         required_arg("heading", "initial heading for first searching the pipeline").
         required_arg("z", "the Z value at which we should search for the pipeline").
         required_arg("speed", "the forward speed at which we should search for the pipeline").
-        required_arg("expected_pipeline_heading", "the general heading of the pipeline. Does not have to be precise.")
+        required_arg("expected_pipeline_heading", "the general heading of the pipeline. Does not have to be precise.").
+        optional_arg('pipeline_activation_delay', 'wait that many seconds before turning the pipeline following ON')
     method(:find_and_follow_pipeline) do
         z     = arguments[:z]
         speed = arguments[:speed]
         heading = arguments[:heading]
         expected_pipeline_heading = arguments[:expected_pipeline_heading]
+        pipeline_activation_delay = arguments[:pipeline_activation_delay]
 
         # Get a task representing the define('pipeline')
         pipeline = self.pipeline
@@ -68,6 +70,18 @@ class MainPlanner < Roby::Planning::Planner
               write_motion_command
             end
 
+            if pipeline_activation_delay
+                start = nil
+                execute { start = Time.now }
+                poll do
+                    motion_command.x_speed = checking_candidate_speed
+                    write_motion_command
+
+                    if (Time.now - start) > pipeline_activation_delay
+                        transition!
+                    end
+                end
+            end
             execute do
                 Robot.info "Now visual servoing for pipeline"
                 pipeline_follower = detector_child
