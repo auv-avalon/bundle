@@ -3,3 +3,20 @@
 enable_gui: 1
 # scenefile of the robot module, which should be loaded
 with_manipulator_gui: 1
+
+topsonar_leftlimit: 0
+
+# 2PI
+topsonar_rightlimit: 6399
+
+topsonar_numberofbins: 299
+
+topsonar_adinterval: 30
+
+# sonar scan modus. 0=continous, 1=pingpong, 2=continous with restricted scan area
+topsonar_cont: 0
+
+--- name:wall_servoing
+topsonar_leftlimit: 2399
+topsonar_rightlimit: 3999
+topsonar_cont: 1
