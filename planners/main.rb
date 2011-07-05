@@ -278,7 +278,7 @@ class MainPlanner < Roby::Planning::Planner
                                              :z => PIPELINE_SEARCH_Z,
                                              :expected_pipeline_heading => PIPELINE_EXPECTED_HEADING)
         
-        hovering = pipeline_hovering(:target_yaw => FIRST_GATE_HEADING)
+        # hovering = pipeline_hovering(:target_yaw => FIRST_GATE_HEADING)
 
         gate_passing = move_forward(:heading => FIRST_GATE_HEADING, :speed => FIRST_GATE_PASSING_SPEED, :z => FIRST_GATE_PASSING_Z)
 
