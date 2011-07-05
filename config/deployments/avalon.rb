@@ -12,12 +12,16 @@ use Cmp::PoseEstimator        => Cmp::PoseEstimator.use(wide_sonar, Cmp::Orienta
 define('pose_estimator', Cmp::PoseEstimator)
 define('orientation_estimator', Cmp::OrientationEstimator)
 
-StateEstimator.on :start do |event|
+StateEstimator::Task.on :start do |event|
    @orientation_reader = data_reader 'orientation_samples'
 end
 StateEstimator::Task.poll do
-   if orientation = @orientation_reader.read
-       State.pose.orientation = orientation
+   if rbs = @orientation_reader.read
+       State.pose.orientation = rbs.orientation
+       if !State.pose.respond_to?(:position)
+       	   State.pose.position = Eigen::Vector3.new(0, 0, 0)
+       end
+       State.pose.position.z = rbs.position.z
    end
 end
 
