@@ -1,6 +1,6 @@
 --- name:default
 # maximum distance for sonar responses in a beam
-beam_threshold_max: 5.0
+beam_threshold_max: 15.0
 # minimum distance for sonar responses in a beam
 beam_threshold_min: 1.0
 # print debug output
@@ -12,7 +12,7 @@ fixed_depth: -1.5
 # modulates the heading to the wall with a fixed degree, default is 0 than the wall in in front
 heading_modulation: 0.0
 # minimum value for responses in a beam, everything below will be ignored
-min_response_value: 10.0
+min_response_value: 20.0
 # reference distance to wall
 wall_distance: 2.0
 # end angle for the wall estimation
@@ -22,8 +22,8 @@ wall_estimation_start_angle: 2.36
 # set distance for the y axis, witch will result in a certain speed
 y_distance: 0.0
 
-wall_estimation_ransac_threshold:  0.5
-wall_estimation_ransac_min_inliers: 0.7
+wall_estimation_ransac_threshold:  0.4
+wall_estimation_ransac_min_inliers: 0.6
 
 --- name:drive-left
 y_distance: 0.2
