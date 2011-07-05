@@ -54,7 +54,7 @@ class MainPlanner < Roby::Planning::Planner
             #    returns the port named 'blabla' from the receiver
             #         control_child.command_child.motion_command_port => returns motion_command_port from the AUVMotionController
 
-            wait control_child.command_child.start_event
+            wait_any control_child.command_child.start_event
 
             execute do
                 control_child.command_child.motion_command_port.disconnect_from control_child.controller_child.command_port
@@ -136,7 +136,7 @@ class MainPlanner < Roby::Planning::Planner
             data_reader 'pipeline_servoing_command', ['detector', 'relative_position_command']
             data_writer 'rel_pos_command', ['control', 'command', 'position_command']
 
-            wait control_child.command_child.start_event
+            wait_any control_child.command_child.start_event
             execute do
                 # Disconnect the pipeline detector from the AUV relpos
                 # controller
@@ -215,7 +215,7 @@ class MainPlanner < Roby::Planning::Planner
 
             endTime = nil
             
-            wait command_child.start_event
+            wait_any command_child.start_event
             
             execute do
                 Robot.info "Disconnect Position Controller from MotionController"
