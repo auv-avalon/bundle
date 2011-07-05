@@ -3,19 +3,20 @@ Roby.app.use_deployments_from "avalon_front", :on => 'front'
 Roby.app.use_deployments_from "avalon_back"
 
 State.orocos.exclude_from_log '/canbus/Message'
-# Uncomment to disable logging cameras
-State.orocos.exclude_from_log '/base/samples/frame/Frame'
 
-#drive_simple = 0
-#drive_slam = 1
-#drive_testbed = 2
-#drive_uwmodem = 3
-#drive_allen = 4
-#drive_dennis = 5
-#drive_wall_servoing = 6
-#pipeline = 7
-State.navigation_mode = ['drive_simple',"drive_slam","pipeline","drive_testbed","drive_uwmodem","allan","dennis","wall_servoing"]
-#should load simpleControl
+Conf.orocos.log_group "images" do
+    add "/RTT/extras/ReadOnlyPointer</base/samples/frame/Frame>"
+end
+
+Conf.orocos.log_group "raw_camera" do
+    add "front_camera.frame_raw"
+    add "front_camera.frame"
+    add "bottom_camera.frame"
+end
+
+Conf.orocos.disable_log_group "images"
+Conf.orocos.disable_log_group "raw_camera"
+
 
 Robot.devices do
   device(Dev::LowLevel, :as => 'low_level_board').
