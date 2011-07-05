@@ -2,9 +2,9 @@
 # no documentation available for this property
 debugging: 1
 # default value of x
-default_x: 0.1
+default_x: 0.5
 # default depth of operation [meter]
-depth: -0.5
+depth: -2.2
 # distance to pipe [meter], 0 = disabled
 distance_to_pipe: 0.0
 # minimum confidence for finding a pipeline
@@ -14,9 +14,9 @@ invert_colors: 0
 # minimum confidence before losing a pipeline
 lose_confidence: 0.1
 # maximal depth of operation [meter], 0 = disabled
-max_depth: -10.0
+max_depth: -2.5
 # maximal width of the pipe [m] 0 = disabled
-max_width: 1.0
+max_width: 4.0
 # number of images where a valid pipeline must be pressent to switch to follow
 min_count: 10
 # minimal depth of operation [meter], 0 = disabled
@@ -28,4 +28,20 @@ out_of_center: 0.0
 # tries to follow the pipeline in this direction [rad], > PI = disabled
 prefered_heading: 9999.0
 # no documentation available for this property
-use_channel: 0
+use_channel: 1   # green channel
+# offset between the center and the end of pipe during 
+# hovering [m] at the end (should be positvie)
+end_of_pipe_offset: 0.2
+# default distance to pipe [meter] if distance_to_pipe is not 
+# set or there is no altitude reading. This is used to calculate 
+# the width of the pipex
+default_distance_to_pipe: 2
+# Anisotropy of the image. It is always negative. 
+# A value close to zero means that the image is uniform for all angles. 
+find_anisotropy: -5
+# how many pixel must be classified as not belonging to the pipeline [%]
+find_end_of_pipe: 0.4
+# how many pixel must be classified as not belonging to the pipeline [%]. 
+# If this value is reachead and the end is on the top the pipeline follower 
+# will change to follow modex
+lose_end_of_pipe: 0.2
