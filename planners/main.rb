@@ -226,6 +226,16 @@ class MainPlanner < Roby::Planning::Planner
             endTime = nil
             
             wait_any command_child.start_event
+
+	    if !heading
+	        poll do
+	            if o = orientation
+		    	heading = o.orientation.yaw
+			transition!
+		    end
+		end
+            end
+			
             
             execute do
                 Robot.info "Disconnect Position Controller from MotionController"
