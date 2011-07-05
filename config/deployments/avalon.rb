@@ -12,6 +12,15 @@ use Cmp::PoseEstimator        => Cmp::PoseEstimator.use(wide_sonar, Cmp::Orienta
 define('pose_estimator', Cmp::PoseEstimator)
 define('orientation_estimator', Cmp::OrientationEstimator)
 
+StateEstimator.on :start do |event|
+   @orientation_reader = data_reader 'orientation_samples'
+end
+StateEstimator::Task.poll do
+   if orientation = @orientation_reader.read
+       State.pose.orientation = orientation
+   end
+end
+
 # Predeploy a few things to keep them always running
 add_mission(Hbridge::Task)
 #add_mission(Cmp::OrientationEstimator)
