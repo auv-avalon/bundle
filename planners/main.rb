@@ -64,6 +64,7 @@ class MainPlanner < Roby::Planning::Planner
 	    	poll do
 		    if o = orientation
 		    	heading = o.orientation.yaw
+                        transition!
 		    end
 		end
 	    end
