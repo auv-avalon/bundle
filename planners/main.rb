@@ -4,6 +4,7 @@ class MainPlanner < Roby::Planning::Planner
     CHECKING_CANDIDATE_SPEED = 0.1
     STOPPING_DURATION = 4 # Seconds needed to stop the vehicle from max speed
 
+    PIPELINE_STABILIZATION_TIME = 10
     describe("moves forward and turns on pipeline following if a pipeline is detected").
         required_arg("heading", "initial heading for first searching the pipeline").
         required_arg("z", "the Z value at which we should search for the pipeline").
@@ -110,9 +111,11 @@ class MainPlanner < Roby::Planning::Planner
                 Robot.info "Pipeline end reached, waiting 5 seconds for stability"
             end
 
-            wait 5
+            wait PIPELINE_STABILIZATION_TIME
 
             execute do
+            wait PIPELINE_STABILIZATION_TIME
+
                 Robot.info "Done pipeline following"
             end
 
