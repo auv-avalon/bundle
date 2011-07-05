@@ -60,6 +60,14 @@ class MainPlanner < Roby::Planning::Planner
                 control_child.command_child.motion_command_port.disconnect_from control_child.controller_child.command_port
             end
 
+	    if !heading
+	    	poll do
+		    if o = orientation
+		    	heading = o.orientation.yaw
+		    end
+		end
+	    end
+
             poll_until detector_child.check_candidate_event do
               motion_command.heading = heading
               motion_command.z = z
