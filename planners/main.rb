@@ -290,11 +290,13 @@ class MainPlanner < Roby::Planning::Planner
         gate_returning = find_and_follow_pipeline(:heading => FIRST_GATE_HEADING, 
                                                   :speed => -PIPELINE_SEARCH_SPEED, 
                                                   :z => PIPELINE_SEARCH_Z,
-                                                  :expected_pipeline_heading => second_pipeline_heading)
+                                                  :expected_pipeline_heading => second_pipeline_heading,
+                                                  :pipeline_activation_delay => 10)
         
+        wall_servoing = wall
 
         task = SaucE.new
-        task.add_sequence(find_pipe, hovering, gate_passing, gate_returning)
+        task.add_sequence(find_pipe, gate_passing, gate_returning, wall_servoing)
         task
     end
 
