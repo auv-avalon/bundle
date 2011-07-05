@@ -7,3 +7,5 @@ imu_period: 0.018
 max_delay: 0.1
 # Use xsens initial orientation for north alignment
 use_initial_orientation: 0
+#Not using the real filter, only passtru the xsens and Deph Values
+only_use_imu: 1
