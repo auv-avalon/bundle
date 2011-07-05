@@ -7,6 +7,7 @@ Roby.app.use_deployment "pipeline_follower"
 Roby.app.use_deployment "buoy_detector"
 Roby.app.use_deployment "auv_rel_pos_controller"
 Roby.app.use_deployment "sonardetector"
+Roby.app.use_deployment "rotation_experiment_test"
 
 Roby.app.orocos_start_all_deployments = true
 
