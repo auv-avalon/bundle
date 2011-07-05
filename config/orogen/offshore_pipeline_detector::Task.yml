@@ -14,7 +14,7 @@ invert_colors: 0
 # minimum confidence before losing a pipeline
 lose_confidence: 0.1
 # maximal depth of operation [meter], 0 = disabled
-max_depth: -2.5
+max_depth: -3.0
 # maximal width of the pipe [m] 0 = disabled
 max_width: 4.0
 # number of images where a valid pipeline must be pressent to switch to follow
