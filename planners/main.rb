@@ -87,9 +87,10 @@ class MainPlanner < Roby::Planning::Planner
                     end
                 end
             end
+
             execute do
                 Robot.info "Now visual servoing for pipeline"
-                pipeline_follower = detector_child
+                pipeline_follower = detector_child.offshorePipelineDetector_child
                 pipeline_follower.orogen_task.depth = z
                 pipeline_follower.orogen_task.prefered_heading = expected_pipeline_heading
                 auv_relpos_controller = control_child.command_child
