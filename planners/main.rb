@@ -25,6 +25,11 @@ class MainPlanner < Roby::Planning::Planner
 
         # Set default speed
         #pipeline_detector_task.orogen_task.default_x = speed
+        #
+        checking_candidate_speed =
+            if speed > 0 then CHECKING_CANDIDATE_SPEED
+            else -CHECKING_CANDIDATE_SPEED
+            end
 
         # Code the actual actions
         pipeline.script do
@@ -66,7 +71,7 @@ class MainPlanner < Roby::Planning::Planner
             Robot.info "Slow AUV down for checking candidates on pipeline detection"
 
             poll_until detector_child.align_auv_event do
-              motion_command.x_speed = CHECKING_CANDIDATE_SPEED
+              motion_command.x_speed = checking_candidate_speed
               write_motion_command
             end
 
