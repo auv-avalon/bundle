@@ -11,8 +11,8 @@ class MainPlanner < Roby::Planning::Planner
         required_arg("expected_pipeline_heading", "the general heading of the pipeline. Does not have to be precise.").
         optional_arg('pipeline_activation_delay', 'wait that many seconds before turning the pipeline following ON')
     method(:find_and_follow_pipeline) do
-        z     = arguments[:z]
-        speed = arguments[:speed]
+        z       = arguments[:z]
+        speed   = arguments[:speed]
         heading = arguments[:heading]
         expected_pipeline_heading = arguments[:expected_pipeline_heading]
         pipeline_activation_delay = arguments[:pipeline_activation_delay]
@@ -124,36 +124,6 @@ class MainPlanner < Roby::Planning::Planner
 
             execute do
                 Robot.info "Following the pipe."
-            end
-
-            wait detector_child.end_of_pipe_event
-
-            execute do
-                Robot.info "Pipeline end reached, waiting 5 seconds for stability"
-            end
-
-            wait PIPELINE_STABILIZATION_TIME
-
-            execute do
-                Robot.info "Turning around"
-		orientation = self.orientation
-		if !orientation
-		    raise ArgumentError, "no orientation !!!!"
-		end
-
-                pipeline_follower = detector_child.offshorePipelineDetector_child
-		new_heading = orientation.orientation.yaw
-		new_heading =
-			if new_heading > 0 then new_heading - Math::PI
-			else new_heading + Math::PI
-			end
-
-                pipeline_follower.orogen_task.prefered_heading = new_heading
-            end
-
-            wait detector_child.follow_pipe_event
-            execute do
-                Robot.info "Successfully following the pipe in the opposite direction"
             end
 
             wait detector_child.end_of_pipe_event
@@ -337,9 +307,12 @@ class MainPlanner < Roby::Planning::Planner
 	CHECKING_CANDIDATE_SPEED = 0.3
         PIPELINE_SEARCH_Z = -2.5
         FIRST_GATE_HEADING = PIPELINE_EXPECTED_HEADING
-        # FIRST_GATE_PASSING_SPEED = 0.5
-        # GATE_PASSING_DURATION = 5
-        # FIRST_GATE_PASSING_Z = PIPELINE_SEARCH_Z
+
+        FIRST_GATE_PASSING_SPEED = 0.5
+        FIRST_GATE_PASSING_DURATION = 3
+        FIRST_GATE_PASSING_Z = PIPELINE_SEARCH_Z
+
+	SECOND_PIPELINE_SERVOING_ACTIVATION_DELAY = 1
 
         SECOND_GATE_PASSING_SPEED = 0.8
         SECOND_GATE_PASSING_DURATION = 5
@@ -358,30 +331,24 @@ class MainPlanner < Roby::Planning::Planner
     describe("Autonomous run for running all sauce-specific tasks")
     method(:autonomous_run) do
         find_pipe = sauce_pipeline
-        # gate_passing = move_forward( :speed => FIRST_GATE_PASSING_SPEED,
-	# 		:z => FIRST_GATE_PASSING_Z,
-	# 		:duration => GATE_PASSING_DURATION)
+	find_pipe.on :success do |event|
+	    State.pipeline_heading = State.pose.orientation.yaw
+	end
+        gate_passing = move_forward( :speed => FIRST_GATE_PASSING_SPEED,
+			:z => FIRST_GATE_PASSING_Z,
+			:duration => FIRST_GATE_PASSING_DURATION)
         
         # hovering = pipeline_hovering(:target_yaw => FIRST_GATE_HEADING)
 
-        # gate_passing = move_forward(:heading => FIRST_GATE_HEADING, :speed => FIRST_GATE_PASSING_SPEED, :z => FIRST_GATE_PASSING_Z, :duration => GATE_PASSING_DURATION)
-
-        # second_pipeline_heading =
-        #     if PIPELINE_EXPECTED_HEADING > 0 then PIPELINE_EXPECTED_HEADING - Math::PI
-        #     else PIPELINE_EXPECTED_HEADING + Math::PI
-        #     end
-
-        # gate_returning = find_and_follow_pipeline(:heading => FIRST_GATE_HEADING, 
-        #                                           :speed => -PIPELINE_SEARCH_SPEED, 
-        #                                           :z => PIPELINE_SEARCH_Z,
-        #                                           :expected_pipeline_heading => second_pipeline_heading,
-        #                                           :pipeline_activation_delay => 10)
+        gate_returning = find_and_follow_pipeline(:speed => -PIPELINE_SEARCH_SPEED, 
+                                                  :z => PIPELINE_SEARCH_Z,
+                                                  :pipeline_activation_delay => SECOND_PIPELINE_SERVOING_ACTIVATION_DELAY)
         
         second_gate_passing = move_forward(:speed => SECOND_GATE_PASSING_SPEED, :z => SECOND_GATE_PASSING_Z, :duration => SECOND_GATE_PASSING_DURATION)
         wall_servoing = wall_left
 
         task = SaucE.new
-        task.add_sequence(find_pipe, second_gate_passing, wall_servoing)
+        task.add_sequence(find_pipe, gate_passing, gate_returning, second_gate_passing, wall_servoing)
         task
     end
 
