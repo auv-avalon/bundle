@@ -100,7 +100,21 @@ class MainPlanner < Roby::Planning::Planner
                 Robot.info "Now visual servoing for pipeline"
                 pipeline_follower = detector_child.offshorePipelineDetector_child
                 pipeline_follower.orogen_task.depth = z
-                pipeline_follower.orogen_task.prefered_heading = expected_pipeline_heading
+
+		if !expected_pipeline_heading && State.pipeline_heading?
+		    expected_pipeline_heading = State.pipeline_heading
+		    if speed < 0
+		        expected_pipeline_heading =
+			    if expected_pipeline_heading > 0
+			    	expected_pipeline_heading - Math::PI
+		            else expected_pipeline_heading + Math::PI
+			end
+		    end
+		end
+
+                if expected_pipeline_heading
+		    pipeline_follower.orogen_task.prefered_heading = expected_pipeline_heading
+		end
                 auv_relpos_controller = control_child.command_child
                 auv_relpos_controller.motion_command_port.connect_to control_child.controller_child.command_port
                 Robot.info "Robot is aligning. Wait until done."
