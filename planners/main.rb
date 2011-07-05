@@ -85,7 +85,10 @@ class MainPlanner < Roby::Planning::Planner
 
             if pipeline_activation_delay
                 start = nil
-                execute { start = Time.now }
+                execute do
+                    start = Time.now
+                    Robot.info "find_and_follow_pipeline: waiting #{pipeline_activation_delay} before giving the control to the pipeline follower"
+                end
                 poll do
                     motion_command.x_speed = checking_candidate_speed
                     write_motion_command
@@ -113,6 +116,7 @@ class MainPlanner < Roby::Planning::Planner
 		end
 
                 if expected_pipeline_heading
+                    Robot.info "find_and_follow_pipeline: expected heading is #{expected_pipeline_heading * 180 / Math::PI}"
 		    pipeline_follower.orogen_task.prefered_heading = expected_pipeline_heading
 		end
                 auv_relpos_controller = control_child.command_child
@@ -250,6 +254,7 @@ class MainPlanner < Roby::Planning::Planner
 	        poll do
 	            if o = orientation
 		    	heading = o.orientation.yaw
+                        Robot.info "move_forward: using heading=#{heading * 180 / Math::PI}"
 			transition!
 		    end
 		end
@@ -332,6 +337,7 @@ class MainPlanner < Roby::Planning::Planner
     method(:autonomous_run) do
         find_pipe = sauce_pipeline
 	find_pipe.on :success do |event|
+            Robot.info "storing pipeline heading: #{State.pose.orientation.yaw * 180 / Math::PI}"
 	    State.pipeline_heading = State.pose.orientation.yaw
 	end
         gate_passing = move_forward( :speed => FIRST_GATE_PASSING_SPEED,
