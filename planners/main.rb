@@ -7,11 +7,13 @@ class MainPlanner < Roby::Planning::Planner
     describe("moves forward and turns on pipeline following if a pipeline is detected").
         required_arg("heading", "initial heading for first searching the pipeline").
         required_arg("z", "the Z value at which we should search for the pipeline").
-        required_arg("speed", "the forward speed at which we should search for the pipeline")
+        required_arg("speed", "the forward speed at which we should search for the pipeline").
+        required_arg("expected_pipeline_heading", "the general heading of the pipeline. Does not have to be precise.")
     method(:find_and_follow_pipeline) do
         z     = arguments[:z]
         speed = arguments[:speed]
         heading = arguments[:heading]
+        expected_pipeline_heading = arguments[:expected_pipeline_heading]
 
         # Get a task representing the define('pipeline')
         pipeline = self.pipeline
@@ -45,6 +47,8 @@ class MainPlanner < Roby::Planning::Planner
             #    returns the port named 'blabla' from the receiver
             #         control_child.command_child.motion_command_port => returns motion_command_port from the AUVMotionController
 
+            wait control_child.command_child.start_event
+
             execute do
                 control_child.command_child.motion_command_port.disconnect_from control_child.controller_child.command_port
             end
@@ -66,7 +70,11 @@ class MainPlanner < Roby::Planning::Planner
 
             execute do
                 Robot.info "Now visual servoing for pipeline"
-                control_child.command_child.motion_command_port.connect_to control_child.controller_child.command_port
+                pipeline_follower = detector_child
+                pipeline_follower.orogen_task.depth = z
+                pipeline_follower.orogen_task.preferred_heading = expected_pipeline_heading
+                auv_relpos_controller = control_child.command_child
+                auv_relpos_controller.motion_command_port.connect_to control_child.controller_child.command_port
                 Robot.info "Robot is aligning. Wait until done."
             end
 
@@ -223,27 +231,60 @@ class MainPlanner < Roby::Planning::Planner
     # -------------------------------------------------------------------------
 
     describe("Autonomous run for running all sauce-specific tasks")
-    PIPELINE_SEARCH_HEADING = Math::PI / 2
-    PIPELINE_SEARCH_SPEED = 0.5
-    PIPELINE_SEARCH_Z = -6.0
-    FIRST_GATE_HEADING = Math::PI / 2
-    FIRST_GATE_PASSING_SPEED = 0.5 
-    FIRST_GATE_PASSING_Z = PIPELINE_SEARCH_Z
+    RUN_IN_SIMULATION = true
+    if RUN_IN_SIMULATION
+        PIPELINE_SEARCH_HEADING = Math::PI / 2
+        PIPELINE_SEARCH_SPEED = 0.1
+        PIPELINE_SEARCH_Z = -4.5
+        PIPELINE_EXPECTED_HEADING = 0.0
+        FIRST_GATE_HEADING = Math::PI / 2
+        FIRST_GATE_PASSING_SPEED = 0.5 
+        FIRST_GATE_PASSING_Z = PIPELINE_SEARCH_Z
+    else
+    end
+
+    # starting point for testing pipeline following
+    #  sim_set_position 15, -5, -4.5
     method(:autonomous_run) do
         find_pipe = find_and_follow_pipeline(:heading => PIPELINE_SEARCH_HEADING, 
                                              :speed => PIPELINE_SEARCH_SPEED, 
-                                             :z => PIPELINE_SEARCH_Z)
+                                             :z => PIPELINE_SEARCH_Z,
+                                             :expected_pipeline_heading => PIPELINE_EXPECTED_HEADING)
         
         hovering = pipeline_hovering(:target_yaw => FIRST_GATE_HEADING)
 
         gate_passing = move_forward(:heading => FIRST_GATE_HEADING, :speed => FIRST_GATE_PASSING_SPEED, :z => FIRST_GATE_PASSING_Z)
 
-        gate_returning = find_and_follow_pipeline(:heading => FIRST_GATE_HEADING, :speed => -PIPELINE_SEARCH_SPEED, :z => PIPELINE_SEARCH_Z)
+        second_pipeline_heading =
+            if PIPELINE_EXPECTED_HEADING > 0 then PIPELINE_EXPECTED_HEADING - Math::PI
+            else PIPELINE_EXPECTED_HEADING + Math::PI
+            end
+
+        gate_returning = find_and_follow_pipeline(:heading => FIRST_GATE_HEADING, 
+                                                  :speed => -PIPELINE_SEARCH_SPEED, 
+                                                  :z => PIPELINE_SEARCH_Z,
+                                                  :expected_pipeline_heading => second_pipeline_heading)
         
-        find_pipe + hovering + gate_passing + gate_returning
+
+        task = SaucE.new
+        task.add_sequence(find_pipe, hovering, gate_passing, gate_returning)
+        task
     end
 
     # -------------------------------------------------------------------------
+end
+
+class Roby::Task
+    def add_sequence(*tasks)
+        last_task = nil
+        tasks.each do |t|
+            depends_on t
+            if last_task
+                t.should_start_after last_task
+            end
+            last_task = t
+        end
+    end
 end
 
 # Other operations
