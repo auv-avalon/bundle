@@ -12,11 +12,12 @@ Conf.orocos.log_group "raw_camera" do
     add "front_camera.frame_raw"
     add "front_camera.frame"
     add "bottom_camera.frame"
+    add "camera_unicap_left.frame"
+    add "camera_unicap_right.frame"
 end
 
 Conf.orocos.disable_log_group "images"
 Conf.orocos.disable_log_group "raw_camera"
-
 
 Robot.devices do
   device(Dev::LowLevel, :as => 'low_level_board').
