@@ -1,16 +1,17 @@
 # The main planner. A planner of this model is automatically added in the
 # Interface planner list.
 class MainPlanner < Roby::Planning::Planner
-    GATE_TURN_DIRECTION = 1
     CHECKING_CANDIDATE_SPEED = 0.1
     STOPPING_DURATION = 4 # Seconds needed to stop the vehicle from max speed
 
     describe("moves forward and turns on pipeline following if a pipeline is detected").
+        required_arg("heading", "initial heading for first searching the pipeline").
         required_arg("z", "the Z value at which we should search for the pipeline").
         required_arg("speed", "the forward speed at which we should search for the pipeline")
     method(:find_and_follow_pipeline) do
         z     = arguments[:z]
         speed = arguments[:speed]
+        heading = arguments[:heading]
 
         # Get a task representing the define('pipeline')
         pipeline = self.pipeline
@@ -48,14 +49,8 @@ class MainPlanner < Roby::Planning::Planner
                 control_child.command_child.motion_command_port.disconnect_from control_child.controller_child.command_port
             end
 
-            poll do
-                if orientation
-                    motion_command.heading = orientation.orientation.yaw
-                    transition!
-                end
-            end
-
             poll_until detector_child.check_candidate_event do
+              motion_command.heading = heading
               motion_command.z = z
               motion_command.x_speed = speed
               motion_command.y_speed = 0
@@ -85,20 +80,6 @@ class MainPlanner < Roby::Planning::Planner
 
             execute do
                 Robot.info "Pipeline end reached."
-            end
-
-            # Stop after end of pipeline. Hold heading 0 (-> debug).
-            poll do
-              motion_command.z = z
-              motion_command.x_speed = 0
-              motion_command.y_speed = 0
-              motion_command.heading = 0
-              write_motion_command
-            end
-
-
-            execute do
-                Robot.info "Pipeline Servoing completed!"
             end
 
             emit :success
@@ -159,6 +140,7 @@ class MainPlanner < Roby::Planning::Planner
             emit :success
         end
     end
+    
     # -------------------------------------------------------------------------
 
     describe("simple rotate with a given speed for a specific angle").
@@ -182,29 +164,29 @@ class MainPlanner < Roby::Planning::Planner
         end
     end
 
-
     # -------------------------------------------------------------------------
 
     describe("simple move forward with a given speed for a specific duration").
         required_arg("speed", "set the current speed of this movement").
         required_arg("duration", "set the current duration in s for the movement").
-        required_arg("z", "the Z value at which we should move forward")
+        required_arg("z", "the Z value at which we should move forward").
+        required_arg("heading", "heading for the forward movement")
 
     method(:move_forward) do
         speed = arguments[:speed]
         duration = arguments[:duration]
         z = arguments[:z]
+        heading = arguments[:heading]
 
         control = Cmp::ControlLoop.use('command' => AuvRelPosController::Task).as_plan
 
         control.script do
             setup_logger(Robot)
             
-            # Define 'motion_command_writer', 'motion_command' and 'write_motion_command'
             data_reader 'orientation', ['orientation_with_z', 'orientation_z_samples']
             data_writer 'motion_command', ['controller', 'command']
 
-            endTime = 0
+            endTime = nil
             
             wait command_child.start_event
             
@@ -213,11 +195,6 @@ class MainPlanner < Roby::Planning::Planner
                 command_child.motion_command_port.disconnect_from controller_child.command_port
                 
                 endTime = Time.now + duration
-
-                # Catch current heading from the orientation estimator
-                if orientation
-                    motion_command.heading = orientation.orientation.yaw 
-                end
             end
  
             poll do
@@ -227,10 +204,10 @@ class MainPlanner < Roby::Planning::Planner
                 end
 
                 # send movements commands to the Motion Controller
+                motion_command.heading = heading
                 motion_command.z = z
                 motion_command.x_speed = speed
                 motion_command.y_speed = 0
-                Robot.info "============ HERE COMES THE MOTION COMMAND ==========="
                 write_motion_command
             end
 
@@ -240,11 +217,33 @@ class MainPlanner < Roby::Planning::Planner
             end
 
             emit :success
-
         end
     end
 
-   # -------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
+
+    describe("Autonomous run for running all sauce-specific tasks")
+    PIPELINE_SEARCH_HEADING = Math::PI / 2
+    PIPELINE_SEARCH_SPEED = 0.5
+    PIPELINE_SEARCH_Z = -6.0
+    FIRST_GATE_HEADING = Math::PI / 2
+    FIRST_GATE_PASSING_SPEED = 0.5 
+    FIRST_GATE_PASSING_Z = PIPELINE_SEARCH_Z
+    method(:autonomous_run) do
+        find_pipe = find_and_follow_pipeline(:heading => PIPELINE_SEARCH_HEADING, 
+                                             :speed => PIPELINE_SEARCH_SPEED, 
+                                             :z => PIPELINE_SEARCH_Z)
+        
+        hovering = pipeline_hovering(:target_yaw => FIRST_GATE_HEADING)
+
+        gate_passing = move_forward(:heading => FIRST_GATE_HEADING, :speed => FIRST_GATE_PASSING_SPEED, :z => FIRST_GATE_PASSING_Z)
+
+        gate_returning = find_and_follow_pipeline(:heading => FIRST_GATE_HEADING, :speed => -PIPELINE_SEARCH_SPEED, :z => PIPELINE_SEARCH_Z)
+        
+        find_pipe + hovering + gate_passing + gate_returning
+    end
+
+    # -------------------------------------------------------------------------
 end
 
 # Other operations
