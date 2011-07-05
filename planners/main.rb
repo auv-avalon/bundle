@@ -198,32 +198,45 @@ class MainPlanner < Roby::Planning::Planner
         control = Cmp::ControlLoop.use('command' => AuvRelPosController::Task).as_plan
 
         control.script do
+            setup_logger(Robot)
+            
             # Define 'motion_command_writer', 'motion_command' and 'write_motion_command'
+            data_reader 'orientation', ['orientation_with_z', 'orientation_z_samples']
             data_writer 'motion_command', ['controller', 'command']
 
-            # Determine end time of moving forward
-            endTime = Time.now + duration
+            endTime = 0
+            
+            wait command_child.start_event
+            
+            execute do
+                Robot.info "Disconnect Position Controller from MotionController"
+                command_child.motion_command_port.disconnect_from controller_child.command_port
+                
+                endTime = Time.now + duration
 
+                # Catch current heading from the orientation estimator
+                if orientation
+                    motion_command.heading = orientation.orientation.yaw 
+                end
+            end
+ 
             poll do
+                # check if the duration time elapsed and break out of the loop
                 if(Time.now >= endTime)
                     transition!
                 end
+
+                # send movements commands to the Motion Controller
                 motion_command.z = z
                 motion_command.x_speed = speed
                 motion_command.y_speed = 0
+                Robot.info "============ HERE COMES THE MOTION COMMAND ==========="
                 write_motion_command
             end
 
-            # Stop the vehicle
-            endTime = Time.now + STOPPING_DURATION
-            poll do
-                if(Time.now >= endTime)
-                    transition!
-                end
-                motion_command.z = z
-                motion_command.x_speed = speed
-                motion_command.y_speed = 0
-                write_motion_command
+            execute do
+                # Connect AUV Position Controller to the MotionControl Task
+                command_child.motion_command_port.connect_to controller_child.command_port
             end
 
             emit :success
