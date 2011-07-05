@@ -107,7 +107,13 @@ class MainPlanner < Roby::Planning::Planner
             wait detector_child.end_of_pipe_event
 
             execute do
-                Robot.info "Pipeline end reached."
+                Robot.info "Pipeline end reached, waiting 5 seconds for stability"
+            end
+
+            wait 5
+
+            execute do
+                Robot.info "Done pipeline following"
             end
 
             emit :success
