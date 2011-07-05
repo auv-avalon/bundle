@@ -280,7 +280,7 @@ class MainPlanner < Roby::Planning::Planner
         
         # hovering = pipeline_hovering(:target_yaw => FIRST_GATE_HEADING)
 
-        gate_passing = move_forward(:heading => FIRST_GATE_HEADING, :speed => FIRST_GATE_PASSING_SPEED, :z => FIRST_GATE_PASSING_Z)
+        gate_passing = move_forward(:heading => FIRST_GATE_HEADING, :speed => FIRST_GATE_PASSING_SPEED, :z => FIRST_GATE_PASSING_Z, :duration => GATE_PASSING_DURATION)
 
         second_pipeline_heading =
             if PIPELINE_EXPECTED_HEADING > 0 then PIPELINE_EXPECTED_HEADING - Math::PI
