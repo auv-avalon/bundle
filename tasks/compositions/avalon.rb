@@ -91,6 +91,7 @@ end
 
 composition 'BuoyDetector' do
     add Srv::ImageProvider
+    add Srv::OrientationWithZ
     add Buoydetector::Task, :as => 'detector'
     autoconnect
 
