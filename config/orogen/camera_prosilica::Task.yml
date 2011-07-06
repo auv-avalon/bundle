@@ -69,7 +69,7 @@ exposure: 20000
 # exposure mode (auto, manual, external, none)
 exposure_mode: auto
 # gain value
-gain: 2
+gain: 20
 # gain mode
 gain_mode_auto: 0
 # width of the camera frame
