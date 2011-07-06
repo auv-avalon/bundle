@@ -31,7 +31,7 @@ prefered_heading: 9999.0
 use_channel: 1   # green channel
 # offset between the center and the end of pipe during 
 # hovering [m] at the end (should be positvie)
-end_of_pipe_offset: 0.2
+end_of_pipe_offset: 0.25
 # default distance to pipe [meter] if distance_to_pipe is not 
 # set or there is no altitude reading. This is used to calculate 
 # the width of the pipex
