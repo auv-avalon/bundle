@@ -1,17 +1,21 @@
 # The main planner. A planner of this model is automatically added in the
 # Interface planner list.
 class MainPlanner < Roby::Planning::Planner
-    CHECKING_CANDIDATE_SPEED = 0.1
     STOPPING_DURATION = 4 # Seconds needed to stop the vehicle from max speed
 
+    PIPELINE_STABILIZATION_TIME = 10
     describe("moves forward and turns on pipeline following if a pipeline is detected").
         required_arg("heading", "initial heading for first searching the pipeline").
         required_arg("z", "the Z value at which we should search for the pipeline").
-        required_arg("speed", "the forward speed at which we should search for the pipeline")
+        required_arg("speed", "the forward speed at which we should search for the pipeline").
+        required_arg("expected_pipeline_heading", "the general heading of the pipeline. Does not have to be precise.").
+        optional_arg('pipeline_activation_delay', 'wait that many seconds before turning the pipeline following ON')
     method(:find_and_follow_pipeline) do
-        z     = arguments[:z]
-        speed = arguments[:speed]
+        z       = arguments[:z]
+        speed   = arguments[:speed]
         heading = arguments[:heading]
+        expected_pipeline_heading = arguments[:expected_pipeline_heading]
+        pipeline_activation_delay = arguments[:pipeline_activation_delay]
 
         # Get a task representing the define('pipeline')
         pipeline = self.pipeline
@@ -21,6 +25,11 @@ class MainPlanner < Roby::Planning::Planner
 
         # Set default speed
         #pipeline_detector_task.orogen_task.default_x = speed
+        #
+        checking_candidate_speed =
+            if speed > 0 then CHECKING_CANDIDATE_SPEED
+            else -CHECKING_CANDIDATE_SPEED
+            end
 
         # Code the actual actions
         pipeline.script do
@@ -45,9 +54,20 @@ class MainPlanner < Roby::Planning::Planner
             #    returns the port named 'blabla' from the receiver
             #         control_child.command_child.motion_command_port => returns motion_command_port from the AUVMotionController
 
+            wait_any control_child.command_child.start_event
+
             execute do
                 control_child.command_child.motion_command_port.disconnect_from control_child.controller_child.command_port
             end
+
+	    if !heading
+	    	poll do
+		    if o = orientation
+		    	heading = o.orientation.yaw
+                        transition!
+		    end
+		end
+	    end
 
             poll_until detector_child.check_candidate_event do
               motion_command.heading = heading
@@ -60,13 +80,48 @@ class MainPlanner < Roby::Planning::Planner
             Robot.info "Slow AUV down for checking candidates on pipeline detection"
 
             poll_until detector_child.align_auv_event do
-              motion_command.x_speed = CHECKING_CANDIDATE_SPEED
+              motion_command.x_speed = checking_candidate_speed
               write_motion_command
+            end
+
+            if pipeline_activation_delay
+                start = nil
+                execute do
+                    start = Time.now
+                    Robot.info "find_and_follow_pipeline: waiting #{pipeline_activation_delay} before giving the control to the pipeline follower"
+                end
+                poll do
+                    motion_command.x_speed = checking_candidate_speed
+                    write_motion_command
+
+                    if (Time.now - start) > pipeline_activation_delay
+                        transition!
+                    end
+                end
             end
 
             execute do
                 Robot.info "Now visual servoing for pipeline"
-                control_child.command_child.motion_command_port.connect_to control_child.controller_child.command_port
+                pipeline_follower = detector_child.offshorePipelineDetector_child
+                pipeline_follower.orogen_task.depth = z
+
+		if !expected_pipeline_heading && State.pipeline_heading?
+		    expected_pipeline_heading = State.pipeline_heading
+		    if speed < 0
+		        expected_pipeline_heading =
+			    if expected_pipeline_heading > 0
+			    	expected_pipeline_heading - Math::PI
+		            else expected_pipeline_heading + Math::PI
+			end
+		    end
+		end
+
+                if expected_pipeline_heading
+                    Robot.info "find_and_follow_pipeline: expected heading is #{expected_pipeline_heading * 180 / Math::PI}"
+		    pipeline_follower.orogen_task.prefered_heading = expected_pipeline_heading
+		end
+                auv_relpos_controller = control_child.command_child
+                auv_relpos_controller.motion_command_port.connect_to control_child.controller_child.command_port
                 Robot.info "Robot is aligning. Wait until done."
             end
 
@@ -79,7 +134,13 @@ class MainPlanner < Roby::Planning::Planner
             wait detector_child.end_of_pipe_event
 
             execute do
-                Robot.info "Pipeline end reached."
+                Robot.info "Pipeline end reached, waiting 5 seconds for stability"
+            end
+
+            wait PIPELINE_STABILIZATION_TIME
+
+            execute do
+                Robot.info "Done pipeline following"
             end
 
             emit :success
@@ -109,7 +170,7 @@ class MainPlanner < Roby::Planning::Planner
             data_reader 'pipeline_servoing_command', ['detector', 'relative_position_command']
             data_writer 'rel_pos_command', ['control', 'command', 'position_command']
 
-            wait control_child.command_child.start_event
+            wait_any control_child.command_child.start_event
             execute do
                 # Disconnect the pipeline detector from the AUV relpos
                 # controller
@@ -188,7 +249,18 @@ class MainPlanner < Roby::Planning::Planner
 
             endTime = nil
             
-            wait command_child.start_event
+            wait_any command_child.start_event
+
+	    if !heading
+	        poll do
+	            if o = orientation
+		    	heading = o.orientation.yaw
+                        Robot.info "move_forward: using heading=#{heading * 180 / Math::PI}"
+			transition!
+		    end
+		end
+            end
+			
             
             execute do
                 Robot.info "Disconnect Position Controller from MotionController"
@@ -221,29 +293,86 @@ class MainPlanner < Roby::Planning::Planner
     end
 
     # -------------------------------------------------------------------------
+    
 
+    RUN_IN_SIMULATION = false
+    if RUN_IN_SIMULATION
+        PIPELINE_SEARCH_HEADING = 0
+        PIPELINE_SEARCH_SPEED = 0.1
+	CHECKING_CANDIDATE_SPEED = 0.1
+        PIPELINE_SEARCH_Z = -4.5
+        PIPELINE_EXPECTED_HEADING = 0.0
+        FIRST_GATE_HEADING = 0
+        FIRST_GATE_PASSING_SPEED = 0.5 
+        FIRST_GATE_PASSING_Z = PIPELINE_SEARCH_Z
+        GATE_PASSING_DURATION = 5
+    else
+        PIPELINE_SEARCH_HEADING = 20 * Math::PI / 180
+        PIPELINE_EXPECTED_HEADING = 110 * Math::PI / 180
+        PIPELINE_SEARCH_SPEED = 1
+	CHECKING_CANDIDATE_SPEED = 0.3
+        PIPELINE_SEARCH_Z = -2.5
+        FIRST_GATE_HEADING = PIPELINE_EXPECTED_HEADING
+
+        FIRST_GATE_PASSING_SPEED = 0.5
+        FIRST_GATE_PASSING_DURATION = 3
+        FIRST_GATE_PASSING_Z = PIPELINE_SEARCH_Z
+
+	SECOND_PIPELINE_SERVOING_ACTIVATION_DELAY = 1
+
+        SECOND_GATE_PASSING_SPEED = 0.8
+        SECOND_GATE_PASSING_DURATION = 5
+        SECOND_GATE_PASSING_Z = PIPELINE_SEARCH_Z
+    end
+
+    method(:sauce_pipeline) do
+	find_and_follow_pipeline(:heading => PIPELINE_SEARCH_HEADING, 
+			:speed => PIPELINE_SEARCH_SPEED, 
+			:z => PIPELINE_SEARCH_Z,
+			:expected_pipeline_heading => PIPELINE_EXPECTED_HEADING)
+    end
+
+    # starting point for testing pipeline following
+    #  sim_set_position 15, -5, -4.5
     describe("Autonomous run for running all sauce-specific tasks")
-    PIPELINE_SEARCH_HEADING = Math::PI / 2
-    PIPELINE_SEARCH_SPEED = 0.5
-    PIPELINE_SEARCH_Z = -6.0
-    FIRST_GATE_HEADING = Math::PI / 2
-    FIRST_GATE_PASSING_SPEED = 0.5 
-    FIRST_GATE_PASSING_Z = PIPELINE_SEARCH_Z
     method(:autonomous_run) do
-        find_pipe = find_and_follow_pipeline(:heading => PIPELINE_SEARCH_HEADING, 
-                                             :speed => PIPELINE_SEARCH_SPEED, 
-                                             :z => PIPELINE_SEARCH_Z)
+        find_pipe = sauce_pipeline
+	find_pipe.on :success do |event|
+            Robot.info "storing pipeline heading: #{State.pose.orientation.yaw * 180 / Math::PI}"
+	    State.pipeline_heading = State.pose.orientation.yaw
+	end
+        gate_passing = move_forward( :speed => FIRST_GATE_PASSING_SPEED,
+			:z => FIRST_GATE_PASSING_Z,
+			:duration => FIRST_GATE_PASSING_DURATION)
         
-        hovering = pipeline_hovering(:target_yaw => FIRST_GATE_HEADING)
+        # hovering = pipeline_hovering(:target_yaw => FIRST_GATE_HEADING)
 
-        gate_passing = move_forward(:heading => FIRST_GATE_HEADING, :speed => FIRST_GATE_PASSING_SPEED, :z => FIRST_GATE_PASSING_Z)
-
-        gate_returning = find_and_follow_pipeline(:heading => FIRST_GATE_HEADING, :speed => -PIPELINE_SEARCH_SPEED, :z => PIPELINE_SEARCH_Z)
+        gate_returning = find_and_follow_pipeline(:speed => -PIPELINE_SEARCH_SPEED, 
+                                                  :z => PIPELINE_SEARCH_Z,
+                                                  :pipeline_activation_delay => SECOND_PIPELINE_SERVOING_ACTIVATION_DELAY)
         
-        find_pipe + hovering + gate_passing + gate_returning
+        second_gate_passing = move_forward(:speed => SECOND_GATE_PASSING_SPEED, :z => SECOND_GATE_PASSING_Z, :duration => SECOND_GATE_PASSING_DURATION)
+        wall_servoing = wall_left
+
+        task = SaucE.new
+        task.add_sequence(find_pipe, gate_passing, gate_returning, second_gate_passing, wall_servoing)
+        task
     end
 
     # -------------------------------------------------------------------------
+end
+
+class Roby::Task
+    def add_sequence(*tasks)
+        last_task = nil
+        tasks.each do |t|
+            depends_on t
+            if last_task
+                t.should_start_after last_task
+            end
+            last_task = t
+        end
+    end
 end
 
 # Other operations

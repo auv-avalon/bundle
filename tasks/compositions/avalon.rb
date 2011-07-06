@@ -11,6 +11,7 @@ using_task_library 'buoydetector'
 using_task_library 'frame_demultiplexer'
 using_task_library 'controldev'
 using_task_library 'raw_control_command_converter'
+using_task_library 'rotation_experiment'
 
 # Composition that extracts the normal camera stream out of a "structured light"
 # stream
@@ -107,5 +108,15 @@ composition 'WallDetector' do
 
     export detector.position_command
     provides Srv::RelativePositionDetector
+end
+
+composition 'Rotation' do
+    add Srv::ImageProvider
+    add Srv::OrientationWithZ
+    add_main RotationExperiment::Task, :as => 'rotator'
+    autoconnect
+
+    export rotator.position_command
+
 end
 
