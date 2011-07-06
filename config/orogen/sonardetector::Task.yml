@@ -29,9 +29,16 @@ wall_estimation_ransac_threshold:  0.4
 wall_estimation_ransac_min_inliers: 0.6
 
 --- name:drive-left
-y_distance: 0.9
-heading_modulation: 0.0 
+servoing_speed: 0.9
+heading_modulation: 0
 
 --- name:drive-right
-y_distance: -0.2
-heading_modulation: -0.75838
+servoing_speed: -0.9
+heading_modulation: 0
+
+--- name:follow-right-wall
+servoing_speed: 0.3
+heading_modulation: 1.5707 #pi/2
+wall_estimation_start_angle: 0.799
+wall_estimation_end_angle: 2.399
+
