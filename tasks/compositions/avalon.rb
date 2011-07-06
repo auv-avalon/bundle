@@ -91,6 +91,17 @@ composition 'PipelineDetector' do
 end
 
 composition 'BuoyDetector' do
+    event :buoy_detected
+    event :buoy_lost
+    event :buoy_arrived
+    event :strafe_start
+    event :strafe_finished
+    event :strafe_error
+    event :moving_to_cutting_distance
+    event :cutting
+    event :cutting_success
+    event :cutting_error
+    
     add Srv::ImageProvider
     add Srv::OrientationWithZ
     add Buoydetector::Task, :as => 'detector'

@@ -149,6 +149,90 @@ class MainPlanner < Roby::Planning::Planner
 
     # -------------------------------------------------------------------------
 
+    describe("move forward as long as a buoy is found by the detector and start
+              servoing and later strafing around the buoy").
+        required_arg("heading", "initial heading where search a buoy").
+        required_arg("distance", "wished distance to the buoy for servoing").
+        required_arg("speed", "forward speed for searching a buoy").
+        required_arg("z", "the z value on which a buoy should be searched")
+    method(:find_and_strafe_buoy) do
+        distance = arguments[:distance]
+        heading = arguments[:heading]
+        speed = arguments[:speed]
+        z = arguments[:z]
+
+        buoy = self.buoy
+
+        buoy.script do
+            setup_logger(Robot)
+
+            data_reader 'buoy_servoing_command', ['detector', 'relative_position_command']
+            data_reader 'orientation', ['control', 'orientation_with_z', 'orientation_z_samples']
+            data_writer 'rel_pos_command', ['control', 'command', 'position_command']
+            data_writer 'motion_command', ['control', 'controller', 'command']
+         
+            wait_any control_child.command_child.start_event
+
+            execute do
+                control_child.command_child.motion_command_port.disconnect_from control_child.controller_child.command_port
+            end
+
+            if !heading
+                poll do
+                    if o = orientation
+                        heading = o.orientation.yaw
+                        transition!
+                    end
+                end
+            end
+
+            execute do
+                Robot.info "Move forward and search a buoy on the front"
+            end
+
+            poll_until detector_child.buoy_detected_event do
+                motion_command.heading = heading
+                motion_command.z = z
+                motion_command.x_speed = speed
+                motion_command.y_speed = 0
+                write_motion_command
+            end
+
+            execute do
+                Robot.info "Found a buoy and start servoing"
+                
+                auv_relpos_controller = control_child.command_child
+                auv_relpos_controller.motion_command_port.connect_to control_child.controller_child.command_port
+            end
+
+            poll do
+                buoy_detector = detector_child
+
+                if buoy_detector.buoy_lost?
+                    Robot.info "Buoydetector have lost a buoy in screen"
+                    # TODO: reaction to lost buoy ... e.g. 2 * PI - Rotation while searching a buoy again
+                elsif buoy_detector.moving_to_cutting_distance?
+                    Robot.info "Aligning auv for perfect cutting distance"
+                elsif buoy_detector.cutting?
+                    Robot.info "Start moving for cutting the buoy"
+                elsif buoy_detector.cutting_success?
+                    Robot.info "Buoy is released from rope hopefully. Estimate successful cutting"
+                    transition!
+                elsif buoy_detector.cutting_error?
+                    Robot.info "Something failed in cutting"
+                    # TODO: reaction to cutting error
+                elsif buoy_detector.strafe_start?
+                    Robot.info "Buoydetector start strafing around the buoy"
+                end
+            end
+
+            emit :success
+        end
+    end
+
+
+    # -------------------------------------------------------------------------
+
     # The angular tolerance around the target heading to declare that we reached
     # it. The task will require the heading to not be further away than
     # PIPELINE_HOVERING_STABILITY_THRESHOLD radians for
