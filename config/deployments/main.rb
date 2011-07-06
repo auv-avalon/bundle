@@ -12,6 +12,9 @@ define('pipeline_detector', Cmp::PipelineDetector.use('bottom_camera'))
 define('buoy', Cmp::VisualServoing.use(Cmp::BuoyDetector.use('front_camera')))
 define('buoy_detector', Cmp::BuoyDetector.use('front_camera'))
 
+define('asv', Cmp::VisualServoing.use(Cmp::AsvDetector.use('left_unicap_camera')))
+define('asv_detector', Cmp::AsvDetector.use('left_unicap_camera'))
+
 define('rotation', Cmp::VisualServoing.use(Cmp::Rotation.use('bottom_camera')))
 
 narrow_sonar = device('sonar').use_conf('sonar', 'narrow')

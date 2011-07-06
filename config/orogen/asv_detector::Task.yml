@@ -1,0 +1,7 @@
+--- name:default
+camera_image_width: 648
+camera_image_height: 468
+detection_threshold: 0.02
+iir_size: 10
+fixed_depth: -2
+
