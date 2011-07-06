@@ -16,4 +16,4 @@ steps: 10
 
 edgeTh: 35
 
-run_in_simulation: 1
+run_in_simulation: 0
