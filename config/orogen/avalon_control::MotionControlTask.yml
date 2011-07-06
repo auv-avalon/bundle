@@ -18,7 +18,7 @@ pitch_pid:
 # no documentation available for this property
 pitch_target: 0.122173047639603
 # no documentation available for this property
-timeout: 1.0
+timeout: 20.0
 # no documentation available for this property
 x_factor: 1.0
 # no documentation available for this property
