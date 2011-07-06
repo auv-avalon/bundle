@@ -15,7 +15,8 @@ simple_tests:
     - drive_simple
     - buoy
     - buoy_detector
-    - wall
+    - wall_left
+    - wall_right
     - wall_detector
 
 
