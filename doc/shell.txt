@@ -23,6 +23,11 @@ Set the current position in simulation
 
     sim_set_position x, y, z
 
+Enables / disables logging of all images
+
+    enable_logging_of "images"
+    disable_logging_of "images"
+
 Normal shell commands
 =====================
 rock-display --host=avalon.local deployed_task_name # allows to inspect a running component
