@@ -4,7 +4,7 @@ buoy_timeout: 10
 # maximum buoy distance in m
 max_buoy_distance: 4.5
 
-buoy_radius: 0.20
+#buoy_radius: 0.20
 
 houghTh: 100
 
@@ -16,4 +16,4 @@ steps: 10
 
 edgeTh: 35
 
-run_in_simulation: 1
+run_in_simulation: 0
