@@ -3,8 +3,8 @@ include Orocos
 # The main planner. A planner of this model is automatically added in the
 # Interface planner list.
 class MainPlanner < Roby::Planning::Planner
-    GATE_TURN_DIRECTION = 1
-    CHECKING_CANDIDATE_SPEED = 0.1
+    # GATE_TURN_DIRECTION = 1
+    # CHECKING_CANDIDATE_SPEED = 0.1
 
     describe("test the altitude mode of the pipeline detector.").
         required_arg("z", "the Z value at which we _cshould search for the pipeline").
@@ -93,4 +93,33 @@ class MainPlanner < Roby::Planning::Planner
             emit :success
         end
     end
+
+    method(:pipeline_ping_pong) do
+        find_pipe = sauce_pipeline
+	find_pipe.on :success do |event|
+            Robot.info "storing pipeline heading: #{State.pose.orientation.yaw * 180 / Math::PI}deg"
+	    State.pipeline_heading = State.pose.orientation.yaw
+	end
+
+        tasks = []
+        20.times do
+            gate_passing = move_forward( :speed => FIRST_GATE_PASSING_SPEED,
+                            :z => FIRST_GATE_PASSING_Z,
+                            :duration => FIRST_GATE_PASSING_DURATION)
+            
+            gate_returning = find_and_follow_pipeline(:speed => -PIPELINE_SEARCH_SPEED, 
+                                                      :z => PIPELINE_SEARCH_Z,
+                                                      :pipeline_activation_threshold => SECOND_PIPELINE_SERVOING_ACTIVATION_THRESHOLD)
+            gate_returning.on :success do |event|
+                Robot.info "storing pipeline heading: #{State.pose.orientation.yaw * 180 / Math::PI}deg"
+                State.pipeline_heading = State.pose.orientation.yaw
+            end
+
+            tasks << gate_passing << gate_returning
+        end
+        task = SaucE.new
+        task.add_sequence(find_pipe, *tasks)
+        task
+    end
 end
+
