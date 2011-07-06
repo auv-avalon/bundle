@@ -387,8 +387,9 @@ class MainPlanner < Roby::Planning::Planner
     else
         PIPELINE_SEARCH_HEADING = 20 * Math::PI / 180
         PIPELINE_EXPECTED_HEADING = 110 * Math::PI / 180
-        PIPELINE_SEARCH_SPEED = 1
-	CHECKING_CANDIDATE_SPEED = 0.3
+        PIPELINE_SEARCH_SPEED = 0.7
+        PIPELINE_RETURNING_SPEED = 0.3
+	CHECKING_CANDIDATE_SPEED = 0.2
         PIPELINE_SEARCH_Z = -2.5
         FIRST_GATE_HEADING = PIPELINE_EXPECTED_HEADING
 
@@ -398,8 +399,8 @@ class MainPlanner < Roby::Planning::Planner
 
 	SECOND_PIPELINE_SERVOING_ACTIVATION_THRESHOLD = 0.8
 
-        SECOND_GATE_PASSING_SPEED = 0.8
-        SECOND_GATE_PASSING_DURATION = 5
+        SECOND_GATE_PASSING_SPEED = 0.5
+        SECOND_GATE_PASSING_DURATION = 7
         SECOND_GATE_PASSING_Z = PIPELINE_SEARCH_Z
     end
 
@@ -425,7 +426,7 @@ class MainPlanner < Roby::Planning::Planner
         
         # hovering = pipeline_hovering(:target_yaw => FIRST_GATE_HEADING)
 
-        gate_returning = find_and_follow_pipeline(:speed => -PIPELINE_SEARCH_SPEED, 
+        gate_returning = find_and_follow_pipeline(:speed => -PIPELINE_RETURNING_SPEED, 
                                                   :z => PIPELINE_SEARCH_Z,
                                                   :pipeline_activation_threshold => SECOND_PIPELINE_SERVOING_ACTIVATION_THRESHOLD)
         

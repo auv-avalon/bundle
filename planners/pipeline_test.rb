@@ -107,7 +107,7 @@ class MainPlanner < Roby::Planning::Planner
                             :z => FIRST_GATE_PASSING_Z,
                             :duration => FIRST_GATE_PASSING_DURATION)
             
-            gate_returning = find_and_follow_pipeline(:speed => -PIPELINE_SEARCH_SPEED, 
+            gate_returning = find_and_follow_pipeline(:speed => -PIPELINE_RETURNING_SPEED, 
                                                       :z => PIPELINE_SEARCH_Z,
                                                       :pipeline_activation_threshold => SECOND_PIPELINE_SERVOING_ACTIVATION_THRESHOLD)
             gate_returning.on :success do |event|

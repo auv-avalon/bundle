@@ -2,7 +2,7 @@
 # no documentation available for this property
 debugging: 1
 # default value of x
-default_x: 0.5
+default_x: 0.3
 # default depth of operation [meter]
 depth: -2.5
 # distance to pipe [meter], 0 = disabled
