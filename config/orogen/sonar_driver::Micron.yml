@@ -39,7 +39,7 @@ config:
   numberOfBins: 600
   applyoffset: 0
   invert: 0
-  initialGain: 50
+  initialGain: 230
   motorStepDelayTime: 25
   adLow: 8
   cont: true
@@ -52,7 +52,7 @@ config:
 port: /dev/ttyS3
 # timeout on the distance readings in milliseconds
 timeout: 200
---- name:narrow
+--- name:narrow_front
 #Special sonar settings for wall following. Front Sonar.
 config:
   rightLimit: 3999
@@ -62,4 +62,12 @@ config:
   initialGain: 50
   cont: 0
   leftLimit: 2399
-
+--- name:narrow_right
+config:
+  rightLimit: 2399
+  adInterval: 100
+  pingpong: 1
+  numberOfBins: 300
+  initialGain: 50
+  cont: 0
+  leftLimit: 799
