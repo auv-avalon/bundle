@@ -53,7 +53,7 @@ port: /dev/ttyS3
 # timeout on the distance readings in milliseconds
 timeout: 200
 --- name:narrow_front
-#Special sonar settings for wall following. Front Sonar.
+# Special sonar settings for wall following. Front Sonar.
 config:
   rightLimit: 3999
   adInterval: 100
@@ -64,10 +64,10 @@ config:
   leftLimit: 2399
 --- name:narrow_right
 config:
-  rightLimit: 2399
+  rightLimit: 5599
   adInterval: 100
   pingpong: 1
   numberOfBins: 300
   initialGain: 50
   cont: 0
-  leftLimit: 799
+  leftLimit: 3999
