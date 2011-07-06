@@ -56,9 +56,10 @@ timeout: 200
 #Special sonar settings for wall following. Front Sonar.
 config:
   rightLimit: 3999
-  adInterval: 50
+  adInterval: 100
   pingpong: 1
   numberOfBins: 300
   initialGain: 50
   cont: 0
   leftLimit: 2399
+
