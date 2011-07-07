@@ -129,7 +129,7 @@ composition 'BuoyDetector' do
     
     add Srv::ImageProvider
     add Srv::OrientationWithZ
-    add Buoydetector::Task, :as => 'detector'
+    add_main Buoydetector::Task, :as => 'detector'
     autoconnect
 
     export detector.relative_position
