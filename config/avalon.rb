@@ -19,6 +19,8 @@ end
 Conf.orocos.disable_log_group "images"
 Conf.orocos.disable_log_group "raw_camera"
 
+StateEstimator::Task.worstcase_processing_time 1
+
 Robot.devices do
   device(Dev::LowLevel, :as => 'low_level_board').
     period(0.3)

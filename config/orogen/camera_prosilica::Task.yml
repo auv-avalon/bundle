@@ -69,21 +69,21 @@ exposure: 20000
 # exposure mode (auto, manual, external, none)
 exposure_mode: auto
 # gain value
-gain: 0
+gain: 20
 # gain mode
 gain_mode_auto: 0
 # width of the camera frame
-width: 1024
+width: 2400
 # height of the camera frame
-height: 768
+height: 1200
 # the offset to be used on the left margin in case of scaling
 offset_x: 0
 # the offset to be used on the left margin in case of scaling
 offset_y: 0
 # start of region readout, in pixels; left edge.
-region_x: 712
+region_x: 24
 # start of region readout, in pixels; top edge.
-region_y: 641
+region_y: 550
 # scale factor for the x direction which is used to scale the image before it is written to the output_port. 
 scale_x: 0.5
 # scale factor for the y direction which is used to scale the image before it is written to the output_port. 
