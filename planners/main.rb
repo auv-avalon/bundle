@@ -16,6 +16,7 @@ class MainPlanner < Roby::Planning::Planner
         heading = arguments[:heading]
         expected_pipeline_heading = arguments[:expected_pipeline_heading]
         pipeline_activation_threshold = arguments[:pipeline_activation_threshold]
+        timeout = arguments[:timeout]
 
         # Get a task representing the define('pipeline')
         pipeline = self.pipeline
@@ -44,6 +45,14 @@ class MainPlanner < Roby::Planning::Planner
             # Define 'motion_command_writer', 'motion_command' and 'write_motion_command'
             data_writer 'motion_command', ['control', 'controller', 'command']
             data_writer 'rel_pos_command', ['control', 'command', 'position_command']
+
+            if timeout
+                execute do
+                    detector_child.found_pipe_event.
+                        should_emit_after detector_child.start_event,
+                        :max_t => timeout
+                end
+            end
 
             # <blabla>_child
             #    returns the child named 'blabla' from the receiver
