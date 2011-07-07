@@ -2,9 +2,9 @@
 # number of frames a buoy is not detected in order to set BUOY_LOST
 buoy_timeout: 10
 # maximum buoy distance in m
-max_buoy_distance: 2.0
+max_buoy_distance: 4.5
 
-buoy_radius: 0.20
+#buoy_radius: 0.20
 
 houghTh: 100
 
@@ -15,3 +15,5 @@ vValue: 20
 steps: 10
 
 edgeTh: 35
+
+run_in_simulation: 0
