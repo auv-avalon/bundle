@@ -29,7 +29,7 @@ Robot.devices do
   device(Dev::Dsp3000, :as => 'fog').
     period(0.01)
   device(Dev::Micron, :as => 'sonar').
-    period(0.1).
+    period(0.01).
     use_conf("sonar")
   device(Dev::Profiling, :as => 'profiler').
     period(0.1)
@@ -38,7 +38,7 @@ Robot.devices do
     device_id("/dev/ttyS3")
   
   device(Dev::Micron, :as => "sonar_rear").
-    period(0.1).
+    period(0.01).
     use_conf('sonar_rear')
 
   device(Dev::CameraProsilica, :as => "front_camera").
