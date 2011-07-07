@@ -62,6 +62,16 @@ config:
   initialGain: 50
   cont: 0
   leftLimit: 2399
+--- name:wall_approach
+# Special sonar settings to approach the wall
+config:
+  rightLimit: 3999
+  adInterval: 100
+  pingpong: 1
+  numberOfBins: 300
+  initialGain: 50
+  cont: 0
+  leftLimit: 2399
 --- name:narrow_right
 config:
   rightLimit: 5599
