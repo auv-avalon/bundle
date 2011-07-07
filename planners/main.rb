@@ -478,6 +478,8 @@ class MainPlanner < Roby::Planning::Planner
         FIND_BUOY_SPEED = 0.2
         FIND_BUOY_DEPTH = -2.4
         FIND_BUOY_TIMEOUT = 5
+        # TODO: enter correct value for z of the red buoy
+        FIND_BUOY_TURNING_Z = -4.5
         WALL_DISTANCE_THRESHOLD = 1.5
     end
 
@@ -519,7 +521,7 @@ class MainPlanner < Roby::Planning::Planner
         end
 
         # Second part: rotate towards the buoy
-        turn = rotate(:relative_heading => Math::PI)
+        turn = rotate(:relative_heading => Math::PI, :z => FIND_BUOY_TURNING_Z)
 
         # Third part: use the wall servoing with the wall full right. Try to get
         # a detected buoy
