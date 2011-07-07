@@ -17,14 +17,6 @@ define('asv_detector', Cmp::AsvDetector.use('left_unicap_camera'))
 
 define('rotation', Cmp::VisualServoing.use(Cmp::Rotation.use('bottom_camera')))
 
-narrow_sonar = device('sonar').use_conf('sonar', 'narrow_front')
-wall_servoing_right = Cmp::WallDetector.use('sonar').
-	use(narrow_sonar,Sonardetector::Task.use_conf("default","drive-right"))
-wall_servoing_left = Cmp::WallDetector.
-	use(narrow_sonar,Sonardetector::Task.use_conf("default", "drive-left"))
-define('wall_right', Cmp::VisualServoing.use(wall_servoing_right))
-define('wall_left', Cmp::VisualServoing.use(wall_servoing_left))
-define('wall_detector', Cmp::WallDetector.use(narrow_sonar))
 
 # define_wall_servoing(define_name, :sonar => sonar_config, :detector => detector_config)
 #
@@ -49,7 +41,11 @@ def define_wall_servoing(name, options = Hash.new)
            use(sonar, Sonardetector::Task.use_conf(*detector_config)))
 end
 
-define_wall_servoing 'wall_distance_estimator', :sonar => 'very_narrow_front', :detector => 'distance_estimator'
+define_wall_servoing 'wall_right', :sonar => 'narrow_front', :detector => 'drive-right'
+define_wall_servoing 'wall_left',  :sonar => 'narrow_front', :detector => 'drive-left'
+define_wall_servoing 'wall_distance_estimator', :sonar => 'wall_approach', :detector => 'distance_estimator'
 define_wall_servoing 'wall_approach_buoy' ,     :sonar => 'scan_right',        :detector => 'approach_buoy'
 define_wall_servoing 'wall_servoing_right_wall',:sonar => 'scan_right',        :detector => 'servo_right_wall'
+narrow_sonar = device('sonar').use_conf('sonar', 'narrow_front')
+define('wall_detector', Cmp::WallDetector.use(narrow_sonar))
 

@@ -36,7 +36,7 @@ heading_modulation: 0.4
 servoing_speed: -0.9
 heading_modulation: 0
 
---- name:follow-right-wall
+--- name:servo_right_wall
 servoing_speed: 0.3
 heading_modulation: 1.5707 #pi/2
 wall_estimation_start_angle: 0.799
