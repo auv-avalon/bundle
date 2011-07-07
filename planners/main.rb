@@ -548,6 +548,33 @@ class MainPlanner < Roby::Planning::Planner
         main
     end
 
+    method(:qualif_pipeline) do
+        find_pipe = sauce_pipeline
+	find_pipe.on :success do |event|
+            Robot.info "storing pipeline heading: #{State.pose.orientation.yaw * 180 / Math::PI}deg"
+	    State.pipeline_heading = State.pose.orientation.yaw
+	end
+        gate_passing = move_forward( :speed => FIRST_GATE_PASSING_SPEED,
+			:z => FIRST_GATE_PASSING_Z,
+			:duration => FIRST_GATE_PASSING_DURATION)
+        
+        # hovering = pipeline_hovering(:target_yaw => FIRST_GATE_HEADING)
+
+        gate_returning = find_and_follow_pipeline(:speed => -PIPELINE_RETURNING_SPEED, 
+                                                  :z => PIPELINE_SEARCH_Z,
+                                                  :pipeline_activation_threshold => SECOND_PIPELINE_SERVOING_ACTIVATION_THRESHOLD)
+        
+        second_gate_passing = move_forward(:speed => SECOND_GATE_PASSING_SPEED, :z => SECOND_GATE_PASSING_Z, :duration => SECOND_GATE_PASSING_DURATION)
+
+        task = SaucE.new
+        task.add_sequence(find_pipe, gate_passing, gate_returning, second_gate_passing)
+        task
+    end
+
+    method(:qualif_wall) do
+        wall_left
+    end
+
     # starting point for testing pipeline following
     #  sim_set_position 15, -5, -4.5
     describe("Autonomous run for running all sauce-specific tasks")
