@@ -399,17 +399,22 @@ class MainPlanner < Roby::Planning::Planner
             
             wait_any command_child.start_event
 
-	    if !heading
+            if heading.respond_to?(:call)
+                describe "move_forward: getting heading from block"
+                execute do
+                    heading = heading.call
+                    Robot.info "move_forward: heading=#{heading * 180 / Math::PI}"
+                end
+            elsif !heading
                 describe "move_forward: autodetecting heading"
-	        poll do
-	            if o = orientation
-		    	heading = o.orientation.yaw
+                poll do
+                    if o = orientation
+                        heading = o.orientation.yaw
                         Robot.info "move_forward: using heading=#{heading * 180 / Math::PI}"
-			transition!
-		    end
-		end
+                        transition!
+                    end
+                end
             end
-			
             
             execute do
                 command_child.motion_command_port.disconnect_from controller_child.command_port
@@ -551,23 +556,36 @@ class MainPlanner < Roby::Planning::Planner
     method(:qualif_pipeline) do
         find_pipe = sauce_pipeline
 	find_pipe.on :success do |event|
-            Robot.info "storing pipeline heading: #{State.pose.orientation.yaw * 180 / Math::PI}deg"
-	    State.pipeline_heading = State.pose.orientation.yaw
+            heading = event.task.detector_child.pipeline_heading
+            Robot.info "storing pipeline heading: #{heading * 180 / Math::PI}deg"
+	    State.pipeline_heading = heading
 	end
         gate_passing = move_forward( :speed => FIRST_GATE_PASSING_SPEED,
 			:z => FIRST_GATE_PASSING_Z,
-			:duration => FIRST_GATE_PASSING_DURATION)
+			:duration => FIRST_GATE_PASSING_DURATION,
+                        :heading => proc { State.pipeline_heading })
         
         # hovering = pipeline_hovering(:target_yaw => FIRST_GATE_HEADING)
 
-        gate_returning = find_and_follow_pipeline(:speed => -PIPELINE_RETURNING_SPEED, 
-                                                  :z => PIPELINE_SEARCH_Z,
-                                                  :pipeline_activation_threshold => SECOND_PIPELINE_SERVOING_ACTIVATION_THRESHOLD)
+        gate_returning = find_and_follow_pipeline(
+            :speed => -PIPELINE_RETURNING_SPEED, 
+            :z => PIPELINE_SEARCH_Z,
+            :pipeline_activation_threshold => SECOND_PIPELINE_SERVOING_ACTIVATION_THRESHOLD)
+        gate_returning.on :success do |event|
+            heading = event.task.detector_child.pipeline_heading
+            Robot.info "storing pipeline heading: #{heading * 180 / Math::PI}deg"
+            State.pipeline_heading = heading
+        end
         
-        second_gate_passing = move_forward(:speed => SECOND_GATE_PASSING_SPEED, :z => SECOND_GATE_PASSING_Z, :duration => SECOND_GATE_PASSING_DURATION)
+        second_gate_passing = move_forward(
+            :speed => SECOND_GATE_PASSING_SPEED,
+            :z => SECOND_GATE_PASSING_Z,
+            :duration => SECOND_GATE_PASSING_DURATION,
+            :heading => proc { State.pipeline_heading })
 
         task = SaucE.new
         task.add_sequence(find_pipe, gate_passing, gate_returning, second_gate_passing)
+        second_gate_passing.success_event.forward_to task.success_event
         task
     end
 
@@ -581,12 +599,14 @@ class MainPlanner < Roby::Planning::Planner
     method(:autonomous_run) do
         find_pipe = sauce_pipeline
 	find_pipe.on :success do |event|
-            Robot.info "storing pipeline heading: #{State.pose.orientation.yaw * 180 / Math::PI}deg"
-	    State.pipeline_heading = State.pose.orientation.yaw
+            heading = event.task.detector_child.pipeline_heading
+            Robot.info "storing pipeline heading: #{heading * 180 / Math::PI}deg"
+	    State.pipeline_heading = heading
 	end
         gate_passing = move_forward( :speed => FIRST_GATE_PASSING_SPEED,
 			:z => FIRST_GATE_PASSING_Z,
-			:duration => FIRST_GATE_PASSING_DURATION)
+			:duration => FIRST_GATE_PASSING_DURATION,
+                        :heading => proc { State.pipeline_heading })
         
         # hovering = pipeline_hovering(:target_yaw => FIRST_GATE_HEADING)
 

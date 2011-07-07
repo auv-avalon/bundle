@@ -80,6 +80,7 @@ composition 'PipelineDetector' do
     event :lost_pipe
     event :search_pipe
     event :end_of_pipe
+    event :weak_signal
 
     add Srv::ImageProvider
     add_main OffshorePipelineDetector::Task, :as => 'offshorePipelineDetector'
@@ -89,6 +90,24 @@ composition 'PipelineDetector' do
 
     export offshorePipelineDetector.position_command
     provides Srv::RelativePositionDetector
+
+    attr_reader :pipeline_heading
+
+    on :start do |event|
+        @orientation_reader = data_reader 'orientation_with_z', 'orientation_z_samples'
+    end
+
+    on :weak_signal do |event|
+        if o = @orientation_reader.read
+            @pipeline_heading = o.orientation.yaw
+        end
+    end
+
+    on :end_of_pipe do |event|
+        if !@pipeline_heading && (o = @orientation_reader.read)
+            @pipeline_heading = o.orientation.yaw
+        end
+    end
 end
 
 composition 'BuoyDetector' do
