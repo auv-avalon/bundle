@@ -1,6 +1,6 @@
 --- name:default
 # maximum distance for sonar responses in a beam
-beam_threshold_max: 10.0
+beam_threshold_max: 14.0
 # minimum distance for sonar responses in a beam
 beam_threshold_min: 1.0
 # print debug output
@@ -28,11 +28,6 @@ wall_estimation_ransac_threshold:  0.4
 # minimum count inliers of the point cloud in percent to be a valid model
 wall_estimation_ransac_min_inliers: 0.6
 
---- name:drive_left
-servoing_speed: 0.9
-# +pi/8
-heading_modulation: 0.4
-
 --- name:distance_estimator
 servoing_speed: 0
 heading_modulation: 0
@@ -41,9 +36,20 @@ heading_modulation: 0
 servoing_speed: 0.2
 # +pi/2
 heading_modulation: 1.57
+# reference distance to wall
+wall_distance: 4.0
+
+--- name:drive_left
+servoing_speed: 0.4
+# +pi/4
+heading_modulation: 0.78
+# reference distance to wall
+wall_distance: 2.0
 
 --- name:servo_right_wall
 servoing_speed: 0.2
 # +pi/2
 heading_modulation: 1.57
+# reference distance to wall
+wall_distance: 2.0
 
