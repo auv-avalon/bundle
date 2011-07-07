@@ -149,6 +149,8 @@ class MainPlanner < Roby::Planning::Planner
 
     # -------------------------------------------------------------------------
 
+    BUOY_RESCUE_ANGLE_RANGE = Math::PI
+
     describe("move forward as long as a buoy is found by the detector and start
               servoing and later strafing around the buoy").
         required_arg("heading", "initial heading where search a buoy").
@@ -160,6 +162,8 @@ class MainPlanner < Roby::Planning::Planner
         heading = arguments[:heading]
         speed = arguments[:speed]
         z = arguments[:z]
+
+        half_rescue_angle = Math::PI / 2.0
 
         buoy = self.buoy
 
@@ -209,8 +213,15 @@ class MainPlanner < Roby::Planning::Planner
                 buoy_detector = detector_child
 
                 if buoy_detector.buoy_lost?
-                    Robot.info "Buoydetector have lost a buoy in screen"
+                    Robot.info "Buoydetector have lost a buoy in screen. Start Turning"
                     # TODO: reaction to lost buoy ... e.g. 2 * PI - Rotation while searching a buoy again
+                    emit :failed
+                elsif buoy_detector.strafing?
+                    Robot.info "Robot start strafing around the buoy"
+                elsif buoy_detector.strafe_finished?
+                    Robot.info "Strafing around the buoy has been finished"
+                elsif buoy_detector.strafe_error?
+                    Robot.warn "Strafing failed at the buoy"
                 elsif buoy_detector.moving_to_cutting_distance?
                     Robot.info "Aligning auv for perfect cutting distance"
                 elsif buoy_detector.cutting?
@@ -220,9 +231,7 @@ class MainPlanner < Roby::Planning::Planner
                     transition!
                 elsif buoy_detector.cutting_error?
                     Robot.info "Something failed in cutting"
-                    # TODO: reaction to cutting error
-                elsif buoy_detector.strafe_start?
-                    Robot.info "Buoydetector start strafing around the buoy"
+                    emit :failed
                 end
             end
 
@@ -288,26 +297,59 @@ class MainPlanner < Roby::Planning::Planner
     
     # -------------------------------------------------------------------------
 
+    HEADING_ZERO_THRESHOLD = 10 * Math::PI / 180.0
+
     describe("simple rotate with a given speed for a specific angle").
-
-        required_arg("speed", "set the current rotation speed").
-        required_arg("angle", "set the angle of rotate")
-
+        required_arg("heading", "the wanted absolute heading")
+    
     method(:rotate) do
-        speed = arguments[:speed]
-        angle = arguments[:angle]
+        heading = arguments[:heading]
 
-        control = Cmp::ControlLoop.use(AuvRelPosController::Task).as_plan
-        # control.depends_on(Srv::Orientation)
+        control = Cmp::ControlLoop.use('command' => AuvRelPosController::Task).as_plan
 
         control.script do
-            # TODO: get control ports and rotate
+            data_reader 'orientation', ['orientation_with_z', 'orientation_z_samples']
             data_writer 'motion_command', ['controller', 'command']
 
+            wait_any command_child.start_event
+
             execute do
+                command_child.motion_command_port.disconnect_from controller_child.command_port
             end
+            
+            execute do 
+                Robot.info "Start rotation about #{heading * 180.0 / Math::PI} degree"
+            end
+
+            current_heading = nil
+            
+            poll do
+                current_heading = orientation.orientation.yaw
+
+                if not current_heading.nil?
+                    motion_command.heading = heading
+                    write_motion_command
+
+                    heading_error = heading - current_heading
+
+                    if heading_error.abs < HEADING_ZERO_THRESHOLD
+                        transition!
+                    end
+                end
+            end
+
+            execute do
+                Robot.info "Rotation finished"
+            end
+
+            poll do
+            end
+
+            emit :success
         end
     end
+
+    # -------------------------------------------------------------------------
 
     # -------------------------------------------------------------------------
 
