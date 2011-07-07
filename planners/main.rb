@@ -610,11 +610,21 @@ class MainPlanner < Roby::Planning::Planner
         
         # hovering = pipeline_hovering(:target_yaw => FIRST_GATE_HEADING)
 
-        gate_returning = find_and_follow_pipeline(:speed => -PIPELINE_RETURNING_SPEED, 
-                                                  :z => PIPELINE_SEARCH_Z,
-                                                  :pipeline_activation_threshold => SECOND_PIPELINE_SERVOING_ACTIVATION_THRESHOLD)
+        gate_returning = find_and_follow_pipeline(
+            :speed => -PIPELINE_RETURNING_SPEED, 
+            :z => PIPELINE_SEARCH_Z,
+            :pipeline_activation_threshold => SECOND_PIPELINE_SERVOING_ACTIVATION_THRESHOLD)
+        gate_returning.on :success do |event|
+            heading = event.task.detector_child.pipeline_heading
+            Robot.info "storing pipeline heading: #{heading * 180 / Math::PI}deg"
+            State.pipeline_heading = heading
+        end
         
-        second_gate_passing = move_forward(:speed => SECOND_GATE_PASSING_SPEED, :z => SECOND_GATE_PASSING_Z, :duration => SECOND_GATE_PASSING_DURATION)
+        second_gate_passing = move_forward(
+            :speed => SECOND_GATE_PASSING_SPEED,
+            :z => SECOND_GATE_PASSING_Z,
+            :duration => SECOND_GATE_PASSING_DURATION,
+            :heading => proc { State.pipeline_heading })
         wall_servoing = wall_left
 
         task = SaucE.new
