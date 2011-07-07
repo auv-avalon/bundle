@@ -292,7 +292,8 @@ class MainPlanner < Roby::Planning::Planner
     HEADING_ZERO_THRESHOLD = 10 * Math::PI / 180.0
 
     describe("simple rotate with a given speed for a specific angle").
-        required_arg("heading", "the wanted absolute heading")
+        required_arg("heading", "the wanted absolute heading").
+        required_arg("z", "initial z value on which robot should rotate")
     
     method(:rotate) do
         heading = arguments[:heading]
