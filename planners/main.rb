@@ -497,6 +497,7 @@ class MainPlanner < Roby::Planning::Planner
         # TODO: enter correct value for z of the red buoy
         FIND_BUOY_TURNING_Z = -4.5
         WALL_DISTANCE_THRESHOLD = 1.5
+        WALL_SEARCH_TIMEOUT = 30
     end
 
     describe "just after the pipeline, approaches the wall using the sonar, turns towards the buoy and servoes the wall until either a buoy is detected or a timeout is found"
@@ -606,6 +607,7 @@ class MainPlanner < Roby::Planning::Planner
                 should_emit_after task.detector_child.start_event,
                 :max_t => WALL_SEARCH_TIMEOUT
         end
+        task
     end
 
     # starting point for testing pipeline following
