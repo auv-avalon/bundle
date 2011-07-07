@@ -631,7 +631,7 @@ class Roby::Task
         tasks.each do |t|
             depends_on t
             if last_task
-                t.should_start_after last_task
+                t.should_start_after last_task.success_event
             end
             last_task = t
         end
