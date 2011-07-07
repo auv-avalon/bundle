@@ -137,9 +137,11 @@ composition 'BuoyDetector' do
 end
 
 composition 'WallDetector' do
+    event :wall_found
+
     add Srv::SonarScanProvider
-    add Sonardetector::Task , :as => 'detector'
     add Srv::Orientation
+    add_main Sonardetector::Task , :as => 'detector'
     autoconnect
 
     export detector.position_command
