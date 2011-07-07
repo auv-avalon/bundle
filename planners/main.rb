@@ -401,6 +401,10 @@ class MainPlanner < Roby::Planning::Planner
         SECOND_GATE_PASSING_SPEED = 0.8
         SECOND_GATE_PASSING_DURATION = 5
         SECOND_GATE_PASSING_Z = PIPELINE_SEARCH_Z
+
+        FIND_BUOY_SPEED = 0.2
+        FIND_BUOY_DEPTH = -2.4
+        FIND_BUOY_TIMEOUT = 5
     end
 
     method(:sauce_pipeline) do
@@ -408,6 +412,55 @@ class MainPlanner < Roby::Planning::Planner
 			:speed => PIPELINE_SEARCH_SPEED, 
 			:z => PIPELINE_SEARCH_Z,
 			:expected_pipeline_heading => PIPELINE_EXPECTED_HEADING)
+    end
+
+    describe "just after the pipeline, approaches the wall using the sonar, turns towards the buoy and servoes the wall until either a buoy is detected or a timeout is found"
+    method(:find_buoy) do
+        main = LookForBuoy.new
+
+        # First part: get closer to the wall, using the wall detector as a
+        # distance estimator
+        move = move_forward(:duration => 10,
+                            :speed => FIND_BUOY_SPEED,
+                            :z => FIND_BUOY_DEPTH)
+        move.depends_on(wall_distance_estimator, :as => 'wall_distance')
+        move.script do
+            data_reader 'wall_info', ['wall_distance']
+            wait_any wall_distance_child.start_event
+            poll do
+                # TODO
+                # Wait for distance < threshold
+                transition!
+            end
+            emit :success
+        end
+
+        # Second part: rotate towards the buoy
+        turn = rotate(:relative_heading => Math::PI)
+
+        # Third part: use the wall servoing with the wall full right. Try to get
+        # a detected buoy
+        main.depends_on(approach = wall_approach_buoy, :role => 'approach')
+        approach.depends_on(buoy_detector = self.buoy_detector, :as => "buoy_detector")
+        buoy_detector.buoy_detected_event.
+            forward_to main.found_event
+
+        # Timeout on the buoy detection
+        main.script do
+            wait approach_child.start_event
+            start = nil
+            execute do
+                start = Time.now
+            end
+            poll do
+                if Time.now - start > FIND_BUOY_TIMEOUT
+                    emit :not_found
+                end
+            end
+        end
+
+        main.add_sequence(move, turn, approach)
+        main
     end
 
     # starting point for testing pipeline following
