@@ -30,15 +30,20 @@ wall_estimation_ransac_min_inliers: 0.6
 
 --- name:drive-left
 servoing_speed: 0.9
+# +pi/8
 heading_modulation: 0.4
 
---- name:drive-right
-servoing_speed: -0.9
+--- name:distance_estimator
+servoing_speed: 0
 heading_modulation: 0
 
+--- name:approach_buoy
+servoing_speed: 0.2
+# +pi/2
+heading_modulation: 1.57
+
 --- name:servo_right_wall
-servoing_speed: 0.3
-heading_modulation: 1.5707 #pi/2
-wall_estimation_start_angle: 0.799
-wall_estimation_end_angle: 2.399
+servoing_speed: 0.2
+# +pi/2
+heading_modulation: 1.57
 

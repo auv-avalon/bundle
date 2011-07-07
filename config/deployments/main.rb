@@ -41,8 +41,7 @@ def define_wall_servoing(name, options = Hash.new)
            use(sonar, Sonardetector::Task.use_conf(*detector_config)))
 end
 
-define_wall_servoing 'wall_right', :sonar => 'narrow_front', :detector => 'drive-right'
-define_wall_servoing 'wall_left',  :sonar => 'narrow_front', :detector => 'drive-left'
+define_wall_servoing 'wall_left', :sonar => 'narrow_front', :detector => 'drive_left'
 define_wall_servoing 'wall_distance_estimator', :sonar => 'wall_approach', :detector => 'distance_estimator'
 define_wall_servoing 'wall_approach_buoy' ,     :sonar => 'scan_right',        :detector => 'approach_buoy'
 define_wall_servoing 'wall_servoing_right_wall',:sonar => 'scan_right',        :detector => 'servo_right_wall'
