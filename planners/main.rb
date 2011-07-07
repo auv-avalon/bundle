@@ -304,6 +304,7 @@ class MainPlanner < Roby::Planning::Planner
     
     method(:rotate) do
         heading = arguments[:heading]
+        z   = arguments[:z]
 
         control = Cmp::ControlLoop.use('command' => AuvRelPosController::Task).as_plan
 
@@ -327,10 +328,16 @@ class MainPlanner < Roby::Planning::Planner
                 current_heading = orientation.orientation.yaw
 
                 if not current_heading.nil?
+                    motion_command.x_speed = 0
+                    motion_command.y_speed = 0
+                    motion_command.z = z
                     motion_command.heading = heading
                     write_motion_command
 
                     heading_error = heading - current_heading
+                    if heading_error > Math::PI then heading_error -= 2 * Math::PI
+                    elsif heading_error < -Math::PI then heading_error += 2 * Math::PI
+                    end
 
                     if heading_error.abs < HEADING_ZERO_THRESHOLD
                         transition!
@@ -340,9 +347,6 @@ class MainPlanner < Roby::Planning::Planner
 
             execute do
                 Robot.info "Rotation finished"
-            end
-
-            poll do
             end
 
             emit :success
