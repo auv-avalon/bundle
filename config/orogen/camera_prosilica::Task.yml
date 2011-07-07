@@ -88,6 +88,8 @@ region_y: 550
 scale_x: 0.25
 # scale factor for the y direction which is used to scale the image before it is written to the output_port. 
 scale_y: 0.25
+#overwrite the resize algorithm for this frame, since bayer resize is not implemented for quarter images
+resize_algorithm: :INTER_NEAREST
 
 
 
