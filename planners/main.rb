@@ -291,13 +291,23 @@ class MainPlanner < Roby::Planning::Planner
 
     HEADING_ZERO_THRESHOLD = 10 * Math::PI / 180.0
 
+    # heading or relative_heading must be given
     describe("simple rotate with a given speed for a specific angle").
-        required_arg("heading", "the wanted absolute heading").
-        required_arg("z", "initial z value on which robot should rotate")
+        required_arg("z", "initial z value on which robot should rotate").
+        optional_arg("heading", "the wanted absolute heading").
+        optional_arg("relative_heading", "adding a relative heading to the current one")
     
     method(:rotate) do
-        heading = arguments[:heading]
-        z   = arguments[:z]
+        heading          = arguments[:heading]
+        relative_heading = arguments[:relative_heading]
+        z                = arguments[:z]
+
+        if heading.nil? and relative_heading.nil?
+            execute do 
+                Robot.error "No :heading or :relative_heading is given to this method"
+                emit :failed
+            end
+        end
 
         control = Cmp::ControlLoop.use('command' => AuvRelPosController::Task).as_plan
 
@@ -309,27 +319,42 @@ class MainPlanner < Roby::Planning::Planner
 
             execute do
                 command_child.motion_command_port.disconnect_from controller_child.command_port
-            end
-            
-            execute do 
-                Robot.info "Start rotation about #{heading * 180.0 / Math::PI} degree"
+                Robot.info "Start rotation"
             end
 
-            current_heading = nil
-            
+            next_heading = nil
+
             poll do
                 current_heading = orientation.orientation.yaw
 
                 if not current_heading.nil?
+                    next_heading = if not heading.nil? then heading 
+                                   else current_heading + relative_heading end
+
+                    if next_heading > Math::PI then next_heading -= (2 * Math::PI)
+                    elsif next_heading < -Math::PI then next_heading += (2 * Math::PI)
+                    end
+
+                    transition!
+                end
+            end 
+
+            poll do
+                current_heading = orientation.orientation.yaw
+
+                if not current_heading.nil?
+                    #heading = if not heading.nil? then heading
+                    #          else next_heading end
+
                     motion_command.x_speed = 0
                     motion_command.y_speed = 0
                     motion_command.z = z
-                    motion_command.heading = heading
+                    motion_command.heading = next_heading
                     write_motion_command
 
-                    heading_error = heading - current_heading
-                    if heading_error > Math::PI then heading_error -= 2 * Math::PI
-                    elsif heading_error < -Math::PI then heading_error += 2 * Math::PI
+                    heading_error = next_heading - current_heading
+                    if heading_error > Math::PI then heading_error -= (2 * Math::PI)
+                    elsif heading_error < -Math::PI then heading_error += (2 * Math::PI)
                     end
 
                     if heading_error.abs < HEADING_ZERO_THRESHOLD
@@ -453,6 +478,7 @@ class MainPlanner < Roby::Planning::Planner
         FIND_BUOY_SPEED = 0.2
         FIND_BUOY_DEPTH = -2.4
         FIND_BUOY_TIMEOUT = 5
+        WALL_DISTANCE_THRESHOLD = 1.5
     end
 
     method(:sauce_pipeline) do
@@ -475,11 +501,20 @@ class MainPlanner < Roby::Planning::Planner
         move.script do
             data_reader 'wall_info', ['wall_distance']
             wait_any wall_distance_child.start_event
+            
             poll do
                 # TODO
                 # Wait for distance < threshold
-                transition!
+                # transition!
+                current_distance = wall_info.detector.distance
+
+                if not current_distance.nil?
+                    if current_distance < WALL_DISTANCE_THRESHOLD
+                        transition!
+                    end
+                end
             end
+
             emit :success
         end
 
