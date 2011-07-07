@@ -140,7 +140,7 @@ class MainPlanner < Roby::Planning::Planner
             describe "find_and_follow_pipeline: following the pipe until end_of_pipe"
             wait detector_child.end_of_pipe_event
 
-            describe "find_and_follow_pipeline: pipeline end reached, waiting 5 seconds for stability"
+            describe "find_and_follow_pipeline: pipeline end reached, waiting #{PIPELINE_STABILIZATION_TIME} seconds for stability"
             wait PIPELINE_STABILIZATION_TIME
 
             describe "find_and_follow_pipeline: finished"
