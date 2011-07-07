@@ -69,7 +69,7 @@ exposure: 20000
 # exposure mode (auto, manual, external, none)
 exposure_mode: auto
 # gain value
-gain: 20
+gain: 0
 # gain mode
 gain_mode_auto: 0
 # width of the camera frame
@@ -90,6 +90,8 @@ scale_x: 0.25
 scale_y: 0.25
 #overwrite the resize algorithm for this frame, since bayer resize is not implemented for quarter images
 resize_algorithm: :INTER_NEAREST
+#fixed set the output format to RGB
+output_format: MODE_RGB
 
 
 
