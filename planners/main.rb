@@ -155,14 +155,13 @@ class MainPlanner < Roby::Planning::Planner
     describe("move forward as long as a buoy is found by the detector and start
               servoing and later strafing around the buoy").
         required_arg("heading", "initial heading where search a buoy").
-        required_arg("distance", "wished distance to the buoy for servoing").
         required_arg("speed", "forward speed for searching a buoy").
         required_arg("z", "the z value on which a buoy should be searched")
     method(:find_and_strafe_buoy) do
-        distance = arguments[:distance]
         heading = arguments[:heading]
         speed = arguments[:speed]
         z = arguments[:z]
+        timeout = arguments[:timeout]
 
         half_rescue_angle = Math::PI / 2.0
 
@@ -171,9 +170,7 @@ class MainPlanner < Roby::Planning::Planner
         buoy.script do
             setup_logger(Robot)
 
-            data_reader 'buoy_servoing_command', ['detector', 'relative_position_command']
             data_reader 'orientation', ['control', 'orientation_with_z', 'orientation_z_samples']
-            data_writer 'rel_pos_command', ['control', 'command', 'position_command']
             data_writer 'motion_command', ['control', 'controller', 'command']
          
             wait_any control_child.command_child.start_event
@@ -183,6 +180,11 @@ class MainPlanner < Roby::Planning::Planner
 
                 buoydetector = detector_child.detector_child
                 buoydetector.orogen_task.run_in_simulation = IS_SIMULATION
+                buoydetector.orogen_task.debug_gui = IS_SIMULATION
+                buoydetector.orogen_task.buoy_depth = z
+                detector_child.buoy_detected_event.
+                    should_emit_after detector_child.start_event,
+                    :max_t => timeout
             end
 
             if !heading
@@ -195,7 +197,25 @@ class MainPlanner < Roby::Planning::Planner
             end
 
             execute do
-                Robot.info "Move forward and search a buoy on the front"
+                Robot.info "starting to dive ..."
+            end
+
+            poll do
+                motion_command.heading = heading
+                motion_command.z = z
+                motion_command.x_speed = 0
+                motion_command.y_speed = 0
+                write_motion_command
+
+                if o = orientation
+                    if o.position.z < FIND_BUOY_MIN_DEPTH
+                        transition!
+                    end
+                end
+            end
+
+            execute do
+                Robot.info "looking for a buoy ..."
             end
 
             poll_until detector_child.buoy_detected_event do
@@ -208,38 +228,64 @@ class MainPlanner < Roby::Planning::Planner
 
             execute do
                 Robot.info "Found a buoy and start servoing"
-                
                 auv_relpos_controller = control_child.command_child
                 auv_relpos_controller.motion_command_port.connect_to control_child.controller_child.command_port
             end
 
-            poll do
-                buoy_detector = detector_child
+            wait BUOY_SERVOING_STABILIZATION_TIME
 
-                if buoy_detector.buoy_lost?
-                    Robot.info "Buoydetector have lost a buoy in screen. Start Turning"
-                    # TODO: reaction to lost buoy ... e.g. 2 * PI - Rotation while searching a buoy again
-                    emit :failed
-                elsif buoy_detector.strafing?
-                    Robot.info "Robot start strafing around the buoy"
-                elsif buoy_detector.strafe_finished?
-                    Robot.info "Strafing around the buoy has been finished"
-                elsif buoy_detector.strafe_error?
-                    Robot.warn "Strafing failed at the buoy"
-                elsif buoy_detector.moving_to_cutting_distance?
-                    Robot.info "Aligning auv for perfect cutting distance"
-                elsif buoy_detector.cutting?
-                    Robot.info "Start moving for cutting the buoy"
-                elsif buoy_detector.cutting_success?
-                    Robot.info "Buoy is released from rope hopefully. Estimate successful cutting"
-                    transition!
-                elsif buoy_detector.cutting_error?
-                    Robot.info "Something failed in cutting"
-                    emit :failed
-                end
+            execute do
+                buoydetector = detector_child.detector_child
+                buoydetector.orogen_task.max_buoy_distance = 0
             end
 
+            wait BUOY_CUTTING_TIME
+
             emit :success
+
+            #detection_time = nil
+            #lost_time = nil
+            #poll do
+            #    buoy_detector = detector_child
+
+            #    if buoy_detector.buoy_lost?
+            #        detection_time = nil
+            #        Robot.info "no buoy detected... waiting"
+            #        # TODO: reaction to lost buoy ... e.g. 2 * PI - Rotation while searching a buoy again
+            #        if lost_time
+            #            if Time.now - lost_time > BUOY_LOST_TIMEOUT
+            #                emit :failed
+            #            end
+            #        else
+            #            lost_time = Time.now
+            #        end
+            #    else
+            #        lost_time = nil
+            #        if detection_time && ((Time.now - detection_time) > BUOY_SERVOING_STABILIZATION_TIME)
+            #            Robot.info "now trying to cut"
+            #            buoydetector = detector_child.detector_child
+            #            buoydetector.orogen_task.max_buoy_distance = 0
+            #        end
+            #    end
+
+            #    if buoy_detector.strafing?
+            #        Robot.info "Robot start strafing around the buoy"
+            #    elsif buoy_detector.strafe_finished?
+            #        Robot.info "Strafing around the buoy has been finished"
+            #    elsif buoy_detector.strafe_error?
+            #        Robot.warn "Strafing failed at the buoy"
+            #    elsif buoy_detector.moving_to_cutting_distance?
+            #        Robot.info "Aligning auv for perfect cutting distance"
+            #    elsif buoy_detector.cutting?
+            #        Robot.info "Start moving for cutting the buoy"
+            #    elsif buoy_detector.cutting_success?
+            #        Robot.info "Buoy is released from rope hopefully. Estimate successful cutting"
+            #        transition!
+            #    elsif buoy_detector.cutting_error?
+            #        Robot.info "Something failed in cutting"
+            #        emit :failed
+            #    end
+            #end
         end
     end
 
@@ -301,84 +347,76 @@ class MainPlanner < Roby::Planning::Planner
     
     # -------------------------------------------------------------------------
 
-    HEADING_ZERO_THRESHOLD = 10 * Math::PI / 180.0
+    STATION_KEEP_HEADING_THRESHOLD = 10 * Math::PI / 180.0
+    STATION_KEEP_DEPTH_THRESHOLD   = 0.3
 
     # heading or relative_heading must be given
-    describe("simple rotate with a given speed for a specific angle").
+    describe("got to a angle/depth target").
         required_arg("z", "initial z value on which robot should rotate").
-        optional_arg("heading", "the wanted absolute heading").
+        optional_arg("duration", "how long we should stay at the specified depth/heading, in seconds").
+        optional_arg("heading", "the wanted absolute heading. Set to nil to use the current heading").
         optional_arg("relative_heading", "adding a relative heading to the current one")
     
-    method(:rotate) do
-        heading          = arguments[:heading]
-        relative_heading = arguments[:relative_heading]
+    method(:station_keep) do
+        target_heading   = arguments[:heading]
         z                = arguments[:z]
-
-        if heading.nil? and relative_heading.nil?
-            execute do 
-                Robot.error "No :heading or :relative_heading is given to this method"
-                emit :failed
-            end
-        end
+        relative_heading = arguments[:relative_heading]
+        duration         = arguments[:duration]
 
         control = Cmp::ControlLoop.use('command' => AuvRelPosController::Task).as_plan
-
         control.script do
             data_reader 'orientation', ['orientation_with_z', 'orientation_z_samples']
             data_writer 'motion_command', ['controller', 'command']
 
             wait_any command_child.start_event
 
-            execute do
-                command_child.motion_command_port.disconnect_from controller_child.command_port
-                Robot.info "Start rotation"
-            end
-
-            next_heading = nil
-
-            poll do
-                current_heading = orientation.orientation.yaw
-
-                if not current_heading.nil?
-                    next_heading = if not heading.nil? then heading 
-                                   else current_heading + relative_heading end
-
-                    if next_heading > Math::PI then next_heading -= (2 * Math::PI)
-                    elsif next_heading < -Math::PI then next_heading += (2 * Math::PI)
-                    end
-
-                    transition!
-                end
-            end 
-
-            poll do
-                current_heading = orientation.orientation.yaw
-
-                if not current_heading.nil?
-                    #heading = if not heading.nil? then heading
-                    #          else next_heading end
-
-                    motion_command.x_speed = 0
-                    motion_command.y_speed = 0
-                    motion_command.z = z
-                    motion_command.heading = next_heading
-                    write_motion_command
-
-                    heading_error = next_heading - current_heading
-                    if heading_error > Math::PI then heading_error -= (2 * Math::PI)
-                    elsif heading_error < -Math::PI then heading_error += (2 * Math::PI)
-                    end
-
-                    if heading_error.abs < HEADING_ZERO_THRESHOLD
+            if !target_heading
+                poll do
+                    if o = orientation
+                        target_heading = o.orientation.yaw
+                        if relative_heading
+                            target_heading += relative_heading
+                        end
+                        if target_heading > Math::PI then target_heading -= 2*Math::PI
+                        elsif target_heading < Math::PI then target_heading += 2*Math::PI
+                        end
                         transition!
                     end
+                end 
+            end
+
+            execute do
+                command_child.disconnect_ports(controller_child, [['motion_command', 'command']])
+                Robot.info "start station keep at target_heading=#{target_heading} and z=#{z}"
+            end
+
+            poll do
+                motion_command.x_speed = 0
+                motion_command.y_speed = 0
+                motion_command.z = z
+                motion_command.heading = target_heading
+                write_motion_command
+
+                current_pose = self.orientation
+                current_heading = current_pose.orientation.yaw
+                heading_error = current_heading - target_heading
+                if heading_error > Math::PI then heading_error -= (2 * Math::PI)
+                elsif heading_error < -Math::PI then heading_error += (2 * Math::PI)
+                end
+
+                depth_error = current_pose.position.z - z
+
+                if heading_error.abs < STATION_KEEP_HEADING_THRESHOLD && depth_error.abs < STATION_KEEP_DEPTH_THRESHOLD
+                    transition!
                 end
             end
 
             execute do
-                Robot.info "Rotation finished"
+                Robot.info "reached specified station keeping position"
             end
-
+            if duration
+                wait duration
+            end
             emit :success
         end
     end
@@ -461,7 +499,7 @@ class MainPlanner < Roby::Planning::Planner
 
     # -------------------------------------------------------------------------
     
-    if IS_SIMULATION
+    if false && IS_SIMULATION
         PIPELINE_SEARCH_HEADING = 0
         PIPELINE_SEARCH_SPEED = 0.1
 	CHECKING_CANDIDATE_SPEED = 0.1
@@ -500,12 +538,18 @@ class MainPlanner < Roby::Planning::Planner
         SECOND_GATE_PASSING_Z = PIPELINE_SEARCH_Z
 
         FIND_BUOY_SPEED = 0.2
-        FIND_BUOY_DEPTH = -2.4
-        FIND_BUOY_TIMEOUT = 5
+        FIND_BUOY_MIN_DEPTH = -1
+        BUOY_DEPTH = -2.6
+        BUOY_LOST_TIMEOUT = 5
+        BUOY_SERVOING_STABILIZATION_TIME = 30
+        BUOY_CUTTING_TIME = 30
+        SIMPLE_FIND_BUOY_TIMEOUT = 60
+
         # TODO: enter correct value for z of the red buoy
         FIND_BUOY_TURNING_Z = -4.5
         WALL_DISTANCE_THRESHOLD = 1.5
         WALL_SEARCH_TIMEOUT = 30
+        WALLSERVOING_FIND_BUOY_TIMEOUT = 5
     end
 
     method(:sauce_pipeline) do
@@ -612,6 +656,18 @@ class MainPlanner < Roby::Planning::Planner
         main.add_sequence(find_pipe, gate_passing, gate_returning, second_gate_passing)
         second_gate_passing.success_event.forward_to main.success_event
         main
+    end
+
+    method(:qualif_buoy) do
+        find_and_strafe_buoy(:speed => 0,
+                             :heading => nil,
+                             :timeout => SIMPLE_FIND_BUOY_TIMEOUT,
+                             :z => BUOY_DEPTH)
+
+    end
+
+    method(:qalif_wall) do
+        wall_servoing(:wall_left)
     end
 
     def wall_servoing(name)
