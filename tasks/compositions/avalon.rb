@@ -109,6 +109,11 @@ composition 'PipelineDetector' do
         end
     end
 end
+Cmp::VisualServoing.specialize 'detector' => Cmp::PipelineDetector do
+    overload 'detector', Cmp::PipelineDetector,
+        :failure => :lost_pipe, :success => :end_of_pipe,
+        :remove_when_done => false
+end
 
 composition 'BuoyDetector' do
     event :buoy_detected
@@ -124,7 +129,7 @@ composition 'BuoyDetector' do
     
     add Srv::ImageProvider
     add Srv::OrientationWithZ
-    add Buoydetector::Task, :as => 'detector'
+    add_main Buoydetector::Task, :as => 'detector'
     autoconnect
 
     export detector.relative_position
@@ -132,9 +137,11 @@ composition 'BuoyDetector' do
 end
 
 composition 'WallDetector' do
+    event :wall_found
+
     add Srv::SonarScanProvider
-    add Sonardetector::Task , :as => 'detector'
     add Srv::Orientation
+    add_main Sonardetector::Task , :as => 'detector'
     autoconnect
 
     export detector.position_command

@@ -16,6 +16,7 @@ class MainPlanner < Roby::Planning::Planner
         heading = arguments[:heading]
         expected_pipeline_heading = arguments[:expected_pipeline_heading]
         pipeline_activation_threshold = arguments[:pipeline_activation_threshold]
+        timeout = arguments[:timeout]
 
         # Get a task representing the define('pipeline')
         pipeline = self.pipeline
@@ -44,6 +45,14 @@ class MainPlanner < Roby::Planning::Planner
             # Define 'motion_command_writer', 'motion_command' and 'write_motion_command'
             data_writer 'motion_command', ['control', 'controller', 'command']
             data_writer 'rel_pos_command', ['control', 'command', 'position_command']
+
+            if timeout
+                execute do
+                    detector_child.found_pipe_event.
+                        should_emit_after detector_child.start_event,
+                        :max_t => timeout
+                end
+            end
 
             # <blabla>_child
             #    returns the child named 'blabla' from the receiver
@@ -131,7 +140,7 @@ class MainPlanner < Roby::Planning::Planner
             describe "find_and_follow_pipeline: following the pipe until end_of_pipe"
             wait detector_child.end_of_pipe_event
 
-            describe "find_and_follow_pipeline: pipeline end reached, waiting 5 seconds for stability"
+            describe "find_and_follow_pipeline: pipeline end reached, waiting #{PIPELINE_STABILIZATION_TIME} seconds for stability"
             wait PIPELINE_STABILIZATION_TIME
 
             describe "find_and_follow_pipeline: finished"
@@ -471,9 +480,11 @@ class MainPlanner < Roby::Planning::Planner
         WALL_DISTANCE_THRESHOLD = 2
     else
         PIPELINE_SEARCH_HEADING = 20 * Math::PI / 180
+        PIPELINE_SEARCH_TIMEOUT = 3 * 60
         PIPELINE_EXPECTED_HEADING = 110 * Math::PI / 180
         PIPELINE_SEARCH_SPEED = 0.7
         PIPELINE_RETURNING_SPEED = 0.3
+        PIPELINE_RETURNING_TIMEOUT = 60
 	CHECKING_CANDIDATE_SPEED = 0.2
         PIPELINE_SEARCH_Z = -2.5
         FIRST_GATE_HEADING = PIPELINE_EXPECTED_HEADING
@@ -493,7 +504,8 @@ class MainPlanner < Roby::Planning::Planner
         FIND_BUOY_TIMEOUT = 5
         # TODO: enter correct value for z of the red buoy
         FIND_BUOY_TURNING_Z = -4.5
-        WALL_DISTANCE_THRESHOLD = 2
+        WALL_DISTANCE_THRESHOLD = 1.5
+        WALL_SEARCH_TIMEOUT = 30
     end
 
     method(:sauce_pipeline) do
@@ -561,8 +573,12 @@ class MainPlanner < Roby::Planning::Planner
         main
     end
 
-    method(:qualif_pipeline) do
-        find_pipe = sauce_pipeline
+    method(:sauce_pipeline_and_gates, :returns => SaucE::PipelineAndGates) do
+        find_pipe = find_and_follow_pipeline(:heading => PIPELINE_SEARCH_HEADING, 
+			:speed => PIPELINE_SEARCH_SPEED, 
+			:z => PIPELINE_SEARCH_Z,
+			:expected_pipeline_heading => PIPELINE_EXPECTED_HEADING,
+                        :timeout => PIPELINE_SEARCH_TIMEOUT)
 	find_pipe.on :success do |event|
             heading = event.task.detector_child.pipeline_heading
             Robot.info "storing pipeline heading: #{heading * 180 / Math::PI}deg"
@@ -578,7 +594,8 @@ class MainPlanner < Roby::Planning::Planner
         gate_returning = find_and_follow_pipeline(
             :speed => -PIPELINE_RETURNING_SPEED, 
             :z => PIPELINE_SEARCH_Z,
-            :pipeline_activation_threshold => SECOND_PIPELINE_SERVOING_ACTIVATION_THRESHOLD)
+            :pipeline_activation_threshold => SECOND_PIPELINE_SERVOING_ACTIVATION_THRESHOLD,
+            :timeout => PIPELINE_RETURNING_TIMEOUT)
         gate_returning.on :success do |event|
             heading = event.task.detector_child.pipeline_heading
             Robot.info "storing pipeline heading: #{heading * 180 / Math::PI}deg"
@@ -591,52 +608,32 @@ class MainPlanner < Roby::Planning::Planner
             :duration => SECOND_GATE_PASSING_DURATION,
             :heading => proc { State.pipeline_heading })
 
-        task = SaucE.new
-        task.add_sequence(find_pipe, gate_passing, gate_returning, second_gate_passing)
-        second_gate_passing.success_event.forward_to task.success_event
-        task
+        main = SaucE::PipelineAndGates.new
+        main.add_sequence(find_pipe, gate_passing, gate_returning, second_gate_passing)
+        second_gate_passing.success_event.forward_to main.success_event
+        main
     end
 
-    method(:qualif_wall) do
-        wall_left
+    def wall_servoing(name)
+        task = send(name)
+        task.on :start do |event|
+            task = event.task
+            task.detector_child.wall_found_event.
+                should_emit_after task.detector_child.start_event,
+                :max_t => WALL_SEARCH_TIMEOUT
+        end
+        task
     end
 
     # starting point for testing pipeline following
     #  sim_set_position 15, -5, -4.5
     describe("Autonomous run for running all sauce-specific tasks")
-    method(:autonomous_run) do
-        find_pipe = sauce_pipeline
-	find_pipe.on :success do |event|
-            heading = event.task.detector_child.pipeline_heading
-            Robot.info "storing pipeline heading: #{heading * 180 / Math::PI}deg"
-	    State.pipeline_heading = heading
-	end
-        gate_passing = move_forward( :speed => FIRST_GATE_PASSING_SPEED,
-			:z => FIRST_GATE_PASSING_Z,
-			:duration => FIRST_GATE_PASSING_DURATION,
-                        :heading => proc { State.pipeline_heading })
-        
-        # hovering = pipeline_hovering(:target_yaw => FIRST_GATE_HEADING)
+    method(:autonomous_run, :returns => SaucE::Mission) do
+        pipeline_and_gates = self.sauce_pipeline_and_gates
+        wall_servoing = self.wall_servoing(:wall_left)
 
-        gate_returning = find_and_follow_pipeline(
-            :speed => -PIPELINE_RETURNING_SPEED, 
-            :z => PIPELINE_SEARCH_Z,
-            :pipeline_activation_threshold => SECOND_PIPELINE_SERVOING_ACTIVATION_THRESHOLD)
-        gate_returning.on :success do |event|
-            heading = event.task.detector_child.pipeline_heading
-            Robot.info "storing pipeline heading: #{heading * 180 / Math::PI}deg"
-            State.pipeline_heading = heading
-        end
-        
-        second_gate_passing = move_forward(
-            :speed => SECOND_GATE_PASSING_SPEED,
-            :z => SECOND_GATE_PASSING_Z,
-            :duration => SECOND_GATE_PASSING_DURATION,
-            :heading => proc { State.pipeline_heading })
-        wall_servoing = wall_left
-
-        task = SaucE.new
-        task.add_sequence(find_pipe, gate_passing, gate_returning, second_gate_passing, wall_servoing)
+        task = SaucE::Mission.new
+        task.add_sequence(pipeline_and_gates, wall_servoing)
         task
     end
 
@@ -649,7 +646,7 @@ class Roby::Task
         tasks.each do |t|
             depends_on t
             if last_task
-                t.should_start_after last_task
+                t.should_start_after last_task.success_event
             end
             last_task = t
         end

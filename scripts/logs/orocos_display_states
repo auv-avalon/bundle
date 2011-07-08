@@ -12,15 +12,15 @@ model_name = ARGV.shift
 state = Hash.new
 model = rebuilder.find_model(stream, /#{model_name}/i)
 
-pipelines = ValueSet.new
+all_tasks = ValueSet.new
 rebuilder.analyze_stream(stream) do
     tasks = rebuilder.plan.find_tasks(model).to_a
-    pipelines.merge(tasks.to_value_set)
+    all_tasks.merge(tasks.to_value_set)
     false
 end
 
 all = []
-pipelines.each do |p|
+all_tasks.each do |p|
     p.history.each do |ev|
         all << ev
     end
