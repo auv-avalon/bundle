@@ -1,9 +1,6 @@
 # The main planner. A planner of this model is automatically added in the
 # Interface planner list.
 class MainPlanner < Roby::Planning::Planner
-    STOPPING_DURATION = 4 # Seconds needed to stop the vehicle from max speed
-
-    PIPELINE_STABILIZATION_TIME = 10
     describe("moves forward and turns on pipeline following if a pipeline is detected").
         required_arg("heading", "initial heading for first searching the pipeline").
         required_arg("z", "the Z value at which we should search for the pipeline").
@@ -28,8 +25,8 @@ class MainPlanner < Roby::Planning::Planner
         #pipeline_detector_task.orogen_task.default_x = speed
         #
         checking_candidate_speed =
-            if speed > 0 then CHECKING_CANDIDATE_SPEED
-            else -CHECKING_CANDIDATE_SPEED
+            if speed > 0 then PIPELINE_SEARCH_CANDIDATE_SPEED
+            else -PIPELINE_SEARCH_CANDIDATE_SPEED
             end
 
         # Code the actual actions
@@ -63,11 +60,12 @@ class MainPlanner < Roby::Planning::Planner
             # <blabla>_port
             #    returns the port named 'blabla' from the receiver
             #         control_child.command_child.motion_command_port => returns motion_command_port from the AUVMotionController
-
+            #
+            removed_connections = nil
             with_description "starting find_and_follow_pipeline" do
                 wait_any control_child.command_child.start_event
                 execute do
-                    control_child.command_child.motion_command_port.disconnect_from control_child.controller_child.command_port
+                    removed_connections = control_child.command_child.disconnect_ports(control_child.controller_child, [['motion_command', 'command']])
                     pipeline_follower = detector_child.offshorePipelineDetector_child
                     pipeline_follower.orogen_task.depth = z
 
@@ -131,8 +129,7 @@ class MainPlanner < Roby::Planning::Planner
 
             describe "find_and_follow_pipeline: starting visual servoing for pipeline"
             execute do
-                auv_relpos_controller = control_child.command_child
-                auv_relpos_controller.motion_command_port.connect_to control_child.controller_child.command_port
+                control_child.command_child.connect_ports(control_child.controller_child, removed_connections)
                 Robot.info "Robot is aligning. Wait until done."
             end
             wait detector_child.follow_pipe_event
@@ -150,14 +147,12 @@ class MainPlanner < Roby::Planning::Planner
 
     # -------------------------------------------------------------------------
 
-    BUOY_RESCUE_ANGLE_RANGE = Math::PI
-
     describe("move forward as long as a buoy is found by the detector and start
               servoing and later strafing around the buoy").
         required_arg("heading", "initial heading where search a buoy").
         required_arg("speed", "forward speed for searching a buoy").
         required_arg("z", "the z value on which a buoy should be searched")
-    method(:find_and_strafe_buoy) do
+    method(:find_and_servo_buoy) do
         heading = arguments[:heading]
         speed = arguments[:speed]
         z = arguments[:z]
@@ -176,15 +171,12 @@ class MainPlanner < Roby::Planning::Planner
             wait_any control_child.command_child.start_event
 
             execute do
-                control_child.command_child.motion_command_port.disconnect_from control_child.controller_child.command_port
+                control_child.command_child.disconnect_ports(control_child.controller_child, [['motion_command', 'command']])
 
                 buoydetector = detector_child.detector_child
                 buoydetector.orogen_task.run_in_simulation = IS_SIMULATION
-                buoydetector.orogen_task.debug_gui = IS_SIMULATION
+                buoydetector.orogen_task.debug_gui = false
                 buoydetector.orogen_task.buoy_depth = z
-                detector_child.buoy_detected_event.
-                    should_emit_after detector_child.start_event,
-                    :max_t => timeout
             end
 
             if !heading
@@ -208,7 +200,7 @@ class MainPlanner < Roby::Planning::Planner
                 write_motion_command
 
                 if o = orientation
-                    if o.position.z < FIND_BUOY_MIN_DEPTH
+                    if o.position.z < FIND_BUOY_MIN_Z
                         transition!
                     end
                 end
@@ -228,8 +220,6 @@ class MainPlanner < Roby::Planning::Planner
 
             execute do
                 Robot.info "Found a buoy and start servoing"
-                auv_relpos_controller = control_child.command_child
-                auv_relpos_controller.motion_command_port.connect_to control_child.controller_child.command_port
             end
 
             wait BUOY_SERVOING_STABILIZATION_TIME
@@ -242,126 +232,34 @@ class MainPlanner < Roby::Planning::Planner
             wait BUOY_CUTTING_TIME
 
             emit :success
-
-            #detection_time = nil
-            #lost_time = nil
-            #poll do
-            #    buoy_detector = detector_child
-
-            #    if buoy_detector.buoy_lost?
-            #        detection_time = nil
-            #        Robot.info "no buoy detected... waiting"
-            #        # TODO: reaction to lost buoy ... e.g. 2 * PI - Rotation while searching a buoy again
-            #        if lost_time
-            #            if Time.now - lost_time > BUOY_LOST_TIMEOUT
-            #                emit :failed
-            #            end
-            #        else
-            #            lost_time = Time.now
-            #        end
-            #    else
-            #        lost_time = nil
-            #        if detection_time && ((Time.now - detection_time) > BUOY_SERVOING_STABILIZATION_TIME)
-            #            Robot.info "now trying to cut"
-            #            buoydetector = detector_child.detector_child
-            #            buoydetector.orogen_task.max_buoy_distance = 0
-            #        end
-            #    end
-
-            #    if buoy_detector.strafing?
-            #        Robot.info "Robot start strafing around the buoy"
-            #    elsif buoy_detector.strafe_finished?
-            #        Robot.info "Strafing around the buoy has been finished"
-            #    elsif buoy_detector.strafe_error?
-            #        Robot.warn "Strafing failed at the buoy"
-            #    elsif buoy_detector.moving_to_cutting_distance?
-            #        Robot.info "Aligning auv for perfect cutting distance"
-            #    elsif buoy_detector.cutting?
-            #        Robot.info "Start moving for cutting the buoy"
-            #    elsif buoy_detector.cutting_success?
-            #        Robot.info "Buoy is released from rope hopefully. Estimate successful cutting"
-            #        transition!
-            #    elsif buoy_detector.cutting_error?
-            #        Robot.info "Something failed in cutting"
-            #        emit :failed
-            #    end
-            #end
         end
     end
 
 
     # -------------------------------------------------------------------------
-
-    # The angular tolerance around the target heading to declare that we reached
-    # it. The task will require the heading to not be further away than
-    # PIPELINE_HOVERING_STABILITY_THRESHOLD radians for
-    # PIPELINE_HOVERING_STABILITY_TIME before declaring success
-    PIPELINE_HOVERING_STABILITY_THRESHOLD = 10 * Math::PI / 180
-    # The amound of seconds we require our heading to be close to target before
-    # announcing a success
-    PIPELINE_HOVERING_STABILITY_TIME = 10
-    describe("rotate to a specific direction in focus of the end of pipeline").
-        required_arg("target_yaw", "the target heading in radians")
-    method(:pipeline_hovering) do
-        rotation_speed = arguments[:rotation_speed]
-        target_yaw     = arguments[:target_yaw]
-
-        # we need the pipeline definition for visual servoing on the end of pipeline
-        pipeline = self.pipeline
-        pipeline.script do
-            data_reader 'orientation', ['control', 'orientation_with_z', 'orientation_z_samples']
-            data_reader 'pipeline_servoing_command', ['detector', 'relative_position_command']
-            data_writer 'rel_pos_command', ['control', 'command', 'position_command']
-
-            wait_any control_child.command_child.start_event
-            execute do
-                # Disconnect the pipeline detector from the AUV relpos
-                # controller
-                pipeline_detector_port = detector_child.relative_position_command_port
-                auv_relpos_port        = control_child.command_child.position_command_port
-                pipeline_detector_port.disconnect_from auv_relpos_port
-            end
-
-            stability_start = nil
-            poll do
-                servoing_command    = pipeline_servoing_command
-                current_orientation = orientation
-                if servoing_command && current_orientation
-                    heading_error = target_yaw - current_orientation.orientation.yaw
-                    servoing_command.heading = heading_error
-                    rel_pos_command_writer.write(servoing_command)
-
-                    if heading_error.abs < PIPELINE_HOVERING_STABILITY_THRESHOLD
-                        stability_start ||= Time.now
-                    else stability_start = nil
-                    end
-
-                    if stability_start && (Time.now - stability_start) > PIPELINE_HOVERING_STABILITY_TIME
-                        transition!
-                    end
-                end
-            end
-            emit :success
-        end
-    end
-    
-    # -------------------------------------------------------------------------
-
-    STATION_KEEP_HEADING_THRESHOLD = 10 * Math::PI / 180.0
-    STATION_KEEP_DEPTH_THRESHOLD   = 0.3
 
     # heading or relative_heading must be given
-    describe("got to a angle/depth target").
+    describe("simple movement").
         required_arg("z", "initial z value on which robot should rotate").
+        optional_arg('forward_speed', 'if set to a non-zero value, the system will first go to position and then go forward for the specified duration at this speed').
+        optional_arg('move_during_descent', 'if set to true and forward_speed to a non-zero value, the system will move even before having reached its specified heading and depth').
         optional_arg("duration", "how long we should stay at the specified depth/heading, in seconds").
         optional_arg("heading", "the wanted absolute heading. Set to nil to use the current heading").
         optional_arg("relative_heading", "adding a relative heading to the current one")
     
-    method(:station_keep) do
-        target_heading   = arguments[:heading]
-        z                = arguments[:z]
-        relative_heading = arguments[:relative_heading]
-        duration         = arguments[:duration]
+    method(:simple_move) do
+        target_heading      = arguments[:heading]
+        relative_heading    = arguments[:relative_heading]
+        z                   = arguments[:z]
+        duration            = arguments[:duration]
+        forward_speed       = arguments[:forward_speed] || 0
+        move_during_descent = arguments[:move_during_descent]
+
+        descent_speed = { :x => 0, :y => 0 }
+        if move_during_descent
+            descent_speed[:x] = forward_speed
+        end
+        wait_speed    = { :x => forward_speed, :y => 0 }
 
         control = Cmp::ControlLoop.use('command' => AuvRelPosController::Task).as_plan
         control.script do
@@ -370,44 +268,49 @@ class MainPlanner < Roby::Planning::Planner
 
             wait_any command_child.start_event
 
-            if !target_heading
+            if target_heading.respond_to?(:call)
+                execute { target_heading = target_heading.call }
+            elsif !target_heading
                 poll do
                     if o = orientation
                         target_heading = o.orientation.yaw
-                        if relative_heading
-                            target_heading += relative_heading
-                        end
-                        if target_heading > Math::PI then target_heading -= 2*Math::PI
-                        elsif target_heading < Math::PI then target_heading += 2*Math::PI
-                        end
                         transition!
                     end
                 end 
             end
 
             execute do
+                if relative_heading
+                    target_heading += relative_heading
+                end
+                if target_heading > Math::PI then target_heading -= 2*Math::PI
+                elsif target_heading < -Math::PI then target_heading += 2*Math::PI
+                end
+
                 command_child.disconnect_ports(controller_child, [['motion_command', 'command']])
-                Robot.info "start station keep at target_heading=#{target_heading} and z=#{z}"
+                Robot.info "start simple_move at target_heading=#{target_heading} and z=#{z}"
+                Robot.info " going to target with speed=#{descent_speed}"
             end
 
             poll do
-                motion_command.x_speed = 0
-                motion_command.y_speed = 0
+                motion_command.x_speed = descent_speed[:x]
+                motion_command.y_speed = descent_speed[:y]
                 motion_command.z = z
                 motion_command.heading = target_heading
                 write_motion_command
 
-                current_pose = self.orientation
-                current_heading = current_pose.orientation.yaw
-                heading_error = current_heading - target_heading
-                if heading_error > Math::PI then heading_error -= (2 * Math::PI)
-                elsif heading_error < -Math::PI then heading_error += (2 * Math::PI)
-                end
+                if current_pose = self.orientation
+                    current_heading = current_pose.orientation.yaw
+                    heading_error = current_heading - target_heading
+                    if heading_error > Math::PI then heading_error -= (2 * Math::PI)
+                    elsif heading_error < -Math::PI then heading_error += (2 * Math::PI)
+                    end
 
-                depth_error = current_pose.position.z - z
+                    depth_error = current_pose.position.z - z
 
-                if heading_error.abs < STATION_KEEP_HEADING_THRESHOLD && depth_error.abs < STATION_KEEP_DEPTH_THRESHOLD
-                    transition!
+                    if heading_error.abs < SIMPLE_MOVE_HEADING_THRESHOLD && depth_error.abs < SIMPLE_MOVE_Z_THRESHOLD
+                        transition!
+                    end
                 end
             end
 
@@ -415,285 +318,45 @@ class MainPlanner < Roby::Planning::Planner
                 Robot.info "reached specified station keeping position"
             end
             if duration
-                wait duration
-            end
-            emit :success
-        end
-    end
-
-    # -------------------------------------------------------------------------
-
-    # -------------------------------------------------------------------------
-
-    describe("simple move forward with a given speed for a specific duration").
-        required_arg("speed", "set the current speed of this movement").
-        required_arg("duration", "set the current duration in s for the movement").
-        required_arg("z", "the Z value at which we should move forward").
-        required_arg("heading", "heading for the forward movement")
-
-    method(:move_forward) do
-        speed = arguments[:speed]
-        duration = arguments[:duration]
-        z = arguments[:z]
-        heading = arguments[:heading]
-
-        control = Cmp::ControlLoop.use('command' => AuvRelPosController::Task).as_plan
-
-        control.script do
-            setup_logger(Robot)
-            
-            data_reader 'orientation', ['orientation_with_z', 'orientation_z_samples']
-            data_writer 'motion_command', ['controller', 'command']
-
-            endTime = nil
-            
-            wait_any command_child.start_event
-
-            if heading.respond_to?(:call)
-                describe "move_forward: getting heading from block"
                 execute do
-                    heading = heading.call
-                    Robot.info "move_forward: heading=#{heading * 180 / Math::PI}"
+                    Robot.info " waiting #{duration} with speed=#{wait_speed}"
                 end
-            elsif !heading
-                describe "move_forward: autodetecting heading"
+                start_time = nil
+                execute { start_time = Time.now }
                 poll do
-                    if o = orientation
-                        heading = o.orientation.yaw
-                        Robot.info "move_forward: using heading=#{heading * 180 / Math::PI}"
+                    motion_command.x_speed = wait_speed[:x]
+                    motion_command.y_speed = wait_speed[:y]
+                    motion_command.z = z
+                    motion_command.heading = target_heading
+                    write_motion_command
+
+                    if Time.now - start_time > duration
                         transition!
                     end
                 end
             end
-            
-            execute do
-                command_child.motion_command_port.disconnect_from controller_child.command_port
-                endTime = Time.now + duration
-            end
- 
-            poll do
-                # check if the duration time elapsed and break out of the loop
-                if Time.now >= endTime
-                    Robot.info "move_forward: timeout reached"
-                    transition!
-                end
-
-                # send movements commands to the Motion Controller
-                motion_command.heading = heading
-                motion_command.z = z
-                motion_command.x_speed = speed
-                motion_command.y_speed = 0
-                write_motion_command
-            end
-
-            describe "move_forward: restoring plain connection state"
-            execute do
-                # Connect AUV Position Controller to the MotionControl Task
-                command_child.motion_command_port.connect_to controller_child.command_port
-            end
-
-            describe "move_forward: done"
             emit :success
         end
     end
 
-    # -------------------------------------------------------------------------
-    
-    if false && IS_SIMULATION
-        PIPELINE_SEARCH_HEADING = 0
-        PIPELINE_SEARCH_SPEED = 0.1
-	CHECKING_CANDIDATE_SPEED = 0.1
-        PIPELINE_SEARCH_Z = -4.5
-        PIPELINE_EXPECTED_HEADING = 0.0
-        FIRST_GATE_HEADING = 0
-        FIRST_GATE_PASSING_SPEED = 0.5 
-        FIRST_GATE_PASSING_Z = PIPELINE_SEARCH_Z
-        GATE_PASSING_DURATION = 5
- 
-        FIND_BUOY_SPEED = 0.2
-        FIND_BUOY_DEPTH = -5.5
-        FIND_BUOY_TIMEOUT = 5
-        # TODO: enter correct value for z of the red buoy
-        FIND_BUOY_TURNING_Z = -5.5
-        WALL_DISTANCE_THRESHOLD = 2
-    else
-        PIPELINE_SEARCH_HEADING = 20 * Math::PI / 180
-        PIPELINE_SEARCH_TIMEOUT = 3 * 60
-        PIPELINE_EXPECTED_HEADING = 110 * Math::PI / 180
-        PIPELINE_SEARCH_SPEED = 0.6
-        PIPELINE_RETURNING_SPEED = 0.3
-        PIPELINE_RETURNING_TIMEOUT = 60
-	CHECKING_CANDIDATE_SPEED = 0.2
-        PIPELINE_SEARCH_Z = -2.5
-        FIRST_GATE_HEADING = PIPELINE_EXPECTED_HEADING
-
-        FIRST_GATE_PASSING_SPEED = 0.5
-        FIRST_GATE_PASSING_DURATION = 3
-        FIRST_GATE_PASSING_Z = PIPELINE_SEARCH_Z
-
-	SECOND_PIPELINE_SERVOING_ACTIVATION_THRESHOLD = 0.8
-
-        SECOND_GATE_PASSING_SPEED = 0.5
-        SECOND_GATE_PASSING_DURATION = 7
-        SECOND_GATE_PASSING_Z = PIPELINE_SEARCH_Z
-
-        FIND_BUOY_SPEED = 0.2
-        FIND_BUOY_MIN_DEPTH = -1
-        BUOY_DEPTH = -2.6
-        BUOY_LOST_TIMEOUT = 5
-        BUOY_SERVOING_STABILIZATION_TIME = 30
-        BUOY_CUTTING_TIME = 30
-        SIMPLE_FIND_BUOY_TIMEOUT = 60
-
-        # TODO: enter correct value for z of the red buoy
-        FIND_BUOY_TURNING_Z = -4.5
-        WALL_DISTANCE_THRESHOLD = 1.5
-        WALL_SEARCH_TIMEOUT = 30
-        WALLSERVOING_FIND_BUOY_TIMEOUT = 5
-    end
-
-    method(:sauce_pipeline) do
-	find_and_follow_pipeline(:heading => PIPELINE_SEARCH_HEADING, 
-			:speed => PIPELINE_SEARCH_SPEED, 
-			:z => PIPELINE_SEARCH_Z,
-			:expected_pipeline_heading => PIPELINE_EXPECTED_HEADING)
-    end
-
-    describe "just after the pipeline, approaches the wall using the sonar, turns towards the buoy and servoes the wall until either a buoy is detected or a timeout is found"
-    method(:find_buoy) do
-        main = LookForBuoy.new
-
-        # First part: get closer to the wall, using the wall detector as a
-        # distance estimator
-        move = move_forward(:duration => 10,
-                            :speed => FIND_BUOY_SPEED,
-                            :z => FIND_BUOY_DEPTH)
-        move.depends_on(wall_distance_estimator, :as => 'wall_distance')
-        move.script do
-            data_reader 'wall_info', ['wall_distance']
-            wait_any wall_distance_child.start_event
-            
-            poll do
-                # TODO
-                # Wait for distance < threshold
-                # transition!
-                current_distance = wall_info.detector.distance
-
-                if not current_distance.nil?
-                    if current_distance < WALL_DISTANCE_THRESHOLD
-                        transition!
-                    end
-                end
-            end
-
-            emit :success
-        end
-
-        # Second part: rotate towards the buoy
-        turn = rotate(:relative_heading => Math::PI, :z => FIND_BUOY_TURNING_Z)
-
-        # Third part: use the wall servoing with the wall full right. Try to get
-        # a detected buoy
-        main.depends_on(approach = wall_approach_buoy, :role => 'approach')
-        approach.depends_on(buoy_detector = self.buoy_detector, :as => "buoy_detector")
-        buoy_detector.buoy_detected_event.
-            forward_to main.found_event
-
-        # Timeout on the buoy detection
-        main.script do
-            wait approach_child.start_event
-            start = nil
-            execute do
-                start = Time.now
-            end
-            poll do
-                if Time.now - start > FIND_BUOY_TIMEOUT
-                    emit :not_found
-                end
-            end
-        end
-
-        main.add_sequence(move, turn, approach)
-        main
-    end
-
-    method(:sauce_pipeline_and_gates, :returns => SaucE::PipelineAndGates) do
-        find_pipe = find_and_follow_pipeline(:heading => PIPELINE_SEARCH_HEADING, 
-			:speed => PIPELINE_SEARCH_SPEED, 
-			:z => PIPELINE_SEARCH_Z,
-			:expected_pipeline_heading => PIPELINE_EXPECTED_HEADING,
-                        :timeout => PIPELINE_SEARCH_TIMEOUT)
-	find_pipe.on :success do |event|
-            heading = event.task.detector_child.pipeline_heading
-            Robot.info "storing pipeline heading: #{heading * 180 / Math::PI}deg"
-	    State.pipeline_heading = heading
-	end
-        gate_passing = move_forward( :speed => FIRST_GATE_PASSING_SPEED,
-			:z => FIRST_GATE_PASSING_Z,
-			:duration => FIRST_GATE_PASSING_DURATION,
-                        :heading => proc { State.pipeline_heading })
-        
-        # hovering = pipeline_hovering(:target_yaw => FIRST_GATE_HEADING)
-
-        gate_returning = find_and_follow_pipeline(
-            :speed => -PIPELINE_RETURNING_SPEED, 
-            :z => PIPELINE_SEARCH_Z,
-            :pipeline_activation_threshold => SECOND_PIPELINE_SERVOING_ACTIVATION_THRESHOLD,
-            :timeout => PIPELINE_RETURNING_TIMEOUT)
-        gate_returning.on :success do |event|
-            heading = event.task.detector_child.pipeline_heading
-            Robot.info "storing pipeline heading: #{heading * 180 / Math::PI}deg"
-            State.pipeline_heading = heading
-        end
-        
-        second_gate_passing = move_forward(
-            :speed => SECOND_GATE_PASSING_SPEED,
-            :z => SECOND_GATE_PASSING_Z,
-            :duration => SECOND_GATE_PASSING_DURATION,
-            :heading => proc { State.pipeline_heading })
-
-        main = SaucE::PipelineAndGates.new
-        main.add_sequence(find_pipe, gate_passing, gate_returning, second_gate_passing)
-        second_gate_passing.success_event.forward_to main.success_event
-        main
-    end
-
-    method(:qualif_buoy) do
-        find_and_strafe_buoy(:speed => 0,
-                             :heading => nil,
-                             :timeout => SIMPLE_FIND_BUOY_TIMEOUT,
-                             :z => BUOY_DEPTH)
-
-    end
-
-    method(:qalif_wall) do
-        wall_servoing(:wall_left)
-    end
-
+    # Helper method to deal with all the possible configurations of the wall
+    # servoing
+    #
+    # +name+ is the definition of the wall servoing composition we should run
     def wall_servoing(name)
         task = send(name)
         task.on :start do |event|
             task = event.task
             task.detector_child.wall_found_event.
-                should_emit_after task.detector_child.start_event,
+                should_emit_after task.start_event,
                 :max_t => WALL_SEARCH_TIMEOUT
+            task.detector_child.detected_corner_event.
+                should_emit_after task.detector_child.wall_found_event,
+                :max_t => WALL_CORNER_TIMEOUT
         end
+        task.detected_corner_event.forward_to task.success_event, :delay => WALL_SUCCESS_TIMEOUT_AFTER_CORNER
         task
     end
-
-    # starting point for testing pipeline following
-    #  sim_set_position 15, -5, -4.5
-    describe("Autonomous run for running all sauce-specific tasks")
-    method(:autonomous_run, :returns => SaucE::Mission) do
-        pipeline_and_gates = self.sauce_pipeline_and_gates
-        wall_servoing = self.wall_servoing(:wall_left)
-
-        task = SaucE::Mission.new
-        task.add_sequence(pipeline_and_gates, wall_servoing)
-        task
-    end
-
-    # -------------------------------------------------------------------------
 end
 
 class Roby::Task
