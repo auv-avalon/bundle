@@ -14,5 +14,9 @@ module SaucE
         event :not_found
         forward :not_found => :success
     end
+
+    class QualifWall < Roby::Task
+        terminates
+    end
 end
 
