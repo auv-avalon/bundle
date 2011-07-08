@@ -3,3 +3,13 @@
 enable_gui: 1
 # scenefile of the robot module, which should be loaded
 with_manipulator_gui: 1
+
+# Initial position - complete mission
+initial_position:
+    data: [40, -5, -2]
+initial_yaw: 1.3
+
+# Initial position - gate
+# initial_position:
+#     data: [48, 0, -2]
+# initial_yaw: 0
