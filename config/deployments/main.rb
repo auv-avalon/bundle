@@ -25,7 +25,7 @@ define('rotation', Cmp::VisualServoing.use(Cmp::Rotation.use('bottom_camera')))
 #     define_name is the definition name
 #     the sonar is configured in [sonar, sonar_config] mode
 #     the detector (sonardetector::task) is configured in [default, detector_config] mode
-def define_wall_servoing(name, options = Hash.new)
+def define_wall_servoing(name, cmp, options = Hash.new)
     options = Kernel.validate_options options,
         :sonar => nil, :detector => nil
 
@@ -37,18 +37,45 @@ def define_wall_servoing(name, options = Hash.new)
     
     sonar = Roby.orocos_engine.device('sonar').
         use_conf(*sonar_config)
-    detector = Cmp::WallDetector.
-        use(sonar, Sonardetector::Task.use_conf(*detector_config))
+
+    task = if cmp == Cmp::WallDetector then
+               Sonardetector::Task
+           else 
+               SonarServoing::Task
+           end
+
+    detector = cmp.use(sonar, task.use_conf(*detector_config))
     Roby.orocos_engine.define("#{name}_detector", detector)
     Roby.orocos_engine.define("#{name}", Cmp::VisualServoing.use(detector))
 end
 
-define_wall_servoing 'wall_left', :sonar => 'narrow_front', :detector => 'drive_left'
-define_wall_servoing 'wall_approach',           :sonar => 'wall_approach',     :detector => 'wall_approach'
-define_wall_servoing 'wall_approach_buoy' ,     :sonar => 'scan_right',        :detector => 'approach_buoy'
-define_wall_servoing 'wall_servoing_right_wall',:sonar => 'scan_right',        :detector => 'servo_right_wall'
+# -----------------------------------------------------------------------------
+# definitions using SONAR DETECTOR
+# -----------------------------------------------------------------------------
+
+define_wall_servoing 'wall_left', Cmp::WallDetector,
+    :sonar => 'narrow_front', :detector => 'drive_left'
+
+define_wall_servoing 'wall_approach', Cmp::WallDetector,
+    :sonar => 'wall_approach',     :detector => 'wall_approach'
+
+define_wall_servoing 'wall_approach_buoy', Cmp::WallDetector,
+    :sonar => 'scan_right',        :detector => 'approach_buoy'
+
+define_wall_servoing 'wall_servoing_right_wall', Cmp::WallDetector, 
+    :sonar => 'scan_right',        :detector => 'servo_right_wall'
+
 narrow_sonar = device('sonar').use_conf('sonar', 'narrow_front')
 define('wall_detector', Cmp::WallDetector.use(narrow_sonar))
+
 narrow_sonar = device('sonar').use_conf('sonar', 'wall_approach')
 define('wall_distance_estimator', Cmp::WallDetector.use(narrow_sonar))
+
+# -----------------------------------------------------------------------------
+# definitions using SONAR SERVOING (old one)
+# -----------------------------------------------------------------------------
+
+define_wall_servoing 'classic_wall', Cmp::ClassicWallDetector, 
+    :sonar => 'narrow_front'
+
 
