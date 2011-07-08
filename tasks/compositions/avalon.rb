@@ -8,6 +8,7 @@ using_task_library 'structured_light'
 using_task_library 'offshore_pipeline_detector'
 using_task_library 'sonardetector'
 using_task_library 'asv_detector'
+using_task_library 'sonar_servoing'
 using_task_library 'buoydetector'
 using_task_library 'frame_demultiplexer'
 using_task_library 'controldev'
@@ -148,12 +149,29 @@ composition 'WallDetector' do
     provides Srv::RelativePositionDetector
 end
 
+
+composition 'ClassicWallDetector' do
+    event :searching_wall
+    event :found_wall
+    event :corner_passed
+    event :wrong_opening_angle
+
+    add Srv::SonarScanProvider
+    add Srv::OrientationWithZ
+    add_main SonarServoing::Task, :as => 'detector'
+    autoconnect
+
+    export detector.position_command
+    provides Srv::RelativePositionDetector
+end
+
+
 composition 'AsvDetector' do
     event :asv_found
     event :asv_lost
 
     add Srv::ImageProvider
-    add AsvDetector::Task, :as => 'detector'
+    add_main AsvDetector::Task, :as => 'detector'
     autoconnect
 
     export detector.position_command

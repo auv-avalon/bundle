@@ -1,0 +1,2 @@
+class SonarServoing::Task
+end
