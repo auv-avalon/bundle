@@ -30,13 +30,19 @@ end
 class LogConverter
     
     :output
+    :samples
 
     def initialize
 	@output = ""
+	@samples = []
     end
 
-    def convertSamples(samples)
-	samples.each do |sample|
+    def addSample(sample)
+	@samples << sample
+    end
+
+    def convertSamples
+	@samples.each do |sample|
 	    @output << convertToCsv(sample) + "\n"
 	end
 	return @output
@@ -61,11 +67,24 @@ s3 = LogSample.new(01234, 034, 0, -1.0, "DONE", "Final comment")
 ##### DEBUG!!!
 #Process.exit()
 
+def usage
+    puts "Usage: ruby log_converter.rb <path> {<model>}"
+    puts "Example with two models: ruby log_converter log/avalon-events.0.log AvalonControl::MotionControlTask Sonardetector"
+end
+
+case ARGV.size
+    when 0
+	puts "Please submit event log file"
+    when 1
+	puts "Please submit at least one desired model"
+end
+
 puts "***** ARGV = #{ARGV}"
 
 input_logfile = ARGV.shift
-
 all = []
+log_converter = LogConverter.new
+
 
 # Get tasks of all desired models
 ARGV.each do |arg|
@@ -99,10 +118,19 @@ ARGV.each do |arg|
 end #while
     
 symbol_width = all.map(&:symbol).map(&:to_s).map(&:size).max
-    all.sort_by { |ev| ev.time }.each do |ev|
+
+all.sort_by { |ev| ev.time }.each do |ev|
+    
     #puts "%s   %-#{symbol_width}s   %s" % [Roby.format_time(ev.time), ev.symbol, ev.task]
-    puts ev.symbol
+    #puts ev.symbol
+    #puts (Roby.format_time ev.time)
+
+    time = (ev.time - all[0].time).to_s.split('.').first.rjust(5, '0')
+    action = (((ev.task.to_s.split ":0").first.split "::").drop 2).join "::"
+    log_converter.addSample(LogSample.new(time,"XXX.x","YYY.y","ZZZ.z","#{action}.#{ev.symbol}","heading = <HEADING>; fancy comment"))
 end
+
+puts log_converter.convertSamples
 
 ### TODO: get heading, depth
 #file = Pocolog::Logfiles.open(filename)
