@@ -155,14 +155,13 @@ class MainPlanner < Roby::Planning::Planner
     describe("move forward as long as a buoy is found by the detector and start
               servoing and later strafing around the buoy").
         required_arg("heading", "initial heading where search a buoy").
-        required_arg("distance", "wished distance to the buoy for servoing").
         required_arg("speed", "forward speed for searching a buoy").
         required_arg("z", "the z value on which a buoy should be searched")
     method(:find_and_strafe_buoy) do
-        distance = arguments[:distance]
         heading = arguments[:heading]
         speed = arguments[:speed]
         z = arguments[:z]
+        timeout = arguments[:timeout]
 
         half_rescue_angle = Math::PI / 2.0
 
@@ -183,12 +182,30 @@ class MainPlanner < Roby::Planning::Planner
 
                 buoydetector = detector_child.detector_child
                 buoydetector.orogen_task.run_in_simulation = IS_SIMULATION
+                buoydetector.orogen_task.buoy_depth = z
+                detector_child.buoy_detected_event.
+                    should_start_after detector_child.start_event,
+                    :max_t => timeout
             end
 
             if !heading
                 poll do
                     if o = orientation
                         heading = o.orientation.yaw
+                        transition!
+                    end
+                end
+            end
+
+            poll do
+                motion_command.heading = heading
+                motion_command.z = z
+                motion_command.x_speed = 0
+                motion_command.y_speed = 0
+                write_motion_command
+
+                if o = orientation
+                    if o.position.z < -1
                         transition!
                     end
                 end
@@ -213,14 +230,31 @@ class MainPlanner < Roby::Planning::Planner
                 auv_relpos_controller.motion_command_port.connect_to control_child.controller_child.command_port
             end
 
+            detection_time = nil
+            lost_time = nil
             poll do
                 buoy_detector = detector_child
 
                 if buoy_detector.buoy_lost?
-                    Robot.info "Buoydetector have lost a buoy in screen. Start Turning"
+                    Robot.info "no buoy detected... waiting"
                     # TODO: reaction to lost buoy ... e.g. 2 * PI - Rotation while searching a buoy again
-                    emit :failed
-                elsif buoy_detector.strafing?
+                    if lost_time
+                        if Time.now - lost_time > BUOY_LOST_TIMEOUT
+                            emit :failed
+                        end
+                    else
+                        lost_time = Time.now
+                    end
+                else
+                    lost_time = nil
+                    if Time.now - detection_time > BUOY_SERVOING_STABILIZATION_TIME
+                        Robot.info "now trying to cut"
+                        buoydetector = detector_child.detector_child
+                        buoydetector.orogen_task.max_buoy_distance = 0
+                    end
+                end
+
+                if buoy_detector.strafing?
                     Robot.info "Robot start strafing around the buoy"
                 elsif buoy_detector.strafe_finished?
                     Robot.info "Strafing around the buoy has been finished"
@@ -492,8 +526,10 @@ class MainPlanner < Roby::Planning::Planner
         SECOND_GATE_PASSING_Z = PIPELINE_SEARCH_Z
 
         FIND_BUOY_SPEED = 0.2
-        FIND_BUOY_DEPTH = -2.4
-        FIND_BUOY_TIMEOUT = 5
+        BUOY_DEPTH = -2.6
+        WALLSERVOING_FIND_BUOY_TIMEOUT = 5
+        BUOY_LOST_TIMEOUT = 5
+        SIMPLE_FIND_BUOY_TIMEOUT = 10
         # TODO: enter correct value for z of the red buoy
         FIND_BUOY_TURNING_Z = -4.5
         WALL_DISTANCE_THRESHOLD = 1.5
@@ -604,6 +640,14 @@ class MainPlanner < Roby::Planning::Planner
         main.add_sequence(find_pipe, gate_passing, gate_returning, second_gate_passing)
         second_gate_passing.success_event.forward_to main.success_event
         main
+    end
+
+    method(:qualif_buoy) do
+        find_and_strafe_buoy(:speed => 0,
+                             :heading => nil,
+                             :timeout => SIMPLE_FIND_BUOY_TIMEOUT,
+                             :z => BUOY_DEPTH)
+
     end
 
     def wall_servoing(name)
