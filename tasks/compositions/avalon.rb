@@ -80,6 +80,7 @@ composition 'PipelineDetector' do
     event :lost_pipe
     event :search_pipe
     event :end_of_pipe
+    event :weak_signal
 
     add Srv::ImageProvider
     add_main OffshorePipelineDetector::Task, :as => 'offshorePipelineDetector'
@@ -89,6 +90,29 @@ composition 'PipelineDetector' do
 
     export offshorePipelineDetector.position_command
     provides Srv::RelativePositionDetector
+
+    attr_reader :pipeline_heading
+
+    on :start do |event|
+        @orientation_reader = data_reader 'orientation_with_z', 'orientation_z_samples'
+    end
+
+    on :weak_signal do |event|
+        if o = @orientation_reader.read
+            @pipeline_heading = o.orientation.yaw
+        end
+    end
+
+    on :end_of_pipe do |event|
+        if !@pipeline_heading && (o = @orientation_reader.read)
+            @pipeline_heading = o.orientation.yaw
+        end
+    end
+end
+Cmp::VisualServoing.specialize 'detector' => Cmp::PipelineDetector do
+    overload 'detector', Cmp::PipelineDetector,
+        :failure => :lost_pipe, :success => :end_of_pipe,
+        :remove_when_done => false
 end
 
 composition 'BuoyDetector' do
@@ -105,7 +129,7 @@ composition 'BuoyDetector' do
     
     add Srv::ImageProvider
     add Srv::OrientationWithZ
-    add Buoydetector::Task, :as => 'detector'
+    add_main Buoydetector::Task, :as => 'detector'
     autoconnect
 
     export detector.relative_position
@@ -113,9 +137,11 @@ composition 'BuoyDetector' do
 end
 
 composition 'WallDetector' do
+    event :wall_found
+
     add Srv::SonarScanProvider
-    add Sonardetector::Task , :as => 'detector'
     add Srv::Orientation
+    add_main Sonardetector::Task , :as => 'detector'
     autoconnect
 
     export detector.position_command

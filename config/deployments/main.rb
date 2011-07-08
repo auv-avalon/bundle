@@ -37,14 +37,18 @@ def define_wall_servoing(name, options = Hash.new)
     
     sonar = Roby.orocos_engine.device('sonar').
         use_conf(*sonar_config)
-    Roby.orocos_engine.define(name, Cmp::WallDetector.
-           use(sonar, Sonardetector::Task.use_conf(*detector_config)))
+    detector = Cmp::WallDetector.
+        use(sonar, Sonardetector::Task.use_conf(*detector_config))
+    Roby.orocos_engine.define("#{name}_detector", detector)
+    Roby.orocos_engine.define("#{name}", Cmp::VisualServoing.use(detector))
 end
 
 define_wall_servoing 'wall_left', :sonar => 'narrow_front', :detector => 'drive_left'
-define_wall_servoing 'wall_distance_estimator', :sonar => 'wall_approach', :detector => 'distance_estimator'
+define_wall_servoing 'wall_approach',           :sonar => 'wall_approach',     :detector => 'wall_approach'
 define_wall_servoing 'wall_approach_buoy' ,     :sonar => 'scan_right',        :detector => 'approach_buoy'
 define_wall_servoing 'wall_servoing_right_wall',:sonar => 'scan_right',        :detector => 'servo_right_wall'
 narrow_sonar = device('sonar').use_conf('sonar', 'narrow_front')
 define('wall_detector', Cmp::WallDetector.use(narrow_sonar))
+narrow_sonar = device('sonar').use_conf('sonar', 'wall_approach')
+define('wall_distance_estimator', Cmp::WallDetector.use(narrow_sonar))
 
