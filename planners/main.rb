@@ -171,6 +171,9 @@ class MainPlanner < Roby::Planning::Planner
 
             execute do
                 control_child.command_child.motion_command_port.disconnect_from control_child.controller_child.command_port
+
+                buoydetector = detector_child.detector_child
+                buoydetector.orogen_task.run_in_simulation = IS_SIMULATION
             end
 
             if !heading
@@ -449,9 +452,7 @@ class MainPlanner < Roby::Planning::Planner
 
     # -------------------------------------------------------------------------
     
-
-    RUN_IN_SIMULATION = false
-    if RUN_IN_SIMULATION
+    if IS_SIMULATION
         PIPELINE_SEARCH_HEADING = 0
         PIPELINE_SEARCH_SPEED = 0.1
 	CHECKING_CANDIDATE_SPEED = 0.1
@@ -461,6 +462,13 @@ class MainPlanner < Roby::Planning::Planner
         FIRST_GATE_PASSING_SPEED = 0.5 
         FIRST_GATE_PASSING_Z = PIPELINE_SEARCH_Z
         GATE_PASSING_DURATION = 5
+ 
+        FIND_BUOY_SPEED = 0.2
+        FIND_BUOY_DEPTH = -5.5
+        FIND_BUOY_TIMEOUT = 5
+        # TODO: enter correct value for z of the red buoy
+        FIND_BUOY_TURNING_Z = -5.5
+        WALL_DISTANCE_THRESHOLD = 2
     else
         PIPELINE_SEARCH_HEADING = 20 * Math::PI / 180
         PIPELINE_EXPECTED_HEADING = 110 * Math::PI / 180
@@ -485,7 +493,7 @@ class MainPlanner < Roby::Planning::Planner
         FIND_BUOY_TIMEOUT = 5
         # TODO: enter correct value for z of the red buoy
         FIND_BUOY_TURNING_Z = -4.5
-        WALL_DISTANCE_THRESHOLD = 1.5
+        WALL_DISTANCE_THRESHOLD = 2
     end
 
     method(:sauce_pipeline) do
