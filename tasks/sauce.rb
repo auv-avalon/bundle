@@ -15,6 +15,10 @@ module SaucE
         forward :not_found => :success
     end
 
+    class Wall < Roby::Task
+        terminates
+    end
+
     class QualifWall < Roby::Task
         terminates
     end

@@ -147,6 +147,8 @@ class MainPlanner < Roby::Planning::Planner
 
     # -------------------------------------------------------------------------
 
+    BUOY_SERVOING_VALIDATION_WINDOW = 10
+    BUOY_SERVOING_DISTANCE = 2
     describe("move forward as long as a buoy is found by the detector and start
               servoing and later strafing around the buoy").
         required_arg("heading", "initial heading where search a buoy").
@@ -154,14 +156,59 @@ class MainPlanner < Roby::Planning::Planner
         required_arg("z", "the z value on which a buoy should be searched")
     method(:find_and_servo_buoy) do
         heading = arguments[:heading]
-        speed = arguments[:speed]
-        z = arguments[:z]
-        timeout = arguments[:timeout]
-
-        half_rescue_angle = Math::PI / 2.0
+        speed   = arguments[:speed]
+        z       = arguments[:z]
+        search_timeout = arguments[:search_timeout]
 
         buoy = self.buoy
+        # Guard for finding / maintaining the buoy
+        buoy.script do
+            data_reader 'detected_buoy', ['detector', 'detector', 'buoy']
+            timeout search_timeout, :emit => :failed_to_find_buoy do
+                wait detector_child.buoy_detected_event
+            end
 
+            window = []
+            poll_until detector_child.cutting_event do
+                if (b = detected_buoy)
+                    window.unshift(b.world_coord.x)
+
+                    actual_window = window.find_all { |x| x != 0 }
+                    if actual_window.size > BUOY_SERVOING_VALIDATION_WINDOW
+                        window.pop
+                        mean1 = actual_window[0, BUOY_SERVOING_VALIDATION_WINDOW / 2].inject(&:+) / window.size / 2
+                        mean0 = actual_window[BUOY_SERVOING_VALIDATION_WINDOW / 2, BUOY_SERVOING_VALIDATION_WINDOW / 2].inject(&:+) / window.size / 2
+
+                        # Error if we are too far away from the buoy and don't
+                        # get nearer
+                        if (mean1 + mean0) / 2 > 2 * BUOY_SERVOING_DISTANCE && (mean1 - mean0) / mean0 > -0.1
+                            emit :failed_to_approach
+                        end
+                    end
+                end
+            end
+        end
+        # Guard for lost buoy (no support for this kind of timeout yet ...)
+        buoy.script do
+            wait detector_child.buoy_detected_event
+
+            start_time = Time.now
+            poll do
+                last_ev = detector_child.history.last
+                puts "#{last_ev} #{last_ev.symbol} #{start_time}"
+                if last_ev.symbol == :buoy_lost
+                    emit :buoy_lost
+                    if start_time && (Time.now - start_time) > BUOY_LOST_TIMEOUT
+                        emit :buoy_lost
+                    else
+                        start_time = last_ev.time
+                    end
+                else
+                    start_time = nil
+                end
+            end
+        end
+        # Main script: find, servo and cut
         buoy.script do
             setup_logger(Robot)
 
@@ -170,16 +217,20 @@ class MainPlanner < Roby::Planning::Planner
          
             wait_any control_child.command_child.start_event
 
+            removed_connections = nil
             execute do
-                control_child.command_child.disconnect_ports(control_child.controller_child, [['motion_command', 'command']])
+                removed_connections = control_child.command_child.
+                    disconnect_ports(control_child.controller_child, [['motion_command', 'command']])
 
                 buoydetector = detector_child.detector_child
-                buoydetector.orogen_task.run_in_simulation = IS_SIMULATION
+                # buoydetector.orogen_task.run_in_simulation = IS_SIMULATION
                 buoydetector.orogen_task.debug_gui = false
                 buoydetector.orogen_task.buoy_depth = z
             end
 
-            if !heading
+            if heading.respond_to?(:call)
+                execute { heading = heading.call }
+            elsif !heading
                 poll do
                     if o = orientation
                         heading = o.orientation.yaw
@@ -189,7 +240,7 @@ class MainPlanner < Roby::Planning::Planner
             end
 
             execute do
-                Robot.info "starting to dive ..."
+                Robot.info "starting to dive. Heading=#{heading * 180 / Math::PI}"
             end
 
             poll do
@@ -220,17 +271,18 @@ class MainPlanner < Roby::Planning::Planner
 
             execute do
                 Robot.info "Found a buoy and start servoing"
+                control_child.command_child.
+                    connect_ports(control_child.controller_child, removed_connections)
             end
 
-            wait BUOY_SERVOING_STABILIZATION_TIME
-
+            wait detector_child.buoy_detected_event
             execute do
-                buoydetector = detector_child.detector_child
-                buoydetector.orogen_task.max_buoy_distance = 0
+                Robot.info "buoy detected"
             end
-
-            wait BUOY_CUTTING_TIME
-
+            wait detector_child.cutting_success_event
+            execute do
+                Robot.info "buoy cutted"
+            end
             emit :success
         end
     end
@@ -350,11 +402,11 @@ class MainPlanner < Roby::Planning::Planner
             task.detector_child.wall_found_event.
                 should_emit_after task.start_event,
                 :max_t => WALL_SEARCH_TIMEOUT
-            task.detector_child.detected_corner_event.
-                should_emit_after task.detector_child.wall_found_event,
-                :max_t => WALL_CORNER_TIMEOUT
+            # task.detector_child.detected_corner_event.
+            #     should_emit_after task.detector_child.wall_found_event,
+            #     :max_t => WALL_CORNER_TIMEOUT
         end
-        task.detected_corner_event.forward_to task.success_event, :delay => WALL_SUCCESS_TIMEOUT_AFTER_CORNER
+        # task.detected_corner_event.forward_to task.success_event, :delay => WALL_SUCCESS_TIMEOUT_AFTER_CORNER
         task
     end
 end
@@ -369,6 +421,15 @@ class Roby::Task
             end
             last_task = t
         end
+    end
+end
+
+def normalize_angle(angle)
+    if angle > Math::PI
+        angle - 2*Math::PI
+    elsif angle < -Math::PI
+        angle + 2*Math::PI
+    else angle
     end
 end
 

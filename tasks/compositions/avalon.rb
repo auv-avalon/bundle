@@ -136,6 +136,14 @@ composition 'BuoyDetector' do
     export detector.relative_position
     provides Srv::RelativePositionDetector
 end
+Cmp::VisualServoing.specialize 'detector' => Cmp::BuoyDetector do
+    event :failed_to_find_buoy
+    forward :failed_to_find_buoy => :failed
+    event :failed_to_approach
+    forward :failed_to_approach => :failed
+    event :buoy_lost
+    forward :buoy_lost => :failed
+end
 
 composition 'WallDetector' do
     event :wall_found

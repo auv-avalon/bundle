@@ -28,11 +28,19 @@ class MainPlanner
 
     SIMPLE_FIND_BUOY_TIMEOUT = 60
 
+    BUOY_SEARCH_TIMEOUT = 15
+    BUOY_SEARCH_SPEED = 0.3
     BUOY_Z = -2.6
     BUOY_LOST_TIMEOUT = 5
     BUOY_SERVOING_STABILIZATION_TIME = 30
     BUOY_CUTTING_TIME = 30
+    BUOY_DIRECTION_AT_GATE = 20 * Math::PI / 180
 
+    LOST_BUOY_TO_WALL_TIME = 5
+    LOST_BUOY_TO_WALL_SPEED = 0.4
+
+    WALL_SERVOING_Z = -1.5
+    WALL_ALIGNMENT_STABILIZATION_TIME = 10
     WALL_SEARCH_TIMEOUT = 30
     WALL_CORNER_TIMEOUT = 2 * 60
     WALL_SUCCESS_TIMEOUT_AFTER_CORNER = 2 * 60
@@ -40,6 +48,8 @@ class MainPlanner
     if IS_SIMULATION
         PIPELINE_SEARCH_HEADING   = - Math::PI
         PIPELINE_EXPECTED_HEADING = - Math::PI
+        BUOY_SEARCH_TIMEOUT = 40
+        BUOY_DIRECTION_AT_GATE = 40 * Math::PI / 180
     end
 
     method(:sauce_pipeline_and_gates, :returns => SaucE::PipelineAndGates) do
@@ -82,14 +92,76 @@ class MainPlanner
         main
     end
 
+    method(:sauce_buoy) do
+        find_and_servo_buoy(
+            :heading => proc { normalize_angle(State.pipeline_heading + BUOY_DIRECTION_AT_GATE) },
+            :speed => BUOY_SEARCH_SPEED,
+            :z => BUOY_Z,
+            :search_timeout => BUOY_SEARCH_TIMEOUT)
+    end
+
+    method(:sauce_wall) do
+        main = SaucE::Wall.new
+        alignment = simple_move(:heading => proc { State.pipeline_heading },
+                    :z => WALL_SERVOING_Z,
+                    :forward_speed => 0,
+                    :duration => WALL_ALIGNMENT_STABILIZATION_TIME)
+
+        main.add_sequence(alignment, self.wall_servoing(:wall_left))
+        main
+    end
+
+    method(:sauce_buoy_simtest) do
+        State.pipeline_heading = 0
+
+        buoy = sauce_buoy
+        wall = sauce_wall
+
+        main = SaucE::Mission.new
+
+        main.depends_on(buoy, :success => [:buoy_lost, :success],
+                        :remove_when_done => false)
+        main.depends_on(wall)
+
+        # Movement that puts us closer to the wall if we lost the buoy
+        move_to_wall = simple_move(:heading => proc { State.pipeline_heading + Math::PI / 2 },
+                    :z => WALL_SERVOING_Z,
+                    :forward_speed => LOST_BUOY_TO_WALL_SPEED,
+                    :duration => LOST_BUOY_TO_WALL_TIME)
+        main.depends_on(move_to_wall)
+
+
+        move_to_wall.should_start_after buoy.buoy_lost_event
+        wall.should_start_after(move_to_wall.success_event | buoy.success_event)
+        main
+    end
+
+
     describe("Autonomous run for running all sauce-specific tasks")
     method(:autonomous_run, :returns => SaucE::Mission) do
-        pipeline_and_gates = self.sauce_pipeline_and_gates
-        wall_servoing = self.wall_servoing(:wall_left)
+        pipeline_and_gates = sauce_pipeline_and_gates
+        buoy = sauce_buoy
+        wall = sauce_wall
 
-        task = SaucE::Mission.new
-        task.add_sequence(pipeline_and_gates, wall_servoing)
-        task
+        main = SaucE::Mission.new
+
+        main.depends_on(pipeline_and_gates)
+        main.depends_on(buoy, :success => [:lost_buoy, :success],
+                        :remove_when_done => false)
+        main.depends_on(wall)
+
+        # Movement that puts us closer to the wall if we lost the buoy
+        move_to_wall = simple_move(:heading => proc { State.pipeline_heading + Math::PI / 2 },
+                    :z => WALL_SERVOING_Z,
+                    :speed => LOST_BUOY_RECOVERY_SPEED,
+                    :duration => to_wall_duration)
+        main.depends_on(move_to_wall)
+
+
+        buoy.should_start_after pipeline_and_gates
+        move_to_wall.should_start_after buoy.lost_buoy_event
+        wall.should_start_after(move_to_wall.success_event | buoy.success_event)
+        main
     end
 end
 
