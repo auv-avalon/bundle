@@ -8,9 +8,9 @@ module Robot
     end
 
     def self.set_avalon_to(object)
-        buoy = { :x => 59.0, :y => -8.0, :z => -7.5, :theta => Math::PI }
-        pipe = { :x => 30.0, :y => -5.0, :z => -2.5, :theta => Math::PI }
-        wall = { :x => 70.0, :y => 10.0, :z => -4.5, :theta => Math::PI }
+        buoy = { :x => 55.0, :y => -1.0, :z => -2.5, :theta => Math::PI / 2.0 }
+        pipe = { :x => 0.0, :y => 0.0, :z => -0.0, :theta => 0.0 }
+        wall = { :x => 58.0, :y => 2.5, :z => -4.5, :theta => Math::PI / 2.0 }
 
         position = nil
 
