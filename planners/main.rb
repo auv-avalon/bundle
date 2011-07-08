@@ -301,84 +301,76 @@ class MainPlanner < Roby::Planning::Planner
     
     # -------------------------------------------------------------------------
 
-    HEADING_ZERO_THRESHOLD = 10 * Math::PI / 180.0
+    STATION_KEEP_HEADING_THRESHOLD = 10 * Math::PI / 180.0
+    STATION_KEEP_DEPTH_THRESHOLD   = 0.3
 
     # heading or relative_heading must be given
-    describe("simple rotate with a given speed for a specific angle").
+    describe("got to a angle/depth target").
         required_arg("z", "initial z value on which robot should rotate").
-        optional_arg("heading", "the wanted absolute heading").
+        optional_arg("duration", "how long we should stay at the specified depth/heading, in seconds").
+        optional_arg("heading", "the wanted absolute heading. Set to nil to use the current heading").
         optional_arg("relative_heading", "adding a relative heading to the current one")
     
-    method(:rotate) do
-        heading          = arguments[:heading]
-        relative_heading = arguments[:relative_heading]
+    method(:station_keep) do
+        target_heading   = arguments[:heading]
         z                = arguments[:z]
-
-        if heading.nil? and relative_heading.nil?
-            execute do 
-                Robot.error "No :heading or :relative_heading is given to this method"
-                emit :failed
-            end
-        end
+        relative_heading = arguments[:relative_heading]
+        duration         = arguments[:duration]
 
         control = Cmp::ControlLoop.use('command' => AuvRelPosController::Task).as_plan
-
         control.script do
             data_reader 'orientation', ['orientation_with_z', 'orientation_z_samples']
             data_writer 'motion_command', ['controller', 'command']
 
             wait_any command_child.start_event
 
-            execute do
-                command_child.motion_command_port.disconnect_from controller_child.command_port
-                Robot.info "Start rotation"
-            end
-
-            next_heading = nil
-
-            poll do
-                current_heading = orientation.orientation.yaw
-
-                if not current_heading.nil?
-                    next_heading = if not heading.nil? then heading 
-                                   else current_heading + relative_heading end
-
-                    if next_heading > Math::PI then next_heading -= (2 * Math::PI)
-                    elsif next_heading < -Math::PI then next_heading += (2 * Math::PI)
-                    end
-
-                    transition!
-                end
-            end 
-
-            poll do
-                current_heading = orientation.orientation.yaw
-
-                if not current_heading.nil?
-                    #heading = if not heading.nil? then heading
-                    #          else next_heading end
-
-                    motion_command.x_speed = 0
-                    motion_command.y_speed = 0
-                    motion_command.z = z
-                    motion_command.heading = next_heading
-                    write_motion_command
-
-                    heading_error = next_heading - current_heading
-                    if heading_error > Math::PI then heading_error -= (2 * Math::PI)
-                    elsif heading_error < -Math::PI then heading_error += (2 * Math::PI)
-                    end
-
-                    if heading_error.abs < HEADING_ZERO_THRESHOLD
+            if !target_heading
+                poll do
+                    if o = orientation
+                        target_heading = o.orientation.yaw
+                        if relative_heading
+                            target_heading += relative_heading
+                        end
+                        if target_heading > Math::PI then target_heading -= 2*Math::PI
+                        elsif target_heading < Math::PI then target_heading += 2*Math::PI
+                        end
                         transition!
                     end
+                end 
+            end
+
+            execute do
+                command_child.disconnect_ports(controller_child, [['motion_command', 'command']])
+                Robot.info "start station keep at target_heading=#{target_heading} and z=#{z}"
+            end
+
+            poll do
+                motion_command.x_speed = 0
+                motion_command.y_speed = 0
+                motion_command.z = z
+                motion_command.heading = target_heading
+                write_motion_command
+
+                current_pose = self.orientation
+                current_heading = current_pose.orientation.yaw
+                heading_error = current_heading - target_heading
+                if heading_error > Math::PI then heading_error -= (2 * Math::PI)
+                elsif heading_error < -Math::PI then heading_error += (2 * Math::PI)
+                end
+
+                depth_error = current_pose.position.z - z
+
+                if heading_error.abs < STATION_KEEP_HEADING_THRESHOLD && depth_error.abs < STATION_KEEP_DEPTH_THRESHOLD
+                    transition!
                 end
             end
 
             execute do
-                Robot.info "Rotation finished"
+                Robot.info "reached specified station keeping position"
             end
-
+            if duration
+                wait duration
+            end
             emit :success
         end
     end
