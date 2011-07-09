@@ -147,7 +147,7 @@ class MainPlanner < Roby::Planning::Planner
 
     # -------------------------------------------------------------------------
 
-    BUOY_SERVOING_VALIDATION_WINDOW = 10
+    BUOY_SERVOING_VALIDATION_WINDOW = 500
     BUOY_SERVOING_DISTANCE = 2
     describe("move forward as long as a buoy is found by the detector and start
               servoing and later strafing around the buoy").
@@ -168,25 +168,39 @@ class MainPlanner < Roby::Planning::Planner
                 wait detector_child.buoy_detected_event
             end
 
-            window = []
-            poll_until detector_child.cutting_event do
-                if (b = detected_buoy)
-                    window.unshift(b.world_coord.x)
-
-                    actual_window = window.find_all { |x| x != 0 }
-                    if actual_window.size > BUOY_SERVOING_VALIDATION_WINDOW
-                        window.pop
-                        mean1 = actual_window[0, BUOY_SERVOING_VALIDATION_WINDOW / 2].inject(&:+) / window.size / 2
-                        mean0 = actual_window[BUOY_SERVOING_VALIDATION_WINDOW / 2, BUOY_SERVOING_VALIDATION_WINDOW / 2].inject(&:+) / window.size / 2
-
-                        # Error if we are too far away from the buoy and don't
-                        # get nearer
-                        if (mean1 + mean0) / 2 > 2 * BUOY_SERVOING_DISTANCE && (mean1 - mean0) / mean0 > -0.1
-                            emit :failed_to_approach
-                        end
-                    end
-                end
+            timeout BUOY_DETECTION_TO_STRAFE_TIMEOUT, :emit => :failed_to_approach do
+                wait detector_child.buoy_arrived_event
+                wait detector_child.strafe_start_event
             end
+
+            timeout BUOY_STRAFE_TO_CUT_TIMEOUT, :emit => :failed_to_strafe do
+                wait detector_child.cutting_event
+            end
+
+            timeout BUOY_CUTTING_TIMEOUT, :emit => :failed_to_cut do
+                wait detector_child.cutting_success_event
+            end
+
+
+            # window = []
+            # poll_until detector_child.cutting_event do
+            #     if (b = detected_buoy)
+            #         window.unshift(b.world_coord.x)
+
+            #         actual_window = window.find_all { |x| x != 0 }
+            #         if actual_window.size > BUOY_SERVOING_VALIDATION_WINDOW
+            #             window.pop
+            #             mean1 = actual_window[0, BUOY_SERVOING_VALIDATION_WINDOW / 2].inject(&:+) / window.size / 2
+            #             mean0 = actual_window[BUOY_SERVOING_VALIDATION_WINDOW / 2, BUOY_SERVOING_VALIDATION_WINDOW / 2].inject(&:+) / window.size / 2
+
+            #             # Error if we are too far away from the buoy and don't
+            #             # get nearer
+            #             if (mean1 + mean0) / 2 > 2 * BUOY_SERVOING_DISTANCE && (mean1 - mean0) / mean0 > -0.1
+            #                 emit :failed_to_approach
+            #             end
+            #         end
+            #     end
+            # end
         end
         # Guard for lost buoy (no support for this kind of timeout yet ...)
         buoy.script do
