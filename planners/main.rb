@@ -409,14 +409,15 @@ class MainPlanner < Roby::Planning::Planner
         task = send(name)
         task.on :start do |event|
             task = event.task
-            task.detector_child.wall_found_event.
+            task.detector_child.found_wall_event.
                 should_emit_after task.start_event,
                 :max_t => WALL_SEARCH_TIMEOUT
-            # task.detector_child.detected_corner_event.
-            #     should_emit_after task.detector_child.wall_found_event,
-            #     :max_t => WALL_CORNER_TIMEOUT
+            task.detector_child.corner_passed_event.
+                should_emit_after task.detector_child.found_wall_event,
+                :max_t => WALL_CORNER_TIMEOUT
+            task.detector_child.corner_passed_event.
+                forward_to task.success_event, :delay => WALL_SUCCESS_TIMEOUT_AFTER_CORNER
         end
-        # task.detected_corner_event.forward_to task.success_event, :delay => WALL_SUCCESS_TIMEOUT_AFTER_CORNER
         task
     end
 end
