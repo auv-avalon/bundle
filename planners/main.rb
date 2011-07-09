@@ -147,7 +147,7 @@ class MainPlanner < Roby::Planning::Planner
 
     # -------------------------------------------------------------------------
 
-    BUOY_SERVOING_VALIDATION_WINDOW = 10
+    BUOY_SERVOING_VALIDATION_WINDOW = 500
     BUOY_SERVOING_DISTANCE = 2
     describe("move forward as long as a buoy is found by the detector and start
               servoing and later strafing around the buoy").
@@ -168,25 +168,39 @@ class MainPlanner < Roby::Planning::Planner
                 wait detector_child.buoy_detected_event
             end
 
-            window = []
-            poll_until detector_child.cutting_event do
-                if (b = detected_buoy)
-                    window.unshift(b.world_coord.x)
-
-                    actual_window = window.find_all { |x| x != 0 }
-                    if actual_window.size > BUOY_SERVOING_VALIDATION_WINDOW
-                        window.pop
-                        mean1 = actual_window[0, BUOY_SERVOING_VALIDATION_WINDOW / 2].inject(&:+) / window.size / 2
-                        mean0 = actual_window[BUOY_SERVOING_VALIDATION_WINDOW / 2, BUOY_SERVOING_VALIDATION_WINDOW / 2].inject(&:+) / window.size / 2
-
-                        # Error if we are too far away from the buoy and don't
-                        # get nearer
-                        if (mean1 + mean0) / 2 > 2 * BUOY_SERVOING_DISTANCE && (mean1 - mean0) / mean0 > -0.1
-                            emit :failed_to_approach
-                        end
-                    end
-                end
+            timeout BUOY_DETECTION_TO_STRAFE_TIMEOUT, :emit => :failed_to_approach do
+                wait detector_child.buoy_arrived_event
+                wait detector_child.strafe_start_event
             end
+
+            timeout BUOY_STRAFE_TO_CUT_TIMEOUT, :emit => :failed_to_strafe do
+                wait detector_child.cutting_event
+            end
+
+            timeout BUOY_CUTTING_TIMEOUT, :emit => :failed_to_cut do
+                wait detector_child.cutting_success_event
+            end
+
+
+            # window = []
+            # poll_until detector_child.cutting_event do
+            #     if (b = detected_buoy)
+            #         window.unshift(b.world_coord.x)
+
+            #         actual_window = window.find_all { |x| x != 0 }
+            #         if actual_window.size > BUOY_SERVOING_VALIDATION_WINDOW
+            #             window.pop
+            #             mean1 = actual_window[0, BUOY_SERVOING_VALIDATION_WINDOW / 2].inject(&:+) / window.size / 2
+            #             mean0 = actual_window[BUOY_SERVOING_VALIDATION_WINDOW / 2, BUOY_SERVOING_VALIDATION_WINDOW / 2].inject(&:+) / window.size / 2
+
+            #             # Error if we are too far away from the buoy and don't
+            #             # get nearer
+            #             if (mean1 + mean0) / 2 > 2 * BUOY_SERVOING_DISTANCE && (mean1 - mean0) / mean0 > -0.1
+            #                 emit :failed_to_approach
+            #             end
+            #         end
+            #     end
+            # end
         end
         # Guard for lost buoy (no support for this kind of timeout yet ...)
         buoy.script do
@@ -223,7 +237,7 @@ class MainPlanner < Roby::Planning::Planner
                     disconnect_ports(control_child.controller_child, [['motion_command', 'command']])
 
                 buoydetector = detector_child.detector_child
-                # buoydetector.orogen_task.run_in_simulation = IS_SIMULATION
+                buoydetector.orogen_task.run_in_simulation = IS_SIMULATION
                 buoydetector.orogen_task.debug_gui = false
                 buoydetector.orogen_task.buoy_depth = z
             end
@@ -275,10 +289,6 @@ class MainPlanner < Roby::Planning::Planner
                     connect_ports(control_child.controller_child, removed_connections)
             end
 
-            wait detector_child.buoy_detected_event
-            execute do
-                Robot.info "buoy detected"
-            end
             wait detector_child.cutting_success_event
             execute do
                 Robot.info "buoy cutted"
@@ -399,14 +409,15 @@ class MainPlanner < Roby::Planning::Planner
         task = send(name)
         task.on :start do |event|
             task = event.task
-            task.detector_child.wall_found_event.
+            task.detector_child.found_wall_event.
                 should_emit_after task.start_event,
                 :max_t => WALL_SEARCH_TIMEOUT
-            # task.detector_child.detected_corner_event.
-            #     should_emit_after task.detector_child.wall_found_event,
-            #     :max_t => WALL_CORNER_TIMEOUT
+            task.detector_child.corner_passed_event.
+                should_emit_after task.detector_child.found_wall_event,
+                :max_t => WALL_CORNER_TIMEOUT
+            task.detector_child.corner_passed_event.
+                forward_to task.success_event, :delay => WALL_SUCCESS_TIMEOUT_AFTER_CORNER
         end
-        # task.detected_corner_event.forward_to task.success_event, :delay => WALL_SUCCESS_TIMEOUT_AFTER_CORNER
         task
     end
 end

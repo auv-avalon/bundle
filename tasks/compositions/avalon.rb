@@ -139,10 +139,17 @@ end
 Cmp::VisualServoing.specialize 'detector' => Cmp::BuoyDetector do
     event :failed_to_find_buoy
     forward :failed_to_find_buoy => :failed
+    event :behaviour_failure
+    forward :behaviour_failure => :failed
+
     event :failed_to_approach
-    forward :failed_to_approach => :failed
+    forward :failed_to_approach => :behaviour_failure
+    event :failed_to_strafe
+    forward :failed_to_strafe => :behaviour_failure
+    event :failed_to_cut
+    forward :failed_to_cut => :behaviour_failure
     event :buoy_lost
-    forward :buoy_lost => :failed
+    forward :buoy_lost => :behaviour_failure
 end
 
 composition 'WallDetector' do

@@ -1,21 +1,21 @@
 class MainPlanner
-
     SIMPLE_MOVE_HEADING_THRESHOLD = 10 * Math::PI / 180.0
     SIMPLE_MOVE_Z_THRESHOLD   = 0.3
 
-    PIPELINE_SEARCH_HEADING = 20 * Math::PI / 180
-    PIPELINE_SEARCH_TIMEOUT = 3 * 60
-    PIPELINE_SEARCH_Z = -2.5
+    PIPELINE_SEARCH_HEADING = 10 * Math::PI / 180
+    PIPELINE_SEARCH_TIMEOUT = 2 * 60
+    PIPELINE_SEARCH_Z = -2.7
     PIPELINE_SEARCH_SPEED = 0.6
     PIPELINE_SEARCH_CANDIDATE_SPEED = 0.2
     PIPELINE_EXPECTED_HEADING = 110 * Math::PI / 180
     PIPELINE_STABILIZATION_TIME = 10
-    PIPELINE_RETURNING_SPEED = 0.3
-    PIPELINE_RETURNING_TIMEOUT = 60
 
     FIRST_GATE_PASSING_SPEED = 0.5
-    FIRST_GATE_PASSING_DURATION = 3
+    FIRST_GATE_PASSING_DURATION = 4
     FIRST_GATE_PASSING_Z = PIPELINE_SEARCH_Z
+
+    PIPELINE_RETURNING_SPEED = 0.3
+    PIPELINE_RETURNING_TIMEOUT = 60
 
     SECOND_PIPELINE_SERVOING_ACTIVATION_THRESHOLD = 0.8
 
@@ -23,26 +23,24 @@ class MainPlanner
     SECOND_GATE_PASSING_DURATION = 7
     SECOND_GATE_PASSING_Z = PIPELINE_SEARCH_Z
 
-    FIND_BUOY_SPEED = 0.2
-    FIND_BUOY_MIN_Z = -1
+    FIND_BUOY_MIN_Z = -1 # only when starting at the surface: do not allow detection above -1m
+    BUOY_DIRECTION_AT_GATE = 60 * Math::PI / 180
+    BUOY_SEARCH_TIMEOUT = 15 # !!!! if we ram the wall, that's the end of it !!!!
+    BUOY_SEARCH_SPEED = 0.2
+    BUOY_Z = -2.2
 
-    SIMPLE_FIND_BUOY_TIMEOUT = 60
+    BUOY_DETECTION_TO_STRAFE_TIMEOUT = 1 * 60
+    BUOY_STRAFE_TO_CUT_TIMEOUT = 3 * 60
+    BUOY_CUTTING_TIMEOUT = 15
 
-    BUOY_SEARCH_TIMEOUT = 15
-    BUOY_SEARCH_SPEED = 0.3
-    BUOY_Z = -2.6
-    BUOY_LOST_TIMEOUT = 5
-    BUOY_SERVOING_STABILIZATION_TIME = 30
-    BUOY_CUTTING_TIME = 30
-    BUOY_DIRECTION_AT_GATE = 20 * Math::PI / 180
+    LOST_BUOY_TO_WALL_TIME = 10
+    LOST_BUOY_TO_WALL_SPEED = 0.2
 
-    LOST_BUOY_TO_WALL_TIME = 5
-    LOST_BUOY_TO_WALL_SPEED = 0.4
-
-    WALL_SERVOING_Z = -1.5
-    WALL_ALIGNMENT_STABILIZATION_TIME = 10
-    WALL_SEARCH_TIMEOUT = 30
-    WALL_CORNER_TIMEOUT = 2 * 60
+    WALL_ALIGNMENT_STABILIZATION_TIME = 5
+    WALL_SERVOING_Z = -1
+    WALL_SEARCH_TIMEOUT = 60
+    WALL_CORNER_TIMEOUT = 4 * 60
+    # TODO: change for consecutive missions / tasks
     WALL_SUCCESS_TIMEOUT_AFTER_CORNER = 2 * 60
     
     if IS_SIMULATION
@@ -107,7 +105,7 @@ class MainPlanner
                     :forward_speed => 0,
                     :duration => WALL_ALIGNMENT_STABILIZATION_TIME)
 
-        main.add_sequence(alignment, self.wall_servoing(:wall_left))
+        main.add_sequence(alignment, self.wall_servoing(:classic_wall))
         main
     end
 
@@ -119,7 +117,7 @@ class MainPlanner
 
         main = SaucE::Mission.new
 
-        main.depends_on(buoy, :success => [:buoy_lost, :success],
+        main.depends_on(buoy, :success => [:behaviour_failure, :failed_to_find_buoy, :success],
                         :remove_when_done => false)
         main.depends_on(wall)
 
@@ -130,8 +128,7 @@ class MainPlanner
                     :duration => LOST_BUOY_TO_WALL_TIME)
         main.depends_on(move_to_wall)
 
-
-        move_to_wall.should_start_after buoy.buoy_lost_event
+        move_to_wall.should_start_after (buoy.behaviour_failure_event | buoy.failed_to_find_buoy_event)
         wall.should_start_after(move_to_wall.success_event | buoy.success_event)
         main
     end
@@ -146,22 +143,29 @@ class MainPlanner
         main = SaucE::Mission.new
 
         main.depends_on(pipeline_and_gates)
-        main.depends_on(buoy, :success => [:lost_buoy, :success],
+        main.depends_on(buoy, :success => [:behaviour_failure, :failed_to_find_buoy, :success],
                         :remove_when_done => false)
         main.depends_on(wall)
 
         # Movement that puts us closer to the wall if we lost the buoy
         move_to_wall = simple_move(:heading => proc { State.pipeline_heading + Math::PI / 2 },
                     :z => WALL_SERVOING_Z,
-                    :speed => LOST_BUOY_RECOVERY_SPEED,
-                    :duration => to_wall_duration)
+                    :forward_speed => LOST_BUOY_TO_WALL_SPEED,
+                    :duration => LOST_BUOY_TO_WALL_TIME)
         main.depends_on(move_to_wall)
 
-
         buoy.should_start_after pipeline_and_gates
-        move_to_wall.should_start_after buoy.lost_buoy_event
+        move_to_wall.should_start_after (buoy.behaviour_failure_event | buoy.failed_to_find_buoy_event)
         wall.should_start_after(move_to_wall.success_event | buoy.success_event)
         main
+    end
+
+    method(:sauce_dumb_forward) do
+    	simple_move :z => -1,
+	    :duration => 10,
+	    :forward_speed => 0.3,
+	    :move_during_descent => true,
+	    :heading => nil
     end
 end
 

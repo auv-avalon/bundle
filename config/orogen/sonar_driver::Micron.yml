@@ -62,7 +62,7 @@ timeout: 200
 # (wall servoing): Used in drive_left
 # Special sonar settings for wall following. Front Sonar.
 config:
-  leftLimit: 2400
+  leftLimit: 2300
   rightLimit: 4000
   cont: 0
   pingpong: 1
