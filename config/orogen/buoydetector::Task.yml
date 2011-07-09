@@ -20,5 +20,5 @@ strafe_intensity: -0.5
 maxX: 0.2
 headingModulation: 0.0
 headingFactor: 4.0
-cutting_time: 14
+cutting_time: 10
 cutting_hight: 0.25
