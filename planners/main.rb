@@ -289,10 +289,6 @@ class MainPlanner < Roby::Planning::Planner
                     connect_ports(control_child.controller_child, removed_connections)
             end
 
-            wait detector_child.buoy_detected_event
-            execute do
-                Robot.info "buoy detected"
-            end
             wait detector_child.cutting_success_event
             execute do
                 Robot.info "buoy cutted"
