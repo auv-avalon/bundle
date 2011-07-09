@@ -24,19 +24,14 @@ class MainPlanner
     SECOND_GATE_PASSING_Z = PIPELINE_SEARCH_Z
 
     FIND_BUOY_MIN_Z = -1 # only when starting at the surface: do not allow detection above -1m
-    # TODO
     BUOY_DIRECTION_AT_GATE = 60 * Math::PI / 180
-    # TODO
     BUOY_SEARCH_TIMEOUT = 15 # !!!! if we ram the wall, that's the end of it !!!!
     BUOY_SEARCH_SPEED = 0.2
-    BUOY_Z = -2.6 # TODO
+    BUOY_Z = -2.2
 
-    # TODO
-    BUOY_DETECTION_TO_STRAFE_TIMEOUT = 2 * 60
-    # TODO
-    BUOY_STRAFE_TO_CUT_TIMEOUT = 2 * 60
-    # TODO
-    BUOY_CUTTING_TIMEOUT = 2 * 60
+    BUOY_DETECTION_TO_STRAFE_TIMEOUT = 1 * 60
+    BUOY_STRAFE_TO_CUT_TIMEOUT = 3 * 60
+    BUOY_CUTTING_TIMEOUT = 1 * 60
 
     LOST_BUOY_TO_WALL_TIME = 10
     LOST_BUOY_TO_WALL_SPEED = 0.2
