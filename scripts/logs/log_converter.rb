@@ -3,6 +3,7 @@
 # Each team will produce a log file of the mission within around 10 minutes of the end of the run. The format of the log file will be a comma separated ASCII file of the format: Time, position, action, a comment between simple quotes.
 # (SSSSS,XXX.x,YYY.y,ZZZ.z,AA.aa). Logged data will be plotted by plotting routine written by the organising committee. This will be used to score the log file. For ASV tracking task the additional file of range and bearing data from the AUV to the pinger will need to be provided.
 
+require 'eigen'
 require 'roby/standalone'
 require 'roby/log/event_stream'
 require 'roby/log/plan_rebuilder'
@@ -41,6 +42,10 @@ class LogConverter
 	@samples << sample
     end
 
+    def getLastSample
+	return @samples.last
+    end
+
     def convertSamples
 	@samples.each do |sample|
 	    @output << convertToCsv(sample) + "\n"
@@ -57,16 +62,6 @@ class LogConverter
     end
 end
 
-#TODO coords and time always with max. number of chars?
-s1 = LogSample.new(00000, 0, 0, -1.0, "STARTING", "Nice comment")
-s2 = LogSample.new(00012, 2, 55, -1.5, "WORKING", "Even nicer comment")
-s3 = LogSample.new(01234, 034, 0, -1.0, "DONE", "Final comment")
-
-#puts LogConverter.new.convertSamples([s1,s2,s3])
-
-##### DEBUG!!!
-#Process.exit()
-
 def usage
     puts "Usage: ruby log_converter.rb <path> {<model>}"
     puts "Example with two models: ruby log_converter log/avalon-events.0.log AvalonControl::MotionControlTask Sonardetector"
@@ -75,19 +70,40 @@ end
 case ARGV.size
     when 0
 	puts "Please submit event log file"
-    when 1
-	puts "Please submit at least one desired model"
+    #when 1
+    #	puts "Please submit at least one desired model"
 end
 
-puts "***** ARGV = #{ARGV}"
+desired_models = [
+    'Orocos::RobyPlugin::OffshorePipelineDetector::Task',
+    #'Orocos::RobyPlugin::Compositions::ControlLoop',
+    'Orocos::RobyPlugin::BuoyDetector::Task'
+]
 
 input_logfile = ARGV.shift
 all = []
 log_converter = LogConverter.new
+depth = 0
+heading = 0
+x_speed = 0
+y_speed = 0
+last_time = 0
+position_estimate = Eigen::Vector3.new
+position_estimate[0] = 0
+position_estimate[1] = 0
+position_estimate[2] = 0
+
+pos_output_file = File.new("position.txt","w")
+
+#Get stream for orientation logfile
+orientation_logfile = Pocolog::Logfiles.open('orientation_estimator.0.log') #TODO add constant
+orientation_stream = orientation_logfile.stream('orientation_estimator.orientation_samples')
+relpos_logfile = Pocolog::Logfiles.open('auv_rel_pos_controller.0.log')
+relpos_stream = relpos_logfile.stream('auv_rel_pos_controller.motion_command')
 
 
 # Get tasks of all desired models
-ARGV.each do |arg|
+desired_models.each do |arg|
 
     puts "*********** Working #{arg}"
     
@@ -127,7 +143,51 @@ all.sort_by { |ev| ev.time }.each do |ev|
 
     time = (ev.time - all[0].time).to_s.split('.').first.rjust(5, '0')
     action = (((ev.task.to_s.split ":0").first.split "::").drop 2).join "::"
-    log_converter.addSample(LogSample.new(time,"XXX.x","YYY.y","ZZZ.z","#{action}.#{ev.symbol}","heading = <HEADING>; fancy comment"))
+    puts "***********" << orientation_stream.class.to_s
+    puts "********** Sample time: " << ev.time.to_s
+    
+    puts "********** Time interval array size:" << orientation_stream.time_interval.size.to_s
+
+    if(ev.time <= orientation_stream.time_interval[1])
+	orientation_stream.seek(ev.time)
+	sample = orientation_stream.next[2]
+	
+	depth = sample.position[2]
+	headingRad = sample.orientation.yaw
+	heading = (180 / Math::PI) * headingRad
+	
+	relpos = relpos_stream.next[2]
+	
+	world_speed = sample.orientation * Eigen::Vector3.new(relpos.x_speed,relpos.y_speed,0) 
+	puts "************************ World Speed type: " << world_speed.class.to_s
+
+	
+	# delta t
+	time_offset = ev.time - last_time
+	last_time = ev.time
+
+	# delta p
+	world_pos_offset = world_speed * time_offset
+	
+	# update position
+	position_estimate[0] += position_estimate[0] + world_pos_offset[0]
+	position_estimate[1] += position_estimate[1] + world_pos_offset[1]
+	position_estimate[2] += depth
+
+	pos_output_file.puts "#{position_estimate[0]} #{position_estimate[1]}"
+	# call gnuplot with
+	# echo "plot 'position.txt' using 1:2 with lines " | gnuplot -persist
+
+    else 
+	#depth = old_depth
+    end
+    #puts "******** Depth class:" << depth.class.to_s
+    #puts "******** d0" << depth[0].to_s
+    #puts "******** d1" << depth[1].to_s
+    #puts "******** d2" << depth[2].to_s
+    
+    log_converter.addSample(LogSample.new(time,"#{position_estimate[0]}","#{position_estimate[1]}","#{depth.to_s.rjust(5, '0')}","#{action}.#{ev.symbol}","heading = #{heading}"))
+
 end
 
 puts log_converter.convertSamples
