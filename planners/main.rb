@@ -237,7 +237,7 @@ class MainPlanner < Roby::Planning::Planner
                     disconnect_ports(control_child.controller_child, [['motion_command', 'command']])
 
                 buoydetector = detector_child.detector_child
-                # buoydetector.orogen_task.run_in_simulation = IS_SIMULATION
+                buoydetector.orogen_task.run_in_simulation = IS_SIMULATION
                 buoydetector.orogen_task.debug_gui = false
                 buoydetector.orogen_task.buoy_depth = z
             end
