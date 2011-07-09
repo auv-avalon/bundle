@@ -29,8 +29,8 @@ add_mission(AvalonSimulation::Task)
 add_mission(AvalonSimulation::StateEstimator)
 
 #test
-add_mission("sonar")
-add_mission("sonar_rear")
+# add_mission("sonar")
+# add_mission("sonar_rear")
 
 
 ### not finished or tested
