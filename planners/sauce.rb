@@ -109,7 +109,7 @@ class MainPlanner
                     :forward_speed => 0,
                     :duration => WALL_ALIGNMENT_STABILIZATION_TIME)
 
-        main.add_sequence(alignment, self.wall_servoing(:wall_left))
+        main.add_sequence(alignment, self.wall_servoing(:classic_wall))
         main
     end
 
