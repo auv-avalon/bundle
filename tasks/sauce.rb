@@ -1,6 +1,10 @@
 module SaucE
     class Mission < Roby::Task
         terminates
+
+	on :stop do |event|
+	    Robot.emergency_surfacing
+	end
     end
 
     class PipelineAndGates < Roby::Task
