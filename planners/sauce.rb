@@ -121,7 +121,7 @@ class MainPlanner
 
         main = SaucE::Mission.new
 
-        main.depends_on(buoy, :success => [:buoy_lost, :success],
+        main.depends_on(buoy, :success => [:behaviour_failure, :failed_to_find_buoy, :success],
                         :remove_when_done => false)
         main.depends_on(wall)
 
@@ -132,8 +132,7 @@ class MainPlanner
                     :duration => LOST_BUOY_TO_WALL_TIME)
         main.depends_on(move_to_wall)
 
-
-        move_to_wall.should_start_after buoy.buoy_lost_event
+        move_to_wall.should_start_after (buoy.behaviour_failure_event | buoy.failed_to_find_buoy_event)
         wall.should_start_after(move_to_wall.success_event | buoy.success_event)
         main
     end
@@ -148,7 +147,7 @@ class MainPlanner
         main = SaucE::Mission.new
 
         main.depends_on(pipeline_and_gates)
-        main.depends_on(buoy, :success => [:buoy_lost, :success],
+        main.depends_on(buoy, :failed => [], :success => [:failed, :success],
                         :remove_when_done => false)
         main.depends_on(wall)
 
