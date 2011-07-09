@@ -146,20 +146,20 @@ class MainPlanner
         main = SaucE::Mission.new
 
         main.depends_on(pipeline_and_gates)
-        main.depends_on(buoy, :success => [:lost_buoy, :success],
+        main.depends_on(buoy, :success => [:buoy_lost, :success],
                         :remove_when_done => false)
         main.depends_on(wall)
 
         # Movement that puts us closer to the wall if we lost the buoy
         move_to_wall = simple_move(:heading => proc { State.pipeline_heading + Math::PI / 2 },
                     :z => WALL_SERVOING_Z,
-                    :speed => LOST_BUOY_RECOVERY_SPEED,
-                    :duration => to_wall_duration)
+                    :forward_speed => LOST_BUOY_TO_WALL_SPEED,
+                    :duration => LOST_BUOY_TO_WALL_TIME)
         main.depends_on(move_to_wall)
 
 
         buoy.should_start_after pipeline_and_gates
-        move_to_wall.should_start_after buoy.lost_buoy_event
+        move_to_wall.should_start_after buoy.buoy_lost_event
         wall.should_start_after(move_to_wall.success_event | buoy.success_event)
         main
     end
