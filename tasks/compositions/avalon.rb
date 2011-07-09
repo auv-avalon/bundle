@@ -114,6 +114,20 @@ Cmp::VisualServoing.specialize 'detector' => Cmp::PipelineDetector do
     overload 'detector', Cmp::PipelineDetector,
         :failure => :follow_pipe.followed_by(:lost_pipe), :success => :end_of_pipe,
         :remove_when_done => false
+
+    on :start do |event|
+        Robot.info "overloading configuration of #{control_child.command_child}"
+        pid = control_child.command_child.orogen_task.controller_y
+        pid.Ti = 0.001
+        control_child.command_child.orogen_task.controller_y = pid
+    end
+
+    on :stop do |event|
+        Robot.info "restoring configuration of #{control_child.command_child}"
+        pid = control_child.command_child.orogen_task.controller_y
+        pid.Ti = 0
+        control_child.command_child.orogen_task.controller_y = pid
+    end
 end
 
 composition 'BuoyDetector' do
