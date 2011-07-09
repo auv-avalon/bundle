@@ -20,7 +20,8 @@ controller_y:
   YMin: -0.4
   Td: 2.0
   Ts: 0.01
-  Ti: 0.001
+#  Ti: 0.001
+  Ti: 0
 # if set to false the heading is interpreated as absolute heading
 rel_heading: 1
 # if set to false z is interpreated as absolute depth
