@@ -6,7 +6,7 @@ beam_threshold_min: 1.0
 # if set to true the threshold for the sonar beams is enabled
 enable_beam_threshold: 1
 # reference depth
-fixed_depth: -1.5
+fixed_depth: -1.4
 # modulates the heading to the wall with a fixed degree, default is 0 than the wall in in front
 heading_modulation: 0.0
 # minimum value for responses in a beam, everything below will be ignored
@@ -43,11 +43,11 @@ heading_modulation: 1.57
 wall_distance: 4.0
 
 --- name:drive_left
-servoing_speed: 0.6
+servoing_speed: 0.7
 # +pi/8
-heading_modulation: 0.4
+heading_modulation: 0.0
 # reference distance to wall
-wall_distance: 2.0
+wall_distance: 2.5
 
 --- name:servo_right_wall
 servoing_speed: 0.2

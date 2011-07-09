@@ -68,7 +68,8 @@ config:
   pingpong: 1
   adInterval: 100
   numberOfBins: 300
-  initialGain: 50
+  initialGain: 100
+  motorStepDelayTime: 12
 --- name:wall_approach
 # (wall servoing): Used in distance_estimator
 # Special sonar settings to approach the wall

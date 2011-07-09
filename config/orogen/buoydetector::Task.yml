@@ -3,7 +3,7 @@
 buoy_timeout: 10
 # maximum buoy distance in m
 max_buoy_distance: 1.5
-buoy_radius: 0.15
+buoy_radius: 0.10
 houghTh: 25
 hValue: 55
 vValue: 40
@@ -12,8 +12,11 @@ steps: 5
 edgeTh: 35
 run_in_simulation: 0
 debug_gui: false
-buoy_depth: -2.2
-good_y_z: 0.25
+buoy_depth: -2.4
+good_y_z: 0.2
 good_x: 0.3
 filter_timeout: 1.5
-strafe_intensity: 0.5
+strafe_intensity: -0.2
+maxX: 0.2
+headingModulation: 0.0
+headingFactor: 4.0
