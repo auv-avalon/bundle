@@ -159,5 +159,13 @@ class MainPlanner
         wall.should_start_after(move_to_wall.success_event | buoy.success_event)
         main
     end
+
+    method(:sauce_dumb_forward) do
+    	simple_move :z => -1,
+	    :duration => 10,
+	    :forward_speed => 0.3,
+	    :move_during_descent => true,
+	    :heading => nil
+    end
 end
 
