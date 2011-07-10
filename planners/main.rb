@@ -63,6 +63,7 @@ class MainPlanner < Roby::Planning::Planner
             #
             removed_connections = nil
             with_description "starting find_and_follow_pipeline" do
+                wait_any detector_child.start_event
                 wait_any control_child.command_child.start_event
                 execute do
                     removed_connections = control_child.command_child.disconnect_ports(control_child.controller_child, [['motion_command', 'command']])
@@ -98,18 +99,21 @@ class MainPlanner < Roby::Planning::Planner
 	    end
 
             describe "find_and_follow_pipeline: moving forward until a candidate is found"
-            poll_until detector_child.check_candidate_event do
-              motion_command.heading = heading
-              motion_command.z = z
-              motion_command.x_speed = speed
-              motion_command.y_speed = 0
-              write_motion_command
-            end
+            poll do
+                motion_command.heading = heading
+                motion_command.z = z
+                motion_command.y_speed = 0
 
-            describe "find_and_follow_pipeline: found a candidate, slowing down"
-            poll_until detector_child.align_auv_event do
-              motion_command.x_speed = checking_candidate_speed
-              write_motion_command
+                last_event = detector_child.history.last
+                if last_event.symbol == :check_candidate
+                    motion_command.x_speed = checking_candidate_speed
+                elsif detector_child.found_pipe?
+                    transition!
+                else
+                    Robot.info "normal search"
+                    motion_command.x_speed = speed
+                end
+                write_motion_command
             end
 
             if pipeline_activation_threshold
