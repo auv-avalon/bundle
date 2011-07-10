@@ -242,6 +242,7 @@ class MainPlanner < Roby::Planning::Planner
             data_reader 'orientation', ['control', 'orientation_with_z', 'orientation_z_samples']
             data_writer 'motion_command', ['control', 'controller', 'command']
          
+            wait_any detector_child.detector_child.start_event
             wait_any control_child.command_child.start_event
 
             removed_connections = nil
