@@ -14,6 +14,7 @@ class MainPlanner < Roby::Planning::Planner
         expected_pipeline_heading = arguments[:expected_pipeline_heading]
         pipeline_activation_threshold = arguments[:pipeline_activation_threshold]
         timeout = arguments[:timeout]
+        stabilization_time = arguments[:stabilization_time] || PIPELINE_STABILIZATION_TIME
 
         # Get a task representing the define('pipeline')
         pipeline = self.pipeline
@@ -142,7 +143,7 @@ class MainPlanner < Roby::Planning::Planner
             wait detector_child.end_of_pipe_event
 
             describe "find_and_follow_pipeline: pipeline end reached, waiting #{PIPELINE_STABILIZATION_TIME} seconds for stability"
-            wait PIPELINE_STABILIZATION_TIME
+            wait stabilization_time
 
             describe "find_and_follow_pipeline: finished"
             emit :success

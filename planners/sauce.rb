@@ -67,6 +67,14 @@ class MainPlanner
 			:z => PIPELINE_SEARCH_Z,
 			:expected_pipeline_heading => PIPELINE_EXPECTED_HEADING,
                         :timeout => PIPELINE_SEARCH_TIMEOUT)
+        find_pipe.on :start do |event|
+            task = event.task.detector_child
+            task.on :lost_pipe do |_|
+                if !event.task.end_of_pipe?
+                    event.task.emit :failed
+                end
+            end
+        end
 	find_pipe.on :success do |event|
             heading = event.task.detector_child.pipeline_heading
             Robot.info "storing pipeline heading: #{heading * 180 / Math::PI}deg"
@@ -82,7 +90,12 @@ class MainPlanner
             :speed => -PIPELINE_RETURNING_SPEED, 
             :z => PIPELINE_SEARCH_Z,
             :pipeline_activation_threshold => SECOND_PIPELINE_SERVOING_ACTIVATION_THRESHOLD,
-            :timeout => PIPELINE_RETURNING_TIMEOUT)
+            :timeout => PIPELINE_RETURNING_TIMEOUT,
+            :stabilization_time => 0)
+        gate_returning.on :start do |event|
+            task = event.task.detector_child
+            task.lost_pipe_event.forward_to task.end_of_pipe_event
+        end
         gate_returning.on :success do |event|
             heading = event.task.detector_child.pipeline_heading
             Robot.info "storing pipeline heading: #{heading * 180 / Math::PI}deg"
