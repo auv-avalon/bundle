@@ -76,8 +76,15 @@ end
 
 desired_models = [
     'Orocos::RobyPlugin::OffshorePipelineDetector::Task',
-    'Orocos::RobyPlugin::Compositions::ControlLoop',
-    'Orocos::RobyPlugin::BuoyDetector::Task'
+    'Orocos::RobyPlugin::BuoyDetector::Task',
+    'Orocos::RobyPlugin::SonarServoing::Task',
+    'Orocos::RobyPlugin::ASVDetector::Task',
+    'SaucE::Mission',
+    'SaucE::PipelineAndGates',
+    'SaucE::BuoyAndWall',
+    'SaucE::LookForBuoy',
+    'SaucE::Wall',
+    'SaucE::ASVFromWall'
 ]
 
 OUTPUT_LOGFILE_NAME = "DFKI-Bremen_AVALON.txt"
@@ -148,7 +155,7 @@ all.sort_by { |ev| ev.time }.each do |ev|
     #puts (Roby.format_time ev.time)
 
     time = (ev.time - all[0].time).to_s.split('.').first.rjust(5, '0')
-    action = (((ev.task.to_s.split ":0").first.split "::").drop 2).join "::"
+    action = ev.task.class.name.gsub('Orocos::RobyPlugin::', '')
     #puts "********** Sample time: " << ev.time.to_s
 
     #puts "********** Time interval array size:" << orientation_stream.time_interval.size.to_s
