@@ -172,13 +172,22 @@ class MainPlanner < Roby::Planning::Planner
                 wait detector_child.buoy_detected_event
             end
 
-            timeout BUOY_DETECTION_TO_STRAFE_TIMEOUT, :emit => :failed_to_approach do
-                wait detector_child.buoy_arrived_event
-                wait detector_child.strafe_start_event
-            end
+            if BUOY_HAS_STRAFE_STATE
+                timeout BUOY_DETECTION_TO_STRAFE_TIMEOUT, :emit => :failed_to_approach do
+                    wait detector_child.buoy_arrived_event
+                    wait detector_child.strafe_start_event
+                end
 
-            timeout BUOY_STRAFE_TO_CUT_TIMEOUT, :emit => :failed_to_strafe do
-                wait detector_child.cutting_event
+                timeout BUOY_STRAFE_TO_CUT_TIMEOUT, :emit => :failed_to_strafe do
+                    wait detector_child.cutting_event
+                end
+            else
+                timeout BUOY_DETECTION_TO_STRAFE_TIMEOUT, :emit => :failed_to_approach do
+                    wait detector_child.buoy_arrived_event
+                end
+                timeout BUOY_DETECTION_TO_STRAFE_TIMEOUT + BUOY_STRAFE_TO_CUT_TIMEOUT, :emit => :failed_to_strafe do
+                    wait detector_child.cutting_event
+                end
             end
 
             timeout BUOY_CUTTING_TIMEOUT, :emit => :failed_to_cut do
