@@ -29,41 +29,41 @@ class LogSample
 end
 
 class LogConverter
-    
+
     :output
     :samples
 
     def initialize
-	@output = ""
-	@samples = []
+        @output = ""
+        @samples = []
     end
 
     def addSample(sample)
-	@samples << sample
+        @samples << sample
     end
 
     def getLastSample
-	return @samples.last
+        return @samples.last
     end
 
     def convertSamples
-	@samples.each do |sample|
-	    @output << convertToCsv(sample) + "\n"
-	end
-	return @output
+        @samples.each do |sample|
+            @output << convertToCsv(sample) + "\n"
+        end
+        return @output
     end
 
     def convertToCsv(sample)
-	if not sample.is_a? LogSample
-	    puts "Incorrect input, need log sample."
-	    Process.exit()
-	end
-	return "#{sample.seconds},#{sample.x},#{sample.y},#{sample.z},#{sample.action},'#{sample.comment}'"
+        if not sample.is_a? LogSample
+            puts "Incorrect input, need log sample."
+            Process.exit()
+        end
+        return "#{sample.seconds},#{sample.x},#{sample.y},#{sample.z},#{sample.action},'#{sample.comment}'"
     end
 end
 
 def usage
-    puts "Usage: ruby log_converter.rb <path> {<model>}"
+    puts "Usage: ruby log_converter.rb <path to event log>}"
     puts "Example with two models: ruby log_converter log/avalon-events.0.log AvalonControl::MotionControlTask Sonardetector"
 end
 
@@ -76,9 +76,11 @@ end
 
 desired_models = [
     'Orocos::RobyPlugin::OffshorePipelineDetector::Task',
-    #'Orocos::RobyPlugin::Compositions::ControlLoop',
+    'Orocos::RobyPlugin::Compositions::ControlLoop',
     'Orocos::RobyPlugin::BuoyDetector::Task'
 ]
+
+OUTPUT_LOGFILE_NAME = "DFKI-Bremen_AVALON.txt"
 
 input_logfile = ARGV.shift
 all = []
@@ -94,6 +96,10 @@ position_estimate[1] = 0
 position_estimate[2] = 0
 
 pos_output_file = File.new("position.txt","w")
+log_output_file = File.new(OUTPUT_LOGFILE_NAME,"w")
+
+# TODO usability
+puts "#~#~#~#~#~# IMPORTANT: You have to run this script out of the log folder!!! #~#~#~#~#~#"
 
 #Get stream for orientation logfile
 orientation_logfile = Pocolog::Logfiles.open('orientation_estimator.0.log') #TODO add constant
@@ -106,12 +112,12 @@ relpos_stream = relpos_logfile.stream('auv_rel_pos_controller.motion_command')
 desired_models.each do |arg|
 
     puts "*********** Working #{arg}"
-    
+
     stream = Roby::LogReplay::EventFileStream.open(input_logfile)
     rebuilder = Roby::LogReplay::PlanRebuilder.new
 
     model_name = arg
-    
+
     state = Hash.new
     model = rebuilder.find_model(stream, /#{model_name}/i)
 
@@ -123,7 +129,7 @@ desired_models.each do |arg|
         all_tasks.merge(tasks.to_value_set)
 	false
     end
-    
+
     all_tasks.each do |p|
         p.history.each do |ev|
             all << ev
@@ -132,43 +138,42 @@ desired_models.each do |arg|
     end
 
 end #while
-    
-symbol_width = all.map(&:symbol).map(&:to_s).map(&:size).max
+
+#symbol_width = all.map(&:symbol).map(&:to_s).map(&:size).max
 
 all.sort_by { |ev| ev.time }.each do |ev|
-    
+
     #puts "%s   %-#{symbol_width}s   %s" % [Roby.format_time(ev.time), ev.symbol, ev.task]
     #puts ev.symbol
     #puts (Roby.format_time ev.time)
 
     time = (ev.time - all[0].time).to_s.split('.').first.rjust(5, '0')
     action = (((ev.task.to_s.split ":0").first.split "::").drop 2).join "::"
-    puts "***********" << orientation_stream.class.to_s
-    puts "********** Sample time: " << ev.time.to_s
-    
-    puts "********** Time interval array size:" << orientation_stream.time_interval.size.to_s
+    #puts "********** Sample time: " << ev.time.to_s
+
+    #puts "********** Time interval array size:" << orientation_stream.time_interval.size.to_s
 
     if(ev.time <= orientation_stream.time_interval[1])
 	orientation_stream.seek(ev.time)
 	sample = orientation_stream.next[2]
-	
+
 	depth = sample.position[2]
 	headingRad = sample.orientation.yaw
 	heading = (180 / Math::PI) * headingRad
-	
-	relpos = relpos_stream.next[2]
-	
-	world_speed = sample.orientation * Eigen::Vector3.new(relpos.x_speed,relpos.y_speed,0) 
-	puts "************************ World Speed type: " << world_speed.class.to_s
 
-	
+	relpos = relpos_stream.next[2]
+
+	world_speed = sample.orientation * Eigen::Vector3.new(relpos.x_speed,relpos.y_speed,0)
+	#puts "************************ World Speed type: " << world_speed.class.to_s
+
+
 	# delta t
 	time_offset = ev.time - last_time
 	last_time = ev.time
 
 	# delta p
 	world_pos_offset = world_speed * time_offset
-	
+
 	# update position
 	position_estimate[0] += position_estimate[0] + world_pos_offset[0]
 	position_estimate[1] += position_estimate[1] + world_pos_offset[1]
@@ -178,23 +183,13 @@ all.sort_by { |ev| ev.time }.each do |ev|
 	# call gnuplot with
 	# echo "plot 'position.txt' using 1:2 with lines " | gnuplot -persist
 
-    else 
-	#depth = old_depth
+    else
+        puts "WARNING: Some events happened after last orientation sample."
     end
-    #puts "******** Depth class:" << depth.class.to_s
-    #puts "******** d0" << depth[0].to_s
-    #puts "******** d1" << depth[1].to_s
-    #puts "******** d2" << depth[2].to_s
-    
+
     log_converter.addSample(LogSample.new(time,"#{position_estimate[0]}","#{position_estimate[1]}","#{depth.to_s.rjust(5, '0')}","#{action}.#{ev.symbol}","heading = #{heading}"))
 
 end
 
-puts log_converter.convertSamples
-
-### TODO: get heading, depth
-#file = Pocolog::Logfiles.open(filename)
-#stream = file.stream('orientation.orientation_samples')
-#
-#stream.seek(time)
-#time, _, data = stream.next
+log_output_file.puts log_converter.convertSamples
+puts "Logs converted to CSV into file " << OUTPUT_LOGFILE_NAME
