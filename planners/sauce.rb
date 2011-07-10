@@ -116,7 +116,9 @@ class MainPlanner
                     :forward_speed => 0,
                     :duration => WALL_ALIGNMENT_STABILIZATION_TIME)
 
-        main.add_sequence(alignment, self.wall_servoing(:classic_wall))
+        servoing = self.wall_servoing(:classic_wall)
+        main.add_sequence(alignment, servoing)
+        servoing.failed_event.forward_to main.timeout_event
         main
     end
 
@@ -203,7 +205,7 @@ class MainPlanner
         move_to_wall.should_start_after(buoy.behaviour_failure_event | buoy.failed_to_find_buoy_event)
         wall.should_start_after(move_to_wall.success_event | buoy.success_event)
 
-        wall.failed_event.forward_to main.failed_event
+        wall.timeout_event.forward_to main.wall_timeout_event
         wall.success_event.forward_to main.success_event
         main
     end
@@ -251,7 +253,16 @@ class MainPlanner
         else
             State.pipeline_heading = (110 - 180) * Math::PI / 180
         end
-        sauce_buoy_and_wall :heading => proc { normalize_angle(State.pipeline_heading + BUOY_DIRECTION_AT_GATE) }
+
+        main = SaucE::Mission.new
+        buoy_and_wall = sauce_buoy_and_wall :heading => proc { normalize_angle(State.pipeline_heading + BUOY_DIRECTION_AT_GATE) }
+        asv = sauce_asv_from_wall
+        main.depends_on(buoy_and_wall, :success => :stop)
+        main.depends_on(asv)
+
+        asv.should_start_after buoy_and_wall
+
+        main
     end
 
     method(:sauce_after_wall) do

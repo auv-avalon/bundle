@@ -13,6 +13,9 @@ module SaucE
 
     class BuoyAndWall < Roby::Task
         terminates
+
+        event :wall_timeout
+        forward :wall_timeout => :failed
     end
 
     class CoolBuoyAndWall < Roby::Task
@@ -36,6 +39,9 @@ module SaucE
 
     class Wall < Roby::Task
         terminates
+
+        event :timeout
+        forward :timeout => :failed
     end
 
     class ASVFromWall < Roby::Task
