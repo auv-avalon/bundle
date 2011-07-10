@@ -112,7 +112,7 @@ composition 'PipelineDetector' do
 end
 Cmp::VisualServoing.specialize 'detector' => Cmp::PipelineDetector do
     overload 'detector', Cmp::PipelineDetector,
-        :failure => :follow_pipe.followed_by(:lost_pipe), :success => :end_of_pipe,
+        :failure => :found_pipe.followed_by(:lost_pipe), :success => :end_of_pipe,
         :remove_when_done => false
 
     on :start do |event|
