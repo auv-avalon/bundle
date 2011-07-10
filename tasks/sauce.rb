@@ -11,6 +11,21 @@ module SaucE
         terminates
     end
 
+    class BuoyAndWall < Roby::Task
+        terminates
+    end
+
+    class CoolBuoyAndWall < Roby::Task
+        terminates
+
+        event :found_distance
+        event :no_distance
+
+        event :wall_acquisition_finished
+        forward :found_distance => :wall_acquisition_finished
+        forward :no_distance => :wall_acquisition_finished
+    end
+
     class LookForBuoy < Roby::Task
         terminates
         event :found
@@ -20,6 +35,10 @@ module SaucE
     end
 
     class Wall < Roby::Task
+        terminates
+    end
+
+    class ASVFromWall < Roby::Task
         terminates
     end
 
