@@ -1,4 +1,5 @@
 --- name:default
+lost_timeout: 15
 # number of frames a buoy is not detected in order to set BUOY_LOST
 buoy_timeout: 10
 # maximum buoy distance in m
