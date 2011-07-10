@@ -222,7 +222,6 @@ class MainPlanner < Roby::Planning::Planner
             start_time = Time.now
             poll do
                 last_ev = detector_child.history.last
-                puts "#{last_ev} #{last_ev.symbol} #{start_time}"
                 if last_ev.symbol == :buoy_lost
                     emit :buoy_lost
                     if start_time && (Time.now - start_time) > BUOY_LOST_TIMEOUT
