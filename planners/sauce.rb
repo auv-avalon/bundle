@@ -58,6 +58,7 @@ class MainPlanner
         PIPELINE_EXPECTED_HEADING = - Math::PI
         BUOY_SEARCH_TIMEOUT = 40
         BUOY_DIRECTION_AT_GATE = 90 * Math::PI / 180
+        WALL_CORNER_TIMEOUT = 20
     end
 
     method(:sauce_pipeline_and_gates, :returns => SaucE::PipelineAndGates) do
