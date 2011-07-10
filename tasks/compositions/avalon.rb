@@ -120,6 +120,7 @@ Cmp::VisualServoing.specialize 'detector' => Cmp::PipelineDetector do
         pid = control_child.command_child.orogen_task.controller_y
         pid.Ti = 0.001
         control_child.command_child.orogen_task.controller_y = pid
+        control_child.command_child.orogen_task.reset
     end
 
     on :stop do |event|
@@ -127,6 +128,7 @@ Cmp::VisualServoing.specialize 'detector' => Cmp::PipelineDetector do
         pid = control_child.command_child.orogen_task.controller_y
         pid.Ti = 0
         control_child.command_child.orogen_task.controller_y = pid
+        control_child.command_child.orogen_task.reset
     end
 end
 
