@@ -27,7 +27,7 @@ class MainPlanner
     BUOY_DIRECTION_AT_GATE = 60 * Math::PI / 180
     BUOY_SEARCH_TIMEOUT = 15 # !!!! if we ram the wall, that's the end of it !!!!
     BUOY_SEARCH_SPEED = 0.2
-    BUOY_Z = -2.2
+    BUOY_Z = -1.5
     BUOY_WALL_APPROACH_SPEED = 0.2 # speed at which we approach the wall if we use the wall detector method
 
     BUOY_HAS_STRAFE_STATE = false
