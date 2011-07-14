@@ -4,19 +4,22 @@ Roby.app.use_deployments_from "avalon_back"
 
 State.orocos.exclude_from_log '/canbus/Message'
 
+# Does not work in multihost
+# Roby.app.orocos_start_all_deployments = true
+
 Conf.orocos.log_group "images" do
     add "/RTT/extras/ReadOnlyPointer</base/samples/frame/Frame>"
 end
 
 Conf.orocos.log_group "raw_camera" do
-    add "front_camera.frame_raw"
-    add "front_camera.frame"
-    add "bottom_camera.frame"
+    # add "front_camera.frame_raw"
+    # add "front_camera.frame"
+    # add "bottom_camera.frame"
     add "camera_unicap_left.frame"
     add "camera_unicap_right.frame"
 end
 
-Conf.orocos.disable_log_group "images"
+# Conf.orocos.disable_log_group "images"
 Conf.orocos.disable_log_group "raw_camera"
 
 StateEstimator::Task.worstcase_processing_time 1

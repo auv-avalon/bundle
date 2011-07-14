@@ -76,6 +76,6 @@ define('wall_distance_estimator', Cmp::WallDetector.use(narrow_sonar))
 # -----------------------------------------------------------------------------
 
 define_wall_servoing 'classic_wall', Cmp::ClassicWallDetector, 
-    :sonar => 'narrow_front'
+    :sonar => 'narrow_front', :detector => 'default'
 
 

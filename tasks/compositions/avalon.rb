@@ -110,26 +110,31 @@ composition 'PipelineDetector' do
         end
     end
 end
+
+class Orocos::RobyPlugin::OffshorePipelineDetector::Task
+    on :start do |event|
+        Robot.info "overloading configuration of #{self}"
+        control_task = Roby.plan.find_tasks(Orocos::RobyPlugin::AuvRelPosController::Task).to_a.first.orogen_task
+        pid = control_task.controller_y
+        pid.Ti = 0.001
+        control_task.controller_y = pid
+        control_task.reset
+    end
+
+    on :stop do |event|
+        Robot.info "resetting configuration"
+        control_task = Roby.plan.find_tasks(Orocos::RobyPlugin::AuvRelPosController::Task).to_a.first.orogen_task
+        pid = control_task.controller_y
+        pid.Ti = 0
+        control_task.controller_y = pid
+        control_task.reset
+    end
+end
+
 Cmp::VisualServoing.specialize 'detector' => Cmp::PipelineDetector do
     overload 'detector', Cmp::PipelineDetector,
         :success => :end_of_pipe,
         :remove_when_done => false
-
-    on :start do |event|
-        Robot.info "overloading configuration of #{control_child.command_child}"
-        pid = control_child.command_child.orogen_task.controller_y
-        pid.Ti = 0.001
-        control_child.command_child.orogen_task.controller_y = pid
-        control_child.command_child.orogen_task.reset
-    end
-
-    on :stop do |event|
-        Robot.info "restoring configuration of #{control_child.command_child}"
-        pid = control_child.command_child.orogen_task.controller_y
-        pid.Ti = 0
-        control_child.command_child.orogen_task.controller_y = pid
-        control_child.command_child.orogen_task.reset
-    end
 end
 
 composition 'BuoyDetector' do
