@@ -1,0 +1,4 @@
+--name:default
+fading_out: 0.0
+servoing_direction: RIGHT
+
