@@ -1,6 +1,6 @@
 --- name:default
 # check after how many calls of the update hook the CAN bus will be checked, if it is still ok
-checkBusOkCount: 100
+#checkBusOkCount: 100
 # the device file used to connect to the CAN bus
 device: can0
 # the device type, this determines which driver will be used to open the device

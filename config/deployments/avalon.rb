@@ -4,7 +4,7 @@ use Srv::Orientation      => Cmp::OrientationEstimator
 use Srv::OrientationWithZ => Cmp::OrientationEstimator
 use Srv::Pose             => Cmp::PoseEstimator
 
-use Cmp::OrientationEstimator => Cmp::OrientationEstimator.use('low_level_board')
+use Cmp::OrientationEstimator => Cmp::OrientationEstimator.use('depth_reader')
 
 wide_sonar = device('sonar').use_conf('sonar')
 use Cmp::PoseEstimator        => Cmp::PoseEstimator.use(wide_sonar, Cmp::OrientationEstimator)
@@ -37,14 +37,14 @@ add_mission(Sysmon::Task)
 # add_mission(Taskmon::Task).on_server('localhost')
 # add_mission(Taskmon::Task).on_server('front')
 
-add_mission('bottom_camera')
-add_mission('front_camera')
-add_mission('left_unicap_camera')
-add_mission('right_unicap_camera')
+#add_mission('bottom_camera')
+#add_mission('front_camera')
+#add_mission('left_unicap_camera')
+#add_mission('right_unicap_camera')
 
-add_mission('profiler')
-add_mission('sonar')
-add_mission('sonar_rear')
+#add_mission('profiler')
+#add_mission('sonar')
+#add_mission('sonar_rear')
 
 add_mission("orientation_estimator")
 

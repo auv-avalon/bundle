@@ -35,7 +35,7 @@ class Controldev::Remote
     # driver_for Dev::RemoteSliderbox, :as => 'sliderbox'
 end
 
-class Controldev::Local
+class Controldev::JoystickTask
     driver_for Dev::Joystick
 end
 

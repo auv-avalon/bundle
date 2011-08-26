@@ -5,7 +5,7 @@ require 'controllers/common_controller'
 Roby.app.apply_orocos_deployment 'avalon' # load config/deployments/avalon.rb
 
 navigation_mode = nil 
-State.navigation_mode = 'autonomous_run'
+State.navigation_mode = 'drive_simple'
 
 run_start = nil
 SOFT_TIMEOUT = 10 * 60

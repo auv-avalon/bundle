@@ -1,5 +1,7 @@
-Roby.app.orocos_process_server 'front','192.168.128.50', :log_dir => '/mnt/logs/log', :result_dir => '/mnt/logs/results'
-Roby.app.use_deployments_from "avalon_front", :on => 'front'
+#Roby.app.orocos_process_server 'front','192.168.128.50', :log_dir => '/mnt/logs/log', :result_dir => '/mnt/logs/results'
+#Roby.app.use_deployments_from "avalon_front", :on => 'front'
+
+Roby.app.use_deployments_from "avalon_front"
 Roby.app.use_deployments_from "avalon_back"
 
 State.orocos.exclude_from_log '/canbus/Message'
@@ -25,8 +27,8 @@ Conf.orocos.disable_log_group "raw_camera"
 StateEstimator::Task.worstcase_processing_time 1
 
 Robot.devices do
-  device(Dev::LowLevel, :as => 'low_level_board').
-    period(0.3)
+#  device(Dev::LowLevel, :as => 'low_level_board').
+#    period(0.3)
   device(Dev::XsensImu, :as => 'imu').
     period(0.01)
   device(Dev::Dsp3000, :as => 'fog').
@@ -74,6 +76,10 @@ Robot.devices do
 
     device(Dev::Modem, :as => 'modem').
     	can_id(0x1E0, 0x7FF).
+	period(0.1)
+
+    device(Dev::DepthReader, :ad => 'depth_reader').
+    	can_id(0x110,0x7FF).
 	period(0.1)
 
     device(Dev::SystemStatus).

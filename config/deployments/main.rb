@@ -38,11 +38,12 @@ def define_wall_servoing(name, cmp, options = Hash.new)
     sonar = Roby.orocos_engine.device('sonar').
         use_conf(*sonar_config)
 
-    task = if cmp == Cmp::WallDetector then
-               Sonardetector::Task
-           else 
-               SonarServoing::Task
-           end
+    #task = if cmp == Cmp::WallDetector then
+     #          Sonardetector::Task
+     #      else 
+      #         SonarServoing::Task
+      #     end
+    task = Sonardetector::Task
 
     detector = cmp.use(sonar, task.use_conf(*detector_config))
     Roby.orocos_engine.define("#{name}_detector", detector)

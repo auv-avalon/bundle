@@ -1,5 +1,0 @@
---- name:default
-# the device port
-port: /dev/ttyS0
-# how long we wait for data before going into IO_ERROR state, in milliseconds
-timeout: 100

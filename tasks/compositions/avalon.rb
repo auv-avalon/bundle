@@ -1,15 +1,16 @@
 using_task_library 'avalon_control'
 using_task_library 'ekf_slam'
-using_task_library 'low_level_driver'
+#using_task_library 'low_level_driver'
+using_task_library 'depth_reader'
 using_task_library 'xsens_imu'
-using_task_library 'dsp3000'
+using_task_library 'fog_kvh'
 using_task_library 'state_estimator'
 using_task_library 'structured_light'
 using_task_library 'offshore_pipeline_detector'
 using_task_library 'sonardetector'
-using_task_library 'asv_detector'
-using_task_library 'sonar_servoing'
-using_task_library 'buoydetector'
+#using_task_library 'asv_detector'
+#using_task_library 'sonar_servoing'
+#using_task_library 'buoydetector'
 using_task_library 'frame_demultiplexer'
 using_task_library 'controldev'
 using_task_library 'raw_control_command_converter'
@@ -57,7 +58,8 @@ composition "OrientationEstimator" do
     add XsensImu::Task, :as => 'imu'
     connect imu => estimator.orientation_samples_imu
     connect imu => estimator.imu_sensor_samples
-    add Dsp3000::Task, :as => 'fog'
+    add FogKvh::Dsp3000Task, :as => 'fog'
+
     connect fog => estimator.fog_samples
 
     export estimator.orientation_samples
@@ -138,24 +140,24 @@ Cmp::VisualServoing.specialize 'detector' => Cmp::PipelineDetector do
 end
 
 composition 'BuoyDetector' do
-    event :buoy_detected
-    event :buoy_lost
-    event :buoy_arrived
-    event :strafe_start
-    event :strafe_finished
-    event :strafe_error
-    event :moving_to_cutting_distance
-    event :cutting
-    event :cutting_success
-    event :cutting_error
-    
-    add Srv::ImageProvider
-    add Srv::OrientationWithZ
-    add_main Buoydetector::Task, :as => 'detector'
-    autoconnect
-
-    export detector.relative_position
-    provides Srv::RelativePositionDetector
+#    event :buoy_detected
+#    event :buoy_lost
+#    event :buoy_arrived
+#    event :strafe_start
+#    event :strafe_finished
+#    event :strafe_error
+#    event :moving_to_cutting_distance
+#    event :cutting
+#    event :cutting_success
+#    event :cutting_error
+#    
+#    add Srv::ImageProvider
+#    add Srv::OrientationWithZ
+#    add_main Buoydetector::Task, :as => 'detector'
+#    autoconnect
+#
+#    export detector.relative_position
+#    provides Srv::RelativePositionDetector
 end
 Cmp::VisualServoing.specialize 'detector' => Cmp::BuoyDetector do
     event :failed_to_find_buoy
@@ -174,44 +176,44 @@ Cmp::VisualServoing.specialize 'detector' => Cmp::BuoyDetector do
 end
 
 composition 'WallDetector' do
-    event :wall_found
-
-    add Srv::SonarScanProvider
-    add Srv::Orientation
-    add_main Sonardetector::Task , :as => 'detector'
-    autoconnect
-
-    export detector.position_command
-    provides Srv::RelativePositionDetector
+#    event :wall_found
+#
+#    add Srv::SonarScanProvider
+#    add Srv::Orientation
+#    add_main Sonardetector::Task , :as => 'detector'
+#    autoconnect
+#
+#    export detector.position_command
+#    provides Srv::RelativePositionDetector
 end
 
 
 composition 'ClassicWallDetector' do
-    event :searching_wall
-    event :found_wall
-    event :corner_passed
-    event :wrong_opening_angle
-
-    add Srv::SonarScanProvider
-    add Srv::OrientationWithZ
-    add_main SonarServoing::Task, :as => 'detector'
-    autoconnect
-
-    export detector.position_command
-    provides Srv::RelativePositionDetector
+#    event :searching_wall
+#    event :found_wall
+#    event :corner_passed
+#    event :wrong_opening_angle
+#
+#    add Srv::SonarScanProvider
+#    add Srv::OrientationWithZ
+#    add_main SonarServoing::Task, :as => 'detector'
+#    autoconnect
+#
+#    export detector.position_command
+#    provides Srv::RelativePositionDetector
 end
 
 
 composition 'AsvDetector' do
-    event :asv_found
-    event :asv_lost
-
-    add Srv::ImageProvider
-    add_main AsvDetector::Task, :as => 'detector'
-    autoconnect
-
-    export detector.position_command
-    provides Srv::RelativePositionDetector
+#    event :asv_found
+#    event :asv_lost
+#
+#    add Srv::ImageProvider
+#    add_main AsvDetector::Task, :as => 'detector'
+#    autoconnect
+#
+#    export detector.position_command
+#    provides Srv::RelativePositionDetector
 end
 
 composition 'Rotation' do

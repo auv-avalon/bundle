@@ -6,21 +6,21 @@ binning_y: 1
 # true => undistort the image before it is writen to the output port
 undistort: 0
 # parameter for undistort
-calibration_parameters: 
-  cy: 0.0
-  d0: 0.0
-  d1: 0.0
-  d2: 0.0
-  tx: 0.0
-  d3: 0.0
-  ty: 0.0
-  rx: 1.0
-  tz: 0.0
-  ry: 1.0
-  fx: 0.0
-  rz: 1.0
-  fy: 0.0
-  cx: 0.0
+#calibration_parameters: 
+#  cy: 0.0
+#  d0: 0.0
+#  d1: 0.0
+#  d2: 0.0
+#  tx: 0.0
+#  d3: 0.0
+#  ty: 0.0
+#  rx: 1.0
+#  tz: 0.0
+#  ry: 1.0
+#  fx: 0.0
+#  rz: 1.0
+#  fy: 0.0
+#  cx: 0.0
 # size of the frame buffer
 frame_buffer_size: 10
 # External trigger event, allowed values:  EdgeRising, EdgeFalling, EdgeAny, LevelHigh, LevelLow, none
