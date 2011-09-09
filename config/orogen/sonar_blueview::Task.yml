@@ -1,0 +1,23 @@
+--- name:default
+# no documentation available for this property
+fluidType: 0
+# no documentation available for this property
+gain: 2.0
+# no documentation available for this property
+hostname: "192.168.128.16"
+# no documentation available for this property
+imageRes: 3
+# no documentation available for this property
+maxRange: 10.0
+# no documentation available for this property
+minRange: 0.0
+# no documentation available for this property
+port: 1149
+# no documentation available for this property
+rangeRes: 0.0
+# no documentation available for this property
+soundSpeed: 1480
+# no documentation available for this property
+tvgSlope: 0.0
+# no documentation available for this property
+tx: 1
