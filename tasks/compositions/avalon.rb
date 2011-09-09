@@ -15,6 +15,7 @@ using_task_library 'frame_demultiplexer'
 using_task_library 'controldev'
 using_task_library 'raw_control_command_converter'
 using_task_library 'rotation_experiment'
+using_task_library 'pipline_tracker'
 
 # Composition that extracts the normal camera stream out of a "structured light"
 # stream
@@ -73,6 +74,13 @@ composition 'StructuredLight' do
     export structuredLight.laser_scan
     provides Srv::LaserRangeFinder
     autoconnect
+end
+composition 'PipelineSonarDetector' do
+    add SonarTritech::Profiling
+    add PiplineTracker::Task, :as => "detector"
+    autoconnect
+    export detector.position_command
+    provides Srv::RelativePositionDetector
 end
 
 composition 'PipelineDetector' do

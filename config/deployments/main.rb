@@ -9,6 +9,9 @@ define('drive_simple', Cmp::ControlLoop).
 define('pipeline', Cmp::VisualServoing.use(Cmp::PipelineDetector.use('bottom_camera')))
 define('pipeline_detector', Cmp::PipelineDetector.use('bottom_camera'))
 
+define('pipeline_sonar', Cmp::VisualServoing.use(Cmp::PipelineSonarDetector))
+define('pipeline_sonar_detector', Cmp::PipelineSonarDetector)
+
 define('buoy', Cmp::VisualServoing.use(Cmp::BuoyDetector.use('front_camera')))
 define('buoy_detector', Cmp::BuoyDetector.use('front_camera'))
 
@@ -17,6 +20,12 @@ define('asv_detector', Cmp::AsvDetector.use('left_unicap_camera'))
 
 define('rotation', Cmp::VisualServoing.use(Cmp::Rotation.use('bottom_camera')))
 
+model.data_service_type "NavigationMode"
+Cmp::ControlLoop.provides Srv::NavigationMode
+Cmp::VisualServoing.provides Srv::NavigationMode
+
+
+modality_selection Srv::NavigationMode, 'drive_simple', 'pipeline', 'buoy', 'asv', 'rotation', 'testing', 'pipeline_sonar'
 
 # define_wall_servoing(define_name, :sonar => sonar_config, :detector => detector_config)
 #

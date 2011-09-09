@@ -3,14 +3,14 @@
 config: 
   config: 
     filterGainCh2: 1
-    rightLimit: 6399
+    rightLimit: 3300
     V3BParams: 29
     maxAgeCh1: 107
     ctl2: 0
     filterGain: 1
     slopeDelayCh1: 0
     maxAgeCh2: 107
-    stepSize: 16
+    stepSize: 8 
     rangeScale: 20
     txnch1: 77846282
     slopeDelayCh2: 0
@@ -36,7 +36,7 @@ config:
     rxnch1: 138915348
     setPointCh2: 100
     scanZ: 0
-    leftLimit: 0
+    leftLimit: 1600 
     rxnch2: 223472517
     headCtl: 9092
     filterGainCh1: 1
@@ -44,6 +44,7 @@ config:
   stamp: 
     microseconds: 0
 # the device port
-port: /dev/ttyS1
+offset: 2.4
+port: /dev/ttyS6
 # timeout on the distance readings in milliseconds
 timeout: 200

@@ -26,6 +26,8 @@ Conf.orocos.disable_log_group "raw_camera"
 
 StateEstimator::Task.worstcase_processing_time 1
 
+State.navigation_mode = ['drive_simple','pipeline','pipeline_sonar']
+
 Robot.devices do
 #  device(Dev::LowLevel, :as => 'low_level_board').
 #    period(0.3)
@@ -38,7 +40,8 @@ Robot.devices do
     use_conf("sonar")
   device(Dev::Profiling, :as => 'profiler').
     period(0.1)
-  
+  device(Dev::BlueView, :as => 'blueview').
+    period(0.1)
   device(Dev::Dynamixel, :as => 'dynamixel').
     device_id("/dev/ttyS3")
   
