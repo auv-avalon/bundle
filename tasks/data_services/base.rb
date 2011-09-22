@@ -3,6 +3,10 @@ import_types_from 'base'
 ####################################
 ## Services related to pose estimation
 
+data_service_type 'SpeedWithOrientationWithZ' do
+    output_port 'speed_samples', '/base/samples/RigidBodyState'
+end
+
 data_service_type 'Position' do
     output_port 'position_samples', '/base/samples/RigidBodyState'
 end
@@ -98,6 +102,6 @@ data_service_type 'LaserRangeFinder' do
 end
 
 data_service_type 'SonarScanProvider' do
-    output_port 'sonarscan', '/base/samples/SonarScan'
+    output_port 'sonarscan', '/base/samples/SonarBeam'
 end
 

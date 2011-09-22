@@ -34,29 +34,34 @@ modality_selection Srv::NavigationMode, 'drive_simple', 'pipeline', 'buoy', 'asv
 #     define_name is the definition name
 #     the sonar is configured in [sonar, sonar_config] mode
 #     the detector (sonardetector::task) is configured in [default, detector_config] mode
+
+
+#MAGO 21092011 removed everythin in the method
 def define_wall_servoing(name, cmp, options = Hash.new)
-    options = Kernel.validate_options options,
-        :sonar => nil, :detector => nil
-
-    sonar_config = ['sonar']
-    sonar_config << options[:sonar] if options[:sonar]
-
-    detector_config = ['default']
-    detector_config << options[:detector] if options[:detector]
-    
-    sonar = Roby.orocos_engine.device('sonar').
-        use_conf(*sonar_config)
-
-    #task = if cmp == Cmp::WallDetector then
-     #          Sonardetector::Task
-     #      else 
-      #         SonarServoing::Task
-      #     end
-    task = Sonardetector::Task
-
-    detector = cmp.use(sonar, task.use_conf(*detector_config))
-    Roby.orocos_engine.define("#{name}_detector", detector)
-    Roby.orocos_engine.define("#{name}", Cmp::VisualServoing.use(detector))
+#    options = Kernel.validate_options options,
+#        :sonar => nil, :detector => nil
+#
+#    sonar_config = ['sonar']
+#    sonar_config << options[:sonar] if options[:sonar]
+#
+#    detector_config = ['default']
+#    detector_config << options[:detector] if options[:detector]
+#    
+#    sonar = Roby.orocos_engine.device('sonar').
+#        use_conf(*sonar_config)
+#
+#    #task = if cmp == Cmp::WallDetector then
+#     #          Sonardetector::Task
+#     #      else 
+#      #         SonarServoing::Task
+#      #     end
+#    
+#
+#    task = Sonardetector::Task
+#
+#    detector = cmp.use(sonar, task.use_conf(*detector_config))
+#    Roby.orocos_engine.define("#{name}_detector", detector)
+#    Roby.orocos_engine.define("#{name}", Cmp::VisualServoing.use(detector))
 end
 
 # -----------------------------------------------------------------------------

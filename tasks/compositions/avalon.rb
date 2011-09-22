@@ -7,7 +7,7 @@ using_task_library 'fog_kvh'
 using_task_library 'state_estimator'
 using_task_library 'structured_light'
 using_task_library 'offshore_pipeline_detector'
-using_task_library 'sonardetector'
+#using_task_library 'sonardetector'
 #using_task_library 'asv_detector'
 #using_task_library 'sonar_servoing'
 #using_task_library 'buoydetector'
@@ -16,6 +16,8 @@ using_task_library 'controldev'
 using_task_library 'raw_control_command_converter'
 using_task_library 'rotation_experiment'
 using_task_library 'pipline_tracker'
+using_task_library 'motion_estimation'
+using_task_library 'sonar_tritech'
 
 # Composition that extracts the normal camera stream out of a "structured light"
 # stream
@@ -76,8 +78,12 @@ composition 'StructuredLight' do
     autoconnect
 end
 composition 'PipelineSonarDetector' do
+    add Srv::OrientationWithZ
     add SonarTritech::Profiling
-    add PiplineTracker::Task, :as => "detector"
+    add Srv::Actuators
+    add Srv::RawCommand#, :as => 'rawCommand'  #needed only for debugging
+    add_main PiplineTracker::Task, :as => 'detector'
+   # add PiplineTracker::Task, :as => "detector"
     autoconnect
     export detector.position_command
     provides Srv::RelativePositionDetector
@@ -120,6 +126,31 @@ composition 'PipelineDetector' do
         end
     end
 end
+
+
+#class Orocos::RobyPlugin::PiplineTracker::Task
+#    on :start do |event|
+#        Robot.info "overloading configuration of #{self}"
+#        #control_task = Roby.plan.find_tasks(Orocos::RobyPlugin::AuvRelPosController::Task).to_a.first.orogen_task
+#        #pid = control_task.controller_y
+#        #pid.Ti = 0.001
+#        #pid.
+#        #control_task.controller_y = pid
+#        
+#        #control_task.controller_x = pid
+#        control_task.reset
+#    end
+#
+#    on :stop do |event|
+#        Robot.info "resetting configuration"
+#        #control_task = Roby.plan.find_tasks(Orocos::RobyPlugin::AuvRelPosController::Task).to_a.first.orogen_task
+#        #pid = control_task.controller_y
+#        #pid.Ti = 0
+#        #control_task.controller_y = pid
+#        #control_task.reset
+#    end
+#end
+
 
 class Orocos::RobyPlugin::OffshorePipelineDetector::Task
     on :start do |event|
@@ -234,3 +265,12 @@ composition 'Rotation' do
 
 end
 
+
+composition 'MotionEstimation' do
+    add Srv::Actuators
+    add Srv::OrientationWithZ
+    add MotionEstimation::Task, :as => "motion"
+    export motion.speed_samples
+    autoconnect
+    provides Srv::SpeedWithOrientationWithZ
+end

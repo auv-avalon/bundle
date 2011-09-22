@@ -27,6 +27,8 @@ end
 
 # Predeploy a few things to keep them always running
 add_mission(Hbridge::Task)
+add_mission(Cmp::MotionEstimation) #Movemnt model
+
 #add_mission(Cmp::OrientationEstimator)
 
 # Add system monitoring
@@ -48,4 +50,4 @@ add_mission('blueview')
 add_mission('sonar_rear')
 
 add_mission("orientation_estimator")
-
+#add_mission(Cmp::PipelineSonarDetector)
