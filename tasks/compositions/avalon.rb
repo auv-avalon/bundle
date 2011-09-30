@@ -65,7 +65,7 @@ composition "OrientationEstimator" do
 
     connect fog => estimator.fog_samples
 
-    export estimator.orientation_samples
+    export estimator.orientation_samples, :as => 'orientation_z_samples'
     provides Srv::OrientationWithZ
 end
 
@@ -136,7 +136,7 @@ end
 #        #pid.Ti = 0.001
 #        #pid.
 #        #control_task.controller_y = pid
-#        
+#
 #        #control_task.controller_x = pid
 #        control_task.reset
 #    end
@@ -189,7 +189,7 @@ composition 'BuoyDetector' do
 #    event :cutting
 #    event :cutting_success
 #    event :cutting_error
-#    
+#
 #    add Srv::ImageProvider
 #    add Srv::OrientationWithZ
 #    add_main Buoydetector::Task, :as => 'detector'
