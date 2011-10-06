@@ -30,3 +30,10 @@ config:
   leftLimit: 1200
   rightLimit: 2000
 port: /dev/ttyUSB0
+--- name:sonar_profiling_micron
+config:
+  cont: 0
+  pingpong: 1
+  leftLimit: 1600
+  rightLimit: 3300
+port: /dev/ttyS6

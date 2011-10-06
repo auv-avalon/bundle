@@ -45,6 +45,10 @@ Robot.devices do
   device(Dev::Dynamixel, :as => 'dynamixel').
     device_id("/dev/ttyS3")
   
+  device(Dev::Micron, :as => "sonar_profiling_micron").
+    period(0.01).
+    use_conf('sonar_profiling_micron')
+  
   device(Dev::Micron, :as => "sonar_rear").
     period(0.01).
     use_conf('sonar_rear')
