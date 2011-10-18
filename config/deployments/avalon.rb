@@ -50,4 +50,4 @@ add_mission('blueview')
 add_mission('sonar_rear')
 
 add_mission("orientation_estimator")
-#add_mission(Cmp::PipelineSonarDetector)
+add_mission(Cmp::PipelineSonarDetector)

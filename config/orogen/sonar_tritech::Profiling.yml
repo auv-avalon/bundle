@@ -38,13 +38,13 @@ config:
     scanZ: 0
     leftLimit: 1600 
     rxnch2: 223472517
-    headCtl: 9092
+    headCtl: 9090
     filterGainCh1: 1
     scanTime: 30
   stamp: 
     microseconds: 0
 # the device port
-offset: 2.4
+offset: 2.14
 port: /dev/ttyS6
 # timeout on the distance readings in milliseconds
 timeout: 200

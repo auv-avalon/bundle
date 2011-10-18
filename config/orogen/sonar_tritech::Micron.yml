@@ -27,6 +27,7 @@ port: /dev/ttyS3
 timeout: 200
 --- name:sonar_rear
 config: 
+  cont: 0
   leftLimit: 1200
   rightLimit: 2000
 port: /dev/ttyUSB0
