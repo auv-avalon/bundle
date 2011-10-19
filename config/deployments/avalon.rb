@@ -39,15 +39,16 @@ add_mission(ModemCan::Task)
 # add_mission(Taskmon::Task).on_server('localhost')
 # add_mission(Taskmon::Task).on_server('front')
 
-add_mission('bottom_camera')
-add_mission('blueview')
+#add_mission('bottom_camera')
+#add_mission('blueview')
+
 #add_mission('front_camera')
 #add_mission('left_unicap_camera')
 #add_mission('right_unicap_camera')
 
 #add_mission('profiler')
 #add_mission('sonar')
-add_mission('sonar_rear')
+#add_mission('sonar_rear')
 
 add_mission("orientation_estimator")
-add_mission(Cmp::PipelineSonarDetector)
+#add_mission(Cmp::PipelineSonarDetector)

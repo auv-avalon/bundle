@@ -22,7 +22,7 @@ config:
   numberOfBins: 300
   adcSetpointCh: 0
 # the device port
-port: /dev/ttyS3
+port: /dev/ttyS6
 # timeout on the distance readings in milliseconds
 timeout: 200
 --- name:sonar_rear
@@ -30,4 +30,4 @@ config:
   cont: 0
   leftLimit: 1200
   rightLimit: 2000
-port: /dev/ttyUSB0
+port: /dev/ttyS7
