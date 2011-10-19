@@ -86,7 +86,7 @@ data_service_type 'ImageProvider' do
 end
 
 data_service_type 'SonarImage' do
-    output_port 'images', ro_ptr('/base/samples/frame/Frame')
+    output_port 'frame', ro_ptr('/base/samples/frame/Frame')
 end
 
 data_service_type 'StructuredLightPair' do 

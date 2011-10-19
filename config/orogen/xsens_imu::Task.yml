@@ -2,7 +2,7 @@
 # number of consecutive timeouts after which an error is raised
 max_timeouts: 0
 # the device port
-port: /dev/ttyS7
+port: /dev/ttyS4
 # the filter scenario. Use the xsensTest application to list the available ones
 scenario: human
 # the IO timeout in milliseconds
