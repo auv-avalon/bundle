@@ -10,7 +10,7 @@ using_task_library 'offshore_pipeline_detector'
 #using_task_library 'sonardetector'
 #using_task_library 'asv_detector'
 #using_task_library 'sonar_servoing'
-#using_task_library 'buoydetector'
+using_task_library 'buoydetector'
 using_task_library 'frame_demultiplexer'
 using_task_library 'controldev'
 using_task_library 'raw_control_command_converter'
@@ -179,25 +179,27 @@ Cmp::VisualServoing.specialize 'detector' => Cmp::PipelineDetector do
 end
 
 composition 'BuoyDetector' do
-#    event :buoy_detected
-#    event :buoy_lost
-#    event :buoy_arrived
-#    event :strafe_start
-#    event :strafe_finished
-#    event :strafe_error
-#    event :moving_to_cutting_distance
-#    event :cutting
-#    event :cutting_success
-#    event :cutting_error
-#
-#    add Srv::ImageProvider
-#    add Srv::OrientationWithZ
-#    add_main Buoydetector::Task, :as => 'detector'
-#    autoconnect
-#
-#    export detector.relative_position
-#    provides Srv::RelativePositionDetector
+    event :buoy_detected
+    event :buoy_lost
+    event :buoy_arrived
+    event :strafe_start
+    event :strafe_finished
+    event :strafe_error
+    event :moving_to_cutting_distance
+    event :cutting
+    event :cutting_success
+    event :cutting_error
+
+    add Srv::ImageProvider
+    add Srv::OrientationWithZ
+    add_main Buoydetector::Task, :as => 'detector'
+    autoconnect
+
+    export detector.relative_position
+    provides Srv::RelativePositionDetector
 end
+
+
 Cmp::VisualServoing.specialize 'detector' => Cmp::BuoyDetector do
     event :failed_to_find_buoy
     forward :failed_to_find_buoy => :failed

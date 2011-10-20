@@ -2,12 +2,14 @@ class MainPlanner
     SIMPLE_MOVE_HEADING_THRESHOLD = 10 * Math::PI / 180.0
     SIMPLE_MOVE_Z_THRESHOLD   = 0.3
 
-    PIPELINE_SEARCH_HEADING = 20 * Math::PI / 180
+    PIPELINE_SEARCH_HEADING = 20 * Math::PI / 180 unless IS_SIMULATION
+    PIPELINE_SEARCH_HEADING =  Math::PI / 2 if IS_SIMULATION
     PIPELINE_SEARCH_TIMEOUT = 90
     PIPELINE_SEARCH_Z = -2.85
     PIPELINE_SEARCH_SPEED = 0.5
     PIPELINE_SEARCH_CANDIDATE_SPEED = 0.2
-    PIPELINE_EXPECTED_HEADING = 110 * Math::PI / 180
+    PIPELINE_EXPECTED_HEADING = 110 * Math::PI / 180 unless IS_SIMULATION
+    PIPELINE_EXPECTED_HEADING = - Math::PI if IS_SIMULATION
     PIPELINE_STABILIZATION_TIME = 10
 
     FIRST_GATE_PASSING_SPEED = 0.5
@@ -24,8 +26,10 @@ class MainPlanner
     SECOND_GATE_PASSING_Z = PIPELINE_SEARCH_Z
 
     FIND_BUOY_MIN_Z = -1 # only when starting at the surface: do not allow detection above -1m
-    BUOY_DIRECTION_AT_GATE = 60 * Math::PI / 180
-    BUOY_SEARCH_TIMEOUT = 15 # !!!! if we ram the wall, that's the end of it !!!!
+    BUOY_DIRECTION_AT_GATE = 60 * Math::PI / 180 unless IS_SIMULATION
+    BUOY_DIRECTION_AT_GATE = 90 * Math::PI / 180 if IS_SIMULATION
+    BUOY_SEARCH_TIMEOUT = 15 unless IS_SIMULATION
+    BUOY_SEARCH_TIMEOUT = 40 if IS_SIMULATION # !!!! if we ram the wall, that's the end of it !!!!
     BUOY_SEARCH_SPEED = 0.2
     BUOY_Z = -1.5
     BUOY_WALL_APPROACH_SPEED = 0.2 # speed at which we approach the wall if we use the wall detector method
@@ -41,7 +45,8 @@ class MainPlanner
     WALL_ALIGNMENT_STABILIZATION_TIME = 5
     WALL_SERVOING_Z = -1
     WALL_SEARCH_TIMEOUT = 60
-    WALL_CORNER_TIMEOUT = 4 * 60
+    WALL_CORNER_TIMEOUT = 4 * 60 unless IS_SIMULATION
+    WALL_CORNER_TIMEOUT = 20 if IS_SIMULATION
     # TODO: change for consecutive missions / tasks
     WALL_SUCCESS_TIMEOUT_AFTER_CORNER = 2 * 60
 
@@ -52,14 +57,6 @@ class MainPlanner
     ASV_GATE_PASSING_SPEED = 0.6
     ASV_GATE_PASSING_TIME = 15
     ASV_SEARCH_Z = -3
-    
-    if IS_SIMULATION
-        PIPELINE_SEARCH_HEADING   = Math::PI / 2
-        PIPELINE_EXPECTED_HEADING = - Math::PI
-        BUOY_SEARCH_TIMEOUT = 40
-        BUOY_DIRECTION_AT_GATE = 90 * Math::PI / 180
-        WALL_CORNER_TIMEOUT = 20
-    end
 
     method(:sauce_pipeline_and_gates, :returns => SaucE::PipelineAndGates) do
         find_pipe = find_and_follow_pipeline(:heading => PIPELINE_SEARCH_HEADING, 
