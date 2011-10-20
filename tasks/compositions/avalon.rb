@@ -1,15 +1,11 @@
 using_task_library 'avalon_control'
 using_task_library 'ekf_slam'
-#using_task_library 'low_level_driver'
 using_task_library 'depth_reader'
 using_task_library 'xsens_imu'
 using_task_library 'fog_kvh'
 using_task_library 'state_estimator'
 using_task_library 'structured_light'
 using_task_library 'offshore_pipeline_detector'
-#using_task_library 'sonardetector'
-#using_task_library 'asv_detector'
-#using_task_library 'sonar_servoing'
 using_task_library 'buoydetector'
 using_task_library 'frame_demultiplexer'
 using_task_library 'controldev'
@@ -18,6 +14,9 @@ using_task_library 'rotation_experiment'
 using_task_library 'pipline_tracker'
 using_task_library 'motion_estimation'
 using_task_library 'sonar_tritech'
+
+# using_task_library 'asv_detector'
+# using_task_library 'low_level_driver'
 
 # Composition that extracts the normal camera stream out of a "structured light"
 # stream
@@ -228,31 +227,14 @@ composition 'WallDetector' do
 #    provides Srv::RelativePositionDetector
 end
 
-
-composition 'ClassicWallDetector' do
-#    event :searching_wall
-#    event :found_wall
-#    event :corner_passed
-#    event :wrong_opening_angle
-#
-#    add Srv::SonarScanProvider
-#    add Srv::OrientationWithZ
-#    add_main SonarServoing::Task, :as => 'detector'
-#    autoconnect
-#
-#    export detector.position_command
-#    provides Srv::RelativePositionDetector
-end
-
-
 composition 'AsvDetector' do
 #    event :asv_found
 #    event :asv_lost
-#
+
 #    add Srv::ImageProvider
 #    add_main AsvDetector::Task, :as => 'detector'
 #    autoconnect
-#
+
 #    export detector.position_command
 #    provides Srv::RelativePositionDetector
 end
@@ -264,7 +246,6 @@ composition 'Rotation' do
     autoconnect
 
     export rotator.position_command
-
 end
 
 

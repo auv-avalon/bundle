@@ -1,11 +1,11 @@
 Roby.app.use_deployments_from "avalon_simulation_deployment"
 Roby.app.use_deployments_from "controldev" # Joystick
 Roby.app.use_deployment "taskmon_back"
+Roby.app.use_deployment "auv_rel_pos_controller"
 
 # Selectively get deployments from avalonFront / avalonBack
 #Roby.app.use_deployment "pipeline_follower"
 #Roby.app.use_deployment "buoy_detector"
-Roby.app.use_deployment "auv_rel_pos_controller"
 #Roby.app.use_deployment "wall_detector"
 #Roby.app.use_deployment "classic_wall_detector"
 # Roby.app.use_deployment "rotation_experiment_test"

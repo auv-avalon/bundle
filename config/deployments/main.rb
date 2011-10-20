@@ -65,7 +65,7 @@ def define_wall_servoing(name, cmp, options = Hash.new)
 end
 
 # -----------------------------------------------------------------------------
-# definitions using SONAR DETECTOR
+# definitions using WALL DETECTOR
 # -----------------------------------------------------------------------------
 
 define_wall_servoing 'wall_left', Cmp::WallDetector,
@@ -85,12 +85,5 @@ define('wall_detector', Cmp::WallDetector.use(narrow_sonar))
 
 narrow_sonar = device('sonar').use_conf('sonar', 'wall_approach')
 define('wall_distance_estimator', Cmp::WallDetector.use(narrow_sonar))
-
-# -----------------------------------------------------------------------------
-# definitions using SONAR SERVOING (old one)
-# -----------------------------------------------------------------------------
-
-define_wall_servoing 'classic_wall', Cmp::ClassicWallDetector, 
-    :sonar => 'narrow_front', :detector => 'default'
 
 
