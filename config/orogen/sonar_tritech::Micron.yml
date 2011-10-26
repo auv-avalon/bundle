@@ -1,40 +1,70 @@
+# --- name:default
+# Configuration Values for Sonar
+#config: 
+#  stamp: 
+#    microseconds: 0
+#  adc8on: 1
+#  cont: 1
+#  scanright: 0
+#  invert: 0
+#  chan2: 1
+#  applyoffset: 0
+#  pingpong: 0
+#  rangeScale: 30
+#  leftLimit: 1
+#  rightLimit: 6399
+#  adSpan: 81
+#  adLow: 8
+#  initialGain: 50
+#  motorStepDelayTime: 25
+#  motorStepAngleSize: 32
+#  adInterval: 30
+#  numberOfBins: 300
+#  adcSetpointCh: 0
+# the device port
+# port: /dev/ttyS6
+# timeout on the distance readings in milliseconds
+# timeout: 200
+# --- name:sonar_rear
+# config: 
+#  cont: 0
+#  leftLimit: 1200
+#  rightLimit: 2000
+# port: /dev/ttyS7
+# --- name:sonar_profiling_micron
+# config:
+#  cont: 0
+#  pingpong: 1
+#  leftLimit: 1600
+#  rightLimit: 3300
+# port: /dev/ttyUSB0
 --- name:default
 # Configuration Values for Sonar
 config: 
-  stamp: 
-    microseconds: 0
+  rightLimit: 
+    rad: 3.14159265358979
+  resolution: 0.1
+  maximumDistance: 15.0
+  motorStepAngleSize: 
+    rad: 0.0872664625997165
+  pingpong: 0
   adc8on: 1
-  cont: 1
-  scanright: 0
-  invert: 0
+  adSpan: 81
+  rangeScale: 30
   chan2: 1
   applyoffset: 0
-  pingpong: 0
-  rangeScale: 30
-  leftLimit: 1
-  rightLimit: 6399
-  adSpan: 81
-  adLow: 8
-  initialGain: 50
+  invert: 0
+  initialGain: 0.2
   motorStepDelayTime: 25
-  motorStepAngleSize: 32
-  adInterval: 30
-  numberOfBins: 300
+  adLow: 8
+  cont: 1
+  stamp: 
+    microseconds: 0
+  leftLimit: 
+    rad: 3.14159265358979
+  scanright: 0
   adcSetpointCh: 0
 # the device port
-port: /dev/ttyS6
+port: ""
 # timeout on the distance readings in milliseconds
 timeout: 200
---- name:sonar_rear
-config: 
-  cont: 0
-  leftLimit: 1200
-  rightLimit: 2000
-port: /dev/ttyS7
---- name:sonar_profiling_micron
-config:
-  cont: 0
-  pingpong: 1
-  leftLimit: 1600
-  rightLimit: 3300
-port: /dev/ttyUSB0

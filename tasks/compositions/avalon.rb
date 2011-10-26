@@ -10,10 +10,10 @@ using_task_library 'buoydetector'
 using_task_library 'frame_demultiplexer'
 using_task_library 'controldev'
 using_task_library 'raw_control_command_converter'
-using_task_library 'rotation_experiment'
 using_task_library 'pipline_tracker'
 using_task_library 'motion_estimation'
 using_task_library 'sonar_tritech'
+# using_task_library 'rotation_experiment'
 
 # using_task_library 'asv_detector'
 # using_task_library 'low_level_driver'
@@ -240,12 +240,12 @@ composition 'AsvDetector' do
 end
 
 composition 'Rotation' do
-    add Srv::ImageProvider
-    add Srv::OrientationWithZ
-    add_main RotationExperiment::Task, :as => 'rotator'
-    autoconnect
+#    add Srv::ImageProvider
+#    add Srv::OrientationWithZ
+#    add_main RotationExperiment::Task, :as => 'rotator'
+#    autoconnect
 
-    export rotator.position_command
+#    export rotator.position_command
 end
 
 
