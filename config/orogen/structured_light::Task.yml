@@ -1,6 +1,6 @@
 --- name:default
 # config file to calibrate sensor
-config_file: ""
+# config_file: ""
 # debug_level 0=off 
 debug_level: 1
 # lut file to calibrate laser scan

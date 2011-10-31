@@ -11,30 +11,36 @@ config:
   applyoffset: 0
   pingpong: 0
   rangeScale: 30
-  leftLimit: 1
-  rightLimit: 6399
+  leftLimit: 
+    rad: 3.141592653589793
+  rightLimit: 
+    rad: 3.141592653589793
   adSpan: 81
   adLow: 8
-  initialGain: 50
+  initialGain: 0.2 
   motorStepDelayTime: 25
-  motorStepAngleSize: 32
-  adInterval: 30
-  numberOfBins: 300
+  motorStepAngleSize: 
+    rad: 0.08726646259971647
+  maximumDistance: 15.0
+  resolution: 0.1
   adcSetpointCh: 0
-# the device port
 port: /dev/ttyS6
-# timeout on the distance readings in milliseconds
 timeout: 200
+--- name:studiobad
+config:
+  cont: 1
+  maximumDistance: 15.0
+  resolution: 0.1
+port: /dev/ttyS6
 --- name:sonar_rear
 config: 
   cont: 0
-  leftLimit: 1200
-  rightLimit: 2000
+  maximumDistance: 15.0
+  resolution: 0.1
+  leftLimit:
+    rad: 1.17809724509617 
+    #(90.0-22.5)/180.0*Math::PI
+  rightLimit:
+    rad: 1.96349540849362 
+    #(90.0+22.5)/180.0*Math::PI
 port: /dev/ttyS7
---- name:sonar_profiling_micron
-config:
-  cont: 0
-  pingpong: 1
-  leftLimit: 1600
-  rightLimit: 3300
-port: /dev/ttyUSB0

@@ -37,7 +37,7 @@ Robot.devices do
     period(0.01)
   device(Dev::Micron, :as => 'sonar').
     period(0.01).
-    use_conf("sonar")
+    use_conf("studiobad")
   device(Dev::Profiling, :as => 'profiler').
     period(0.1)
   device(Dev::BlueView, :as => 'blueview').
@@ -45,9 +45,9 @@ Robot.devices do
   device(Dev::Dynamixel, :as => 'dynamixel').
     device_id("/dev/ttyS3")
   
-  device(Dev::Micron, :as => "sonar_profiling_micron").
-    period(0.01).
-    use_conf('sonar_profiling_micron')
+  #device(Dev::Micron, :as => "sonar_profiling_micron").
+  #  period(0.01).
+  #  use_conf('sonar_profiling_micron')
   
   device(Dev::Micron, :as => "sonar_rear").
     period(0.01).
