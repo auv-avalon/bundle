@@ -4,9 +4,9 @@ com_bus_type('Canbus', :message_type => '/canbus/Message').
             mask ||= id
             id   = Integer(id)
             mask = Integer(mask)
-            if (id & mask) != id
-                raise ArgumentError, "wrong id/mask combination: some bits in the ID are not set in the mask, and therefore the filter will never match"
-            end
+            #if (id & mask) != id
+            #    raise ArgumentError, "wrong id/mask combination: some bits in the ID are not set in the mask, and therefore the filter will never match"
+            #end
             [id, mask]
         end
     end
