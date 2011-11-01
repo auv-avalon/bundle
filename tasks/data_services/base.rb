@@ -105,3 +105,6 @@ data_service_type 'SonarScanProvider' do
     output_port 'sonarscan', '/base/samples/SonarBeam'
 end
 
+data_service_type 'Trigger' do
+    output_port 'trigger', 'bool'
+end

@@ -190,7 +190,8 @@ composition 'BuoyDetector' do
     event :cutting_error
 
     add Srv::ImageProvider
-    add Srv::OrientationWithZ
+    add Srv::OrientationWithZ    
+    add Srv::Trigger
     add_main Buoydetector::Task, :as => 'detector'
     autoconnect
 
