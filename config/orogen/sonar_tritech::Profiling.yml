@@ -45,6 +45,6 @@ config:
     microseconds: 0
 # the device port
 offset: 2.14
-port: /dev/ttyUSB0
+port: /dev/ttyS1
 # timeout on the distance readings in milliseconds
 timeout: 200
