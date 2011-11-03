@@ -4,7 +4,8 @@ use Srv::Orientation      => Cmp::OrientationEstimator
 use Srv::OrientationWithZ => Cmp::OrientationEstimator
 use Srv::Pose             => Cmp::PoseEstimator
 
-use Cmp::OrientationEstimator => Cmp::OrientationEstimator.use('depth_reader')
+# use Cmp::OrientationEstimator => Cmp::OrientationEstimator.use('depth_reader')
+use Cmp::OrientationEstimator => Cmp::OrientationEstimator.use('sonar_rear')
 
 wide_sonar = device('sonar').use_conf('sonar')
 use Cmp::PoseEstimator        => Cmp::PoseEstimator.use(wide_sonar, Cmp::OrientationEstimator)
@@ -52,4 +53,4 @@ add_mission('sonar')
 add_mission('sonar_rear')
 
 add_mission("orientation_estimator")
-#add_mission(Cmp::PipelineSonarDetector)
+add_mission(Cmp::PipelineSonarDetector)

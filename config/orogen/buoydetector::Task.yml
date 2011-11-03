@@ -13,10 +13,10 @@ steps: 5
 edgeTh: 35
 run_in_simulation: 0
 debug_gui: false
-buoy_depth: 1.45 #-1.0
+buoy_depth: 1.45
 good_y_z: 0.2
 good_x: 0.3
-filter_timeout: 2.0
+filter_timeout: 2.0 
 strafe_intensity: -0.5
 maxX: 0.2
 headingModulation: 0.0

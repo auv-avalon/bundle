@@ -21,12 +21,12 @@ Conf.orocos.log_group "raw_camera" do
     add "camera_unicap_right.frame"
 end
 
-# Conf.orocos.disable_log_group "images"
+Conf.orocos.disable_log_group "images"
 Conf.orocos.disable_log_group "raw_camera"
 
 StateEstimator::Task.worstcase_processing_time 1
 
-State.navigation_mode = ['drive_simple','pipeline','pipeline_sonar']
+State.navigation_mode = ['drive_simple','pipeline','pipeline_sonar','buoy']
 
 Robot.devices do
 #  device(Dev::LowLevel, :as => 'low_level_board').

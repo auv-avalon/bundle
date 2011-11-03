@@ -24,14 +24,14 @@ config:
   maximumDistance: 15.0
   resolution: 0.1
   adcSetpointCh: 0
-port: /dev/ttyS6
+port: /dev/ttyS4
 timeout: 200
 --- name:studiobad
 config:
   cont: 1
   maximumDistance: 15.0
   resolution: 0.1
-port: /dev/ttyS6
+port: /dev/ttyS4
 --- name:sonar_rear
 config: 
   cont: 0
@@ -43,4 +43,4 @@ config:
   rightLimit:
     rad: 1.96349540849362 
     #(90.0+22.5)/180.0*Math::PI
-port: /dev/ttyS7
+port: /dev/ttyS5
