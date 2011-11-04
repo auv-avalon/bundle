@@ -4,8 +4,8 @@ use Srv::Orientation      => Cmp::OrientationEstimator
 use Srv::OrientationWithZ => Cmp::OrientationEstimator
 use Srv::Pose             => Cmp::PoseEstimator
 
-# use Cmp::OrientationEstimator => Cmp::OrientationEstimator.use('depth_reader')
-use Cmp::OrientationEstimator => Cmp::OrientationEstimator.use('sonar_rear')
+use Cmp::OrientationEstimator => Cmp::OrientationEstimator.use('depth_reader') ##Depth Sensor as reference
+#use Cmp::OrientationEstimator => Cmp::OrientationEstimator.use('sonar_rear') ##Ground distance as 0 reference !
 
 wide_sonar = device('sonar').use_conf('sonar')
 use Cmp::PoseEstimator        => Cmp::PoseEstimator.use(wide_sonar, Cmp::OrientationEstimator)
