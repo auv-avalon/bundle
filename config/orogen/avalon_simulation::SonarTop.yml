@@ -1,4 +1,4 @@
---- name:sonar
+--- name:default
   rightlimit: 3999
   leftlimit: 1
   cont: 1

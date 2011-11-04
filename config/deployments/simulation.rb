@@ -27,6 +27,7 @@ use AvalonControl::MotionControlTask => AvalonControl::MotionControlTask.
 
 add_mission(AvalonSimulation::Task)
 add_mission(AvalonSimulation::StateEstimator)
+add_mission(AvalonSimulation::SonarTop)
 
 #test
 # add_mission("sonar")
