@@ -88,7 +88,7 @@ configuration:
       tickDivider: 4
       ticksPerTurn: 93312
     base_config: 
-      maxCurrent: 5000
+      maxCurrent: 20000
       maxMotorTempCount: 200
       maxBoardTemp: 60
       timeout: 1000
@@ -242,7 +242,7 @@ configuration:
       pwmStepPerMs: 20
       openCircuit: 1
     pid_speed: 
-      maxPWM: 1800.0
+      maxPWM: 1000.0
       kd: 0.0
       kp: 400.0
       ki: 5.0
