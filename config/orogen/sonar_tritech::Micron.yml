@@ -31,6 +31,7 @@ config:
   cont: 1
   maximumDistance: 15.0
   resolution: 0.1
+port: /dev/ttyF3
 --- name:sonar_rear
 config: 
   cont: 0
