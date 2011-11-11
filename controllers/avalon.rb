@@ -4,7 +4,6 @@
 require 'controllers/common_controller'
 Roby.app.apply_orocos_deployment 'avalon' # load config/deployments/avalon.rb
 
-ps = spawn("#{ENV['HOME']}/dev/drivers/relaisboard/build/bin/all_on /dev/ttyUSB0 1> /dev/null")
 
 navigation_mode = nil 
 #State.navigation_mode = 'drive_simple'
