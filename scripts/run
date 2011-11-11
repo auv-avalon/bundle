@@ -1,5 +1,4 @@
 #! /usr/bin/env ruby
-ps = spawn("#{ENV['HOME']}/dev/drivers/relaisboard/build/bin/all_on /dev/ttyUSB0 1> /dev/null")
 APP_DIR = File.expand_path('..', File.dirname(__FILE__))
 require 'roby/app/scripts/run'
 Process.kill 'KILL', ps
