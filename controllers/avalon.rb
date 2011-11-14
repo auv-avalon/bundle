@@ -4,12 +4,15 @@
 require 'controllers/common_controller'
 Roby.app.apply_orocos_deployment 'avalon' # load config/deployments/avalon.rb
 
+
 navigation_mode = nil 
 #State.navigation_mode = 'drive_simple'
 current_submode = nil
 run_start = nil
 
 SOFT_TIMEOUT = 10 * 60
+
+
 
 Roby.every(0.1, :on_error => :disable) do
     if State.lowlevel_state?
