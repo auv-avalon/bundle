@@ -16,7 +16,7 @@ pitch_pid:
   min: -1.0
   i: 0.2
 # no documentation available for this property
-pitch_target: -0.39 #0.122173047639603
+pitch_target: 0 #-0.39 #0.122173047639603
 # no documentation available for this property
 timeout: 20.0
 # no documentation available for this property
