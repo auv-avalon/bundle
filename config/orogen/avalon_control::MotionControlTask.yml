@@ -7,7 +7,7 @@ heading_pid:
   d: -2.0
   p: -0.6
   min: -0.4
-  i: -0.001
+  i: 0.0
 # no documentation available for this property
 pitch_pid: 
   max: 1.0
