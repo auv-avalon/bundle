@@ -1,4 +1,5 @@
-using_task_library 'avalon_control'
+#using_task_library 'avalon_control'
+using_task_library 'auv_control'
 using_task_library 'ekf_slam'
 using_task_library 'depth_reader'
 using_task_library 'xsens_imu'
@@ -191,7 +192,6 @@ composition 'BuoyDetector' do
 
     add Srv::ImageProvider
     add Srv::OrientationWithZ    
-    add Srv::Trigger
     add_main Buoydetector::Task, :as => 'detector'
     autoconnect
 

@@ -4,6 +4,9 @@ use Srv::Orientation      => Cmp::OrientationEstimator
 use Srv::OrientationWithZ => Cmp::OrientationEstimator
 use Srv::Pose             => Cmp::PoseEstimator
 
+use DataServices::AUVMotionController => AuvControl::Task
+#use DataServices::AUVMotionController => AvalonControl::MotionControlTask
+
 #use Cmp::OrientationEstimator => Cmp::OrientationEstimator.use('depth_reader') ##Depth Sensor as reference
 use Cmp::OrientationEstimator => Cmp::OrientationEstimator.use('sonar_rear') ##Ground distance as 0 reference !
 
@@ -28,7 +31,7 @@ end
 
 # Predeploy a few things to keep them always running
 add_mission(Hbridge::Task)
-add_mission(Cmp::MotionEstimation) #Movemnt model
+#add_mission(Cmp::MotionEstimation) #Movemnt model
 
 #add_mission(Cmp::OrientationEstimator)
 
@@ -53,4 +56,5 @@ add_mission('sonar')
 add_mission('sonar_rear')
 
 add_mission("orientation_estimator")
-add_mission(Cmp::PipelineSonarDetector)
+#add_mission(Cmp::PipelineSonarDetector)
+

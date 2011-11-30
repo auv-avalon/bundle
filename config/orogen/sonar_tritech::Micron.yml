@@ -35,7 +35,7 @@ port: /dev/ttyF3
 --- name:sonar_rear
 config: 
   cont: 0
-  maximumDistance: 15.0
+  maximumDistance: 20.0
   resolution: 0.1
   leftLimit:
     rad: 1.17809724509617 

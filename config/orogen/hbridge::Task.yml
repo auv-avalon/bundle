@@ -231,7 +231,7 @@ configuration:
       maxCurrent: 3000
       maxMotorTempCount: 200
       maxBoardTemp: 60
-      timeout: 50
+      timeout: 1000
       maxBoardTempCount: 200
       pidDebugActive: 0
       cascadedPositionController: 1
