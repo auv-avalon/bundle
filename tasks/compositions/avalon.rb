@@ -1,10 +1,11 @@
-#using_task_library 'avalon_control'
-using_task_library 'auv_control'
+using_task_library 'avalon_control'
+# using_task_library 'auv_control'
 using_task_library 'ekf_slam'
 using_task_library 'depth_reader'
 using_task_library 'xsens_imu'
 using_task_library 'fog_kvh'
 using_task_library 'state_estimator'
+using_task_library 'orientation_estimator'
 using_task_library 'structured_light'
 using_task_library 'offshore_pipeline_detector'
 using_task_library 'buoydetector'
@@ -57,12 +58,28 @@ composition "OrientationEstimator" do
     add StateEstimator::Task, :as => 'estimator'
 
     add Srv::ZProvider
-    connect z_provider => estimator.depth_samples
     add XsensImu::Task, :as => 'imu'
-    connect imu => estimator.orientation_samples_imu
-    connect imu => estimator.imu_sensor_samples
     add FogKvh::Dsp3000Task, :as => 'fog'
 
+    connect z_provider => estimator.depth_samples
+    connect imu => estimator.orientation_samples_imu
+    connect imu => estimator.imu_sensor_samples
+    connect fog => estimator.fog_samples
+
+    export estimator.orientation_samples, :as => 'orientation_z_samples'
+    provides Srv::OrientationWithZ
+end
+
+composition "DagonOrientationEstimator" do
+    add OrientationEstimator::Task, :as => 'estimator'
+
+    add Srv::ZProvider
+    add XsensIMU::Task, :as => 'imu'
+    add FogKvh::Dsp3000Task, :as => 'fog'
+
+    connect z_provider => estimator.depth_samples
+    connect imu => estimator.orientation_samples_imu
+    connect imu => estimator.imu_sensor_samples
     connect fog => estimator.fog_samples
 
     export estimator.orientation_samples, :as => 'orientation_z_samples'

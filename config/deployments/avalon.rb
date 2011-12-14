@@ -56,5 +56,6 @@ add_mission('sonar')
 add_mission('sonar_rear')
 
 add_mission("orientation_estimator")
+add_mission(Cmp::DagonOrientationEstimator)
 #add_mission(Cmp::PipelineSonarDetector)
 
