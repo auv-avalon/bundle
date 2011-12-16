@@ -4,8 +4,7 @@ use Srv::Orientation      => Cmp::OrientationEstimator
 use Srv::OrientationWithZ => Cmp::OrientationEstimator
 use Srv::Pose             => Cmp::PoseEstimator
 
-use DataServices::AUVMotionController => AuvControl::Task
-#use DataServices::AUVMotionController => AvalonControl::MotionControlTask
+use DataServices::AUVMotionController => AvalonControl::MotionControlTask
 
 #use Cmp::OrientationEstimator => Cmp::OrientationEstimator.use('depth_reader') ##Depth Sensor as reference
 use Cmp::OrientationEstimator => Cmp::OrientationEstimator.use('sonar_rear') ##Ground distance as 0 reference !
