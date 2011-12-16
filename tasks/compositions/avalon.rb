@@ -73,7 +73,7 @@ end
 composition "DagonOrientationEstimator" do
     add OrientationEstimator::Task, :as => 'estimator'
 
-    add XsensIMU::Task, :as => 'imu'
+    add XsensImu::Task, :as => 'imu'
     add FogKvh::Dsp3000Task, :as => 'fog'
 
     connect imu => estimator.xsens_samples
