@@ -20,10 +20,10 @@ class AvalonSimulation::SonarTop
     
 end
 
-class AvalonSimulation::SonarBottom
-    driver_for 'MarsSonarBottom'
-    provides Srv::SonarScanProvider    
-end
+#class AvalonSimulation::SonarBottom
+#    driver_for 'MarsSonarBottom'
+#    provides Srv::SonarScanProvider    
+#end
 
 class AvalonSimulation::Actuators
     driver_for 'MarsAvalonThrusters'
