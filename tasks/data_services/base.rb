@@ -97,7 +97,7 @@ data_service_type 'StereoPairProvider' do
     output_port 'images', ro_ptr('/base/samples/frame/FramePair')
 end
 
-data_service_type 'LaserRangeFinder' do
+data_service_type 'LaserScanProvider' do
     output_port 'laserscan', '/base/samples/LaserScan'
 end
 
