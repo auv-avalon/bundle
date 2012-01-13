@@ -15,8 +15,11 @@ using_task_library 'raw_control_command_converter'
 using_task_library 'pipline_tracker'
 using_task_library 'motion_estimation'
 using_task_library 'sonar_tritech'
-# using_task_library 'rotation_experiment'
+using_task_library 'wall_servoing'
+using_task_library 'sonar_feature_estimator'
 
+
+# using_task_library 'rotation_experiment'
 # using_task_library 'asv_detector'
 # using_task_library 'low_level_driver'
 
@@ -84,14 +87,17 @@ composition "DagonOrientationEstimator" do
     provides Srv::Orientation
 end
 
+
 composition 'StructuredLight' do
     add Srv::StructuredLightPair
     add StructuredLight::Task, :as => 'structuredLight'
 
     export structuredLight.laser_scan
-    provides Srv::LaserRangeFinder
+    provides Srv::LaserScanProvider
     autoconnect
 end
+
+
 composition 'PipelineSonarDetector' do
     add Srv::OrientationWithZ
     add SonarTritech::Profiling
@@ -232,15 +238,19 @@ Cmp::VisualServoing.specialize 'detector' => Cmp::BuoyDetector do
 end
 
 composition 'WallDetector' do
-#    event :wall_found
-#
-#    add Srv::SonarScanProvider
-#    add Srv::Orientation
-#    add_main Sonardetector::Task , :as => 'detector'
-#    autoconnect
-#
-#    export detector.position_command
-#    provides Srv::RelativePositionDetector
+    event :wall_servoing
+    event :searching_wall
+    event :checking_wall
+    event :detected_corner
+
+    add Srv::SonarScanProvider
+    add SonarFeatureEstimator::Task, :as => 'scans'
+    add Srv::Orientation
+    add_main WallServoing::Task , :as => 'detector'
+    autoconnect
+
+    export detector.position_command
+    provides Srv::RelativePositionDetector
 end
 
 composition 'AsvDetector' do

@@ -1,0 +1,21 @@
+--- name:default
+# feature extraction: describes how many best-features will be saved to build the threshold
+best_values_size: 100
+# feature extraction: num of the derivatives to build the history
+derivative_history_length: 3
+# enable debug output on port debug_output
+enable_debug_output: 0
+# feature extraction: threshold for new features in percent of the mean of the last |best_values_size| best features
+feature_threshold: 0.6
+# feature extraction: the length of the plain in percent of signal length, if it is 0 the plain will be ignored
+plain_length: 0.1
+# feature extraction: the threshold to be a acceptable plain in percent of the mean signal strength
+plain_threshold: 0.9
+# signal filter: every value under that proportional threshold of the mean value of the signal will be filtered out
+proportional_value_threshold: 0.5
+# feature extraction: signal_balancing is a slope that corrects the signal moderation
+signal_balancing: 0.2
+# signal filter: if the mean value of the signal is below this threshold, the signal will be skiped
+signal_threshold: 1.5
+--- name:simulation
+derivative_history_length: 1
