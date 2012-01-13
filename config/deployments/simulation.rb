@@ -33,6 +33,3 @@ add_mission(AvalonSimulation::SonarTop)
 #test
 # add_mission("sonar")
 # add_mission("sonar_rear")
-
-
-### not finished or tested
