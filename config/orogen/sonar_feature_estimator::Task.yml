@@ -17,3 +17,5 @@ proportional_value_threshold: 0.5
 signal_balancing: 0.2
 # signal filter: if the mean value of the signal is below this threshold, the signal will be skiped
 signal_threshold: 1.5
+--- name:simulation
+derivative_history_length: 1
