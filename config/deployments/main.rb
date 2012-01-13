@@ -20,6 +20,11 @@ define('asv_detector', Cmp::AsvDetector.use('left_unicap_camera'))
 
 define('rotation', Cmp::VisualServoing.use(Cmp::Rotation.use('bottom_camera')))
 
+define('wall', Cmp::VisualServoing.
+       use(Cmp::WallDetector.use('sonar').
+       use(SonarFeatureEstimator::Task)))
+define('wall_detector', Cmp::WallDetector.use('sonar').use(SonarFeatureEstimator::Task))
+
 model.data_service_type "NavigationMode"
 Cmp::ControlLoop.provides Srv::NavigationMode
 Cmp::VisualServoing.provides Srv::NavigationMode
@@ -68,22 +73,22 @@ end
 # definitions using WALL DETECTOR
 # -----------------------------------------------------------------------------
 
-define_wall_servoing 'wall_left', Cmp::WallDetector,
-    :sonar => 'narrow_front', :detector => 'drive_left'
+#define_wall_servoing 'wall_left', Cmp::WallDetector,
+#    :sonar => 'narrow_front', :detector => 'drive_left'
 
-define_wall_servoing 'wall_approach', Cmp::WallDetector,
-    :sonar => 'wall_approach',     :detector => 'wall_approach'
+#define_wall_servoing 'wall_approach', Cmp::WallDetector,
+#    :sonar => 'wall_approach',     :detector => 'wall_approach'
 
-define_wall_servoing 'wall_approach_buoy', Cmp::WallDetector,
-    :sonar => 'scan_right',        :detector => 'approach_buoy'
+#define_wall_servoing 'wall_approach_buoy', Cmp::WallDetector,
+#    :sonar => 'scan_right',        :detector => 'approach_buoy'
 
-define_wall_servoing 'wall_servoing_right_wall', Cmp::WallDetector, 
-    :sonar => 'scan_right',        :detector => 'servo_right_wall'
+#define_wall_servoing 'wall_servoing_right_wall', Cmp::WallDetector, 
+#    :sonar => 'scan_right',        :detector => 'servo_right_wall'
 
-narrow_sonar = device('sonar').use_conf('sonar', 'narrow_front')
-define('wall_detector', Cmp::WallDetector.use(narrow_sonar))
+#narrow_sonar = device('sonar').use_conf('sonar', 'narrow_front')
+#define('wall_detector', Cmp::WallDetector.use(narrow_sonar))
 
-narrow_sonar = device('sonar').use_conf('sonar', 'wall_approach')
-define('wall_distance_estimator', Cmp::WallDetector.use(narrow_sonar))
+#narrow_sonar = device('sonar').use_conf('sonar', 'wall_approach')
+#define('wall_distance_estimator', Cmp::WallDetector.use(narrow_sonar))
 
 

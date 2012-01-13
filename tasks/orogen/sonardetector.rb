@@ -1,3 +1,0 @@
-class Sonardetector::Task
-end
-
