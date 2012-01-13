@@ -3,17 +3,17 @@ lost_timeout: 15
 # number of frames a buoy is not detected in order to set BUOY_LOST
 buoy_timeout: 10
 # maximum buoy distance in m
-max_buoy_distance: 0.55
-buoy_radius: 0.05
+max_buoy_distance: 1.5 #0.55 studiobad
+buoy_radius: 0.09 #0.05 studiobad
 houghTh: 10
 hValue: 75
 vValue: 40
-sValue: 200
+sValue: 95 #200 studiobad
 steps: 5
 edgeTh: 35
 run_in_simulation: 0
 debug_gui: false
-buoy_depth: 1.45
+buoy_depth: -2.8 # 1.45 studiobad
 good_y_z: 0.2
 good_x: 0.3
 filter_timeout: 2.0 
