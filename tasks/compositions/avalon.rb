@@ -17,7 +17,7 @@ using_task_library 'motion_estimation'
 using_task_library 'sonar_tritech'
 using_task_library 'wall_servoing'
 using_task_library 'sonar_feature_estimator'
-
+using_task_library 'uwv_dynamic_model'
 
 # using_task_library 'rotation_experiment'
 # using_task_library 'asv_detector'
@@ -288,4 +288,14 @@ composition 'MotionEstimation' do
     export motion.speed_samples
     autoconnect
     provides Srv::SpeedWithOrientationWithZ
+end
+
+composition 'UwvModel' do
+    add AvalonControl::MotionControlTask, :as => 'motionControl'
+    add UwvDynamicModel::Task, :as => 'model'
+    autoconnect
+
+    export model.uwvstate
+    provides Srv::SpeedWithOrientationWithZ
+    provides Srv::RelativePose
 end
