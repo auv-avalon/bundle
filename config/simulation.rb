@@ -2,6 +2,7 @@ Roby.app.use_deployments_from "avalon_simulation_deployment"
 Roby.app.use_deployments_from "controldev" # Joystick
 Roby.app.use_deployment "taskmon_back"
 Roby.app.use_deployment "auv_rel_pos_controller"
+#Roby.app.use_deployment "uwv_dynamic_model"
 
 Roby.app.orocos_start_all_deployments = true
 
