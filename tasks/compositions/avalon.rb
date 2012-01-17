@@ -249,9 +249,15 @@ composition 'WallDetector' do
     add_main WallServoing::Task , :as => 'detector'
     autoconnect
 
-    export detector.position_command
+    export detector.position_command, :as => 'relative_position_command'
     provides Srv::RelativePositionDetector
 end
+
+#Cmp::VisualServoing.specialize 'detector' => Cmp::WallDetector do
+##
+## special things only needed when the 'detector' is Cmp::WallDetector.
+##
+#end
 
 composition 'AsvDetector' do
 #    event :asv_found
