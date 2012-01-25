@@ -1,5 +1,4 @@
 class MainPlanner < Roby::Planning::Planner
-
     describe("alignes to the given yaw and z depth and starts moving forward").
         required_arg("yaw", "initial heading for alignment").
         required_arg("z", "initial z value for alignment").
