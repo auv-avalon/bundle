@@ -61,6 +61,7 @@ class MainPlanner
         required_arg("corners", "number of serving corners").
         optional_arg("timeout", "timeout for aborting wall servoing")        
     method(:serve_wall) do
+<<<<<<< HEAD
         yaw_modulation = arguments[:yaw_modulation]
         ref_distance = arguments[:ref_distance]
         min_distance = arguments[:min_distance]
@@ -79,4 +80,5 @@ class MainPlanner
             wait timeout
         end
     end
+=======
 end
