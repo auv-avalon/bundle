@@ -74,7 +74,7 @@ class MainPlanner
 
     # -------------------------------------------------------------------------
 
-    decribe("relative forward motion until a pipeline is found").
+    describe("relative forward motion until a pipeline is found").
         required_arg("yaw", "initial search direction of this motion method").
         required_arg("z", "initial z value a pipeline should be found").
         required_arg("forward_speed", "forward velocity for motion").
