@@ -1,18 +1,7 @@
-# Main planner. A planner of this model is automatically added 
+# Main planner. A planner of this model is automatically added
 # to the interface planner list. For Avalon it should provides
 # global utility functions used in plannning scripting.
 class MainPlanner < Roby::Planning::Planner
-
-    # normalize current angle to range between PI and -PI
-    def normalize_angle(angle)
-        if angle < Math::PI
-            angle - 2 * Math::PI
-        elsif angle < -Math::PI
-            angle + 2 * Math::Pi
-        else
-            angle
-        end
-    end
 
     # use a defined data_reader 'orientation_reader' for fetching current yaw
     def get_current_yaw(orientation_reader)
@@ -24,5 +13,18 @@ class MainPlanner < Roby::Planning::Planner
             end
         end
         yaw
+    end
+
+end
+
+
+# normalize current angle to range between PI and -PI
+def normalize_angle(angle)
+    if angle < Math::PI
+        angle - 2 * Math::PI
+    elsif angle < -Math::PI
+        angle + 2 * Math::Pi
+    else
+        angle
     end
 end
