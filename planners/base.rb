@@ -2,7 +2,7 @@ class MainPlanner < Roby::Planning::Planner
         describe("alignes to the given yaw and z depth and starts moving forward").
         required_arg("yaw", "initial heading for alignment").
         required_arg("z", "initial z value for alignment").
-        required_arg("forward_speed", "forward velocity for motion").
+        optional_arg("forward_speed", "forward velocity for motion").
         optional_arg("duration", "duration for this forward motion")
     method(:move) do
         yaw = arguments[:yaw]
@@ -24,11 +24,12 @@ class MainPlanner < Roby::Planning::Planner
                 command_child.disconnect_ports(controller_child, [['motion_command', 'command']])
             end
 
-                    # align to the given yaw and z value in this movement
+            # align to the given yaw and z value in this movement
             poll do
                 motion_command.x_speed = 0
                 motion_command.y_speed = 0
                 motion_command.z = z
+                motion_command.heading = yaw
                 write_motion_command
 
                 if pose = self.orientation
@@ -43,7 +44,7 @@ class MainPlanner < Roby::Planning::Planner
             end
 
             # move the aligned auv in respect to z, yaw by given forward_speed and duration
-            if duration and forward_speed > 0.0
+            if duration and forward_speed and forward_speed > 0.0
                 start_time = nil
                 execute do
                     start_time = Time.now
