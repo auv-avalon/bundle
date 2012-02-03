@@ -20,10 +20,10 @@ end
 
 # normalize current angle to range between PI and -PI
 def normalize_angle(angle)
-    if angle < Math::PI
+    if angle > Math::PI
         angle - 2 * Math::PI
     elsif angle < -Math::PI
-        angle + 2 * Math::Pi
+        angle + 2 * Math::PI
     else
         angle
     end
