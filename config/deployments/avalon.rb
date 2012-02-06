@@ -15,6 +15,10 @@ use Cmp::PoseEstimator        => Cmp::PoseEstimator.use(wide_sonar, Cmp::Orienta
 define('pose_estimator', Cmp::PoseEstimator)
 define('orientation_estimator', Cmp::OrientationEstimator)
 
+wall_sonar = device('sonar').use_conf('default','wall_servoing')
+define('wall', Cmp::VisualServoing.use(Cmp::WallDetector.use(wall_sonar)))
+#define('wall_detector', Cmp::WallDetector.use('sonar'))
+
 StateEstimator::Task.on :start do |event|
    @orientation_reader = data_reader 'orientation_samples'
 end

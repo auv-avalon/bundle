@@ -20,8 +20,7 @@ define('asv_detector', Cmp::AsvDetector.use('left_unicap_camera'))
 
 define('rotation', Cmp::VisualServoing.use(Cmp::Rotation.use('bottom_camera')))
 
-define('wall', Cmp::VisualServoing.use(Cmp::WallDetector.use('sonar')))
-define('wall_detector', Cmp::WallDetector.use('sonar'))
+# defines for wall_servoing: see special definitions in avalon.rb and simulation.rb
 
 model.data_service_type "NavigationMode"
 Cmp::ControlLoop.provides Srv::NavigationMode

@@ -36,8 +36,8 @@ Robot.devices do
   device(Dev::Dsp3000, :as => 'fog').
     period(0.01)
   device(Dev::Micron, :as => 'sonar').
-    period(0.01).
-    use_conf("studiobad")
+    period(0.01)#.
+    #use_conf("studiobad")
   device(Dev::Profiling, :as => 'profiler').
     period(0.1)
   device(Dev::BlueView, :as => 'blueview').
