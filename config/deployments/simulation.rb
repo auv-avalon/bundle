@@ -1,8 +1,9 @@
 Roby.app.load_orocos_deployment 'main'
 
 wall_sonar = device('sonar').use_conf('default','wall_servoing')
-define('wall', Cmp::VisualServoing.use(
-                    Cmp::WallDetector.use(wall_sonar).use(SonarFeatureEstimator::Task.use_conf('default', 'simulation'))))
+define('wall', Cmp::VisualServoing.use(Cmp::WallDetector.use(wall_sonar)))
+use(SonarFeatureEstimator::Task.use_conf('default', 'simulation'))                    
+                    
 #define('wall_detector', Cmp::WallDetector.use('sonar'))
 
 #add(Cmp::ControlLoop).
