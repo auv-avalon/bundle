@@ -1,8 +1,9 @@
 # This is separated from Controller as other type of control exist in the
 # components (as for instance FourWheelController in controldev)
 
-load_system_model 'tasks/data_services/visual_servoing'
 load_system_model 'tasks/data_services/control'
+load_system_model 'tasks/data_services/base'
+load_system_model 'tasks/data_services/visual_servoing'
 
 composition 'ControlLoop' do
     abstract
