@@ -11,19 +11,19 @@ load_system_model 'tasks/data_services/control.rb'
 #end
 
 
-#device_type 'RemoteJoystick' do
+device_type 'RemoteJoystick' do
 #    provides Srv::Motion2DCommand
-#    provides Srv::RawCommand
-#end
+    provides Srv::RawCommand
+end
 
 #device_type 'RemoteSliderbox' do
 #    provides Srv::FourWheelCommand
 #end
 
-#device_type 'Joystick' do
+device_type 'Joystick' do
 #    provides Srv::Motion2DCommand
-#    provides Srv::RawCommand
-#end
+    provides Srv::RawCommand
+end
 
 
 
