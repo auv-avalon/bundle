@@ -1,5 +1,7 @@
 load_system_model 'tasks/data_services/base'
 
+import_types_from 'controldev'
+
 # -----------------------------------------------------------------------------
 # Low-Level actuator interface 
 # -----------------------------------------------------------------------------
@@ -21,7 +23,7 @@ end
 data_service_type 'Command'
 
 data_service_type "RawCommand" do
-    output_port 'raw_command',"controldev/RawCommand"
+    output_port 'raw_command', "controldev/RawCommand"
 end
 
 data_service_type 'RelativePositionCommand' do
