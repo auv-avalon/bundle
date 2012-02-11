@@ -1,5 +1,3 @@
-load_system_model 'tasks/data_services/control.rb'
-
 data_service_type 'FourWheelController' do
     provides Srv::ActuatorController
     input_port 'command', 'controldev/FourWheelCommand'
