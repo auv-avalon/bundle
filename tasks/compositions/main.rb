@@ -2,6 +2,7 @@
 # components (as for instance FourWheelController in controldev)
 
 load_system_model 'tasks/data_services/visual_servoing'
+load_system_model 'tasks/data_services/control'
 
 composition 'ControlLoop' do
     abstract
