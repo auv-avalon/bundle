@@ -33,7 +33,7 @@ end
 
 class Controldev::Remote
     driver_for Dev::RemoteJoystick
-#    driver_for Dev::RemoteSliderbox, :as => 'sliderbox'
+    driver_for Dev::RemoteSliderbox, :as => 'sliderbox'
 end
 
 class Controldev::JoystickTask
