@@ -20,10 +20,6 @@ end
 
 data_service_type 'Command'
 
-data_service_type "RawCommand" do
-    output_port 'raw_command',"controldev/RawCommand"
-end
-
 data_service_type 'RelativePositionCommand' do
   output_port 'relative_position_command', 'base/AUVPositionCommand'
 end

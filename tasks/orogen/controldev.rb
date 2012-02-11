@@ -10,6 +10,10 @@ end
 
 
 
+data_service_type "RawCommand" do
+    output_port 'raw_command',"controldev/RawCommand"
+end
+
 
 
 device_type 'RemoteJoystick' do
