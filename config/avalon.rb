@@ -85,7 +85,7 @@ Robot.devices do
     	can_id(0x1E0, 0x7FF).
 	period(0.1)
 
-    device(Dev::DepthReader, :as => 'depth_reader').
+    device(Dev::DepthReader, :ad => 'depth_reader').
     	can_id(0x111,0x7F0).
 	period(0.1)
 
@@ -94,12 +94,12 @@ Robot.devices do
   	period(0.01)
 
     device(Dev::RemoteJoystick).
-	can_id(0x100,0x7FF).
-        period(0.01)
+        period(0.01).
+	can_id(0x100,0x7FF)
 
     device(Dev::ExperimentMarkers).
-	can_id(0x1C0,0x7FF).
-   	period(0.1)
+   	period(0.1).
+	can_id(0x1C0,0x7FF)
     end
 end
 
