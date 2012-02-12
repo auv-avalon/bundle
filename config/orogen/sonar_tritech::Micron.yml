@@ -54,3 +54,13 @@ config:
     rad: -0.785398163
   rightLimit:
     rad: 0.785398163
+--- name:distance_estimation
+config:
+  cont: 0
+  pingpong: 1
+  maximumDistance: 20.0
+  leftLimit:
+    rad: -0.01
+  rightLimit:
+    rad: 0.01
+

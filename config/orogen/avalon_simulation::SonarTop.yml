@@ -8,3 +8,8 @@ ping_pong_mode: false
 start_angle: 0.78
 end_angle: -0.78
 ping_pong_mode: true
+--- name:distance_estimation
+start_angle: 0.01
+end_angle: 0.01
+ping_pong_mode: true
+
