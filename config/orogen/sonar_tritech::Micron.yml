@@ -55,3 +55,13 @@ config:
   rightLimit:
     rad: 1.01
 port: /dev/ttyF3
+--- name:distance_estimation
+config:
+  cont: 0
+  pingpong: 1
+  maximumDistance: 20.0
+  leftLimit:
+    rad: -0.01
+  rightLimit:
+    rad: 0.01
+

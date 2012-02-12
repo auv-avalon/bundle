@@ -1,6 +1,8 @@
 --- name:default
 # start the simulation graphical interface with this module
 enable_gui: 1
+use_osg_ocean: 0
+debug_sonar: 1
 # scenefile of the robot module, which should be loaded
 with_manipulator_gui: 1
 
