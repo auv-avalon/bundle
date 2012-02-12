@@ -44,3 +44,13 @@ config:
     rad: 1.96349540849362 
     #(90.0+22.5)/180.0*Math::PI
 port: /dev/ttyF1
+--- name:wall_servoing
+config:
+  cont: 0
+  pingpong: 1
+  maximumDistance: 10.0
+  resolution: 0.1
+  leftLimit:
+    rad: -0.785398163
+  rightLimit:
+    rad: 0.785398163

@@ -6,8 +6,8 @@ use Srv::Pose             => Cmp::PoseEstimator
 
 use DataServices::AUVMotionController => AvalonControl::MotionControlTask
 
-#use Cmp::OrientationEstimator => Cmp::OrientationEstimator.use('depth_reader') ##Depth Sensor as reference
-use Cmp::OrientationEstimator => Cmp::OrientationEstimator.use('sonar_rear') ##Ground distance as 0 reference !
+use Cmp::OrientationEstimator => Cmp::OrientationEstimator.use('depth_reader') ##Depth Sensor as reference
+#use Cmp::OrientationEstimator => Cmp::OrientationEstimator.use('sonar_rear') ##Ground distance as 0 reference !
 
 wide_sonar = device('sonar').use_conf('sonar')
 use Cmp::PoseEstimator        => Cmp::PoseEstimator.use(wide_sonar, Cmp::OrientationEstimator)
@@ -56,5 +56,6 @@ add_mission('sonar_rear')
 
 add_mission("orientation_estimator")
 add_mission(Cmp::DagonOrientationEstimator)
+add_mission(Cmp::UwvModel)
 #add_mission(Cmp::PipelineSonarDetector)
 

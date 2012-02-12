@@ -1,7 +1,7 @@
-#Roby.app.orocos_process_server 'front','192.168.128.50', :log_dir => '/mnt/logs/log', :result_dir => '/mnt/logs/results'
-#Roby.app.use_deployments_from "avalon_front", :on => 'front'
+Roby.app.orocos_process_server 'front','192.168.128.50', :log_dir => '/mnt/logs/log', :result_dir => '/mnt/logs/results'
+Roby.app.use_deployments_from "avalon_front", :on => 'front'
 
-Roby.app.use_deployments_from "avalon_front"
+#Roby.app.use_deployments_from "avalon_front"
 Roby.app.use_deployments_from "avalon_back"
 
 State.orocos.exclude_from_log '/canbus/Message'

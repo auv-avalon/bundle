@@ -27,8 +27,16 @@ model.data_service_type "NavigationMode"
 Cmp::ControlLoop.provides Srv::NavigationMode
 Cmp::VisualServoing.provides Srv::NavigationMode
 
+nav_modes = ['drive_simple', 'pipeline', 'buoy', 'asv', 'rotation', 'testing', 'pipeline_sonar']
 
-modality_selection Srv::NavigationMode, 'drive_simple', 'pipeline', 'buoy', 'asv', 'rotation', 'testing', 'pipeline_sonar'
+modality_selection Srv::NavigationMode, *nav_modes
+
+
+# Show supervision all available selction modes with joysticks button mapping
+Robot.info "Available selection modes:"
+nav_modes.each_with_index do |v, i|
+    Robot.info "- mode #{i}, #{v} (on Button #{i+3})"
+end
 
 # define_wall_servoing(define_name, :sonar => sonar_config, :detector => detector_config)
 #
