@@ -23,6 +23,10 @@ define('rotation', Cmp::VisualServoing.use(Cmp::Rotation.use('bottom_camera')))
 define('wall', Cmp::VisualServoing.use(Cmp::WallDetector.use('sonar')))
 define('wall_detector', Cmp::WallDetector.use('sonar'))
 
+sonar_device = device('sonar').use_conf('default', 'distance_estimation')
+define('sonar_distance', Cmp::VisualServoing.use(Cmp::WallDetector.use(sonar_device)))
+define('sonar_distance_detector', Cmp::WallDetector.use(sonar_device))
+
 model.data_service_type "NavigationMode"
 Cmp::ControlLoop.provides Srv::NavigationMode
 Cmp::VisualServoing.provides Srv::NavigationMode
