@@ -24,7 +24,7 @@ end
 Conf.orocos.disable_log_group "images"
 Conf.orocos.disable_log_group "raw_camera"
 
-StateEstimator::Task.worstcase_processing_time 1
+Orocos::RobyPlugin::StateEstimator::Task.worstcase_processing_time 1
 
 State.navigation_mode = ['drive_simple','pipeline','pipeline_sonar','buoy']
 

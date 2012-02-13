@@ -337,7 +337,7 @@ class MainPlanner < Roby::Planning::Planner
         end
         wait_speed    = { :x => forward_speed, :y => 0 }
 
-        control = Cmp::ControlLoop.use('command' => AuvRelPosController::Task).as_plan
+        control = self.relative_position_control
         control.script do
             data_reader 'orientation', ['orientation_with_z', 'orientation_z_samples']
             data_writer 'motion_command', ['controller', 'command']

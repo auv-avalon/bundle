@@ -1,10 +1,12 @@
 #Anything shared by the robot and the simulator
 
-define('testing', Cmp::ControlLoop).
-  use(AuvRelPosController::Task)
+define('relative_position_control', Cmp::ControlLoop).
+    use('command' => AuvRelPosController::Task).
+    use('controller' => Orocos::RobyPlugin::AvalonControl::MotionControlTask)
 
 define('drive_simple', Cmp::ControlLoop).
-  use(Cmp::AUVJoystickCommand)
+    use('command' => Cmp::AUVJoystickCommand).
+    use('controller' => Orocos::RobyPlugin::AvalonControl::MotionControlTask)
 
 define('pipeline', Cmp::VisualServoing.use(Cmp::PipelineDetector.use('bottom_camera')))
 define('pipeline_detector', Cmp::PipelineDetector.use('bottom_camera'))
@@ -27,7 +29,7 @@ model.data_service_type "NavigationMode"
 Cmp::ControlLoop.provides Srv::NavigationMode
 Cmp::VisualServoing.provides Srv::NavigationMode
 
-nav_modes = ['drive_simple', 'pipeline', 'buoy', 'asv', 'rotation', 'testing', 'pipeline_sonar']
+nav_modes = ['drive_simple', 'pipeline', 'buoy', 'asv', 'rotation', 'pipeline_sonar']
 
 modality_selection Srv::NavigationMode, *nav_modes
 
