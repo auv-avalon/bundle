@@ -1,10 +1,10 @@
 #Anything shared by the robot and the simulator
 
 define('testing', Cmp::ControlLoop).
-  use(AuvRelPosController::Task)
+  use('command' => AuvRelPosController::Task)
 
 define('drive_simple', Cmp::ControlLoop).
-  use(Cmp::AUVJoystickCommand)
+  use('command' => Cmp::AUVJoystickCommand)
 
 define('pipeline', Cmp::VisualServoing.use(Cmp::PipelineDetector.use('bottom_camera')))
 define('pipeline_detector', Cmp::PipelineDetector.use('bottom_camera'))
