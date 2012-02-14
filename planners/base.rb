@@ -13,7 +13,7 @@ class MainPlanner < Roby::Planning::Planner
         YAW_THRESHOLD = 10 * Math::PI / 180.0
         Z_THRESHOLD = 0.3
 
-        control = Cmp::ControlLoop.use('command' => Orocos::RobyPlugin::AuvRelPosController::Task).as_plan
+        control = self.relative_position_control
         control.script do
             data_reader 'orientation', ['orientation_with_z', 'orientation_z_samples']
             data_writer 'motion_command', ['controller', 'command']
@@ -84,9 +84,66 @@ class MainPlanner < Roby::Planning::Planner
         required_arg("yaw", "initial search direction of this motion method").
         required_arg("z", "initial z value a pipeline should be found").
         required_arg("forward_speed", "forward velocity for motion").
-        required_arg("timeout", "timeout when this method should be aborted")
+        optional_arg("timeout", "timeout when this method should be aborted")
     method(:search_pipeline) do
         # Can use move command for alignment and motion
+        z = arguments[:z]
+        forward_speed = arguments[:forward_speed]
+        yaw = arguments[:yaw]
+        timeout = timeout[:timeout]
+
+        PIPELINE_SEARCH_CANDIDATE_SPEED = if forward_speed > 0 then 0.1 else -0.1 end
+        PIPELINE_PREFERED_HEADING = 0.0
+
+        pipeline = self.pipeline
+        pipeline.script do
+            # Define a 'orientation_reader' and 'orientation' methods that allow
+            # access to control.pose.orientation_z_samples
+            data_reader 'orientation', ['control', 'orientation_with_z', 'orientation_z_samples']
+            data_reader 'pipeline_servoing_command', ['detector', 'relative_position_command']
+            data_reader 'pipeline_info', ['detector', 'offshorePipelineDetector', 'pipeline']
+
+            # Define 'motion_command_writer', 'motion_command' and 'write_motion_command'
+            data_writer 'motion_command', ['control', 'controller', 'command']
+            data_writer 'rel_pos_command', ['control', 'command', 'position_command']
+
+            if timeout
+                execute do
+                    detector_child.found_pipe_event.
+                        should_emit_after detector_child.start_event,
+                        :max_t => timeout
+                end
+            end
+
+            wait_any detector_child.start_event
+            wait_any control_child.command_child.start_event
+
+            execute do
+                control_child.command_child.disconnect_ports(control_child.controller_child, [['motion_command', 'command']])
+                pipeline_detector = detector_child.offshorePipelineDetector_child
+                pipeline_detector.orogen_task.depth = z
+                pipeline_detector.orogen_task.prefered_heading = PIPELINE_PREFERED_HEADING
+            end
+
+            poll do
+                motion_command.heading = yaw
+                motion_command.z = z
+                motion_command.y_speed = 0
+
+                last_event = detector_child.history.last
+                if last_event.symbol == :check_candidate
+                    motion_command.x_speed = PIPELINE_SEARCH_CANDIDATE_SPEED
+                elsif detector_child.found_pipe?
+                    transition!
+                else
+                    motion_command.x_speed = forward_speed
+                end
+                write_motion_command
+
+            end
+        end
+
+        emit :success
     end
 
     # -------------------------------------------------------------------------
