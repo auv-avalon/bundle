@@ -1,6 +1,6 @@
 #Anything shared by the robot and the simulator
 
-define('testing', Cmp::ControlLoop).
+define('relative_position_control', Cmp::ControlLoop).
   use('command' => AuvRelPosController::Task)
 
 define('drive_simple', Cmp::ControlLoop).
@@ -31,7 +31,7 @@ model.data_service_type "NavigationMode"
 Cmp::ControlLoop.provides Srv::NavigationMode
 Cmp::VisualServoing.provides Srv::NavigationMode
 
-nav_modes = ['drive_simple', 'pipeline', 'buoy', 'asv', 'rotation', 'testing', 'pipeline_sonar']
+nav_modes = ['drive_simple', 'pipeline', 'buoy', 'asv', 'rotation', 'pipeline_sonar']
 
 modality_selection Srv::NavigationMode, *nav_modes
 
