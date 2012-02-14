@@ -315,6 +315,7 @@ class MainPlanner < Roby::Planning::Planner
     # -------------------------------------------------------------------------
 
     # heading or relative_heading must be given
+<<<<<<< HEAD
     describe("simple movement").
         required_arg("z", "initial z value on which robot should rotate").
         optional_arg('forward_speed', 'if set to a non-zero value, the system will first go to position and then go forward for the specified duration at this speed').
