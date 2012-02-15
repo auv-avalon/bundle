@@ -179,7 +179,7 @@ class Orocos::RobyPlugin::OffshorePipelineDetector::Task
         pid = control_task.controller_y
         pid.Ti = 0.001
         control_task.controller_y = pid
-        control_task.reset
+        # control_task.reset
     end
 
     on :stop do |event|
@@ -188,7 +188,7 @@ class Orocos::RobyPlugin::OffshorePipelineDetector::Task
         pid = control_task.controller_y
         pid.Ti = 0
         control_task.controller_y = pid
-        control_task.reset
+        # control_task.reset
     end
 end
 
@@ -243,8 +243,8 @@ composition 'WallDetector' do
     event :detected_corner
     event :lost_wall
 
-    add Srv::SonarScanProvider
-    add SonarFeatureEstimator::Task, :as => 'scans'
+    add Srv::SonarScanProvider, :as => 'sonar'
+    add SonarFeatureEstimator::Task, :as => 'laserscan'
     add Srv::Orientation
     add_main WallServoing::SingleSonarServoing , :as => 'servoing'
     autoconnect
