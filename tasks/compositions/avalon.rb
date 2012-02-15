@@ -290,7 +290,7 @@ composition 'MotionEstimation' do
 end
 
 composition 'UwvModel' do
-    add AvalonControl::MotionControlTask, :as => 'motionControl'
+    add AvalonControl::MotionControlTask, :as => 'motion_control'
     add UwvDynamicModel::Task, :as => 'model'
     autoconnect
 

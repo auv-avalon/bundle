@@ -6,7 +6,7 @@ class UwvDynamicModel::Task
         # We need to set the model parameters before calling the
         # configure hook because they are used in there.
         puts "UwvDynamicModel: Initializing vehicle parameters ..."
-        task = TaskContext.get self.orocos_name
+        task = Orocos::TaskContext.get self.orocos_name
 
         # Get parameter property
         parameters = task.uwv_param
