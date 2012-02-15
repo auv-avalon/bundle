@@ -24,10 +24,10 @@ class MainPlanner < Roby::Planning::Planner
         end
         wait_speed    = { :x => forward_speed, :y => 0 }
 
-        control = Cmp::ControlLoop.use('command' => AuvRelPosController::Task).as_plan
+        control = self.relative_position_control
         control.script do
             data_reader 'orientation', ['orientation_with_z', 'orientation_z_samples']
-            data_writer 'motion_command', ['controller', 'command']
+            data_writer 'motion_command', ['controller', 'motion_commands']
 
             wait_any command_child.start_event
 
@@ -50,7 +50,7 @@ class MainPlanner < Roby::Planning::Planner
                 elsif target_heading < -Math::PI then target_heading += 2*Math::PI
                 end
 
-                command_child.disconnect_ports(controller_child, [['motion_command', 'command']])
+                command_child.disconnect_ports(controller_child, [['motion_command', 'motion_commands.']])
                 Robot.info "start simple_move at target_heading=#{target_heading} and z=#{z}"
                 Robot.info " going to target with speed=#{descent_speed}"
             end
@@ -117,12 +117,12 @@ class MainPlanner < Roby::Planning::Planner
         control = self.relative_position_control
         control.script do
             data_reader 'orientation', ['orientation_with_z', 'orientation_z_samples']
-            data_writer 'motion_command', ['controller', 'command']
+            data_writer 'motion_command', ['controller', 'motion_commands']
 
             wait_any command_child.start_event
 
             execute do
-                command_child.disconnect_ports(controller_child, [['motion_command', 'command']])
+                command_child.disconnect_ports(controller_child, [['motion_command', 'motion_commands']])
             end
 
             # align to the given yaw and z value in this movement
@@ -205,7 +205,7 @@ class MainPlanner < Roby::Planning::Planner
             data_reader 'pipeline_info', ['detector', 'offshorePipelineDetector', 'pipeline']
 
             # Define 'motion_command_writer', 'motion_command' and 'write_motion_command'
-            data_writer 'motion_command', ['control', 'controller', 'command']
+            data_writer 'motion_command', ['control', 'controller', 'motion_commands']
             data_writer 'rel_pos_command', ['control', 'command', 'position_command']
 
             if timeout
@@ -220,7 +220,7 @@ class MainPlanner < Roby::Planning::Planner
             wait_any control_child.command_child.start_event
 
             execute do
-                control_child.command_child.disconnect_ports(control_child.controller_child, [['motion_command', 'command']])
+                control_child.command_child.disconnect_ports(control_child.controller_child, [['motion_command', 'motion_commands']])
                 pipeline_detector = detector_child.offshorePipelineDetector_child
                 pipeline_detector.orogen_task.depth = z
                 pipeline_detector.orogen_task.prefered_heading = PIPELINE_PREFERED_HEADING
@@ -270,13 +270,13 @@ class MainPlanner < Roby::Planning::Planner
 
         move_forward = sonar_distance.script do
             data_reader 'wall_distance', ['laser_scan_provider', 'laserscan']
-            data_writer 'motion_command', ['controller', 'command']
+            data_writer 'motion_command', ['controller', 'motion_commands']
 
             wait_any command_child.start_event
 
             execute do
                 # disconnect AuvRelPosController
-                command_child.disconnect_ports(controller_child, [['motion_command', 'command']])
+                command_child.disconnect_ports(controller_child, [['motion_command', 'motion_commands']])
             end
 
             poll do 
