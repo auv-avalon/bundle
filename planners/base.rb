@@ -191,7 +191,7 @@ class MainPlanner < Roby::Planning::Planner
         z = arguments[:z]
         forward_speed = arguments[:forward_speed]
         yaw = arguments[:yaw]
-        timeout = timeout[:timeout]
+        timeout = arguments[:timeout]
 
         PIPELINE_SEARCH_CANDIDATE_SPEED = if forward_speed > 0 then 0.1 else -0.1 end
         PIPELINE_PREFERED_HEADING = 0.0
@@ -242,9 +242,9 @@ class MainPlanner < Roby::Planning::Planner
                 write_motion_command
 
             end
-        end
 
-        emit :success
+            emit :success
+        end
     end
 
     # -------------------------------------------------------------------------
@@ -264,19 +264,17 @@ class MainPlanner < Roby::Planning::Planner
 
         WALL_DISTANCE_THRESHOLD = 0.4
 
-        alignment = align_and_move(:yaw => yaw, :z => z)
-
         sonar_distance = self.sonar_distance
+        sonar_distance.script do
+            data_reader 'wall_distance', ['detector', 'laserscan', 'new_feature']
+            data_writer 'motion_command', ['control', 'controller', 'motion_commands']
 
-        move_forward = sonar_distance.script do
-            data_reader 'wall_distance', ['laser_scan_provider', 'laserscan']
-            data_writer 'motion_command', ['controller', 'motion_commands']
-
-            wait_any command_child.start_event
+            wait_any detector_child.start_event
+            wait_any control_child.command_child.start_event
 
             execute do
                 # disconnect AuvRelPosController
-                command_child.disconnect_ports(controller_child, [['motion_command', 'motion_commands']])
+                control_child.command_child.disconnect_ports(control_child.controller_child, [['motion_command', 'motion_commands']])
             end
 
             poll do 
@@ -296,7 +294,7 @@ class MainPlanner < Roby::Planning::Planner
                 motion_command.x_speed = forward_speed
                 write_motion_command
 
-                if wall_distance
+                if wall_distance && wall_distance.ranges[0] > 5
                    current_distance = wall_distance.ranges[0]
                    distance_error = (current_distance - distance).abs
 
@@ -306,10 +304,6 @@ class MainPlanner < Roby::Planning::Planner
 
             emit :success
         end
-
-        move_forward.depends_on alignment
-        move_forward.should_start_after alignment
-        move_forward
     end
 
     # -------------------------------------------------------------------------
