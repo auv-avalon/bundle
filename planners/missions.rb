@@ -7,9 +7,51 @@ class MainPlanner
 
     describe("run a complete pipeline following using current alignment").
         required_arg("turns", "number of turns on pipeline following").
-        required_arg("activation", "activation threshold for finding a pipeline").
+        required_arg("z", "initial z value for pipeline following").
+        required_arg("prefered_heading", "prefered heading on pipeline").
+        required_arg("stabilization_time", "time of stabilization of the pipeline").
         optional_arg("timeout", "timeout for aborting pipeline following")
     method(:follow_pipeline) do
+        turns = arguments[:turns] + 1
+        z = arguments[:z]
+        timeout = arguments[:timeout] 
+        prefered_heading = arguments[:prefered_heading]
+        stabilization_time = arguments[:stabilization_time]
+
+        pipelien = self.pipeline
+        pipeline.script do
+            if timeout
+                execute do
+                    detector_child.found_pipe_event.should_emit_after detector_child.start_event,
+                    :max_t => timeout
+                end
+            end
+
+            wait_any detector_child.start_event
+            wait_any control_child.command_child.start_event
+
+            turns.times do |i|
+                execute do
+                    detector_child.offshorePipelineDetector_child.orogen_task.prefered_heading = 
+                        (i % 2) * Math::PI + prefered_heading
+                end
+
+                wait detector_child.follow_pipe_event
+                wait detector_child.end_of_pipe_event
+                wait stabilization_time
+            end
+
+            emit :success
+        end
+    end
+
+    method(:find_and_follow_pipeline) do
+        search = search_pipeline(:yaw => 0.0, :z => -3.0, :forward_speed => 4.0)
+        follow = follow_pipeline(:turns => 2, :z => -3.0, :prefered_heading => 0, 
+                                 :stabilization_time => 5.0)
+        follow.depends_on(search)
+        follow.should_start_after search.success_event
+        follow
     end
 
     describe("run a complete wall servoing using current alignment to wall").
