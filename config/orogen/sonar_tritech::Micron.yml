@@ -54,6 +54,7 @@ config:
     rad: -0.785398163
   rightLimit:
     rad: 0.785398163
+  port: /dev/ttyF3
 --- name:distance_estimation
 config:
   cont: 0
@@ -63,4 +64,5 @@ config:
     rad: -0.01
   rightLimit:
     rad: 0.01
+port: /dev/ttyF3
 

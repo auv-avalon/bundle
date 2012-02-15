@@ -1,10 +1,12 @@
 #Anything shared by the robot and the simulator
 
 define('relative_position_control', Cmp::ControlLoop).
-  use('command' => AuvRelPosController::Task)
+    use('command' => AuvRelPosController::Task).
+    use('controller' => AvalonControl::MotionControlTask)
 
 define('drive_simple', Cmp::ControlLoop).
-  use('command' => Cmp::AUVJoystickCommand)
+    use('command' => Cmp::AUVJoystickCommand).
+    use('controller' => AvalonControl::MotionControlTask)
 
 define('pipeline', Cmp::VisualServoing.use(Cmp::PipelineDetector.use('bottom_camera')))
 define('pipeline_detector', Cmp::PipelineDetector.use('bottom_camera'))
