@@ -2,11 +2,11 @@
 
 define('relative_position_control', Cmp::ControlLoop).
     use('command' => AuvRelPosController::Task).
-    use('controller' => Orocos::RobyPlugin::AvalonControl::MotionControlTask)
+    use('controller' => AvalonControl::MotionControlTask)
 
 define('drive_simple', Cmp::ControlLoop).
     use('command' => Cmp::AUVJoystickCommand).
-    use('controller' => Orocos::RobyPlugin::AvalonControl::MotionControlTask)
+    use('controller' => AvalonControl::MotionControlTask)
 
 define('pipeline', Cmp::VisualServoing.use(Cmp::PipelineDetector.use('bottom_camera')))
 define('pipeline_detector', Cmp::PipelineDetector.use('bottom_camera'))

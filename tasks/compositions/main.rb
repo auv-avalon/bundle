@@ -35,11 +35,13 @@ Cmp::ControlLoop.controller_type 'Motion2D', '/base/MotionCommand2D'
 Cmp::ControlLoop.controller_type 'AUVMotion', '/base/AUVMotionCommand'
 
 using_task_library 'auv_rel_pos_controller'
+using_task_library 'avalon_control'
 
 composition 'VisualServoing' do
     add Srv::RelativePositionDetector, :as => 'detector'
     add(Cmp::ControlLoop, :as => 'control').
-      use('command' => AuvRelPosController::Task)
+      use('command' => AuvRelPosController::Task).
+      use('controller' => AvalonControl::MotionControlTask) 
 
     autoconnect
 end
