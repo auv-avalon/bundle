@@ -37,7 +37,7 @@ modality_selection Srv::NavigationMode, *nav_modes
 # Show supervision all available selction modes with joysticks button mapping
 Robot.info "Available selection modes:"
 nav_modes.each_with_index do |v, i|
-    Robot.info "- mode #{i}, #{v} (on Button #{i+3})"
+    Robot.info "- mode #{i+3}, #{v} (on Button #{i+4})"
 end
 
 # define_wall_servoing(define_name, :sonar => sonar_config, :detector => detector_config)
