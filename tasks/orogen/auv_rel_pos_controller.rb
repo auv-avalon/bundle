@@ -9,7 +9,6 @@ Cmp::ControlLoop.specialize 'command' => AuvRelPosController::Task do
 
     overload 'controller', Srv::AUVMotionController
     export command.position_command
-    # connect command.motion_command => controller.command
-    
-    autoconnect
+    connect orientation_with_z => command
+    connect command => controller
 end
