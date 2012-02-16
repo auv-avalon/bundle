@@ -50,7 +50,7 @@ class MainPlanner < Roby::Planning::Planner
                 elsif target_heading < -Math::PI then target_heading += 2*Math::PI
                 end
 
-                command_child.disconnect_ports(controller_child, [['motion_command', 'motion_commands.']])
+                command_child.disconnect_ports(controller_child, [['motion_command', 'motion_commands']])
                 Robot.info "start simple_move at target_heading=#{target_heading} and z=#{z}"
                 Robot.info " going to target with speed=#{descent_speed}"
             end
