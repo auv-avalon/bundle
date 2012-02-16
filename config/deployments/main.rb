@@ -31,6 +31,9 @@ sonar_device = device('sonar').use_conf('default', 'distance_estimation')
 define('sonar_distance', Cmp::VisualServoing.use(Cmp::WallDetector.use(sonar_device)))
 define('sonar_distance_detector', Cmp::WallDetector.use(sonar_device))
 
+define('particle_localization', Cmp::Localization.use(ErasPositionEstimator::Task))
+define('ekf_localization', Cmp::Localization.use(EkfSlam::Task))
+
 model.data_service_type "NavigationMode"
 Cmp::ControlLoop.provides Srv::NavigationMode
 Cmp::VisualServoing.provides Srv::NavigationMode
