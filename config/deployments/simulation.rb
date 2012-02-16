@@ -24,6 +24,8 @@ end
 
 use AvalonControl::MotionControlTask => AvalonControl::MotionControlTask.
   use_conf("default", "simulation")
+use SonarFeatureEstimator::Task => SonarFeatureEstimator::Task.
+  use_conf('default','simulation')
 
 add_mission(AvalonSimulation::Task)
 add_mission(AvalonSimulation::StateEstimator)
