@@ -7,6 +7,12 @@ module Robot
         task.setPosition(x, y, z)
     end
 
+    def self.avalon_set_pose(x, y, z, yaw)
+        task = Orocos::TaskContext.get 'avalon_simulation'
+        task.setPosition(x, y, z)
+        task.setYaw(yaw)
+    end
+
     def self.set_avalon_to(object)
         buoy = { :x => 55.0, :y => -1.0, :z => -2.5, :theta => Math::PI / 2.0 }
         pipe = { :x => 0.0, :y => 0.0, :z => -0.0, :theta => 0.0 }
@@ -25,7 +31,7 @@ module Robot
             position = pipe
         end
 
-        sim_set_position(position[:x], position[:y], position[:z])
+        sim_set_pose(position[:x], position[:y], position[:z], position[:theta])
     end
 end
 
