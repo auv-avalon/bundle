@@ -2,7 +2,7 @@ class MainPlanner
     describe("run a complete buoy servoing with cutting given a found buoy using current alignment").
         required_arg("mode", ":serve_180, :serve_360 (180 or 360 degree servoing").
         required_arg("timeout", "timeout for automatically cutting mode")
-    method(:serve_and_cut_buoy) do
+    method(:survey_and_cut_buoy) do
     end
 
     describe("run a complete pipeline following using current alignment").
@@ -60,7 +60,7 @@ class MainPlanner
         required_arg("min_distance", "minimal distance to wall").
         required_arg("corners", "number of serving corners").
         optional_arg("timeout", "timeout for aborting wall servoing")        
-    method(:serve_wall) do
+    method(:survey_wall) do
         yaw_modulation = arguments[:yaw_modulation]
         ref_distance = arguments[:ref_distance]
         min_distance = arguments[:min_distance]
