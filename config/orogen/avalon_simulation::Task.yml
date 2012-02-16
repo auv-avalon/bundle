@@ -7,10 +7,10 @@ debug_sonar: 1
 with_manipulator_gui: 1
 
 # Initial position - complete mission
-initial_x: 0.0
-initial_y: 0.0
+initial_x: 30.0
+initial_y: -8.0
 initial_z: 0.0
-initial_yaw: 0.0
+initial_yaw: 1.57
 
 # Initial position - gate
 # initial_position:
