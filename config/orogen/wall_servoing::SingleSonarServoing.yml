@@ -16,7 +16,7 @@ servoing_speed: 1.0
 # reference distance to wall
 wall_distance: 3.0
 # end angle for the wall estimation
-wall_estimation_end_angle: 0.0
+wall_estimation_end_angle: -0.785
 # minimum count inliers of the point cloud in percent to be a valid model
 wall_estimation_ransac_min_inliers: 0.7
 # maximal inlier distance to the model
