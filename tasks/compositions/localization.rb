@@ -43,6 +43,7 @@ Cmp::Localization.estimator_type(EkfSlam::Task) do
    
     connect orientation_with_z => pose_provider.orientation_samples
     connect orientation_with_z => pose_provider.depth_samples
+    connect motion_provider => pose_provider.speed_samples
     connect sonar => pose_provider
 
     export pose_provider.pose_samples
