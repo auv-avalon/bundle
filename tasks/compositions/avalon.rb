@@ -241,14 +241,15 @@ composition 'WallDetector' do
     event :searching_wall
     event :checking_wall
     event :detected_corner
+    event :lost_wall
 
     add Srv::SonarScanProvider, :as => 'sonar'
     add SonarFeatureEstimator::Task, :as => 'laserscan'
     add Srv::Orientation
-    add_main WallServoing::SingleSonarServoing , :as => 'detector'
+    add_main WallServoing::SingleSonarServoing , :as => 'servoing'
     autoconnect
 
-    export detector.position_command, :as => 'relative_position_command'
+    export servoing.position_command, :as => 'relative_position_command'
     provides Srv::RelativePositionDetector
 end
 

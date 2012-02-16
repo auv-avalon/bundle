@@ -22,8 +22,10 @@ define('asv_detector', Cmp::AsvDetector.use('left_unicap_camera'))
 
 define('rotation', Cmp::VisualServoing.use(Cmp::Rotation.use('bottom_camera')))
 
-define('wall', Cmp::VisualServoing.use(Cmp::WallDetector.use('sonar')))
-define('wall_detector', Cmp::WallDetector.use('sonar'))
+
+wall_device = device('sonar').use_conf('default', 'wall_servoing')
+define('wall', Cmp::VisualServoing.use(Cmp::WallDetector.use(wall_device)))
+define('wall_detector', Cmp::WallDetector.use(wall_device))
 
 sonar_device = device('sonar').use_conf('default', 'distance_estimation')
 define('sonar_distance', Cmp::VisualServoing.use(Cmp::WallDetector.use(sonar_device)))

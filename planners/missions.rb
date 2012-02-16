@@ -18,7 +18,7 @@ class MainPlanner
         prefered_heading = arguments[:prefered_heading]
         stabilization_time = arguments[:stabilization_time]
 
-        pipelien = self.pipeline
+        pipeline = self.pipeline
         pipeline.script do
             if timeout
                 execute do
@@ -61,6 +61,22 @@ class MainPlanner
         required_arg("corners", "number of serving corners").
         optional_arg("timeout", "timeout for aborting wall servoing")        
     method(:serve_wall) do
-    end
+        yaw_modulation = arguments[:yaw_modulation]
+        ref_distance = arguments[:ref_distance]
+        min_distance = arguments[:min_distance]
+        corners = arguments[:corners]
+        timeout = arguments[:timeout]
 
+        wall_servoing = self.wall
+        wall_servoing.script do
+            wait_any detector_child.start_event
+            wait_any control_child.command_child.start_event
+
+            corners.times do |i|
+                wait detector_child.servoing_child.detected_corner_event
+            end
+
+            wait timeout
+        end
+    end
 end
