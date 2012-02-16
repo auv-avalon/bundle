@@ -4,7 +4,7 @@ Roby.app.use_deployment "taskmon_back"
 Roby.app.use_deployment "auv_rel_pos_controller"
 Roby.app.use_deployment "uwv_dynamic_model"
 
-Roby.app.orocos_start_all_deployments = true
+# Roby.app.orocos_start_all_deployments = true
 
 Conf.orocos.log_group "images" do
     add "/RTT/extras/ReadOnlyPointer</base/samples/frame/Frame>"

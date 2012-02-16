@@ -1,4 +1,5 @@
 require 'controllers/common_controller'
+
 Roby.app.apply_orocos_deployment 'simulation' # load config/deployments/avalon.rb
 
 module Robot
@@ -33,5 +34,9 @@ module Robot
 
         sim_set_pose(position[:x], position[:y], position[:z], position[:theta])
     end
+end
+
+fork do
+  system 'rock-display > /dev/null'
 end
 

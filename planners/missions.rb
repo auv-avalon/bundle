@@ -46,8 +46,8 @@ class MainPlanner
     end
 
     method(:find_and_follow_pipeline) do
-        search = search_pipeline(:yaw => 0.0, :z => -3.0, :forward_speed => 4.0)
-        follow = follow_pipeline(:turns => 2, :z => -3.0, :prefered_heading => 0, 
+        search = search_pipeline(:yaw => Math::PI / 2.0, :z => -3.0, :forward_speed => 4.0)
+        follow = follow_pipeline(:turns => 2, :z => -3.0, :prefered_heading => 0.05, 
                                  :stabilization_time => 5.0)
         follow.depends_on(search)
         follow.should_start_after search.success_event
