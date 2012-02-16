@@ -53,7 +53,7 @@ composition 'PoseEstimator' do
     connect sonar_scan_provider => slam.SonarScan
 
     export slam.pose_samples
-    provides DataServices::Pose
+    provides Srv::Pose
 end
 
 composition "OrientationEstimator" do
