@@ -263,6 +263,7 @@ class MainPlanner < Roby::Planning::Planner
         timeout = arguments[:timeout]
 
         WALL_DISTANCE_THRESHOLD = 0.4
+        WALL_DISTANCE_STABILIZATION = 7.0
 
         sonar_distance = self.sonar_distance
         sonar_distance.script do
@@ -300,6 +301,35 @@ class MainPlanner < Roby::Planning::Planner
 
                    transition! if distance_error < WALL_DISTANCE_THRESHOLD
                 end
+            end
+
+            start_time = nil
+            execute do
+                start_time = Time.now
+            end
+
+            poll do
+                distance_error = 0
+                if wall_distance && wall_distance.ranges[0] > 5
+                    current_distance = wall_distance.ranges[0]
+                    distance_error = current_distance - distance
+                end
+
+                motion_command.heading = yaw
+                motion_command.z = z
+                motion_command.y_speed = 0.0
+                motion_command.x_speed = distance_error
+                write_motion_command
+
+                transition! if (Time.now - start_time) > WALL_DISTANCE_STABILIZATION
+            end
+
+            execut do
+                motion_command.heading = yaw
+                motion_command.z = z
+                motion_command.y_speed = 0.0
+                motion_command.x_speed = 0.0
+                wirte_motion_command
             end
 
             emit :success
