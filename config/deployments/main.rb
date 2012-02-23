@@ -22,8 +22,10 @@ define('asv_detector', Cmp::AsvDetector.use('left_unicap_camera'))
 
 define('rotation', Cmp::VisualServoing.use(Cmp::Rotation.use('bottom_camera')))
 
-define('wall', Cmp::VisualServoing.use(Cmp::WallDetector.use('sonar')))
-define('wall_detector', Cmp::WallDetector.use('sonar'))
+
+wall_device = device('sonar').use_conf('default', 'wall_servoing')
+define('wall', Cmp::VisualServoing.use(Cmp::WallDetector.use(wall_device)))
+define('wall_detector', Cmp::WallDetector.use(wall_device))
 
 model.data_service_type "NavigationMode"
 Cmp::ControlLoop.provides Srv::NavigationMode
