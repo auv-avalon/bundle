@@ -37,7 +37,7 @@ model.data_service_type "NavigationMode"
 Cmp::ControlLoop.provides Srv::NavigationMode
 Cmp::VisualServoing.provides Srv::NavigationMode
 
-nav_modes = ['drive_simple', 'pipeline', 'buoy', 'wall', 'asv', 'rotation', 'pipeline_sonar']
+nav_modes = ['drive_simple', 'pipeline', 'buoy', 'asv', 'rotation', 'pipeline_sonar']
 
 modality_selection Srv::NavigationMode, *nav_modes
 
