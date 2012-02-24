@@ -64,4 +64,5 @@ config:
     rad: -0.01
   rightLimit:
     rad: 0.01
+port: /dev/ttyF3
 
