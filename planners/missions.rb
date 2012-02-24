@@ -1,4 +1,6 @@
-class MainPlanner
+puts 'mission.rb'
+
+class MainPlanner < Roby::Planning::Planner
     describe("run a complete buoy servoing with cutting given a found buoy using current alignment").
         required_arg("mode", ":serve_180, :serve_360 (180 or 360 degree servoing").
         required_arg("timeout", "timeout for automatically cutting mode")
@@ -55,28 +57,48 @@ class MainPlanner
     end
 
     describe("run a complete wall servoing using current alignment to wall").
-        required_arg("yaw_modulation", "fixed heading modulation to serve the wall: 0 is front").
-        required_arg("ref_distance", "reference distance to wall").
-        required_arg("min_distance", "minimal distance to wall").
         required_arg("corners", "number of serving corners").
-        optional_arg("timeout", "timeout for aborting wall servoing")        
+        optional_arg("yaw_modulation", "fixed heading modulation to serve the wall: 0 is front").
+        optional_arg("ref_distance", "reference distance to wall").
+        optional_arg("timeout", "timeout after successful corner passing")        
     method(:survey_wall) do
         yaw_modulation = arguments[:yaw_modulation]
         ref_distance = arguments[:ref_distance]
-        min_distance = arguments[:min_distance]
         corners = arguments[:corners]
         timeout = arguments[:timeout]
 
+        PASSING_CORNER_TIMEOUT = 4
+
         wall_servoing = self.wall
         wall_servoing.script do
+            execute do 
+                survey = detector_child.servoing_child
+                survey.orogen_task.wall_distance = ref_distance if ref_distance
+                survey.orogen_task.heading_modulation = yaw_modulation if yaw_modulation
+
+                Plan.info "Start wall servoing over #{corners} corners"
+            end
+
             wait_any detector_child.start_event
             wait_any control_child.command_child.start_event
 
             corners.times do |i|
                 wait detector_child.servoing_child.detected_corner_event
+                wait detector_child.servoing_child.wall_servoing_event
+                wait PASSING_CORNER_TIMEOUT
+                wait detector_child.servoing_child.wall_servoing_event
+
+                execute do
+                    Plan.info "Corner #{i} passed, remaining #{corners - i} times"
+                end
+            end
+
+            execute do
+                Plan.info "Survey #{timeout} seconds until finish"
             end
 
             wait timeout
+            emit :success
         end
     end
 end
