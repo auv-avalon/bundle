@@ -51,7 +51,7 @@ config:
   maximumDistance: 10.0
   resolution: 0.1
   leftLimit:
-    rad: -0.785398163
+    rad: -1.01
   rightLimit:
-    rad: 0.785398163
+    rad: 1.01
 port: /dev/ttyF3

@@ -241,14 +241,15 @@ composition 'WallDetector' do
     event :searching_wall
     event :checking_wall
     event :detected_corner
+    event :lost_wall
 
     add Srv::SonarScanProvider
     add SonarFeatureEstimator::Task, :as => 'scans'
     add Srv::Orientation
-    add_main WallServoing::Task , :as => 'detector'
+    add_main WallServoing::SingleSonarServoing , :as => 'servoing'
     autoconnect
 
-    export detector.position_command, :as => 'relative_position_command'
+    export servoing.position_command, :as => 'relative_position_command'
     provides Srv::RelativePositionDetector
 end
 
@@ -290,7 +291,7 @@ composition 'MotionEstimation' do
 end
 
 composition 'UwvModel' do
-    add AvalonControl::MotionControlTask, :as => 'motionControl'
+    add AvalonControl::MotionControlTask, :as => 'motion_control'
     add UwvDynamicModel::Task, :as => 'model'
     autoconnect
 

@@ -26,7 +26,7 @@ Conf.orocos.disable_log_group "raw_camera"
 
 Orocos::RobyPlugin::StateEstimator::Task.worstcase_processing_time 1
 
-State.navigation_mode = ['drive_simple','pipeline','pipeline_sonar','buoy']
+State.navigation_mode = ['drive_simple','pipeline','wall','buoy']
 
 Robot.devices do
 #  device(Dev::LowLevel, :as => 'low_level_board').
@@ -36,8 +36,7 @@ Robot.devices do
   device(Dev::Dsp3000, :as => 'fog').
     period(0.01)
   device(Dev::Micron, :as => 'sonar').
-    period(0.01).
-    use_conf("studiobad")
+    period(0.01)
   device(Dev::Profiling, :as => 'profiler').
     period(0.1)
   device(Dev::BlueView, :as => 'blueview').
