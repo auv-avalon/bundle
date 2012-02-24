@@ -1,3 +1,5 @@
+puts 'base.rb'
+
 class MainPlanner < Roby::Planning::Planner
    YAW_THRESHOLD = 10 * Math::PI / 180.0
    Z_THRESHOLD = 0.3
@@ -51,8 +53,7 @@ class MainPlanner < Roby::Planning::Planner
                 end
 
                 command_child.disconnect_ports(controller_child, [['motion_command', 'motion_commands']])
-                Robot.info "start simple_move at target_heading=#{target_heading} and z=#{z}"
-                Robot.info " going to target with speed=#{descent_speed}"
+                Plan.info "simple movement to yaw #{target_heading}, z #{z} with speed #{descent_speed}"
             end
 
             poll do
@@ -78,11 +79,12 @@ class MainPlanner < Roby::Planning::Planner
             end
 
             execute do
-                Robot.info "reached specified station keeping position"
+                Plan.info "reached specified station keeping position"
             end
+
             if duration
                 execute do
-                    Robot.info " waiting #{duration} with speed=#{wait_speed}"
+                    Plan.info "waiting #{duration} with speed=#{wait_speed}"
                 end
                 start_time = nil
                 execute { start_time = Time.now }
@@ -123,6 +125,7 @@ class MainPlanner < Roby::Planning::Planner
 
             execute do
                 command_child.disconnect_ports(controller_child, [['motion_command', 'motion_commands']])
+                Plan.info "Align AUV to z #{z} and yaw #{yaw}"
             end
 
             # align to the given yaw and z value in this movement
@@ -148,6 +151,7 @@ class MainPlanner < Roby::Planning::Planner
             if duration and forward_speed and forward_speed > 0.0
                 start_time = nil
                 execute do
+                    Plan.info "Moving forward with speed #{forward_speed} for #{duration} seconds"
                     start_time = Time.now
                 end
 
@@ -161,11 +165,13 @@ class MainPlanner < Roby::Planning::Planner
                     transition! if (Time.now - start_time) > duration
                 end
             end
+
+            execute do
+                Plan.info "Aligning and Moving finished successfully"
+            end
+
             emit :success
-
         end
-
-
     end
 
     # -------------------------------------------------------------------------
@@ -224,6 +230,8 @@ class MainPlanner < Roby::Planning::Planner
                 pipeline_detector = detector_child.offshorePipelineDetector_child
                 pipeline_detector.orogen_task.depth = z
                 pipeline_detector.orogen_task.prefered_heading = PIPELINE_PREFERED_HEADING
+
+                Plan.info "Searching pipeline on yaw #{yaw} with z #{z}"
             end
 
             poll do
@@ -235,6 +243,7 @@ class MainPlanner < Roby::Planning::Planner
                 if last_event.symbol == :check_candidate
                     motion_command.x_speed = PIPELINE_SEARCH_CANDIDATE_SPEED
                 elsif detector_child.found_pipe?
+                    Plan.info "Pipeline detected and found"
                     transition!
                 else
                     motion_command.x_speed = forward_speed
@@ -276,12 +285,14 @@ class MainPlanner < Roby::Planning::Planner
             execute do
                 # disconnect AuvRelPosController
                 control_child.command_child.disconnect_ports(control_child.controller_child, [['motion_command', 'motion_commands']])
+
+                Plan.info "Searching frontal distance to yaw #{yaw}, z #{z} until #{distance / 1000} meter"
             end
 
             poll do 
                 if wall_distance
                    if wall_distance.minRange > distance
-                        emit :failure
+                        emit :failed
                    else
                         transition!
                    end
@@ -306,6 +317,7 @@ class MainPlanner < Roby::Planning::Planner
             start_time = nil
             execute do
                 start_time = Time.now
+                Plan.info "Wanted distance reached. Stabilizing for #{WALL_DISTANCE_STABILIZATION} seconds" 
             end
 
             poll do
@@ -324,12 +336,12 @@ class MainPlanner < Roby::Planning::Planner
                 transition! if (Time.now - start_time) > WALL_DISTANCE_STABILIZATION
             end
 
-            execut do
+            execute do
                 motion_command.heading = yaw
                 motion_command.z = z
                 motion_command.y_speed = 0.0
                 motion_command.x_speed = 0.0
-                wirte_motion_command
+                write_motion_command
             end
 
             emit :success
