@@ -1,9 +1,20 @@
 # Main planner. A planner of this model is automatically added
 # to the interface planner list. For Avalon it should provides
 # global utility functions used in plannning scripting.
-class MainPlanner < Roby::Planning::Planner
+module Plan
+    class << self
+        attr_accessor :logger
+    end
+    extend Logger::Forward
+
+    @logger = Logger.new(STDOUT)
+    @logger.level = Logger::INFO
+    @logger.formatter = Roby.logger.formatter
+    @logger.progname = "MainPlanner"
 end
 
+class MainPlanner < Roby::Planning::Planner
+end
 
 # normalize current angle to range between PI and -PI
 def normalize_angle(angle)
@@ -15,3 +26,6 @@ def normalize_angle(angle)
         angle
     end
 end
+
+
+
