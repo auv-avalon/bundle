@@ -1,5 +1,5 @@
 #Anything shared by the robot and the simulator
-
+define('relative_position_control', Cmp::ControlLoop).
     use('command' => AuvRelPosController::Task).
     use('controller' => AvalonControl::MotionControlTask)
 

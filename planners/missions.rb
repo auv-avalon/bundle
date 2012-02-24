@@ -79,8 +79,4 @@ class MainPlanner
             wait timeout
         end
     end
-<<<<<<< HEAD
-=======
-=======
->>>>>>> prepare wall servoing planning methods.
 end
