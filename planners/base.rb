@@ -11,7 +11,7 @@ class MainPlanner < Roby::Planning::Planner
         optional_arg("duration", "how long we should stay at the specified depth/heading, in seconds").
         optional_arg("heading", "the wanted absolute heading. Set to nil to use the current heading").
         optional_arg("relative_heading", "adding a relative heading to the current one")
-    
+
     method(:simple_move) do
         target_heading      = arguments[:heading]
         relative_heading    = arguments[:relative_heading]
@@ -41,7 +41,7 @@ class MainPlanner < Roby::Planning::Planner
                         target_heading = o.orientation.yaw
                         transition!
                     end
-                end 
+                end
             end
 
             execute do
@@ -182,7 +182,75 @@ class MainPlanner < Roby::Planning::Planner
         required_arg("forward_speed", "forward velocity for motion").
         required_arg("timeout", "timeout when the search should be aborted")
     method(:search_buoy) do
-        # Can use move command for alignment and motion
+        timeout = arguments[:timeout]
+        
+        buoy = self.buoy
+        buoy.script do
+            # Define a 'orientation_reader' and 'orientation' methods that allow
+            # access to control.pose.orientation_z_samples
+            data_reader 'orientation', ['control', 'orientation_with_z', 'orientation_z_samples']
+
+            data_writer 'my_buoy_cutting_command', ['detector', 'detector', 'force_cutting']
+
+            wait_any detector_child.start_event
+
+            start_time = nil
+            time_of_loss = nil
+            MAX_RESEARCH_TIME = 10
+            
+            execute do
+                start_time = Time.now
+            end
+
+            poll do
+                
+                # Check for mission timeout
+                if (Time.now - start_time) > timeout
+                    Plan.info "search_buoy timeout."
+                    emit :failed
+                end
+                
+                # Handle events
+                last_event = detector_child.history.last
+                
+                if last_event.symbol == :buoy_detected
+                    time_of_loss = nil if time_of_loss
+                    Plan.info "Buoy detected"
+                    
+                    #my_buoy_cutting_command = true
+                    #write_my_buoy_cutting_command
+                    #transition! ## TODO: this is the correct behavior! search completed.
+                    
+                elsif last_event.symbol == :re_searching_buoy
+                    Plan.info "Re-searching buoy. (event symbol: #{last_event.symbol}"
+                    
+                elsif last_event.symbol == :buoy_lost
+                    Plan.info "Buoy lost."
+                    
+                    # Time when buoy was lost
+                    time_of_loss = Time.now if not time_of_loss
+                    
+                    # Check for mission timeout
+                    if (Time.now - time_of_loss) > MAX_RESEARCH_TIME
+                        Plan.info "Buoy lost for too long. Abort search_buoy."
+                        emit :failed
+                    end
+                    
+                else
+                    Plan.info "In poll, no wanted state. Current state: #{last_event.symbol}"
+                end
+
+            end
+
+            poll do
+                last_event = detector_child.history.last
+                if last_event.symbol == :cutting_success
+                    transition!
+                end
+            end
+
+            emit :success
+        end
     end
 
     # -------------------------------------------------------------------------
@@ -289,7 +357,7 @@ class MainPlanner < Roby::Planning::Planner
                 Plan.info "Searching frontal distance to yaw #{yaw}, z #{z} until #{distance / 1000} meter"
             end
 
-            poll do 
+            poll do
                 if wall_distance
                    if wall_distance.minRange > distance
                         emit :failed
