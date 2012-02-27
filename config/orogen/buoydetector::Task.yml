@@ -25,3 +25,18 @@ cutting_time: 10
 cutting_hight: -0.8
 strafe_angle: 0.3
 strafe_around: 0
+--- name:studiobad
+#TODO!
+max_buoy_distance: 0.55
+buoy_radius: 0.05
+buoy_depth: 1.45
+sValue: 95
+--- name:testbed
+#TODO!
+--- name:simulation
+#TODO!
+strafe_around: 1
+max_buoy_distance: 2
+buoy_radius: 0.09
+sValue: 95
+buoy_depth: -3
