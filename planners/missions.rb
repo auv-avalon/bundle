@@ -1,5 +1,3 @@
-puts 'mission.rb'
-
 class MainPlanner < Roby::Planning::Planner
     describe("run a complete buoy servoing with cutting given a found buoy using current alignment").
         required_arg("mode", ":serve_180, :serve_360 (180 or 360 degree servoing").
@@ -8,7 +6,6 @@ class MainPlanner < Roby::Planning::Planner
     end
 
     describe("run a complete pipeline following using current alignment").
-        required_arg("turns", "number of turns on pipeline following").
         required_arg("z", "initial z value for pipeline following").
         required_arg("prefered_heading", "prefered heading on pipeline").
         required_arg("stabilization_time", "time of stabilization of the pipeline").
@@ -32,23 +29,30 @@ class MainPlanner < Roby::Planning::Planner
             wait_any detector_child.start_event
             wait_any control_child.command_child.start_event
 
-            turns.times do |i|
-                execute do
-                    detector_child.offshorePipelineDetector_child.orogen_task.prefered_heading = 
-                        (i % 2) * Math::PI + prefered_heading
-                end
-
-                wait detector_child.follow_pipe_event
-                wait detector_child.end_of_pipe_event
-                wait stabilization_time
+            execute do
+                detector_child.offshorePipelineDetector_child.orogen_task.prefered_heading = normalize_angle(prefered_heading)
             end
+
+            wait detector_child.follow_pipe_event
+            
+
+            execute do
+                Plan.info "Following pipeline until END_OF_PIPE is occuring"
+            end
+
+            wait detector_child.end_of_pipe_event
+
+            execute do
+                Plan.info "Stabilizing on end of pipeline for #{stabilization_time} seconds"
+            end
+            wait stabilization_time
 
             emit :success
         end
     end
 
     method(:find_and_follow_pipeline) do
-        search = search_pipeline(:yaw => Math::PI / 2.0, :z => -3.0, :forward_speed => 4.0)
+        search = search_pipeline(:yaw => 0.0, :z => -3.0, :forward_speed => 4.0)
         follow = follow_pipeline(:turns => 2, :z => -3.0, :prefered_heading => 0.05, 
                                  :stabilization_time => 5.0)
         follow.depends_on(search)

@@ -1,5 +1,3 @@
-puts 'base.rb'
-
 class MainPlanner < Roby::Planning::Planner
    YAW_THRESHOLD = 10 * Math::PI / 180.0
    Z_THRESHOLD = 0.3
