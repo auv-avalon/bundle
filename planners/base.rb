@@ -189,6 +189,7 @@ class MainPlanner < Roby::Planning::Planner
         required_arg("yaw", "initial search direction of this motion method").
         required_arg("z", "initial z value a pipeline should be found").
         required_arg("forward_speed", "forward velocity for motion").
+        optional_arg("prefered_yaw", "for direct aligning on pipeline").
         optional_arg("timeout", "timeout when this method should be aborted")
     method(:search_pipeline) do
         # Can use move command for alignment and motion
@@ -196,9 +197,10 @@ class MainPlanner < Roby::Planning::Planner
         forward_speed = arguments[:forward_speed]
         yaw = arguments[:yaw]
         timeout = arguments[:timeout]
+        prefered_yaw = arguments[:prefered_yaw]
 
         PIPELINE_SEARCH_CANDIDATE_SPEED = if forward_speed > 0 then 0.1 else -0.1 end
-        PIPELINE_PREFERED_HEADING = 0.0
+        PIPELINE_PREFERED_HEADING = prefered_yaw
 
         pipeline = self.pipeline
         pipeline.script do
@@ -223,8 +225,9 @@ class MainPlanner < Roby::Planning::Planner
             wait_any detector_child.start_event
             wait_any control_child.command_child.start_event
 
+            connection = nil
             execute do
-                control_child.command_child.disconnect_ports(control_child.controller_child, [['motion_command', 'motion_commands']])
+                connection = control_child.command_child.disconnect_ports(control_child.controller_child, [['motion_command', 'motion_commands']])
                 pipeline_detector = detector_child.offshorePipelineDetector_child
                 pipeline_detector.orogen_task.depth = z
                 pipeline_detector.orogen_task.prefered_heading = PIPELINE_PREFERED_HEADING
@@ -247,8 +250,15 @@ class MainPlanner < Roby::Planning::Planner
                     motion_command.x_speed = forward_speed
                 end
                 write_motion_command
-
             end
+
+            if prefered_yaw
+                execute do                    
+                   control_child.command_child.connect_ports(control_child.controller_child, connection)
+                end
+            end
+
+            wait detector_child.follow_pipe_event
 
             emit :success
         end

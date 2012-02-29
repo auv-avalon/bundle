@@ -36,7 +36,3 @@ module Robot
     end
 end
 
-fork do
-  system 'rock-display > /dev/null'
-end
-
