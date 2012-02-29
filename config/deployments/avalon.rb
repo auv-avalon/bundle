@@ -1,5 +1,10 @@
 Roby.app.load_orocos_deployment 'main'
 
+# !!! Configure tasks for specific location !!!
+use Buoydetector::Task => Buoydetector::Task.
+  use_conf("default", "testbed")
+
+
 use Srv::Orientation      => Cmp::OrientationEstimator
 use Srv::OrientationWithZ => Cmp::OrientationEstimator
 use Srv::Pose             => Cmp::PoseEstimator
@@ -14,6 +19,8 @@ use Cmp::PoseEstimator        => Cmp::PoseEstimator.use(wide_sonar, Cmp::Orienta
 
 define('pose_estimator', Cmp::PoseEstimator)
 define('orientation_estimator', Cmp::OrientationEstimator)
+
+
 
 StateEstimator::Task.on :start do |event|
    @orientation_reader = data_reader 'orientation_samples'
@@ -43,7 +50,7 @@ add_mission(ModemCan::Task)
 # add_mission(Taskmon::Task).on_server('front')
 
 add_mission('bottom_camera')
-add_mission('blueview')
+#add_mission('blueview')
 
 add_mission('front_camera')
 #add_mission('left_unicap_camera')

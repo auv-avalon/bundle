@@ -2,7 +2,7 @@
 # feature extraction: describes how many best-features will be saved to build the threshold
 best_values_size: 100
 # feature extraction: num of the derivatives to build the history
-derivative_history_length: 3
+derivative_history_length: 1
 # enable debug output on port debug_output
 enable_debug_output: 0
 # feature extraction: threshold for new features in percent of the mean of the last |best_values_size| best features

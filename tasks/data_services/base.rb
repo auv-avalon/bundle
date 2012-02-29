@@ -1,7 +1,8 @@
 import_types_from 'base'
 
-####################################
-## Services related to pose estimation
+# -----------------------------------------------------------------------------
+# pose estimation
+# -----------------------------------------------------------------------------
 
 data_service_type 'SpeedWithOrientationWithZ' do
     output_port 'speed_samples', '/base/samples/RigidBodyState'
@@ -66,8 +67,12 @@ data_service_type 'PoseDelta' do
     output_port 'pose_delta_samples', '/base/samples/RigidBodyState'
 end
 
-####################################
-## Sensors
+# Service for marking pose estimators
+data_service_type 'PoseEstimator'
+
+# -----------------------------------------------------------------------------
+# Sensors
+# -----------------------------------------------------------------------------
 
 data_service_type 'IMUSensors' do
     output_port 'sensors', '/base/samples/IMUSensors'

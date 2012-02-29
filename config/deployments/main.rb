@@ -1,12 +1,11 @@
 #Anything shared by the robot and the simulator
-
 define('relative_position_control', Cmp::ControlLoop).
     use('command' => AuvRelPosController::Task).
-    use('controller' => Orocos::RobyPlugin::AvalonControl::MotionControlTask)
+    use('controller' => AvalonControl::MotionControlTask)
 
 define('drive_simple', Cmp::ControlLoop).
     use('command' => Cmp::AUVJoystickCommand).
-    use('controller' => Orocos::RobyPlugin::AvalonControl::MotionControlTask)
+    use('controller' => AvalonControl::MotionControlTask)
 
 define('pipeline', Cmp::VisualServoing.use(Cmp::PipelineDetector.use('bottom_camera')))
 define('pipeline_detector', Cmp::PipelineDetector.use('bottom_camera'))
@@ -22,8 +21,17 @@ define('asv_detector', Cmp::AsvDetector.use('left_unicap_camera'))
 
 define('rotation', Cmp::VisualServoing.use(Cmp::Rotation.use('bottom_camera')))
 
-define('wall', Cmp::VisualServoing.use(Cmp::WallDetector.use('sonar')))
-define('wall_detector', Cmp::WallDetector.use('sonar'))
+
+wall_device = device('sonar').use_conf('default', 'wall_servoing')
+define('wall', Cmp::VisualServoing.use(Cmp::WallDetector.use(wall_device)))
+define('wall_detector', Cmp::WallDetector.use(wall_device))
+
+sonar_device = device('sonar').use_conf('default', 'distance_estimation')
+define('sonar_distance', Cmp::VisualServoing.use(Cmp::WallDetector.use(sonar_device)))
+define('sonar_distance_detector', Cmp::WallDetector.use(sonar_device))
+
+define('particle_localization', Cmp::Localization.use(ErasPositionEstimator::Task))
+define('ekf_localization', Cmp::Localization.use(EkfSlam::Task))
 
 model.data_service_type "NavigationMode"
 Cmp::ControlLoop.provides Srv::NavigationMode
@@ -37,7 +45,7 @@ modality_selection Srv::NavigationMode, *nav_modes
 # Show supervision all available selction modes with joysticks button mapping
 Robot.info "Available selection modes:"
 nav_modes.each_with_index do |v, i|
-    Robot.info "- mode #{i}, #{v} (on Button #{i+3})"
+    Robot.info "- mode #{i+3}, #{v} (on Button #{i+4})"
 end
 
 # define_wall_servoing(define_name, :sonar => sonar_config, :detector => detector_config)

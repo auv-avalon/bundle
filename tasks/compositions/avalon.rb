@@ -1,5 +1,4 @@
 using_task_library 'avalon_control'
-# using_task_library 'auv_control'
 using_task_library 'ekf_slam'
 using_task_library 'depth_reader'
 using_task_library 'xsens_imu'
@@ -54,7 +53,7 @@ composition 'PoseEstimator' do
     connect sonar_scan_provider => slam.SonarScan
 
     export slam.pose_samples
-    provides DataServices::Pose
+    provides Srv::Pose
 end
 
 composition "OrientationEstimator" do
@@ -180,7 +179,7 @@ class Orocos::RobyPlugin::OffshorePipelineDetector::Task
         pid = control_task.controller_y
         pid.Ti = 0.001
         control_task.controller_y = pid
-        control_task.reset
+        # control_task.reset
     end
 
     on :stop do |event|
@@ -189,7 +188,7 @@ class Orocos::RobyPlugin::OffshorePipelineDetector::Task
         pid = control_task.controller_y
         pid.Ti = 0
         control_task.controller_y = pid
-        control_task.reset
+        # control_task.reset
     end
 end
 
@@ -242,14 +241,15 @@ composition 'WallDetector' do
     event :searching_wall
     event :checking_wall
     event :detected_corner
+    event :lost_wall
 
-    add Srv::SonarScanProvider
-    add SonarFeatureEstimator::Task, :as => 'scans'
+    add Srv::SonarScanProvider, :as => 'sonar'
+    add SonarFeatureEstimator::Task, :as => 'laserscan'
     add Srv::Orientation
-    add_main WallServoing::SingleSonarServoing , :as => 'detector'
+    add_main WallServoing::SingleSonarServoing , :as => 'servoing'
     autoconnect
 
-    export detector.position_command, :as => 'relative_position_command'
+    export servoing.position_command, :as => 'relative_position_command'
     provides Srv::RelativePositionDetector
 end
 
@@ -291,7 +291,7 @@ composition 'MotionEstimation' do
 end
 
 composition 'UwvModel' do
-    add AvalonControl::MotionControlTask, :as => 'motionControl'
+    add AvalonControl::MotionControlTask, :as => 'motion_control'
     add UwvDynamicModel::Task, :as => 'model'
     autoconnect
 
