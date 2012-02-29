@@ -2,13 +2,15 @@ class AvalonSimulation::Task
     def configure
         autoproj = ENV['AUTOPROJ_PROJECT_BASE']
 
+        file = "demo.scn"
+
         task = Orocos::TaskContext.get self.orocos_name
         task.scenefile = File.join(autoproj, 
                                    "simulation",
                                    "orogen",
                                    "avalon_simulation",
                                    "configuration",
-                                   "studiobad.scn")
+                                   file)
         Orocos.apply_conf_file(task, File.join(autoproj,
                                                "supervision",
                                                "config",
