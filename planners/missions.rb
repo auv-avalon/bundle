@@ -5,16 +5,16 @@ class MainPlanner < Roby::Planning::Planner
     method(:survey_and_cut_buoy) do
     end
 
+
     describe("run a complete pipeline following using current alignment").
         required_arg("z", "initial z value for pipeline following").
-        required_arg("prefered_heading", "prefered heading on pipeline").
+        required_arg("prefered_yaw", "prefered heading on pipeline").
         required_arg("stabilization_time", "time of stabilization of the pipeline").
         optional_arg("timeout", "timeout for aborting pipeline following")
     method(:follow_pipeline) do
-        turns = arguments[:turns] + 1
         z = arguments[:z]
         timeout = arguments[:timeout] 
-        prefered_heading = arguments[:prefered_heading]
+        prefered_heading = arguments[:prefered_yaw]
         stabilization_time = arguments[:stabilization_time]
 
         pipeline = self.pipeline
@@ -31,33 +31,60 @@ class MainPlanner < Roby::Planning::Planner
 
             execute do
                 detector_child.offshorePipelineDetector_child.orogen_task.prefered_heading = normalize_angle(prefered_heading)
+                Plan.info "Start aligning AUV for pipeline following"
             end
 
             wait detector_child.follow_pipe_event
-            
 
             execute do
                 Plan.info "Following pipeline until END_OF_PIPE is occuring"
             end
 
-            wait detector_child.end_of_pipe_event
+            wait detector_child.weak_signal_event
 
             execute do
-                Plan.info "Stabilizing on end of pipeline for #{stabilization_time} seconds"
+                Plan.info "Possible END_OF_PIPE detected via WEAK_SIGNAL"
             end
-            wait stabilization_time
+
+            # wait detector_child.end_of_pipe_event
+
+            #execute do
+            #    Plan.info "Stabilizing on end of pipeline for #{stabilization_time} seconds"
+            #end
+            #wait stabilization_time
 
             emit :success
         end
     end
 
-    method(:find_and_follow_pipeline) do
-        search = search_pipeline(:yaw => 0.0, :z => -3.0, :forward_speed => 4.0)
-        follow = follow_pipeline(:turns => 2, :z => -3.0, :prefered_heading => 0.05, 
-                                 :stabilization_time => 5.0)
-        follow.depends_on(search)
-        follow.should_start_after search.success_event
-        follow
+    describe("find, follow and turn on pipeline").
+        required_arg("z", "initial z value for pipeline following").
+        required_arg("prefered_yaw", "prefered heading on pipeline").
+        required_arg("stabilization_time", "time of stabilization of the pipeline").
+        required_arg("turns", "number of turns on pipeline")
+    method(:follow_and_turn_pipeline) do
+        z = arguments[:z]
+        prefered_yaw = arguments[:prefered_yaw]
+        stabilization_time = arguments[:stabilization_time]
+        turns = arguments[:turns]
+
+        start_follower = follow_pipeline(:z => z, :prefered_yaw => prefered_yaw, 
+                                         :stabilization_time => stabilization_time)
+        
+        sequence = [start_follower]
+
+        turns.times do |i|
+            angle = normalize_angle(prefered_yaw + (i + 1) * Math::PI)
+            turner = search_pipeline(:z => z, :yaw => angle - Math::PI, :forward_speed => -0.8, :prefered_yaw => angle)
+            follower = follow_pipeline(:z => z, 
+                                       :prefered_yaw => angle, 
+                                       :stabilization_time => stabilization_time)
+            sequence << turner << follower
+        end
+
+        task = Planning::BaseTask.new
+        task.add_tasklist(sequence)
+        task
     end
 
     describe("run a complete wall servoing using current alignment to wall").
