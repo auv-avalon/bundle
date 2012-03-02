@@ -255,9 +255,10 @@ class MainPlanner < Roby::Planning::Planner
                 execute do                    
                    control_child.command_child.connect_ports(control_child.controller_child, connection)
                 end
+            
+                wait detector_child.follow_pipe_event
             end
 
-            wait detector_child.follow_pipe_event
 
             emit :success
         end
