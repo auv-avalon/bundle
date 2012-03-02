@@ -7,8 +7,8 @@ debug_sonar: 1
 with_manipulator_gui: 1
 
 # Initial position - complete mission
-initial_x: -6.5
-initial_y: -4.5
+initial_x: 0.0
+initial_y: -2.5
 initial_z: 0.0
 initial_yaw: 0.7
 
