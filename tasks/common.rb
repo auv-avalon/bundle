@@ -12,6 +12,8 @@ module Planning
             list.each do |n|
                 self << n
             end
+
+            @last_task.success_event.forward_to self.success_event
         end
     end
 
