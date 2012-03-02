@@ -36,3 +36,18 @@ module Robot
     end
 end
 
+module Robot
+    def self.emergency_surfacing
+        task = Orocos::TaskContext.get('actuators_simulation')
+	task.command.disconnect_all
+        writer = task.command.writer
+        sample = writer.new_sample
+        sample.time = Time.now
+        sample.mode = [:DM_PWM] * 6
+        sample.target = [0, -0.5, 0, 0, 0, 0]
+        Roby.each_cycle do |_|
+            writer.write(sample)
+        end
+    end
+end
+
