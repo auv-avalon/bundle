@@ -8,7 +8,7 @@ module Planning
             @last_task = roby_task
         end
 
-        def add_tasklist(list)
+        def add_task_sequence(list)
             list.each do |n|
                 self << n
             end
@@ -24,7 +24,7 @@ module Planning
             super(task)
         end
 
-        def add_tasklist(list)
+        def add_task_sequence(list)
             super(task)
         end
 

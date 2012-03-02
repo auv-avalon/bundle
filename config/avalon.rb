@@ -26,7 +26,19 @@ Conf.orocos.disable_log_group "raw_camera"
 
 Orocos::RobyPlugin::StateEstimator::Task.worstcase_processing_time 1
 
-State.navigation_mode = ['drive_simple','pipeline','wall','buoy']
+nav_modes = ['drive_simple', 'pipeline', 'wall', 'buoy']
+
+State.navigation_mode = nav_modes
+
+Robot.info "Current Button Mapping:"
+Robot.info " on Fire: Idle mode"
+Robot.info " on 2: Preoperation mode"
+Robot.info " on 3: Manual Control"
+Robot.info " on 4: Supervision Control"
+Robot.info " on 5: Supervision Autonoum (Amber)"
+nav_modes.each_with_index do |v, i|
+    Robot.info " on #{i + 7}: #{v}"
+end
 
 Robot.devices do
 #  device(Dev::LowLevel, :as => 'low_level_board').
