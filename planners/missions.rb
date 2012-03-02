@@ -46,13 +46,6 @@ class MainPlanner < Roby::Planning::Planner
                 Plan.info "Possible END_OF_PIPE detected via WEAK_SIGNAL"
             end
 
-            # wait detector_child.end_of_pipe_event
-
-            #execute do
-            #    Plan.info "Stabilizing on end of pipeline for #{stabilization_time} seconds"
-            #end
-            #wait stabilization_time
-
             emit :success
         end
     end

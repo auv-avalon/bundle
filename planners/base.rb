@@ -200,7 +200,6 @@ class MainPlanner < Roby::Planning::Planner
         prefered_yaw = arguments[:prefered_yaw]
 
         PIPELINE_SEARCH_CANDIDATE_SPEED = if forward_speed > 0 then 0.1 else -0.1 end
-        PIPELINE_PREFERED_HEADING = prefered_yaw
 
         pipeline = self.pipeline
         pipeline.script do
@@ -230,7 +229,7 @@ class MainPlanner < Roby::Planning::Planner
                 connection = control_child.command_child.disconnect_ports(control_child.controller_child, [['motion_command', 'motion_commands']])
                 pipeline_detector = detector_child.offshorePipelineDetector_child
                 pipeline_detector.orogen_task.depth = z
-                pipeline_detector.orogen_task.prefered_heading = PIPELINE_PREFERED_HEADING
+                pipeline_detector.orogen_task.prefered_heading = prefered_yaw
 
                 Plan.info "Searching pipeline on yaw #{yaw} with z #{z}"
             end
@@ -269,18 +268,20 @@ class MainPlanner < Roby::Planning::Planner
     describe("relative forward motion until a wall is found via ping-pong sonar config").
         required_arg("yaw", "initial search direction of this motion method").
         required_arg("z", "initial z value of this search").
-        required_arg("forward_speed", "forward velocity for motion").
+        required_arg("speed", "forward velocity for motion").
         required_arg("distance", "relative distance to a wall in front of avalon in m").
+        required_arg("stabilization_time", "seconds for holding the wanted distance").
         optional_arg("timeout", "timeout when this method should be aborted")
-    method(:search_frontal_distance) do
+    method(:align_frontal_distance) do
         yaw = arguments[:yaw]
         z = arguments[:z]
-        forward_speed = arguments[:forward_speed]
+        speed = arguments[:speed].abs
         distance = arguments[:distance] * 1000
         timeout = arguments[:timeout]
+        wall_distance_stabilization = arguments[:stabilization_time]
 
-        WALL_DISTANCE_THRESHOLD = 0.4
-        WALL_DISTANCE_STABILIZATION = 7.0
+        WALL_DISTANCE_THRESHOLD = 400
+        MOVE_VARIANCE = 400.0 * 400.0
 
         sonar_distance = self.sonar_distance
         sonar_distance.script do
@@ -311,21 +312,31 @@ class MainPlanner < Roby::Planning::Planner
                 motion_command.heading = yaw
                 motion_command.z = z
                 motion_command.y_speed = 0
-                motion_command.x_speed = forward_speed
-                write_motion_command
 
                 if wall_distance && wall_distance.ranges[0] > 5
                    current_distance = wall_distance.ranges[0]
-                   distance_error = (current_distance - distance).abs
+                   distance_error = (current_distance - distance) 
 
-                   transition! if distance_error < WALL_DISTANCE_THRESHOLD
+                   if distance_error < 0 
+                       align_speed = -speed
+                   else
+                       align_speed = speed
+                   end
+
+                   motion_command.x_speed = (1.0 - Math.exp(-0.5 * (distance_error * distance_error) / MOVE_VARIANCE)) * align_speed
+                   
+                   Robot.info "Error #{distance_error} - speed #{motion_command.x_speed}"
+
+                   transition! if distance_error.abs < WALL_DISTANCE_THRESHOLD
                 end
+
+                write_motion_command
             end
 
             start_time = nil
             execute do
                 start_time = Time.now
-                Plan.info "Wanted distance reached. Stabilizing for #{WALL_DISTANCE_STABILIZATION} seconds" 
+                Plan.info "Wanted distance reached. Stabilizing for #{wall_distance_stabilization} seconds" 
             end
 
             poll do
@@ -335,13 +346,19 @@ class MainPlanner < Roby::Planning::Planner
                     distance_error = current_distance - distance
                 end
 
+                if distance_error < 0
+                    align_speed = 0.1
+                else
+                    align_speed = 0.1
+                end
+
                 motion_command.heading = yaw
                 motion_command.z = z
                 motion_command.y_speed = 0.0
-                motion_command.x_speed = distance_error
+                motion_command.x_speed = (1.0 - Math.exp(-0.5 * (distance_error * distance_error) / MOVE_VARIANCE)) * align_speed
                 write_motion_command
 
-                transition! if (Time.now - start_time) > WALL_DISTANCE_STABILIZATION
+                transition! if (Time.now - start_time) > wall_distance_stabilization
             end
 
             execute do
