@@ -11,6 +11,7 @@ class MainPlanner < Roby::Planning::Planner
     describe("run a complete autonomous mission for studiobad")
     method(:demo_autonomous_run, :returns => Planning::Mission) do
         main = Planning::Mission.new
+        seq = []
 
         start_align = align_and_move(:z => PIPELINE_FOLLOWING_Z, :yaw => PIPELINE_SEARCH_YAW)
 
@@ -30,13 +31,13 @@ class MainPlanner < Roby::Planning::Planner
                                             :distance => BUOY_DISTANCE_ALIGNMENT,
                                             :stabilization_time => PIPELINE_STABILIZATION)
 
-        main << start_align
-        main << find_pipe
-        main << follow_pipe
-        main << stop_on_weak
-        main << stabilize
+        seq << start_align
+        seq << find_pipe
+        seq << follow_pipe
+        seq << stop_on_weak
+        seq << stabilize
 
-        stabilize.success_event.forward_to main.stop_event
+        main.add_tasklist(seq)
         main
     end
 end
