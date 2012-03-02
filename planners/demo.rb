@@ -37,7 +37,7 @@ class MainPlanner < Roby::Planning::Planner
         seq << stop_on_weak
         seq << stabilize
 
-        main.add_tasklist(seq)
+        main.add_task_sequence(seq)
         main
     end
 end

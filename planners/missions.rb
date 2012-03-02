@@ -76,7 +76,7 @@ class MainPlanner < Roby::Planning::Planner
         end
 
         task = Planning::BaseTask.new
-        task.add_tasklist(sequence)
+        task.add_task_sequence(sequence)
         task
     end
 
