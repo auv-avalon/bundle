@@ -9,8 +9,10 @@ fading_out_factor: 0.02
 dbscan_epsilon: 0.15
 # reference depth
 fixed_depth: -1.0
-# modulates the heading to the wall with a fixed degree, default is 0 than the wall is in front
-heading_modulation: 0.0
+# the wall will be in this direction if the wall servoing is performed, default is 0 than the wall is in front
+servoing_wall_direction: 0.0
+# the inital heading of avalon to the wall, default is 0 than the wall is in front
+inital_wall_direction: 0.0
 # the auv will move away from the wall if the wall is to near
 minimal_wall_distance: 0.75
 # set distance for the y axis, witch will result in a certain speed
@@ -21,17 +23,17 @@ wall_distance: 3.0
 wall_estimation_ransac_min_inliers: 0.85
 # maximal inlier distance to the model
 wall_estimation_ransac_threshold: 0.5
-# start angle for the wall estimation
-wall_estimation_start_angle: 0.785
-# end angle for the wall estimation
-wall_estimation_end_angle: -0.785
+# opening angle to the left of the supposed wall direction, always positive
+left_opening_angle: 0.785
+# opening angle to the right of the supposed wall direction, always positive
+right_opening_angle: 0.785
 --- name:wall_left
-heading_modulation: 0.4
+servoing_wall_direction: -0.4
 servoing_speed: 0.5
-wall_estimation_start_angle: 1.01
-wall_estimation_end_angle: -0.785
+left_opening_angle: 1.01
+right_opening_angle: 0.785
 --- name:wall_right
-heading_modulation: -0.4
+servoing_wall_direction: 0.4
 servoing_speed: -0.5
-wall_estimation_start_angle: 0.785
-wall_estimation_end_angle: -1.01
+left_opening_angle: 0.785
+right_opening_angle: 1.01
