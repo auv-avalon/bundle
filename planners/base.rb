@@ -264,7 +264,6 @@ class MainPlanner < Roby::Planning::Planner
         base_task = Planning::BaseTask.new
         base_task.add_task_sequence([alignment, buoy_task])
         base_task
-
     end
 
     # -------------------------------------------------------------------------
