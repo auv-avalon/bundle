@@ -181,74 +181,84 @@ class MainPlanner < Roby::Planning::Planner
         required_arg("timeout", "timeout when the search should be aborted")
     method(:search_buoy) do
         timeout = arguments[:timeout]
-        
+        yaw = arguments[:yaw]
+        z = arguments[:z]
+        forward_speed = arguments[:forward_speed]
+
+        Plan.info "Debug: Before alignment"
+        alignment = align_and_move(:yaw => yaw, :z => z)
+
         buoy = self.buoy
-        buoy.script do
+        Plan.info "Debug: Before Buoy Script"
+        buoy_task = buoy.script do
+            Plan.info "Debug: in Buoy Script"
+
             # Define a 'orientation_reader' and 'orientation' methods that allow
             # access to control.pose.orientation_z_samples
             data_reader 'orientation', ['control', 'orientation_with_z', 'orientation_z_samples']
-
             data_writer 'my_buoy_cutting_command', ['detector', 'detector', 'force_cutting']
 
             wait_any detector_child.start_event
 
             start_time = nil
-            time_of_loss = nil
-            MAX_RESEARCH_TIME = 10
+            connection = nil
             
+            # Take motion control away from detector task
             execute do
                 start_time = Time.now
+                connection = control_child.command_child.disconnect_ports(control_child.controller_child, [['motion_command', 'motion_commands']])
+                buoy_detector = detector_child.detector_child
+                
+                Plan.info "Searching for buoy on yaw #{yaw} with z #{z}. Going forward."
             end
 
             poll do
-                
                 # Check for mission timeout
-                if (Time.now - start_time) > timeout
+                if time_over?(start_time, timeout)
                     Plan.info "search_buoy timeout."
                     emit :failed
                 end
                 
+                # Move forward
+                motion_command.heading = yaw
+                motion_command.z = z
+                motion_command.x_speed = forward_speed
+                motion_command.y_speed = 0
+
                 # Handle events
                 last_event = detector_child.history.last
-                
+
+                # Buoy detected?
                 if last_event.symbol == :buoy_detected
-                    time_of_loss = nil if time_of_loss
+                    # Give control back to detector task
                     Plan.info "Buoy detected"
-                    
-                    #my_buoy_cutting_command = true
-                    #write_my_buoy_cutting_command
-                    #transition! ## TODO: this is the correct behavior! search completed.
-                    
-                elsif last_event.symbol == :re_searching_buoy
-                    Plan.info "Re-searching buoy. (event symbol: #{last_event.symbol}"
-                    
-                elsif last_event.symbol == :buoy_lost
-                    Plan.info "Buoy lost."
-                    
-                    # Time when buoy was lost
-                    time_of_loss = Time.now if not time_of_loss
-                    
-                    # Check for mission timeout
-                    if (Time.now - time_of_loss) > MAX_RESEARCH_TIME
-                        Plan.info "Buoy lost for too long. Abort search_buoy."
-                        emit :failed
-                    end
-                    
-                else
-                    Plan.info "In poll, no wanted state. Current state: #{last_event.symbol}"
+                    control_child.command_child.connect_ports(control_child.controller_child, connection)
+                    transition!
                 end
 
+                write_motion_command
             end
 
             poll do
+                # Check for mission timeout
+                if time_over?(start_time, timeout)
+                    Plan.info "search_buoy timeout."
+                    emit :failed
+                end
+                
                 last_event = detector_child.history.last
                 if last_event.symbol == :cutting_success
-                    transition!
+                    emit :success
                 end
             end
 
-            emit :success
+            
         end
+
+        base_task = Planning::BaseTask.new
+        base_task.add_tasklist([alignment, buoy_task])
+        base_task
+
     end
 
     # -------------------------------------------------------------------------
@@ -320,10 +330,10 @@ class MainPlanner < Roby::Planning::Planner
             end
 
             if prefered_yaw
-                execute do                    
+                execute do
                    control_child.command_child.connect_ports(control_child.controller_child, connection)
                 end
-            
+
                 wait detector_child.follow_pipe_event
             end
 
@@ -384,16 +394,16 @@ class MainPlanner < Roby::Planning::Planner
 
                 if wall_distance && wall_distance.ranges[0] > 5
                    current_distance = wall_distance.ranges[0]
-                   distance_error = (current_distance - distance) 
+                   distance_error = (current_distance - distance)
 
-                   if distance_error < 0 
+                   if distance_error < 0
                        align_speed = -speed
                    else
                        align_speed = speed
                    end
 
                    motion_command.x_speed = (1.0 - Math.exp(-0.5 * (distance_error * distance_error) / MOVE_VARIANCE)) * align_speed
-                   
+
                    Robot.info "Error #{distance_error} - speed #{motion_command.x_speed}"
 
                    transition! if distance_error.abs < WALL_DISTANCE_THRESHOLD
@@ -405,7 +415,7 @@ class MainPlanner < Roby::Planning::Planner
             start_time = nil
             execute do
                 start_time = Time.now
-                Plan.info "Wanted distance reached. Stabilizing for #{wall_distance_stabilization} seconds" 
+                Plan.info "Wanted distance reached. Stabilizing for #{wall_distance_stabilization} seconds"
             end
 
             poll do
