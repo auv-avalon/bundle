@@ -27,5 +27,9 @@ def normalize_angle(angle)
     end
 end
 
+def time_over?(start_time, duration)
+    return (Time.now - start_time) > duration
+end
+
 
 
