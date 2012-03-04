@@ -180,23 +180,24 @@ class MainPlanner < Roby::Planning::Planner
         required_arg("forward_speed", "forward velocity for motion").
         required_arg("timeout", "timeout when the search should be aborted")
     method(:search_buoy) do
+        ### TODO: Currently doing the whole mission in this method.
+    
         timeout = arguments[:timeout]
         yaw = arguments[:yaw]
         z = arguments[:z]
         forward_speed = arguments[:forward_speed]
 
-        Plan.info "Debug: Before alignment"
+        # Specify alignment for later use
         alignment = align_and_move(:yaw => yaw, :z => z)
 
+        # Specify buoy task operations for later use
         buoy = self.buoy
-        Plan.info "Debug: Before Buoy Script"
         buoy_task = buoy.script do
             Plan.info "Debug: in Buoy Script"
 
-            # Define a 'orientation_reader' and 'orientation' methods that allow
-            # access to control.pose.orientation_z_samples
             data_reader 'orientation', ['control', 'orientation_with_z', 'orientation_z_samples']
             data_writer 'my_buoy_cutting_command', ['detector', 'detector', 'force_cutting']
+            data_writer 'motion_command', ['control', 'controller', 'motion_commands']
 
             wait_any detector_child.start_event
 
@@ -215,7 +216,7 @@ class MainPlanner < Roby::Planning::Planner
             poll do
                 # Check for mission timeout
                 if time_over?(start_time, timeout)
-                    Plan.info "search_buoy timeout."
+                    Plan.info "search_buoy timeout. Abort."
                     emit :failed
                 end
                 
@@ -225,7 +226,7 @@ class MainPlanner < Roby::Planning::Planner
                 motion_command.x_speed = forward_speed
                 motion_command.y_speed = 0
 
-                # Handle events
+                ## Handle events
                 last_event = detector_child.history.last
 
                 # Buoy detected?
@@ -242,21 +243,26 @@ class MainPlanner < Roby::Planning::Planner
             poll do
                 # Check for mission timeout
                 if time_over?(start_time, timeout)
-                    Plan.info "search_buoy timeout."
+                    Plan.info "search_buoy timeout. Abort."
                     emit :failed
                 end
                 
                 last_event = detector_child.history.last
                 if last_event.symbol == :cutting_success
+                    Plan.info "Cutting success!"
                     emit :success
+                elsif last_event.symbol == :buoy_lost
+                    Plan.info "Buoy lost. Abort."
+                    emit :failed
                 end
             end
 
             
         end
 
+        # Create and execute sequence of previously specified actions
         base_task = Planning::BaseTask.new
-        base_task.add_tasklist([alignment, buoy_task])
+        base_task.add_task_sequence([alignment, buoy_task])
         base_task
 
     end
