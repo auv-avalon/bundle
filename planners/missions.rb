@@ -1,8 +1,117 @@
 class MainPlanner < Roby::Planning::Planner
     describe("run a complete buoy servoing with cutting given a found buoy using current alignment").
-        required_arg("mode", ":serve_180, :serve_360 (180 or 360 degree servoing").
-        required_arg("timeout", "timeout for automatically cutting mode")
+        required_arg("yaw", "initial search direction").
+        required_arg("z", "initial z value for finding a buoy").
+        required_arg("speed", "search speed for a buoy").
+        optional_arg("mode", ":serve_180, :serve_360 (180 or 360 degree servoing").
+        optional_arg("search_timeout", "timeout for automatically cutting mode").
+        optional_arg("survey_distance", "distance to a buoy").
+        optional_arg("cut_timeout", "force cut after a specific time")
     method(:survey_and_cut_buoy) do
+        yaw = arguments[:yaw]
+        z = arguments[:z]
+        speed = arguments[:forward_speed]
+        mode = arguments[:mode]
+        servey_distance = arguments[:servey_distance]
+        search_timeout = arguments[:search_timeout]
+        cut_timeout = arguments[:cut_timeout]
+
+        # Specify alignment for later use
+        alignment = align_and_move(:yaw => yaw, :z => z)
+
+        CUTTING_TIME_INTERVAL = 3
+
+        # Specify buoy task operations for later use
+        buoy = self.buoy
+        buoy_task = buoy.script do
+            Plan.info "Debug: in Buoy Script"
+
+            data_reader 'orientation', ['control', 'orientation_with_z', 'orientation_z_samples']
+            data_writer 'buoy_cutting_command', ['detector', 'detector', 'force_cutting']
+            data_writer 'motion_command', ['control', 'controller', 'motion_commands']
+
+            wait_any detector_child.start_event
+
+            if search_timeout
+                execute do
+                    detector_child.buoy_detected_event.
+                        should_emit_after(detector_child.start_event, 
+                                          :max_t => search_timeout)
+                end
+            end
+
+            connection = nil
+            
+            # Take motion control away from detector task
+            execute do
+                start_time = Time.now
+                connection = control_child.command_child.disconnect_ports(control_child.controller_child, [['motion_command', 'motion_commands']])
+                buoy_detector = detector_child.detector_child
+                buoy_detector.orogen_task.depth = z
+                buoy_detector.orogen_task.max_buoy_distance = servey_distance if servey_distance
+
+                if mode
+                   buoy_detector.orogen_task.strafe_around = true if mode == :serve_360
+                   buoy_detector.orogen_task.strafe_around = false if mode == :serve_180
+                end
+                
+                Plan.info "Searching for buoy on yaw #{yaw} with z #{z}. Going forward."
+            end
+
+            poll do
+                # Move forward
+                motion_command.heading = yaw
+                motion_command.z = z
+                motion_command.x_speed = speed
+                motion_command.y_speed = 0
+
+                ## Handle events
+                last_event = detector_child.history.last
+
+                # Buoy detected?
+                if detector_child.buoy_detected?
+                    # Give control back to detector task
+                    Plan.info "Buoy detected"
+                    control_child.command_child.connect_ports(control_child.controller_child, connection)
+                    transition!
+                end
+
+                write_motion_command
+            end
+
+            if mode
+                start_time = nil
+                
+                poll do
+                    # Check for mission timeout
+                    if cut_timeout and time_over?(start_time, cut_timeout)
+                        Plan.info "Start force cutting to the buoy"
+
+                        poll do
+                            buoy_cutting_command = true
+                            write_buoy_cutting_command
+
+                            transition! if time_over?(start_time, cut_timeout + CUTTING_TIME_INTERVAL) or detector_child.cutting_success?
+                        end
+
+                        transition!
+                    end
+
+                    if detector_child.buoy_lost? 
+                        Plan.info "Buoy lost. Abort."
+                        emit :failed
+                    end
+                end
+            end
+
+            emit :success
+        end
+
+        # Create and execute sequence of previously specified actions
+        base_task = Planning::BaseTask.new
+        base_task.add_task_sequence([alignment, buoy_task])
+        base_task
+
     end
 
 
@@ -11,7 +120,7 @@ class MainPlanner < Roby::Planning::Planner
         required_arg("prefered_yaw", "prefered heading on pipeline").
         required_arg("stabilization_time", "time of stabilization of the pipeline").
         optional_arg("timeout", "timeout for aborting pipeline following")
-    method(:follow_pipeline) do
+    method(:find_and_follow_pipeline) do
         z = arguments[:z]
         timeout = arguments[:timeout] 
         prefered_heading = arguments[:prefered_yaw]
