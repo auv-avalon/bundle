@@ -241,24 +241,37 @@ class MainPlanner < Roby::Planning::Planner
 
         wall_servoing = self.wall
         wall_servoing.script do
+
+            wait_any detector_child.start_event
+            wait_any control_child.command_child.start_event
+
             execute do 
                 survey = detector_child.servoing_child
                 survey.orogen_task.wall_distance = ref_distance if ref_distance
                 survey.orogen_task.servoing_wall_direction = yaw if yaw
                 survey.orogen_task.initial_wall_direction = wall if wall
                 survey.orogen_task.servoing_speed = speed if speed
+                survey.orogen_task.right_opening_angle = 0.5 * Math::PI
+                survey.orogen_task.left_opening_angle = 0.25 * Math::PI
 
-                Plan.info "Robot: #{Robot.methods.sort!}"
+                sonar = detector_child.sonar_child 
 
-                if robot_system(:simulation)
-                    Plan.info "Simulation found"
+                if robot_name?(:simulation)
+                    Plan.info "Overwrite configuration on avalon_simulation::SonarTop"
+                else
+                    data_writer 'sonar_config', ['detector', 'sonar', 'config_port']
+                    
+                    Plan.info "Overwrite configuration on sonar_tritech::Micron"
+                    sonar_config = sonar.config
+                    sonar_config.rightLimit.rad = 0.0
+                    sonar_config.leftLimit.rad = 0.75 * Math::PI
+                    sonar_config.cont = 0.0
+                    sonar_config.maximumDistance = 10.0
+                    write_sonar_config
                 end
 
                 Plan.info "Start wall servoing over #{corners} corners"
             end
-
-            wait_any detector_child.start_event
-            wait_any control_child.command_child.start_event
 
             corners.times do |i|
                 wait detector_child.servoing_child.detected_corner_event

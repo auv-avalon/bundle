@@ -32,8 +32,8 @@ def time_over?(start_time, duration)
 end
 
 
-def robot_system(name)
-    return Robot.name == name.to_s
+def robot_name?(name)
+    return Roby.app.robot_name == name.to_s
 end
 
 
