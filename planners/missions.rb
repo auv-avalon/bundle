@@ -16,9 +16,6 @@ class MainPlanner < Roby::Planning::Planner
         search_timeout = arguments[:search_timeout]
         cut_timeout = arguments[:cut_timeout]
 
-        # Specify alignment for later use
-        alignment = align_and_move(:yaw => yaw, :z => z)
-
         CUTTING_TIME_INTERVAL = 3
 
         # Specify buoy task operations for later use
@@ -106,31 +103,32 @@ class MainPlanner < Roby::Planning::Planner
 
             emit :success
         end
-
-        # Create and execute sequence of previously specified actions
-        base_task = Planning::BaseTask.new
-        base_task.add_task_sequence([alignment, buoy_task])
-        base_task
-
     end
 
 
     describe("run a complete pipeline following using current alignment").
+        required_arg("yaw", "initial search direction for pipeilne").
         required_arg("z", "initial z value for pipeline following").
-        required_arg("prefered_yaw", "prefered heading on pipeline").
-        required_arg("stabilization_time", "time of stabilization of the pipeline").
-        optional_arg("timeout", "timeout for aborting pipeline following")
+        required_arg("speed", "searching velocity for finding pipeline").
+        optional_arg("prefered_yaw", "alignment yaw and enabling pipeline following").
+        optional_arg("search_timeout", "timeout for searching pipeline")
     method(:find_and_follow_pipeline) do
+        yaw = arguments[:yaw]
         z = arguments[:z]
-        timeout = arguments[:timeout] 
+        speed = arguments[:speed]
+        search_timeout = arguments[:search_timeout] 
         prefered_heading = arguments[:prefered_yaw]
-        stabilization_time = arguments[:stabilization_time]
+        
+        PIPELINE_SEARCH_CANDIDATE_SPEED = if forward_speed > 0 then 0.1 else -0.1 end
 
         pipeline = self.pipeline
         pipeline.script do
-            if timeout
+            data_reader 'pipeline_info', ['detector', 'offshorePipelineDetector', 'pipeline']
+            data_writer 'motion_command', ['control', 'controller', 'motion_commands']
+ 
+            if search_timeout
                 execute do
-                    detector_child.found_pipe_event.should_emit_after detector_child.start_event,
+                    detector_child.align_auv_event.should_emit_after detector_child.start_event,
                     :max_t => timeout
                 end
             end
@@ -138,21 +136,40 @@ class MainPlanner < Roby::Planning::Planner
             wait_any detector_child.start_event
             wait_any control_child.command_child.start_event
 
-            execute do
-                detector_child.offshorePipelineDetector_child.orogen_task.prefered_heading = normalize_angle(prefered_heading)
-                Plan.info "Start aligning AUV for pipeline following"
+            poll do
+                motion_command.heading = yaw
+                motion_command.z = z
+                motion_command.y_speed = 0
+
+                last_event = detector_child.history.last
+                if last_event.symbol == :check_candidate
+                    motion_command.x_speed = PIPELINE_SEARCH_CANDIDATE_SPEED
+                elsif detector_child.found_pipe?
+                    Plan.info "Pipeline detected and found"
+                    transition!
+                else
+                    motion_command.x_speed = forward_speed
+                end
+                write_motion_command
             end
 
-            wait detector_child.follow_pipe_event
+            if prefered_yaw
+                execute do
+                   control_child.command_child.connect_ports(control_child.controller_child, connection)
+                end
 
-            execute do
-                Plan.info "Following pipeline until END_OF_PIPE is occuring"
-            end
+                wait detector_child.follow_pipe_event
+                execute do
+                    Plan.info "Following pipeline until WEAK_SIGNAL is occuring"
+                end
 
-            wait detector_child.weak_signal_event
+                wait detector_child.weak_signal_event
 
-            execute do
-                Plan.info "Possible END_OF_PIPE detected via WEAK_SIGNAL"
+                execute do
+                    Plan.info "Possible END_OF_PIPE detected via WEAK_SIGNAL"
+                end
+
+
             end
 
             emit :success
@@ -160,28 +177,35 @@ class MainPlanner < Roby::Planning::Planner
     end
 
     describe("find, follow and turn on pipeline").
+        required_arg("yaw", "inital search yaw for finding pipeline").
+        required_arg("speed", "search speed for finding pipeline").
         required_arg("z", "initial z value for pipeline following").
         required_arg("prefered_yaw", "prefered heading on pipeline").
-        required_arg("stabilization_time", "time of stabilization of the pipeline").
-        required_arg("turns", "number of turns on pipeline")
+        required_arg("turns", "number of turns on pipeline").
+        optional_arg("search_timeout", "search timeout for finding pipeline")
     method(:follow_and_turn_pipeline) do
         z = arguments[:z]
         prefered_yaw = arguments[:prefered_yaw]
-        stabilization_time = arguments[:stabilization_time]
+        speed = arguments[:speed]
+        yaw = arguments[:yaw]
+        search_timeout = arguments[:search_timeout]
         turns = arguments[:turns]
 
-        start_follower = follow_pipeline(:z => z, :prefered_yaw => prefered_yaw, 
-                                         :stabilization_time => stabilization_time)
+        start_follower = find_and_follow_pipeline(:yaw => yaw, 
+                                                  :z => z, 
+                                                  :prefered_yaw => prefered_yaw, 
+                                                  :speed => speed,
+                                                  :search_timeout => search_timeout)
         
         sequence = [start_follower]
 
         turns.times do |i|
             angle = normalize_angle(prefered_yaw + (i + 1) * Math::PI)
-            turner = search_pipeline(:z => z, :yaw => angle - Math::PI, :forward_speed => -0.8, :prefered_yaw => angle)
-            follower = follow_pipeline(:z => z, 
-                                       :prefered_yaw => angle, 
-                                       :stabilization_time => stabilization_time)
-            sequence << turner << follower
+            turn_follower = find_and_follow_pipeline(:yaw => angle - Math::PI, 
+                                       :z => z, 
+                                       :speed => -0.8,
+                                       :prefered_yaw => angle) 
+            sequence << turn_follower
         end
 
         task = Planning::BaseTask.new
