@@ -31,12 +31,19 @@ class MainPlanner < Roby::Planning::Planner
                                             :stabilization_time => PIPELINE_STABILIZATION)
 
         align_to_buoy = align_and_move(:z => BUOY_SEARCH_Z, :yaw => BUOY_SEARCH_YAW)
+
+        survey = survey_wall(:corners => 2, 
+                             :speed => -0.5, 
+                             :initial_wall_yaw => Math::PI / 2.0,
+                             :servoing_wall_yaw => Math::PI / 2.0,
+                             :ref_distance => 2.5)
         
         seq << start_align
         seq << follow_pipe
         seq << stop_on_weak
         seq << stabilize
-        seq << align_to_buoy
+        seq << survey
+#       seq << align_to_buoy
 
         main.add_task_sequence(seq)
         main

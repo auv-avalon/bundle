@@ -24,7 +24,7 @@ class MainPlanner < Roby::Planning::Planner
             Plan.info "Debug: in Buoy Script"
 
             data_reader 'orientation', ['control', 'orientation_with_z', 'orientation_z_samples']
-            data_writer 'buoy_cutting_command', ['detector', 'detector', 'force_cutting']
+            data_writer 'buoy_cutting_command', ['detector', 'servoing', 'force_cutting']
             data_writer 'motion_command', ['control', 'controller', 'motion_commands']
 
             wait_any detector_child.start_event
@@ -44,7 +44,7 @@ class MainPlanner < Roby::Planning::Planner
                 start_time = Time.now
                 connection = control_child.command_child.disconnect_ports(control_child.controller_child, [['motion_command', 'motion_commands']])
             
-                buoy_detector = detector_child.detector_child
+                buoy_detector = detector_child.servoing_child
                 buoy_detector.orogen_task.depth = z
                 buoy_detector.orogen_task.max_buoy_distance = servey_distance if servey_distance
 
@@ -247,6 +247,12 @@ class MainPlanner < Roby::Planning::Planner
                 survey.orogen_task.servoing_wall_direction = yaw if yaw
                 survey.orogen_task.initial_wall_direction = wall if wall
                 survey.orogen_task.servoing_speed = speed if speed
+
+                Plan.info "Robot: #{Robot.methods.sort!}"
+
+                if robot_system(:simulation)
+                    Plan.info "Simulation found"
+                end
 
                 Plan.info "Start wall servoing over #{corners} corners"
             end
