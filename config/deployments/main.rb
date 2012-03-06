@@ -26,6 +26,14 @@ wall_device = device('sonar').use_conf('default', 'wall_servoing')
 define('wall', Cmp::VisualServoing.use(Cmp::WallDetector.use(wall_device)))
 define('wall_detector', Cmp::WallDetector.use(wall_device))
 
+wall_left_comp = Cmp::WallDetector.use(wall_device)
+wall_left_comp.use(WallServoing::SingleSonarServoing.use_conf('default', 'wall_left'))
+define('wall_left', Cmp::VisualServoing.use(wall_left_comp))
+
+wall_right_comp = Cmp::WallDetector.use(wall_device)
+wall_right_comp.use(WallServoing::SingleSonarServoing.use_conf('default', 'wall_right'))
+define('wall_right', Cmp::VisualServoing.use(wall_right_comp))
+
 sonar_device = device('sonar').use_conf('default', 'distance_estimation')
 define('sonar_distance', Cmp::VisualServoing.use(Cmp::WallDetector.use(sonar_device)))
 define('sonar_distance_detector', Cmp::WallDetector.use(sonar_device))

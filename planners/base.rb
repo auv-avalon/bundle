@@ -9,7 +9,7 @@ class MainPlanner < Roby::Planning::Planner
         optional_arg("duration", "how long we should stay at the specified depth/heading, in seconds").
         optional_arg("heading", "the wanted absolute heading. Set to nil to use the current heading").
         optional_arg("relative_heading", "adding a relative heading to the current one")
-    
+
     method(:simple_move) do
         target_heading      = arguments[:heading]
         relative_heading    = arguments[:relative_heading]
@@ -39,7 +39,7 @@ class MainPlanner < Roby::Planning::Planner
                         target_heading = o.orientation.yaw
                         transition!
                     end
-                end 
+                end
             end
 
             execute do
@@ -180,7 +180,90 @@ class MainPlanner < Roby::Planning::Planner
         required_arg("forward_speed", "forward velocity for motion").
         required_arg("timeout", "timeout when the search should be aborted")
     method(:search_buoy) do
-        # Can use move command for alignment and motion
+        ### TODO: Currently doing the whole mission in this method.
+    
+        timeout = arguments[:timeout]
+        yaw = arguments[:yaw]
+        z = arguments[:z]
+        forward_speed = arguments[:forward_speed]
+
+        # Specify alignment for later use
+        alignment = align_and_move(:yaw => yaw, :z => z)
+
+        # Specify buoy task operations for later use
+        buoy = self.buoy
+        buoy_task = buoy.script do
+            Plan.info "Debug: in Buoy Script"
+
+            data_reader 'orientation', ['control', 'orientation_with_z', 'orientation_z_samples']
+            data_writer 'my_buoy_cutting_command', ['detector', 'detector', 'force_cutting']
+            data_writer 'motion_command', ['control', 'controller', 'motion_commands']
+
+            wait_any detector_child.start_event
+
+            start_time = nil
+            connection = nil
+            
+            # Take motion control away from detector task
+            execute do
+                start_time = Time.now
+                connection = control_child.command_child.disconnect_ports(control_child.controller_child, [['motion_command', 'motion_commands']])
+                buoy_detector = detector_child.detector_child
+                
+                Plan.info "Searching for buoy on yaw #{yaw} with z #{z}. Going forward."
+            end
+
+            poll do
+                # Check for mission timeout
+                if time_over?(start_time, timeout)
+                    Plan.info "search_buoy timeout. Abort."
+                    emit :failed
+                end
+                
+                # Move forward
+                motion_command.heading = yaw
+                motion_command.z = z
+                motion_command.x_speed = forward_speed
+                motion_command.y_speed = 0
+
+                ## Handle events
+                last_event = detector_child.history.last
+
+                # Buoy detected?
+                if last_event.symbol == :buoy_detected
+                    # Give control back to detector task
+                    Plan.info "Buoy detected"
+                    control_child.command_child.connect_ports(control_child.controller_child, connection)
+                    transition!
+                end
+
+                write_motion_command
+            end
+
+            poll do
+                # Check for mission timeout
+                if time_over?(start_time, timeout)
+                    Plan.info "search_buoy timeout. Abort."
+                    emit :failed
+                end
+                
+                last_event = detector_child.history.last
+                if last_event.symbol == :cutting_success
+                    Plan.info "Cutting success!"
+                    emit :success
+                elsif last_event.symbol == :buoy_lost
+                    Plan.info "Buoy lost. Abort."
+                    emit :failed
+                end
+            end
+
+            
+        end
+
+        # Create and execute sequence of previously specified actions
+        base_task = Planning::BaseTask.new
+        base_task.add_task_sequence([alignment, buoy_task])
+        base_task
     end
 
     # -------------------------------------------------------------------------
@@ -252,10 +335,10 @@ class MainPlanner < Roby::Planning::Planner
             end
 
             if prefered_yaw
-                execute do                    
+                execute do
                    control_child.command_child.connect_ports(control_child.controller_child, connection)
                 end
-            
+
                 wait detector_child.follow_pipe_event
             end
 
@@ -299,7 +382,7 @@ class MainPlanner < Roby::Planning::Planner
                 Plan.info "Searching frontal distance to yaw #{yaw}, z #{z} until #{distance / 1000} meter"
             end
 
-            poll do 
+            poll do
                 if wall_distance
                    if wall_distance.minRange > distance
                         emit :failed
@@ -318,7 +401,7 @@ class MainPlanner < Roby::Planning::Planner
 
                 if wall_distance && wall_distance.ranges[0] > 5
                    current_distance = wall_distance.ranges[0]
-                   distance_error = (current_distance - distance) 
+                   distance_error = (current_distance - distance)
 
                    position_command.x = distance_error
 
