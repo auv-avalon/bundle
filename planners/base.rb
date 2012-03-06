@@ -269,14 +269,12 @@ class MainPlanner < Roby::Planning::Planner
     describe("relative forward motion until a wall is found via ping-pong sonar config").
         required_arg("yaw", "initial search direction of this motion method").
         required_arg("z", "initial z value of this search").
-        required_arg("speed", "forward velocity for motion").
         required_arg("distance", "relative distance to a wall in front of avalon in m").
         required_arg("stabilization_time", "seconds for holding the wanted distance").
         optional_arg("timeout", "timeout when this method should be aborted")
     method(:align_frontal_distance) do
         yaw = arguments[:yaw]
         z = arguments[:z]
-        speed = arguments[:speed].abs
         distance = arguments[:distance] * 1000
         timeout = arguments[:timeout]
         wall_distance_stabilization = arguments[:stabilization_time]
@@ -287,14 +285,16 @@ class MainPlanner < Roby::Planning::Planner
         sonar_distance = self.sonar_distance
         sonar_distance.script do
             data_reader 'wall_distance', ['detector', 'laserscan', 'new_feature']
-            data_writer 'motion_command', ['control', 'controller', 'motion_commands']
+            data_writer 'position_command', ['control', 'command', 'position_command'] 
 
             wait_any detector_child.start_event
+            wait_any detector_child.servoing_child.start_event
             wait_any control_child.command_child.start_event
 
             execute do
-                # disconnect AuvRelPosController
-                control_child.command_child.disconnect_ports(control_child.controller_child, [['motion_command', 'motion_commands']])
+                # disconnect SingleSonarServoing from AuvRelPosController
+                #detector_child.disconnect_ports(control_child.command_child,
+                #                                               [['relative_position_command', 'position_command']])
 
                 Plan.info "Searching frontal distance to yaw #{yaw}, z #{z} until #{distance / 1000} meter"
             end
@@ -309,65 +309,32 @@ class MainPlanner < Roby::Planning::Planner
                end
             end
 
+            start_time = nil
             poll do
-                motion_command.heading = yaw
-                motion_command.z = z
-                motion_command.y_speed = 0
+                position_command.heading = yaw
+                position_command.z = z
+                position_command.x = 0.0
+                position_command.y = 0.0
 
                 if wall_distance && wall_distance.ranges[0] > 5
                    current_distance = wall_distance.ranges[0]
                    distance_error = (current_distance - distance) 
 
-                   if distance_error < 0 
-                       align_speed = -speed
-                   else
-                       align_speed = speed
+                   position_command.x = distance_error
+
+                   Robot.info "Current distance error #{distance_error}"
+
+                   if distance_error.abs < WALL_DISTANCE_THRESHOLD
+                       unless start_time
+                           start_time = Time.now
+                           Plan.info "Wanted distance reached. Stabilizing for #{wall_distance_stabilization} seconds" 
+                       end
+
+                       transition! if (Time.now - start_time) > wall_distance_stabilization
                    end
-
-                   motion_command.x_speed = (1.0 - Math.exp(-0.5 * (distance_error * distance_error) / MOVE_VARIANCE)) * align_speed
-                   
-                   Robot.info "Error #{distance_error} - speed #{motion_command.x_speed}"
-
-                   transition! if distance_error.abs < WALL_DISTANCE_THRESHOLD
                 end
 
-                write_motion_command
-            end
-
-            start_time = nil
-            execute do
-                start_time = Time.now
-                Plan.info "Wanted distance reached. Stabilizing for #{wall_distance_stabilization} seconds" 
-            end
-
-            poll do
-                distance_error = 0
-                if wall_distance && wall_distance.ranges[0] > 5
-                    current_distance = wall_distance.ranges[0]
-                    distance_error = current_distance - distance
-                end
-
-                if distance_error < 0
-                    align_speed = 0.1
-                else
-                    align_speed = 0.1
-                end
-
-                motion_command.heading = yaw
-                motion_command.z = z
-                motion_command.y_speed = 0.0
-                motion_command.x_speed = (1.0 - Math.exp(-0.5 * (distance_error * distance_error) / MOVE_VARIANCE)) * align_speed
-                write_motion_command
-
-                transition! if (Time.now - start_time) > wall_distance_stabilization
-            end
-
-            execute do
-                motion_command.heading = yaw
-                motion_command.z = z
-                motion_command.y_speed = 0.0
-                motion_command.x_speed = 0.0
-                write_motion_command
+                write_position_command
             end
 
             emit :success

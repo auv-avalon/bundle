@@ -82,11 +82,15 @@ class MainPlanner < Roby::Planning::Planner
 
     describe("run a complete wall servoing using current alignment to wall").
         required_arg("corners", "number of serving corners").
-        optional_arg("yaw_modulation", "fixed heading modulation to serve the wall: 0 is front").
+        optional_arg("speed", "servoing speed for wall survey").
+        optional_arg("initial_wall_yaw", "servoing wall in this direction").
+        optional_arg("servoing_wall_yaw", "direction for a wall in survey").
         optional_arg("ref_distance", "reference distance to wall").
         optional_arg("timeout", "timeout after successful corner passing")        
     method(:survey_wall) do
-        yaw_modulation = arguments[:yaw_modulation]
+        yaw = arguments[:servoing_wall_yaw]
+        wall = arguments[:initial_wall_yaw]
+        speed = arguments[:speed]
         ref_distance = arguments[:ref_distance]
         corners = arguments[:corners]
         timeout = arguments[:timeout]
@@ -98,7 +102,9 @@ class MainPlanner < Roby::Planning::Planner
             execute do 
                 survey = detector_child.servoing_child
                 survey.orogen_task.wall_distance = ref_distance if ref_distance
-                survey.orogen_task.heading_modulation = yaw_modulation if yaw_modulation
+                survey.orogen_task.servoing_wall_direction = yaw if yaw
+                survey.orogen_task.initial_wall_direction = wall if wall
+                survey.orogen_task.servoing_speed = speed if speed
 
                 Plan.info "Start wall servoing over #{corners} corners"
             end
