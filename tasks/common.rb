@@ -25,7 +25,7 @@ module Planning
         end
 
         def add_task_sequence(list)
-            super(task)
+            super(list)
         end
 
         # surface directly if all tasks are finished
