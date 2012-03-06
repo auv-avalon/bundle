@@ -98,6 +98,7 @@ class MainPlanner < Roby::Planning::Planner
                     end
                 end
             end
+
             emit :success
         end
     end

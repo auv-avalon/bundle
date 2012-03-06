@@ -258,11 +258,14 @@ class MainPlanner < Roby::Planning::Planner
 
                 if robot_name?(:simulation)
                     Plan.info "Overwrite configuration on avalon_simulation::SonarTop"
+                    sonar.orogen_task.start_angle = 0.75 * Math::PI
+                    sonar.orogen_task.end_angle = 0.0
+                    sonar.orogen_task.maximum_distance = 10.0
                 else
                     data_writer 'sonar_config', ['detector', 'sonar', 'config_port']
                     
                     Plan.info "Overwrite configuration on sonar_tritech::Micron"
-                    sonar_config = sonar.config
+                    sonar_config = sonar.orogen_task.config
                     sonar_config.rightLimit.rad = 0.0
                     sonar_config.leftLimit.rad = 0.75 * Math::PI
                     sonar_config.cont = 0.0
@@ -275,9 +278,6 @@ class MainPlanner < Roby::Planning::Planner
 
             corners.times do |i|
                 wait detector_child.servoing_child.detected_corner_event
-                wait detector_child.servoing_child.wall_servoing_event
-                wait PASSING_CORNER_TIMEOUT
-                wait detector_child.servoing_child.wall_servoing_event
 
                 execute do
                     Plan.info "Corner #{i} passed, remaining #{corners - i} times"

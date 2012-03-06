@@ -254,8 +254,7 @@ composition 'WallDetector' do
 end
 
 #Cmp::VisualServoing.specialize 'detector' => Cmp::WallDetector do
-##
-## special things only needed when the 'detector' is Cmp::WallDetector.
+##servoingal things only needed when the 'detector' is Cmp::WallDetector.
 ##
 #end
 

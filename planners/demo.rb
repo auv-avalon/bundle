@@ -26,11 +26,11 @@ class MainPlanner < Roby::Planning::Planner
 
         stop_on_weak = align_and_move(:z => PIPELINE_FOLLOWING_Z, :yaw => PIPELINE_STABILIZE_YAW, :forward_speed => -0.2, :duration => 5.0)
 
-        stabilize = align_frontal_distance(:z => PIPELINE_FOLLOWING_Z, :yaw => PIPELINE_STABILIZE_YAW,
-                                            :distance => BUOY_DISTANCE_ALIGNMENT,
-                                            :stabilization_time => PIPELINE_STABILIZATION)
+#        stabilize = align_frontal_distance(:z => PIPELINE_FOLLOWING_Z, :yaw => PIPELINE_STABILIZE_YAW,
+#                                            :distance => BUOY_DISTANCE_ALIGNMENT,
+#                                            :stabilization_time => PIPELINE_STABILIZATION)
 
-        align_to_buoy = align_and_move(:z => BUOY_SEARCH_Z, :yaw => BUOY_SEARCH_YAW)
+        #align_to_buoy = align_and_move(:z => BUOY_SEARCH_Z, :yaw => BUOY_SEARCH_YAW)
 
         survey = survey_wall(:corners => 2, 
                              :speed => -0.5, 
@@ -41,7 +41,7 @@ class MainPlanner < Roby::Planning::Planner
         seq << start_align
         seq << follow_pipe
         seq << stop_on_weak
-        seq << stabilize
+#        seq << stabilize
         seq << survey
 #       seq << align_to_buoy
 
