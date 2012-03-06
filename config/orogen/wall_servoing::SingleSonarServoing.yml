@@ -12,7 +12,7 @@ fixed_depth: -1.0
 # the wall will be in this direction if the wall servoing is performed, default is 0 than the wall is in front
 servoing_wall_direction: 0.0
 # the inital heading of avalon to the wall, default is 0 than the wall is in front
-inital_wall_direction: 0.0
+initial_wall_direction: 0.0
 # the auv will move away from the wall if the wall is to near
 minimal_wall_distance: 0.75
 # set distance for the y axis, witch will result in a certain speed
