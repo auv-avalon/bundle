@@ -43,6 +43,7 @@ class MainPlanner < Roby::Planning::Planner
             execute do
                 start_time = Time.now
                 connection = control_child.command_child.disconnect_ports(control_child.controller_child, [['motion_command', 'motion_commands']])
+            
                 buoy_detector = detector_child.detector_child
                 buoy_detector.orogen_task.depth = z
                 buoy_detector.orogen_task.max_buoy_distance = servey_distance if servey_distance
@@ -117,14 +118,24 @@ class MainPlanner < Roby::Planning::Planner
         z = arguments[:z]
         speed = arguments[:speed]
         search_timeout = arguments[:search_timeout] 
-        prefered_heading = arguments[:prefered_yaw]
+        prefered_yaw = arguments[:prefered_yaw]
         
-        PIPELINE_SEARCH_CANDIDATE_SPEED = if forward_speed > 0 then 0.1 else -0.1 end
+        PIPELINE_SEARCH_CANDIDATE_SPEED = if speed > 0 then 0.1 else -0.1 end
 
         pipeline = self.pipeline
         pipeline.script do
             data_reader 'pipeline_info', ['detector', 'offshorePipelineDetector', 'pipeline']
             data_writer 'motion_command', ['control', 'controller', 'motion_commands']
+
+            connection = nil
+
+            execute do
+                connection = control_child.command_child.disconnect_ports(control_child.controller_child, [['motion_command', 'motion_commands']])
+                follower = detector_child.offshorePipelineDetector_child
+                follower.orogen_task.prefered_heading = prefered_yaw if prefered_yaw
+                follower.orogen_task.depth = z
+                Plan.info "Searching pipeline on yaw #{yaw} with z #{z}"
+            end
  
             if search_timeout
                 execute do
@@ -148,7 +159,7 @@ class MainPlanner < Roby::Planning::Planner
                     Plan.info "Pipeline detected and found"
                     transition!
                 else
-                    motion_command.x_speed = forward_speed
+                    motion_command.x_speed = speed
                 end
                 write_motion_command
             end
@@ -168,8 +179,6 @@ class MainPlanner < Roby::Planning::Planner
                 execute do
                     Plan.info "Possible END_OF_PIPE detected via WEAK_SIGNAL"
                 end
-
-
             end
 
             emit :success
