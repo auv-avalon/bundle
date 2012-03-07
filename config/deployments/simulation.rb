@@ -33,10 +33,4 @@ use Buoydetector::Task => Buoydetector::Task.
 add_mission(AvalonSimulation::Task)
 add_mission(AvalonSimulation::StateEstimator)
 add_mission(AvalonSimulation::Actuators)
-#add_mission(AvalonSimulation::SonarTop)
-add_mission(Cmp::UwvModel)
-#add_mission(AvalonSimulation::SonarBottom)
-
-#test
 add_mission("sonar")
-# add_mission("sonar_rear")
