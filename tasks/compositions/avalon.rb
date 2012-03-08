@@ -199,10 +199,11 @@ Cmp::VisualServoing.specialize 'detector' => Cmp::PipelineDetector do
 end
 
 composition 'BuoyDetector' do
+    event :buoy_search
     event :buoy_detected
     event :buoy_lost
     event :buoy_arrived
-    event :strafe_start
+    event :strafing
     event :strafe_finished
     event :strafe_error
     event :moving_to_cutting_distance
@@ -242,6 +243,8 @@ composition 'WallDetector' do
     event :checking_wall
     event :detected_corner
     event :lost_wall
+    event :origin_alignment
+    event :alignment_complete
 
     add Srv::SonarScanProvider, :as => 'sonar'
     add SonarFeatureEstimator::Task, :as => 'laserscan'
