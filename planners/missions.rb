@@ -10,7 +10,7 @@ class MainPlanner < Roby::Planning::Planner
     method(:survey_and_cut_buoy) do
         yaw = arguments[:yaw]
         z = arguments[:z]
-        speed = arguments[:forward_speed]
+        speed = arguments[:speed]
         mode = arguments[:mode]
         servey_distance = arguments[:servey_distance]
         search_timeout = arguments[:search_timeout]
