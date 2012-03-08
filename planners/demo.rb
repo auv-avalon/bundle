@@ -7,6 +7,8 @@ class MainPlanner < Roby::Planning::Planner
     PIPELINE_STABILIZATION = 7.0
     PIPELINE_STABILIZE_YAW = 0.0
 
+    SERVOING_Z = -1.5
+
     BUOY_DISTANCE_ALIGNMENT = 4.0
     BUOY_SEARCH_Z = -1.0
     BUOY_SEARCH_YAW = -Math::PI / 2.0
@@ -32,7 +34,8 @@ class MainPlanner < Roby::Planning::Planner
 
         #align_to_buoy = align_and_move(:z => BUOY_SEARCH_Z, :yaw => BUOY_SEARCH_YAW)
 
-        survey = survey_wall(:corners => 2, 
+        survey = survey_wall(:corners => 2,
+                             :z => SERVOING_Z,
                              :speed => -0.5, 
                              :initial_wall_yaw => Math::PI / 2.0,
                              :servoing_wall_yaw => Math::PI / 2.0,

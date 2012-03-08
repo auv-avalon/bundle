@@ -223,6 +223,7 @@ class MainPlanner < Roby::Planning::Planner
     end
 
     describe("run a complete wall servoing using current alignment to wall").
+        required_arg("z", "servoing depth").
         required_arg("corners", "number of serving corners").
         optional_arg("speed", "servoing speed for wall survey").
         optional_arg("initial_wall_yaw", "servoing wall in this direction").
@@ -231,6 +232,7 @@ class MainPlanner < Roby::Planning::Planner
         optional_arg("timeout", "timeout after successful corner passing")        
     method(:survey_wall) do
         yaw = arguments[:servoing_wall_yaw]
+        z = arguments[:z]
         wall = arguments[:initial_wall_yaw]
         speed = arguments[:speed]
         ref_distance = arguments[:ref_distance]
@@ -253,6 +255,7 @@ class MainPlanner < Roby::Planning::Planner
                 survey.orogen_task.servoing_speed = speed if speed
                 survey.orogen_task.right_opening_angle = 0.5 * Math::PI
                 survey.orogen_task.left_opening_angle = 0.25 * Math::PI
+                survey.orogen_task.fixed_depth = z
 
                 sonar = detector_child.sonar_child 
 
@@ -276,13 +279,11 @@ class MainPlanner < Roby::Planning::Planner
                 Plan.info "Start wall servoing over #{corners} corners"
             end
 
-            corners.times do |i|
-                wait detector_child.servoing_child.detected_corner_event
-
-                execute do
-                    Plan.info "Corner #{i} passed, remaining #{corners - i} times"
-                end
+            execute do
+                Plan.info "Wait for corner"
             end
+
+            wait detector_child.detected_corner_event
 
             execute do
                 Plan.info "Survey #{timeout} seconds until finish"
