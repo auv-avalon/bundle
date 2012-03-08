@@ -7,11 +7,11 @@ define('drive_simple', Cmp::ControlLoop).
     use('command' => Cmp::AUVJoystickCommand).
     use('controller' => AvalonControl::MotionControlTask)
 
-pipeline_detector = Cmp::PipelineDetector.use('bottom_camera').use_conf('default', 'studiobad')
+pipeline_detector = Cmp::PipelineDetector.use('bottom_camera')
 define('pipeline', Cmp::VisualServoing.use(pipeline_detector))
 define('pipeline_detector', pipeline_detector)
 
-buoy_detector = Cmp::BuoyDetector.use('front_camera').use_conf('default', 'studiobad')
+buoy_detector = Cmp::BuoyDetector.use('front_camera')
 define('buoy', Cmp::VisualServoing.use(buoy_detector))
 define('buoy_detector', buoy_detector)
 

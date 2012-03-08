@@ -20,7 +20,12 @@ use Cmp::PoseEstimator        => Cmp::PoseEstimator.use(wide_sonar, Cmp::Orienta
 define('pose_estimator', Cmp::PoseEstimator)
 define('orientation_estimator', Cmp::OrientationEstimator)
 
+detector_conf = ["default", "studiobad"]
 
+use Buoydetector::Task => Buoydetector::Task.
+    use_conf(*detector_conf)
+use OffshorePipelineDetector::Task => OffshorePipelineDetector::Task.
+    use_conf(*detector_conf)
 
 StateEstimator::Task.on :start do |event|
    @orientation_reader = data_reader 'orientation_samples'
