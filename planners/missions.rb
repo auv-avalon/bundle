@@ -243,15 +243,14 @@ class MainPlanner < Roby::Planning::Planner
 
         wall_servoing = self.wall
         wall_servoing.script do
-
             wait_any detector_child.start_event
             wait_any control_child.command_child.start_event
 
             execute do 
                 survey = detector_child.servoing_child
                 survey.orogen_task.wall_distance = ref_distance if ref_distance
-                survey.orogen_task.servoing_wall_direction = yaw if yaw
-                survey.orogen_task.initial_wall_direction = wall if wall
+                survey.orogen_task.servoing_wall_direction = Math::PI / 2.0
+                survey.orogen_task.initial_wall_direction = Math::PI / 2.0
                 survey.orogen_task.servoing_speed = speed if speed
                 survey.orogen_task.right_opening_angle = 0.5 * Math::PI
                 survey.orogen_task.left_opening_angle = 0.25 * Math::PI
@@ -265,15 +264,13 @@ class MainPlanner < Roby::Planning::Planner
                     sonar.orogen_task.end_angle = 0.0
                     sonar.orogen_task.maximum_distance = 10.0
                 else
-                    data_writer 'sonar_config', ['detector', 'sonar', 'config_port']
-                    
                     Plan.info "Overwrite configuration on sonar_tritech::Micron"
                     sonar_config = sonar.orogen_task.config
                     sonar_config.rightLimit.rad = 0.0
                     sonar_config.leftLimit.rad = 0.75 * Math::PI
                     sonar_config.cont = 0.0
                     sonar_config.maximumDistance = 10.0
-                    write_sonar_config
+                    sonar.orogen_task.config = sonar_config
                 end
 
                 Plan.info "Start wall servoing over #{corners} corners"
