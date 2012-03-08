@@ -38,11 +38,11 @@ config:
   maximumDistance: 20.0
   resolution: 0.1
   leftLimit:
-    rad: 1.17809724509617 
-    #(90.0-22.5)/180.0*Math::PI
-  rightLimit:
-    rad: 1.96349540849362 
+    rad: 1.96349540849362
     #(90.0+22.5)/180.0*Math::PI
+  rightLimit:
+    rad: 1.17809724509617
+    #(90.0-22.5)/180.0*Math::PI
 port: /dev/ttyF1
 --- name:wall_servoing
 config:
@@ -51,9 +51,9 @@ config:
   maximumDistance: 10.0
   resolution: 0.1
   leftLimit:
-    rad: -1.01
-  rightLimit:
     rad: 1.01
+  rightLimit:
+    rad: -1.01
 port: /dev/ttyF3
 --- name:distance_estimation
 config:
@@ -61,8 +61,8 @@ config:
   pingpong: 1
   maximumDistance: 20.0
   leftLimit:
-    rad: -0.01
-  rightLimit:
     rad: 0.01
+  rightLimit:
+    rad: -0.01
 port: /dev/ttyF3
 
