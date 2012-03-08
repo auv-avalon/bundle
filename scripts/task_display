@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+
+if ARGV.length > 1
+  ip = ARGV[0]
+else
+  ip = "127.0.0.1"
+end
+
+tasks = [
+  "buoy_detector",
+  "pipeline_follower",
+  "wall_servoing",
+  "auv_rel_pos_controller",
+  "motion_control",
+  "hbridge",
+  "state_estimator",
+  "sonar",
+  "sonar_rear",
+  "depth",
+  "front_camera",
+  "bottom_camera"
+]
+
+system("rock-display #{tasks.join(" ")} --host #{ip}")
+
