@@ -45,7 +45,7 @@ class MainPlanner < Roby::Planning::Planner
                 connection = control_child.command_child.disconnect_ports(control_child.controller_child, [['motion_command', 'motion_commands']])
             
                 buoy_detector = detector_child.servoing_child
-                buoy_detector.orogen_task.depth = z
+                buoy_detector.orogen_task.buoy_depth = z
                 buoy_detector.orogen_task.max_buoy_distance = servey_distance if servey_distance
 
                 if mode
