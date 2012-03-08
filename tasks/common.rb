@@ -1,5 +1,7 @@
 module Planning
     class BaseTask < Roby::Task
+        terminates
+
         def <<(roby_task)
             depends_on roby_task
 
@@ -18,8 +20,6 @@ module Planning
     end
 
     class Mission < Planning::BaseTask
-        terminates
-
         def <<(task)
             super(task)
         end

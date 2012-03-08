@@ -4,7 +4,7 @@ debugging: 1
 # default value of x
 default_x: 0.3
 # default depth of operation [meter]
-depth: -2.5
+depth: -1.0
 # distance to pipe [meter], 0 = disabled
 distance_to_pipe: 0.0
 # minimum confidence for finding a pipeline
@@ -45,3 +45,6 @@ find_end_of_pipe: 0.4
 # If this value is reachead and the end is on the top the pipeline follower 
 # will change to follow modex
 lose_end_of_pipe: 0.2
+--- name:studiobad
+invert_colors: 1
+use_channel: 1

@@ -175,20 +175,24 @@ end
 class Orocos::RobyPlugin::OffshorePipelineDetector::Task
     on :start do |event|
         Robot.info "overloading configuration of #{self}"
-        control_task = Roby.plan.find_tasks(Orocos::RobyPlugin::AuvRelPosController::Task).to_a.first.orogen_task
-        pid = control_task.controller_y
-        pid.Ti = 0.001
-        control_task.controller_y = pid
-        # control_task.reset
+        control_task = Roby.plan.find_tasks(Orocos::RobyPlugin::AuvRelPosController::Task).to_a.first
+
+        if control_task
+            pid = control_task.orogen_task.controller_y
+            pid.Ti = 0.001
+            control_task.orogen_task.controller_y = pid
+        end
     end
 
     on :stop do |event|
         Robot.info "resetting configuration"
-        control_task = Roby.plan.find_tasks(Orocos::RobyPlugin::AuvRelPosController::Task).to_a.first.orogen_task
-        pid = control_task.controller_y
-        pid.Ti = 0
-        control_task.controller_y = pid
-        # control_task.reset
+        control_task = Roby.plan.find_tasks(Orocos::RobyPlugin::AuvRelPosController::Task).to_a.first
+
+        if control_task
+            pid = control_task.orogen_task.controller_y
+            pid.Ti = 0
+            control_task.orogen_task.controller_y = pid
+        end
     end
 end
 
@@ -199,10 +203,11 @@ Cmp::VisualServoing.specialize 'detector' => Cmp::PipelineDetector do
 end
 
 composition 'BuoyDetector' do
+    event :buoy_search
     event :buoy_detected
     event :buoy_lost
     event :buoy_arrived
-    event :strafe_start
+    event :strafing
     event :strafe_finished
     event :strafe_error
     event :moving_to_cutting_distance
@@ -242,6 +247,8 @@ composition 'WallDetector' do
     event :checking_wall
     event :detected_corner
     event :lost_wall
+    event :origin_alignment
+    event :alignment_complete
 
     add Srv::SonarScanProvider, :as => 'sonar'
     add SonarFeatureEstimator::Task, :as => 'laserscan'
@@ -254,8 +261,7 @@ composition 'WallDetector' do
 end
 
 #Cmp::VisualServoing.specialize 'detector' => Cmp::WallDetector do
-##
-## special things only needed when the 'detector' is Cmp::WallDetector.
+##servoingal things only needed when the 'detector' is Cmp::WallDetector.
 ##
 #end
 
