@@ -29,6 +29,7 @@ timeout: 200
 --- name:studiobad
 config:
   cont: 1
+  initialGain: 0.5
   maximumDistance: 15.0
   resolution: 0.1
 port: /dev/ttyF3
@@ -48,6 +49,7 @@ port: /dev/ttyF1
 config:
   cont: 0
   pingpong: 1
+  initialGain: 0.5
   maximumDistance: 10.0
   resolution: 0.1
   leftLimit:
