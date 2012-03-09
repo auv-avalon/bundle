@@ -28,7 +28,7 @@ class MainPlanner < Roby::Planning::Planner
                                     :prefered_yaw => PIPELINE_PREFERED_YAW,
                                     :turns => 0)
 
-        stop_on_weak = align_and_move(:z => PIPELINE_SEARCH_Z, :yaw => PIPELINE_STABILIZE_YAW, :forward_speed => -0.1, :duration => 1.5)
+        stop_on_weak = align_and_move(:z => PIPELINE_SEARCH_Z, :yaw => PIPELINE_STABILIZE_YAW, :speed => -0.1, :duration => 1.5)
 
 #        stabilize = align_frontal_distance(:z => PIPELINE_SEARCH_Z, :yaw => PIPELINE_STABILIZE_YAW,
 #                                           :distance => BUOY_DISTANCE_ALIGNMENT,

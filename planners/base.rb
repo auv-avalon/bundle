@@ -107,12 +107,12 @@ class MainPlanner < Roby::Planning::Planner
         describe("alignes to the given yaw and z depth and starts moving forward").
         required_arg("yaw", "initial heading for alignment").
         required_arg("z", "initial z value for alignment").
-        optional_arg("forward_speed", "forward velocity for motion").
+        optional_arg("speed", "forward velocity for motion").
         optional_arg("duration", "duration for this forward motion")
     method(:align_and_move) do
         yaw = arguments[:yaw]
         z = arguments[:z]
-        forward_speed = arguments[:forward_speed]
+        speed = arguments[:speed]
         duration = arguments[:duration]
 
         control = self.relative_position_control
@@ -147,15 +147,15 @@ class MainPlanner < Roby::Planning::Planner
             end
 
             # move the aligned auv in respect to z, yaw by given forward_speed and duration
-            if duration and forward_speed
+            if duration and speed
                 start_time = nil
                 execute do
-                    Plan.info "Moving forward with speed #{forward_speed} for #{duration} seconds"
+                    Plan.info "Moving forward with speed #{speed} for #{duration} seconds"
                     start_time = Time.now
                 end
 
                 poll do
-                    motion_command.x_speed = forward_speed
+                    motion_command.x_speed = speed
                     motion_command.y_speed = 0
                     motion_command.z = z
                     motion_command.heading = yaw
@@ -171,6 +171,78 @@ class MainPlanner < Roby::Planning::Planner
 
             emit :success
         end
+    end
+
+    # -------------------------------------------------------------------------
+   
+    describe("relative strafing with motion_control_task").
+        required_arg("yaw", "initial yaw for strafing").
+        required_arg("z", "initial z value").
+        required_arg("speed", "strafing speed on x direction").
+        required_arg("duration", "strafing duration for this task")
+    method(:align_and_strafe) do
+        yaw = arguments[:yaw]
+        z = arguments[:z]
+        speed = arguments[:speed]
+        duration = arguments[:duration]
+
+        control = self.relative_position_control
+        control.script do
+            data_reader 'orientation', ['orientation_with_z', 'orientation_z_samples']
+            data_writer 'motion_command', ['controller', 'motion_commands']
+
+            wait_any command_child.start_event
+
+            execute do
+                command_child.disconnect_ports(controller_child, [['motion_command', 'motion_commands']])
+                Plan.info "Align AUV to z #{z} and yaw #{yaw}"
+            end
+
+            # align to the given yaw and z value in this movement
+            poll do
+                motion_command.x_speed = 0
+                motion_command.y_speed = 0
+                motion_command.z = z
+                motion_command.heading = yaw
+                write_motion_command
+
+                if pose = self.orientation
+                    current_yaw = pose.orientation.yaw
+                    current_depth = pose.position.z
+
+                    yaw_error = normalize_angle(current_yaw - yaw)
+                    depth_error = current_depth - z
+
+                    transition! if yaw_error.abs < YAW_THRESHOLD and depth_error.abs < Z_THRESHOLD
+                 end
+            end
+
+            # move the aligned auv in respect to z, yaw by given forward_speed and duration
+            if duration and speed
+                start_time = nil
+                execute do
+                    Plan.info "Strafing with speed #{speed} for #{duration} seconds"
+                    start_time = Time.now
+                end
+
+                poll do
+                    motion_command.x_speed = 0
+                    motion_command.y_speed = speed
+                    motion_command.z = z
+                    motion_command.heading = yaw
+                    write_motion_command
+
+                    transition! if (Time.now - start_time) > duration
+                end
+            end
+
+            execute do
+                Plan.info "Aligning and Strafing finished successfully"
+            end
+
+            emit :success
+        end
+
     end
 
     # -------------------------------------------------------------------------
