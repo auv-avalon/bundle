@@ -147,7 +147,7 @@ class MainPlanner < Roby::Planning::Planner
             end
 
             # move the aligned auv in respect to z, yaw by given forward_speed and duration
-            if duration and forward_speed and forward_speed > 0.0
+            if duration and forward_speed
                 start_time = nil
                 execute do
                     Plan.info "Moving forward with speed #{forward_speed} for #{duration} seconds"
