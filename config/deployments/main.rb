@@ -1,11 +1,11 @@
 #Anything shared by the robot and the simulator
-define('relative_position_control', Cmp::ControlLoop).
+define('relative_position_control', Cmp::ControlLoop.
     use('command' => AuvRelPosController::Task).
-    use('controller' => AvalonControl::MotionControlTask)
+    use('controller' => AvalonControl::MotionControlTask))
 
-define('drive_simple', Cmp::ControlLoop).
+define('drive_simple', Cmp::ControlLoop.
     use('command' => Cmp::AUVJoystickCommand).
-    use('controller' => AvalonControl::MotionControlTask)
+    use('controller' => AvalonControl::MotionControlTask))
 
 pipeline_detector = Cmp::PipelineDetector.use('bottom_camera')
 define('pipeline', Cmp::VisualServoing.use(pipeline_detector))
@@ -33,8 +33,6 @@ define('asv_detector', Cmp::AsvDetector.use('left_unicap_camera'))
 define('pipeline_sonar', Cmp::VisualServoing.use(Cmp::PipelineSonarDetector))
 define('pipeline_sonar_detector', Cmp::PipelineSonarDetector)
 
-define('rotation', Cmp::VisualServoing.use(Cmp::Rotation.use('bottom_camera')))
-
 wall_left = Cmp::WallDetector.use(wall_device)
 wall_left.use(WallServoing::SingleSonarServoing.use_conf('default', 'wall_left'))
 define('wall_left', Cmp::VisualServoing.use(wall_left))
@@ -54,8 +52,8 @@ model.data_service_type "NavigationMode"
 Cmp::ControlLoop.provides Srv::NavigationMode
 Cmp::VisualServoing.provides Srv::NavigationMode
 
-nav_modes = ['drive_simple', 'pipeline', 'buoy', 'asv', 'rotation', 'pipeline_sonar']
-modality_selection Srv::NavigationMode, *nav_modes
+modality_selection Srv::NavigationMode, 'drive_simple', 'relative_position_control', 
+    'pipeline', 'buoy', 'asv'
 
 # define_wall_servoing(define_name, :sonar => sonar_config, :detector => detector_config)
 #
