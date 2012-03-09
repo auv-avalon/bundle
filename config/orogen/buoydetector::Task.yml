@@ -29,6 +29,7 @@ strafe_around: 0
 max_buoy_distance: 0.55
 buoy_radius: 0.05
 buoy_depth: 1.45
+cutting_hight: -0.4
 hValue: 75
 vValue: 40
 sValue: 200
