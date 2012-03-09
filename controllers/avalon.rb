@@ -9,21 +9,31 @@ navigation_mode = nil
 #State.navigation_mode = 'drive_simple'
 current_submode = nil
 run_start = nil
+last_navigation_task = nil
 
 SOFT_TIMEOUT = 10 * 60
-
-
 
 Roby.every(0.1, :on_error => :disable) do
     if State.lowlevel_state?
         if (State.lowlevel_state != 5 and  State.lowlevel_state != 3) or ((State.lowlevel_substate != current_submode) and current_submode)
             if navigation_mode
                 Roby.plan.unmark_mission(navigation_mode.task)
-		navigation_mode = nil
-                current_submode = nil
+               
+               #workaround!!! supervision beended tasks nicht
+               #Orocos::TaskContext.get('motion_control').stop
+               #ende workaround
+		
+               last_navigation_task = navigation_mode.task
+               navigation_mode = nil
+               current_submode = nil
             end
         end
-        if State.lowlevel_state == 5 or State.lowlevel_state == 3
+        if last_navigation_task
+            if !last_navigation_task.plan # WORKAROUND: we're waiting for the task to be GCed by Roby before injecting the next navigation mode
+                last_navigation_task = nil
+            end
+        #elsif State.lowlevel_state == 5 or State.lowlevel_state == 3
+        elsif State.lowlevel_state == 3
             if !State.navigation_mode?
                 Robot.warn "switched to mode 3, but no navigation mode is selected in State.navigation_mode"
             elsif !navigation_mode
