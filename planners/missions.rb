@@ -99,6 +99,10 @@ class MainPlanner < Roby::Planning::Planner
                         Plan.info "Buoy lost. Abort."
                         emit :failed
                     end
+
+                    if detector_child.moving_to_cutting_distance?
+                        transition!
+                    end
                 end
             end
 
@@ -253,7 +257,7 @@ class MainPlanner < Roby::Planning::Planner
                 survey.orogen_task.initial_wall_direction = Math::PI / 2.0
                 survey.orogen_task.servoing_speed = speed if speed
                 survey.orogen_task.right_opening_angle = 0.5 * Math::PI
-                survey.orogen_task.left_opening_angle = 0.25 * Math::PI
+                survey.orogen_task.left_opening_angle = 0.35 * Math::PI
                 survey.orogen_task.fixed_depth = z
 
                 sonar = detector_child.sonar_child 
@@ -267,20 +271,15 @@ class MainPlanner < Roby::Planning::Planner
                     Plan.info "Overwrite configuration on sonar_tritech::Micron"
                     sonar_config = sonar.orogen_task.config
                     sonar_config.rightLimit.rad = 0.0
-                    sonar_config.leftLimit.rad = 0.75 * Math::PI
+                    sonar_config.leftLimit.rad = 0.85 * Math::PI
                     sonar_config.cont = 0.0
+                    sonar_config.initialGain = 0.5
                     sonar_config.maximumDistance = 10.0
                     sonar.orogen_task.config = sonar_config
                 end
 
                 Plan.info "Start wall servoing over #{corners} corners"
             end
-
-            execute do
-                Plan.info "Wait for corner"
-            end
-
-            wait detector_child.detected_corner_event
 
             execute do
                 Plan.info "Survey #{timeout} seconds until finish"
