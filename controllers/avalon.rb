@@ -13,6 +13,24 @@ last_navigation_task = nil
 
 SOFT_TIMEOUT = 10 * 60
 
+
+#Workaround Task for hbridges
+Roby.every(0.5, :on_error => :disable) do
+    begin
+        mc = Orocos::TaskContext.get('motion_control')
+        hb = Orocos::TaskContext.get('hbridge')
+        if((hb.state == :TIMEOUT || hb.state == :RUNTIME_ERROR) and mc.state == :RUNNING)
+            hb.motors.disconnect_all
+            mc.motion_commands.connet_to hb.motors
+        end
+    rescue Exception => e
+        pp "An error occure during reconnection of the hbridges: #{e}"
+    end
+end
+
+
+
+
 Roby.every(0.1, :on_error => :disable) do
     if State.lowlevel_state?
         if (State.lowlevel_state != 5 and  State.lowlevel_state != 3) or ((State.lowlevel_substate != current_submode) and current_submode)
