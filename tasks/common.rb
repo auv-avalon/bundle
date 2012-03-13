@@ -20,6 +20,8 @@ module Planning
     end
 
     class Mission < Planning::BaseTask
+        terminates
+
         def <<(task)
             super(task)
         end
