@@ -28,11 +28,10 @@ class MainPlanner < Roby::Planning::Planner
                                     :prefered_yaw => PIPELINE_PREFERED_YAW,
                                     :turns => 0)
 
-        stop_on_weak = align_and_move(:z => PIPELINE_SEARCH_Z, :yaw => PIPELINE_STABILIZE_YAW, :speed => -0.1, :duration => 1.5)
-
-#        stabilize = align_frontal_distance(:z => PIPELINE_SEARCH_Z, :yaw => PIPELINE_STABILIZE_YAW,
-#                                           :distance => BUOY_DISTANCE_ALIGNMENT,
-#                                           :stabilization_time => PIPELINE_STABILIZATION)
+        stop_on_weak = align_and_move(:z => PIPELINE_SEARCH_Z, 
+                                      :yaw => PIPELINE_STABILIZE_YAW, 
+                                      :speed => -0.1, 
+                                      :duration => 1.5)
 
         align_to_buoy = align_and_move(:z => BUOY_SEARCH_Z, :yaw => BUOY_SEARCH_YAW)
          
@@ -40,9 +39,13 @@ class MainPlanner < Roby::Planning::Planner
                                            :z => BUOY_SEARCH_Z,
                                            :speed => SEARCH_SPEED,
                                            :mode => :serve_180,
+                                           :strafe_distance => 0.3,
                                            :survey_distance => 0.55)
  
-        align_to_wall = align_and_move(:z => WALL_SERVOING_Z, :yaw => 0.0)
+        align_to_wall = align_and_strafe(:z => WALL_SERVOING_Z, 
+                                         :yaw => 0.0,
+                                         :speed => 0.3,
+                                         :duration => 3.0)
 
         wall_survey = survey_wall(:corners => 1,
                              :z => WALL_SERVOING_Z,
@@ -55,10 +58,9 @@ class MainPlanner < Roby::Planning::Planner
         seq << start_align
         seq << follow_pipe
         seq << stop_on_weak
- #       seq << stabilize
         seq << align_to_buoy
         seq << buoy_and_cut
-        #seq << align_to_wall
+        seq << align_to_wall
         seq << wall_survey
 
         main.add_task_sequence(seq)
