@@ -1,8 +1,18 @@
-Roby.app.orocos_process_server 'front','192.168.128.50', :log_dir => '/mnt/logs/log', :result_dir => '/mnt/logs/results'
-Roby.app.use_deployments_from "avalon_front", :on => 'front'
+# -----------------------------------------------------------------
+# Use this configuration for running the supervision on REAR
+# -----------------------------------------------------------------
+#Roby.app.orocos_process_server 'front','192.168.128.50', :log_dir => '/mnt/logs/log', :result_dir => '/mnt/logs/results'
+#Roby.app.use_deployments_from "avalon_front", :on => 'front'
+#Roby.app.use_deployments_from "avalon_back"
 
-#Roby.app.use_deployments_from "avalon_front"
-Roby.app.use_deployments_from "avalon_back"
+# -----------------------------------------------------------------
+# Use this configuration for running the supervision on FRONT
+# -----------------------------------------------------------------
+Roby.app.orocos_process_server 'back','192.168.128.51' #, :log_dir => '/mnt/logs/log', :result_dir => '/mnt/logs/results'
+Roby.app.use_deployments_from "avalon_back", :on => 'back'
+Roby.app.use_deployments_from "avalon_front", :log_dir => '/mnt/logs/log', :result_dir => '/mnt/logs/results'
+
+
 
 State.orocos.exclude_from_log '/canbus/Message'
 
