@@ -4,8 +4,9 @@ class MainPlanner < Roby::Planning::Planner
         required_arg("z", "initial z value for finding a buoy").
         required_arg("speed", "search speed for a buoy").
         optional_arg("mode", ":serve_180, :serve_360 (180 or 360 degree servoing").
-        optional_arg("search_timeout", "timeout for automatically cutting mode").
+        optional_arg("search_timeout", "search timeout for finding buoy").
         optional_arg("survey_distance", "distance to a buoy").
+        optional_arg("strafe_distance", "strafing distance for :serve_180").
         optional_arg("cut_timeout", "force cut after a specific time")
     method(:survey_and_cut_buoy) do
         yaw = arguments[:yaw]
@@ -14,6 +15,7 @@ class MainPlanner < Roby::Planning::Planner
         mode = arguments[:mode]
         servey_distance = arguments[:servey_distance]
         search_timeout = arguments[:search_timeout]
+        strafe_distance = arguments[:strafe_distance]
         cut_timeout = arguments[:cut_timeout]
 
         CUTTING_TIME_INTERVAL = 3
@@ -47,6 +49,7 @@ class MainPlanner < Roby::Planning::Planner
                 buoy_detector = detector_child.servoing_child
                 buoy_detector.orogen_task.buoy_depth = z
                 buoy_detector.orogen_task.max_buoy_distance = servey_distance if servey_distance
+                buoy_detector.orogen_task.strafe_angle = strafe_distance if strafe_distance
 
                 if mode
                    buoy_detector.orogen_task.strafe_around = true if mode == :serve_360
@@ -226,6 +229,52 @@ class MainPlanner < Roby::Planning::Planner
         task
     end
 
+    describe("simplified find, follow and turn on pipeline").
+        required_arg("yaw", "initial search yaw for finding pipeline").
+        required_arg("speed", "search speed for finding pipeline").
+        required_arg("z", "initial z value for pipeline following").
+        required_arg("prefered_yaw", "prefered heading on pipeline").
+        required_arg("turns", "number of turns on pipeline").
+        optional_arg("search_timeout", "search timeout for finding pipeline")
+    method(:simple_find_follow_turn_pipeline) do
+        z = arguments[:z]
+        prefered_yaw = arguments[:prefered_yaw]
+        speed = arguments[:speed]
+        yaw = arguments[:yaw]
+        search_timeout = arguments[:search_timeout]
+        turns = arguments[:turns]
+
+        start_follower = find_and_follow_pipeline(:yaw => yaw, 
+                                                  :z => z, 
+                                                  :prefered_yaw => prefered_yaw, 
+                                                  :speed => speed,
+                                                  :search_timeout => search_timeout)
+
+        sequence = [start_follower]
+
+        turns.times do |i|
+            angle = normalize_angle(prefered_yaw + (i + 1) * Math::PI)
+
+            move_back_blind = align_and_move(:yaw => angle - Math::PI, 
+                                             :z => z,
+                                             :speed => speed, 
+                                             :duration => 3.0)
+
+            turn_follower = find_and_follow_pipeline(:yaw => angle - Math::PI, 
+                                       :z => z, 
+                                       :speed => -0.8,
+                                       :prefered_yaw => angle) 
+
+            sequence << move_back_blind << turn_follower
+        end
+        
+        task = Planning::BaseTask.new
+        task.add_task_sequence(sequence)
+        task
+    end
+
+
+
     describe("run a complete wall servoing using current alignment to wall").
         required_arg("z", "servoing depth").
         required_arg("corners", "number of serving corners").
@@ -246,7 +295,7 @@ class MainPlanner < Roby::Planning::Planner
         PASSING_CORNER_TIMEOUT = 4
 
         wall_servoing = self.wall
-        wall_servoing.script do
+        roby_task = wall_servoing.script do
             wait_any detector_child.start_event
             wait_any control_child.command_child.start_event
 
@@ -277,8 +326,6 @@ class MainPlanner < Roby::Planning::Planner
                     sonar_config.maximumDistance = 10.0
                     sonar.orogen_task.config = sonar_config
                 end
-
-                Plan.info "Start wall servoing over #{corners} corners"
             end
 
             execute do
