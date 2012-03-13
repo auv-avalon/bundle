@@ -20,8 +20,8 @@ Roby.every(0.5, :on_error => :disable) do
         mc = Orocos::TaskContext.get('motion_control')
         hb = Orocos::TaskContext.get('hbridge')
         if((hb.state == :TIMEOUT || hb.state == :RUNTIME_ERROR) and mc.state == :RUNNING)
-            hb.motors.disconnect_all
-            mc.motion_commands.connet_to hb.motors
+            hb.cmd_motors.disconnect_all
+            mc.motion_commands.connect_to hb.cmd_motors
         end
     rescue Exception => e
         pp "An error occure during reconnection of the hbridges: #{e}"
