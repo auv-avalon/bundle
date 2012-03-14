@@ -28,7 +28,7 @@ out_of_center: 0.0
 # tries to follow the pipeline in this direction [rad], > PI = disabled
 prefered_heading: 9999.0
 # no documentation available for this property
-use_channel: 1   # green channel
+use_channel: 3 # 1 # green channel
 # offset between the center and the end of pipe during 
 # hovering [m] at the end (should be positvie)
 end_of_pipe_offset: 0.25
@@ -46,5 +46,6 @@ find_end_of_pipe: 0.4
 # will change to follow modex
 lose_end_of_pipe: 0.2
 --- name:studiobad
-invert_colors: 1
-use_channel: 1
+invert_colors: 0
+use_channel: 3
+
