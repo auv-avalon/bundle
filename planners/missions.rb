@@ -335,5 +335,12 @@ class MainPlanner < Roby::Planning::Planner
             wait timeout
             emit :success
         end
+
+        roby_task.on :misconfiguration do |event|
+            Plan.info "Misconfiguration error for sonar found"
+            event.task.emit :failed
+        end
+
+        roby_task
     end
 end
