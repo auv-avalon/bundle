@@ -5,5 +5,5 @@ require 'orocos'
 Orocos::CORBA.name_service = 'avalon.local'
 Orocos.initialize
 
-estimator = Orocos::TaskContext.get 'low_level'
-estimator.reset
+estimator = Orocos::TaskContext.get 'depth'
+estimator.resetPressure
