@@ -257,17 +257,23 @@ class MainPlanner < Roby::Planning::Planner
         sequence = [start_follower]
 
         turns.times do |i|
-            angle = normalize_angle(prefered_yaw + (i + 1) * Math::PI)
+	    angle = nil 
+	    
+	    if i % 2 == 1
+	        angle = normalize_angle(prefered_yaw + Math::PI)
+            else
+		angle = prefered_yaw
+            end
 
-            move_back_blind = align_and_move(:yaw => angle - Math::PI, 
+            move_back_blind = align_and_move(:yaw => angle, 
                                              :z => z,
-                                             :speed => speed, 
+                                             :speed => -0.5, 
                                              :duration => 3.0)
 
-            turn_follower = find_and_follow_pipeline(:yaw => angle - Math::PI, 
+            turn_follower = find_and_follow_pipeline(:yaw => angle, 
                                        :z => z, 
-                                       :speed => -0.8,
-                                       :prefered_yaw => angle) 
+                                       :speed => -0.5,
+                                       :prefered_yaw => normalize_angle(angle + Math::PI)) 
 
             sequence << move_back_blind << turn_follower
         end
