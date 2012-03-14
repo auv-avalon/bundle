@@ -82,6 +82,10 @@ class MainPlanner < Roby::Planning::Planner
 
             if mode
                 start_time = nil
+
+		execute do
+		  start_time = Time.now
+		end
                 
                 poll do
                     # Check for mission timeout
@@ -332,15 +336,22 @@ class MainPlanner < Roby::Planning::Planner
                 Plan.info "Survey #{timeout} seconds until finish"
             end
 
-            wait timeout
+	    start_time = nil
+
+	    execute do
+	        start_time = Time.now
+	    end
+
+            poll do
+		if detector_child.misconfiguration?
+		    Plan.info "Misconfiguration failure on sonar found"
+		    emit :failed
+		end
+
+	        transition! if timeout and time_over?(start_time, timeout)
+	    end
+
             emit :success
         end
-
-        roby_task.on :misconfiguration do |event|
-            Plan.info "Misconfiguration error for sonar found"
-            event.task.emit :failed
-        end
-
-        roby_task
     end
 end
