@@ -3,10 +3,14 @@
 
 require 'pipeline_detector.rb'
 require 'orocos/log'
+require 'yaml'
+
+io = File.open(File.join(File.dirname(__FILE__), "..", "config.yml"))
+cfg = YAML.load(io)
 
 include Orocos
 
-Orocos::CORBA.name_service = "192.168.128.50"
+Orocos::CORBA.name_service = cfg["nameserver"].to_s
 
 Orocos.initialize
 Orocos.run do

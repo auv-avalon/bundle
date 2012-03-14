@@ -1,5 +1,6 @@
 require 'vizkit'
 
+
 class PipelineDetector
   RADTODEG = 180.0/Math::PI
 
