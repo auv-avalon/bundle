@@ -2,18 +2,16 @@ class MainPlanner < Roby::Planning::Planner
     SEARCH_SPEED = 0.2
 
     PIPELINE_SEARCH_Z = -1.0
-    PIPELINE_SEARCH_YAW = 0.4 # Math::PI / 2.0 + 0.4
-    PIPELINE_PREFERED_YAW = 20 * Math::PI / 180.0
+    PIPELINE_SEARCH_YAW = 0.0
+    PIPELINE_PREFERED_YAW = 90 * Math::PI / 180.0
     PIPELINE_STABILIZE_YAW = Math::PI / 2.0
-    PIPELINE_STABILIZATION = 3.0
 
     WALL_SERVOING_Z = -1.1
     WALL_SERVOING_SPEED = -0.25
-    WALL_SERVOING_TIMEOUT = 360
+    WALL_SERVOING_TIMEOUT = 400
 
-    BUOY_DISTANCE_ALIGNMENT = 4.0
     BUOY_SEARCH_Z = -0.8
-    BUOY_SEARCH_YAW = 0.0 # Math::PI / 2.0
+    BUOY_SEARCH_YAW = 0.0 
 
     describe("run a complete autonomous mission for studiobad")
     method(:demo_autonomous_run, :returns => Planning::Mission) do
@@ -22,7 +20,7 @@ class MainPlanner < Roby::Planning::Planner
 
         start_align = align_and_move(:z => PIPELINE_SEARCH_Z, :yaw => PIPELINE_SEARCH_YAW)
 
-        follow_pipe = follow_and_turn_pipeline(:yaw => PIPELINE_SEARCH_YAW, 
+        follow_pipe = simple_find_follow_turn_pipeline(:yaw => PIPELINE_SEARCH_YAW, 
                                     :z => PIPELINE_SEARCH_Z,
                                     :speed => SEARCH_SPEED,
                                     :prefered_yaw => PIPELINE_PREFERED_YAW,
