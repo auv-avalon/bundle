@@ -250,6 +250,7 @@ composition 'WallDetector' do
     event :lost_wall
     event :origin_alignment
     event :alignment_complete
+    event :misconfiguration
 
     add Srv::SonarScanProvider, :as => 'sonar'
     add SonarFeatureEstimator::Task, :as => 'laserscan'
