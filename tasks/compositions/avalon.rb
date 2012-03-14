@@ -1,3 +1,4 @@
+load_system_model 'tasks/compositions/main'
 using_task_library 'avalon_control'
 using_task_library 'ekf_slam'
 using_task_library 'depth_reader'
