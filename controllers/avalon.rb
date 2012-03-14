@@ -22,6 +22,7 @@ Roby.every(0.5, :on_error => :disable) do
         if((hb.state == :TIMEOUT || hb.state == :RUNTIME_ERROR) and mc.state == :RUNNING)
             hb.cmd_motors.disconnect_all
             hb.cmd_motors.connect_to mc.hbridge_commands
+            pp "Reconnect motion_control::Task to HBridge"
         end
     rescue Exception => e
         pp "An error occure during reconnection of the hbridges: #{e}"
