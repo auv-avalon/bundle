@@ -11,7 +11,7 @@ class MainPlanner < Roby::Planning::Planner
     WALL_SERVOING_TIMEOUT = 400
 
     BUOY_SEARCH_Z = -0.6
-    BUOY_SEARCH_YAW = 45 * Math::PI / 180.0
+    BUOY_SEARCH_YAW = 0.0 * Math::PI / 180.0
 
     describe("run a complete autonomous mission for studiobad")
     method(:demo_autonomous_run, :returns => Planning::Mission) do

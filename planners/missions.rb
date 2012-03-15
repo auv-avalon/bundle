@@ -145,7 +145,6 @@ class MainPlanner < Roby::Planning::Planner
                 follower = detector_child.offshorePipelineDetector_child
                 follower.orogen_task.prefered_heading = prefered_yaw if prefered_yaw
                 follower.orogen_task.depth = z
-		follower.orogen_task.default_x = speed
 		follower.orogen_task.use_channel = 3
                 Plan.info "Searching pipeline on yaw #{yaw} with z #{z}"
             end
@@ -184,13 +183,13 @@ class MainPlanner < Roby::Planning::Planner
 
                 wait detector_child.follow_pipe_event
                 execute do
-                    Plan.info "Following pipeline until WEAK_SIGNAL is occuring"
+                    Plan.info "Following pipeline until END_OF_PIPE is occuring"
                 end
 
                 wait detector_child.end_of_pipe_event
 
                 execute do
-                    Plan.info "Possible END_OF_PIPE detected via WEAK_SIGNAL"
+                    Plan.info "Possible END_OF_PIPE detected"
                 end
             end
 
@@ -272,14 +271,14 @@ class MainPlanner < Roby::Planning::Planner
                                              :speed => -0.2, 
                                              :duration => 1.0)
 
-	    manual_turn = align_and_move(:yaw => normalize_angle(angle + Math::PI), :z => z)
+	    # manual_turn = align_and_move(:yaw => normalize_angle(angle + Math::PI), :z => z)
 
-            turn_follower = find_and_follow_pipeline(:yaw => normalize_angle(angle + Math::PI), 
+            turn_follower = find_and_follow_pipeline(:yaw => angle, 
                                        :z => z, 
-                                       :speed => 0.2,
+                                       :speed => -0.2,
                                        :prefered_yaw => normalize_angle(angle + Math::PI)) 
 
-            sequence << move_back_blind << manual_turn << turn_follower
+            sequence << move_back_blind << turn_follower
         end
         
         task = Planning::BaseTask.new
