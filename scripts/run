@@ -2,8 +2,8 @@
 APP_DIR = File.expand_path('..', File.dirname(__FILE__))
 
 
-ps = spawn("#{ENV['HOME']}/dev/drivers/relaisboard/build/bin/all_on /dev/ttyUSB0 1> /dev/null") if ARGV[0] == "avalon"
+#ps = spawn("#{ENV['HOME']}/dev/drivers/relaisboard/build/bin/all_on /dev/ttyUSB0 1> /dev/null") if ARGV[0] == "avalon"
 
 require 'roby/app/scripts/run'
 
-Process.kill 'KILL', ps if ARGV[0] == "avalon"
+#Process.kill 'KILL', ps if ARGV[0] == "avalon"

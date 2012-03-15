@@ -2,7 +2,7 @@
 # no documentation available for this property
 debugging: 1
 # default value of x
-default_x: 0.3
+default_x: 0.2
 # default depth of operation [meter]
 depth: -1.0
 # distance to pipe [meter], 0 = disabled
@@ -48,4 +48,6 @@ lose_end_of_pipe: 0.2
 --- name:studiobad
 invert_colors: 0
 use_channel: 3
-
+weak_signal: 0.1
+default_x: 0.2
+depth: -0.8

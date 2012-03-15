@@ -64,7 +64,7 @@ add_mission('front_camera')
 #add_mission('profiler')
 add_mission('sonar')
 #add_mission('sonar_profiling_micron') # removed now 061011 (MG)
-add_mission('sonar_rear')
+#add_mission('sonar_rear')
 
 add_mission("orientation_estimator")
 add_mission(Cmp::DagonOrientationEstimator)

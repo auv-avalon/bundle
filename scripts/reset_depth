@@ -2,8 +2,9 @@
 
 require 'orocos'
 
-Orocos::CORBA.name_service = 'avalon.local'
+Orocos::CORBA.name_service = '127.0.0.1'
 Orocos.initialize
 
 estimator = Orocos::TaskContext.get 'depth'
 estimator.resetPressure
+
