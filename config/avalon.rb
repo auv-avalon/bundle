@@ -31,7 +31,7 @@ Conf.orocos.log_group "raw_camera" do
     add "camera_unicap_right.frame"
 end
 
-Conf.orocos.disable_log_group "images"
+#Conf.orocos.disable_log_group "images"
 Conf.orocos.disable_log_group "raw_camera"
 
 Orocos::RobyPlugin::StateEstimator::Task.worstcase_processing_time 1
