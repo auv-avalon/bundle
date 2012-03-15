@@ -1,4 +1,6 @@
+#conquest 2012-03-15: use deployments from avalon_simulation as well because it is commented out in avalon_simulation_deployment a.t.m. in order to fix MARS freeze.
 Roby.app.use_deployments_from "avalon_simulation_deployment"
+Roby.app.use_deployments_from "avalon_simulation"
 Roby.app.use_deployments_from "controldev" # Joystick
 Roby.app.use_deployment "taskmon_back"
 Roby.app.use_deployment "auv_rel_pos_controller"
