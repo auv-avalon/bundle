@@ -23,6 +23,7 @@ headingModulation: 0.0
 headingFactor: 4.0
 cutting_time: 10
 cutting_hight: -0.8
+cutting_wait_time: 10 	#timeout before starting the cutting-state
 strafe_angle: 0.3
 strafe_around: 0
 --- name:studiobad
