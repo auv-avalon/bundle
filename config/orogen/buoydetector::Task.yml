@@ -39,5 +39,7 @@ strafe_around: 1
 strafe_around: 1
 max_buoy_distance: 2
 buoy_radius: 0.09
-sValue: 95
-buoy_depth: -3
+hValue: 55
+sValue: 170
+edgeTh: 30
+buoy_depth: -1
