@@ -12,6 +12,7 @@ class MainPlanner < Roby::Planning::Planner
 
     BUOY_SEARCH_Z = -0.6
     BUOY_SEARCH_YAW = 0.0 * Math::PI / 180.0
+    BUOY_CUT_TIMEOUT = 180
 
     describe("run a complete autonomous mission for studiobad")
     method(:demo_autonomous_run, :returns => Planning::Mission) do
@@ -63,5 +64,42 @@ class MainPlanner < Roby::Planning::Planner
 
         main.add_task_sequence(seq)
         main
+    end
+
+    method(:demo_pipeline, :returns => Planning::Mission) do
+        main = Planning::Mission.new
+        seq = []
+
+        start_align = align_and_move(:z => PIPELINE_SEARCH_Z, 
+                                     :yaw => PIPELINE_SEARCH_YAW)
+
+        follow_pipe = simple_find_follow_turn_pipeline(:yaw => PIPELINE_SEARCH_YAW,
+                                                       :z => PIPELINE_SEARCH_Z,
+                                                       :prefered_yaw => -PIPELINE_PREFERED_YAW,
+                                                       :turns => 1)
+
+        seq << start_align
+        seq << follow_pipe
+
+        main.add_task_sequence(seq)
+        main
+    end
+
+    method(:demo_buoy, :returns => Planning::Mission) do
+        main = Planning::Mission.new
+        seq = []
+
+        buoy_and_cut = survey_and_cut_buoy(:yaw => BUOY_SEARCH_YAW,
+                                           :z => BUOY_SEARCH_Z,
+                                           :speed => SEARCH_SPEED,
+                                           :mode => :serve_180,
+                                           :strafe_distance => 0.5,
+                                           :survey_distance => 0.55,
+                                           :cut_timeout => BUOY_CUT_TIMEOUT)
+
+        seq << buoy_and_cut
+
+        main.add_task_sequence(seq)
+        main       
     end
 end

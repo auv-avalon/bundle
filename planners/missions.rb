@@ -271,11 +271,9 @@ class MainPlanner < Roby::Planning::Planner
                                              :speed => -0.2, 
                                              :duration => 1.0)
 
-	    # manual_turn = align_and_move(:yaw => normalize_angle(angle + Math::PI), :z => z)
-
             turn_follower = find_and_follow_pipeline(:yaw => angle, 
                                        :z => z, 
-                                       :speed => -0.2,
+                                       :speed => speed,
                                        :prefered_yaw => normalize_angle(angle + Math::PI)) 
 
             sequence << move_back_blind << turn_follower
