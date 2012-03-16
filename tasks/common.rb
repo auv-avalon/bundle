@@ -31,8 +31,8 @@ module Planning
         end
 
         # surface directly if all tasks are finished
-        on :stop do |event|
-            Robot.emergency_surfacing
-        end
+        #on :stop do |event|
+        #    Robot.emergency_surfacing
+        #end
    end
 end
