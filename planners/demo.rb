@@ -46,8 +46,7 @@ class MainPlanner < Roby::Planning::Planner
                                          :speed => 0.3,
                                          :duration => 2.0)
 
-        wall_survey = survey_wall(:corners => 1,
-                             :z => WALL_SERVOING_Z,
+        wall_survey = survey_wall(:z => WALL_SERVOING_Z,
                              :speed => WALL_SERVOING_SPEED, 
                              :initial_wall_yaw => 0.0, # Math::PI / 2.0,
                              :servoing_wall_yaw => 0.0, # Math::PI / 2.0,
@@ -75,6 +74,7 @@ class MainPlanner < Roby::Planning::Planner
 
         follow_pipe = simple_find_follow_turn_pipeline(:yaw => PIPELINE_SEARCH_YAW,
                                                        :z => PIPELINE_SEARCH_Z,
+						       :speed => SEARCH_SPEED,
                                                        :prefered_yaw => -PIPELINE_PREFERED_YAW,
                                                        :turns => 1)
 
@@ -101,5 +101,23 @@ class MainPlanner < Roby::Planning::Planner
 
         main.add_task_sequence(seq)
         main       
+    end
+
+    method(:demo_wall, :returns => Planning::Mission) do
+    	main = Planning::Mission.new
+	seq = []
+
+	wall_survey = survey_wall(:corners => 1,
+                             :z => WALL_SERVOING_Z,
+                             :speed => WALL_SERVOING_SPEED, 
+                             :initial_wall_yaw => 0.0, # Math::PI / 2.0,
+                             :servoing_wall_yaw => 0.0, # Math::PI / 2.0,
+                             :ref_distance => 2.5,
+                             :timeout => WALL_SERVOING_TIMEOUT)
+
+	seq << wall_survey
+
+	main.add_task_sequence(seq)
+	main
     end
 end

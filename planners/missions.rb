@@ -349,11 +349,24 @@ class MainPlanner < Roby::Planning::Planner
 	        start_time = Time.now
 	    end
 
+	    corner_counter = 0;
+	    is_corner_detected = false;
+
             poll do
 		if detector_child.misconfiguration?
 		    Plan.info "Misconfiguration failure on sonar found"
 		    emit :failed
 		end
+
+		if detector_child.detected_corner? and is_corner_detected == false
+			is_corner_detected = true
+			corner_counter += 1
+			Plan.info "Corner #{corner_counter} detected"
+		elsif !detector_child.detected_corner? and is_corner_detected == true
+			is_corner_detected = false
+		end
+
+		transition! if corners and corner_counter >= corners
 
 	        transition! if timeout and time_over?(start_time, timeout)
 	    end
