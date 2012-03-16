@@ -21,7 +21,7 @@ configuration:
       maxCurrent: 3000
       maxMotorTempCount: 200
       maxBoardTemp: 60
-      timeout: 1000
+      timeout: 32000
       maxBoardTempCount: 200
       pidDebugActive: 0
       cascadedPositionController: 1
@@ -56,7 +56,7 @@ configuration:
       maxCurrent: 3000
       maxMotorTempCount: 200
       maxBoardTemp: 60
-      timeout: 1000
+      timeout: 32000
       maxBoardTempCount: 200
       pidDebugActive: 0
       cascadedPositionController: 1
@@ -91,7 +91,7 @@ configuration:
       maxCurrent: 3000
       maxMotorTempCount: 200
       maxBoardTemp: 60
-      timeout: 1000
+      timeout: 32000
       maxBoardTempCount: 200
       pidDebugActive: 0
       cascadedPositionController: 1
@@ -126,7 +126,7 @@ configuration:
       maxCurrent: 3000
       maxMotorTempCount: 200
       maxBoardTemp: 60
-      timeout: 1000
+      timeout: 32000
       maxBoardTempCount: 200
       pidDebugActive: 0
       cascadedPositionController: 1
@@ -161,7 +161,7 @@ configuration:
       maxCurrent: 3000
       maxMotorTempCount: 200
       maxBoardTemp: 60
-      timeout: 1000
+      timeout: 32000
       maxBoardTempCount: 200
       pidDebugActive: 0
       cascadedPositionController: 1
@@ -196,7 +196,7 @@ configuration:
       maxCurrent: 3000
       maxMotorTempCount: 200
       maxBoardTemp: 60
-      timeout: 1000
+      timeout: 32000
       maxBoardTempCount: 200
       pidDebugActive: 0
       cascadedPositionController: 1
@@ -231,7 +231,7 @@ configuration:
       maxCurrent: 3000
       maxMotorTempCount: 200
       maxBoardTemp: 60
-      timeout: 1000
+      timeout: 32000
       maxBoardTempCount: 200
       pidDebugActive: 0
       cascadedPositionController: 1
@@ -266,7 +266,7 @@ configuration:
       maxCurrent: 8000
       maxMotorTempCount: 200
       maxBoardTemp: 60
-      timeout: 50
+      timeout: 32000
       maxBoardTempCount: 200
       pidDebugActive: 0
       cascadedPositionController: 1

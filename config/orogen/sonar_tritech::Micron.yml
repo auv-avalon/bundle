@@ -53,9 +53,9 @@ config:
   maximumDistance: 10.0
   resolution: 0.1
   leftLimit:
-    rad: 1.01
+    rad: 2.67
   rightLimit:
-    rad: -1.01
+    rad: 0.0
 port: /dev/ttyF3
 --- name:distance_estimation
 config:
