@@ -23,7 +23,7 @@ headingModulation: 0.0
 headingFactor: 4.0
 cutting_time: 10
 cutting_hight: -0.8
-cutting_wait_time: 10 	#timeout before starting the cutting-state
+cutting_wait_time: 5
 strafe_angle: 0.3
 strafe_around: 0
 --- name:studiobad
@@ -31,6 +31,7 @@ max_buoy_distance: 0.55
 buoy_radius: 0.05
 buoy_depth: 1.45
 cutting_hight: -0.4
+cutting_wait_time: 5
 hValue: 75
 vValue: 40
 sValue: 200
