@@ -31,14 +31,6 @@ class MainPlanner < Roby::Planning::Planner
 
             wait_any detector_child.start_event
 
-            if search_timeout
-                execute do
-                    detector_child.buoy_detected_event.
-                        should_emit_after(detector_child.start_event, 
-                                          :max_t => search_timeout)
-                end
-            end
-
             connection = nil
             
             # Take motion control away from detector task
@@ -68,6 +60,11 @@ class MainPlanner < Roby::Planning::Planner
 
                 ## Handle events
                 last_event = detector_child.history.last
+
+		if search_timeout and time_over?(start_time, search_timeout)
+			Plan.info "Buoy not found. Go to next task"
+			emit :success
+		end
 
                 # Buoy detected?
                 if detector_child.buoy_detected?
@@ -107,9 +104,15 @@ class MainPlanner < Roby::Planning::Planner
                         emit :failed
                     end
 
-                    if detector_child.moving_to_cutting_distance?
-                        transition!
-                    end
+                    #if !cut_timeout and detector_child.moving_to_cutting_distance?
+		    #	Plan.info "Moving to cutting distanc and success emitted"
+                    #    transition! 
+                    #end
+
+		    if detector_child.cutting_success?
+		    	Plan.info "Cutting success emitted"
+			transition!
+		    end
                 end
             end
 
@@ -268,7 +271,7 @@ class MainPlanner < Roby::Planning::Planner
 
             move_back_blind = align_and_move(:yaw => angle, 
                                              :z => z,
-                                             :speed => -0.2, 
+                                             :speed => -0.05, 
                                              :duration => 1.0)
 
             turn_follower = find_and_follow_pipeline(:yaw => angle, 
