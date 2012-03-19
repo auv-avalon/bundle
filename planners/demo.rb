@@ -2,7 +2,7 @@ class MainPlanner < Roby::Planning::Planner
     SEARCH_SPEED = 0.15
 
     PIPELINE_SEARCH_Z = -0.8
-    PIPELINE_SEARCH_YAW = -10 * Math::PI / 180
+    PIPELINE_SEARCH_YAW = -15 * Math::PI / 180
     PIPELINE_PREFERED_YAW = -80 * Math::PI / 180
     PIPELINE_STABILIZE_YAW = Math::PI / 2.0
 
