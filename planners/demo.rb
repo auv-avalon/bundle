@@ -21,7 +21,7 @@ class MainPlanner < Roby::Planning::Planner
 
         start_align = align_and_move(:z => PIPELINE_SEARCH_Z, :yaw => PIPELINE_SEARCH_YAW)
 
-        follow_pipe = simple_find_follow_turn_pipeline(:yaw => PIPELINE_SEARCH_YAW, 
+        follow_pipe = find_follow_turn_pipeline(:yaw => PIPELINE_SEARCH_YAW, 
                                     :z => PIPELINE_SEARCH_Z,
                                     :speed => SEARCH_SPEED,
                                     :prefered_yaw => PIPELINE_PREFERED_YAW,
@@ -74,7 +74,7 @@ class MainPlanner < Roby::Planning::Planner
         start_align = align_and_move(:z => PIPELINE_SEARCH_Z, 
                                      :yaw => PIPELINE_SEARCH_YAW)
 
-        follow_pipe = simple_find_follow_turn_pipeline(:yaw => PIPELINE_SEARCH_YAW,
+        follow_pipe = find_follow_turn_pipeline(:yaw => PIPELINE_SEARCH_YAW,
                                                        :z => PIPELINE_SEARCH_Z,
 						       :speed => SEARCH_SPEED,
                                                        :prefered_yaw => PIPELINE_PREFERED_YAW,

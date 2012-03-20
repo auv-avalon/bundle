@@ -137,7 +137,7 @@ class MainPlanner < Roby::Planning::Planner
         PIPELINE_SEARCH_CANDIDATE_SPEED = if speed > 0 then 0.1 else -0.1 end
 
         pipeline = self.pipeline
-        pipeline.script do
+        task = pipeline.script do
             data_reader 'pipeline_info', ['detector', 'offshorePipelineDetector', 'pipeline']
             data_writer 'motion_command', ['control', 'controller', 'motion_commands']
 
@@ -198,43 +198,12 @@ class MainPlanner < Roby::Planning::Planner
 
             emit :success
         end
-    end
 
-    describe("find, follow and turn on pipeline").
-        required_arg("yaw", "inital search yaw for finding pipeline").
-        required_arg("speed", "search speed for finding pipeline").
-        required_arg("z", "initial z value for pipeline following").
-        required_arg("prefered_yaw", "prefered heading on pipeline").
-        required_arg("turns", "number of turns on pipeline").
-        optional_arg("search_timeout", "search timeout for finding pipeline")
-    method(:follow_and_turn_pipeline) do
-        z = arguments[:z]
-        prefered_yaw = arguments[:prefered_yaw]
-        speed = arguments[:speed]
-        yaw = arguments[:yaw]
-        search_timeout = arguments[:search_timeout]
-        turns = arguments[:turns]
-
-        start_follower = find_and_follow_pipeline(:yaw => yaw, 
-                                                  :z => z, 
-                                                  :prefered_yaw => prefered_yaw, 
-                                                  :speed => speed,
-                                                  :search_timeout => search_timeout)
-        
-        sequence = [start_follower]
-
-        turns.times do |i|
-            angle = normalize_angle(prefered_yaw + (i + 1) * Math::PI)
-            turn_follower = find_and_follow_pipeline(:yaw => angle - Math::PI, 
-                                       :z => z, 
-                                       :speed => -0.8,
-                                       :prefered_yaw => angle) 
-            sequence << turn_follower
+	task.on :success do |event|
+            heading = event.task.detector_child.pipeline_heading
+	    Plan.info "Storing current pipeline heading on END_OF_PIPE: #{heading * 180 / Math::PI} deg, #{heading} rad"
+	    State.pipeline_heading = heading
         end
-
-        task = Planning::BaseTask.new
-        task.add_task_sequence(sequence)
-        task
     end
 
     describe("simplified find, follow and turn on pipeline").
@@ -244,7 +213,7 @@ class MainPlanner < Roby::Planning::Planner
         required_arg("prefered_yaw", "prefered heading on pipeline").
         required_arg("turns", "number of turns on pipeline").
         optional_arg("search_timeout", "search timeout for finding pipeline")
-    method(:simple_find_follow_turn_pipeline) do
+    method(:find_follow_turn_pipeline) do
         z = arguments[:z]
         prefered_yaw = arguments[:prefered_yaw]
         speed = arguments[:speed]
@@ -261,23 +230,15 @@ class MainPlanner < Roby::Planning::Planner
         sequence = [start_follower]
 
         turns.times do |i|
-	    angle = nil 
-	    
-	    if i % 2 == 1
-	        angle = normalize_angle(prefered_yaw + Math::PI)
-            else
-		angle = prefered_yaw
-            end
-
-            move_back_blind = align_and_move(:yaw => angle, 
+            move_back_blind = align_and_move(:yaw => proc { State.pipeline_heading }, 
                                              :z => z,
                                              :speed => -0.05, 
                                              :duration => 1.0)
 
-            turn_follower = find_and_follow_pipeline(:yaw => angle, 
+            turn_follower = find_and_follow_pipeline(:yaw => proc { State.pipeline_heading } 
                                        :z => z, 
                                        :speed => speed,
-                                       :prefered_yaw => normalize_angle(angle + Math::PI)) 
+                                       :prefered_yaw => proc { normalize_angle(State.pipeline_heading + Math::PI)}) 
 
             sequence << move_back_blind << turn_follower
         end
