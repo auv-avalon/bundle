@@ -25,6 +25,7 @@ class MainPlanner < Roby::Planning::Planner
         buoy_task = buoy.script do
             Plan.info "Debug: in Buoy Script"
 
+	    execute { yaw = yaw.call } if yaw.respond_to?(:call)
             data_reader 'orientation', ['control', 'orientation_with_z', 'orientation_z_samples']
             data_writer 'buoy_cutting_command', ['detector', 'servoing', 'force_cutting']
             data_writer 'motion_command', ['control', 'controller', 'motion_commands']
@@ -128,10 +129,10 @@ class MainPlanner < Roby::Planning::Planner
         optional_arg("prefered_yaw", "alignment yaw and enabling pipeline following").
         optional_arg("search_timeout", "timeout for searching pipeline")
     method(:find_and_follow_pipeline) do
-        yaw = arguments[:yaw]
         z = arguments[:z]
         speed = arguments[:speed]
         search_timeout = arguments[:search_timeout] 
+        yaw = arguments[:yaw]
         prefered_yaw = arguments[:prefered_yaw]
         
         PIPELINE_SEARCH_CANDIDATE_SPEED = if speed > 0 then 0.1 else -0.1 end
@@ -143,6 +144,8 @@ class MainPlanner < Roby::Planning::Planner
 
             connection = nil
 
+	    execute { yaw = yaw.call } if yaw.respond_to?(:call)
+	    execute { prefered_yaw = prefered_yaw.call } if prefered_yaw and prefered_yaw.respond_to?(:call)
             execute do
                 connection = control_child.command_child.disconnect_ports(control_child.controller_child, [['motion_command', 'motion_commands']])
                 follower = detector_child.offshorePipelineDetector_child
@@ -211,7 +214,7 @@ class MainPlanner < Roby::Planning::Planner
         required_arg("speed", "search speed for finding pipeline").
         required_arg("z", "initial z value for pipeline following").
         required_arg("prefered_yaw", "prefered heading on pipeline").
-        required_arg("turns", "number of turns on pipeline").
+        optional_arg("turns", "number of turns on pipeline").
         optional_arg("search_timeout", "search timeout for finding pipeline")
     method(:find_follow_turn_pipeline) do
         z = arguments[:z]
@@ -219,7 +222,7 @@ class MainPlanner < Roby::Planning::Planner
         speed = arguments[:speed]
         yaw = arguments[:yaw]
         search_timeout = arguments[:search_timeout]
-        turns = arguments[:turns]
+        turns = if arguments[:turns] then arguments[:turns] else 0 end
 
         start_follower = find_and_follow_pipeline(:yaw => yaw, 
                                                   :z => z, 
@@ -235,7 +238,7 @@ class MainPlanner < Roby::Planning::Planner
                                              :speed => -0.05, 
                                              :duration => 1.0)
 
-            turn_follower = find_and_follow_pipeline(:yaw => proc { State.pipeline_heading } 
+            turn_follower = find_and_follow_pipeline(:yaw => proc { State.pipeline_heading }, 
                                        :z => z, 
                                        :speed => speed,
                                        :prefered_yaw => proc { normalize_angle(State.pipeline_heading + Math::PI)}) 

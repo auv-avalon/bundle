@@ -120,6 +120,8 @@ class MainPlanner < Roby::Planning::Planner
             data_reader 'orientation', ['orientation_with_z', 'orientation_z_samples']
             data_writer 'motion_command', ['controller', 'motion_commands']
 
+            execute { yaw = yaw.call } if yaw.respond_to?(:call)
+
             wait_any command_child.start_event
 
             execute do
@@ -190,6 +192,8 @@ class MainPlanner < Roby::Planning::Planner
         control.script do
             data_reader 'orientation', ['orientation_with_z', 'orientation_z_samples']
             data_writer 'motion_command', ['controller', 'motion_commands']
+
+            execute { yaw = yaw.call } if yaw.respond_to?(:call)
 
             wait_any command_child.start_event
 
