@@ -102,7 +102,7 @@ class MainPlanner < Roby::Planning::Planner
 
                     if detector_child.buoy_lost? 
                         Plan.info "Buoy lost. Abort."
-                        emit :failed
+                        emit :success
                     end
 
                     #if !cut_timeout and detector_child.moving_to_cutting_distance?
@@ -333,7 +333,7 @@ class MainPlanner < Roby::Planning::Planner
 			is_corner_detected = false
 		end
 
-		transition! if corners and corner_counter >= corners
+		# transition! if corners and corner_counter >= corners
 
 	        transition! if timeout and time_over?(start_time, timeout)
 	    end
