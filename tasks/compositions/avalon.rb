@@ -98,17 +98,17 @@ composition 'StructuredLight' do
 end
 
 
-composition 'PipelineSonarDetector' do
-    add Srv::OrientationWithZ
-    add SonarTritech::Profiling
-    add Srv::Actuators
-    add Srv::RawCommand#, :as => 'rawCommand'  #needed only for debugging
-    add_main PiplineTracker::Task, :as => 'detector'
-   # add PiplineTracker::Task, :as => "detector"
-    autoconnect
-    export detector.position_command
-    provides Srv::RelativePositionDetector
-end
+#composition 'PipelineSonarDetector' do
+#    add Srv::OrientationWithZ
+#    add SonarTritech::Profiling
+#    add Srv::Actuators
+#    add Srv::RawCommand#, :as => 'rawCommand'  #needed only for debugging
+#    add_main PiplineTracker::Task, :as => 'detector'
+#   # add PiplineTracker::Task, :as => "detector"
+#    autoconnect
+#    export detector.position_command
+#    provides Srv::RelativePositionDetector
+#end
 
 composition 'PipelineDetector' do
     event :check_candidate

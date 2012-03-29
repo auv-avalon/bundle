@@ -5,7 +5,7 @@ class SonarTritech::Micron
     end
 end
 
-class SonarTritech::Profiling
-    driver_for "Dev::Profiling"
-end
+#class SonarTritech::Profiling
+#    driver_for "Dev::Profiling"
+#end
 

@@ -30,8 +30,8 @@ define('wall_right', Cmp::VisualServoing.use(wall_right))
 define('asv', Cmp::VisualServoing.use(Cmp::AsvDetector.use('left_unicap_camera')))
 define('asv_detector', Cmp::AsvDetector.use('left_unicap_camera'))
 
-define('pipeline_sonar', Cmp::VisualServoing.use(Cmp::PipelineSonarDetector))
-define('pipeline_sonar_detector', Cmp::PipelineSonarDetector)
+#define('pipeline_sonar', Cmp::VisualServoing.use(Cmp::PipelineSonarDetector))
+#define('pipeline_sonar_detector', Cmp::PipelineSonarDetector)
 
 wall_left = Cmp::WallDetector.use(wall_device)
 wall_left.use(WallServoing::SingleSonarServoing.use_conf('default', 'wall_left'))
