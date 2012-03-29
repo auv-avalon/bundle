@@ -1,70 +1,66 @@
 --- name:default
-# Configuration Values for Sonar
+# Configuration for Sonar
 config: 
-  stamp: 
-    microseconds: 0
-  adc8on: 1
-  cont: 1
-  scanright: 0
-  invert: 0
-  chan2: 1
-  applyoffset: 0
-  pingpong: 0
-  rangeScale: 30
-  leftLimit: 
+  left_limit: 
     rad: 3.141592653589793
-  rightLimit: 
+  right_limit: 
     rad: 3.141592653589793
-  adSpan: 81
-  adLow: 8
-  initialGain: 0.2 
-  motorStepDelayTime: 25
-  motorStepAngleSize: 
+  angular_resolution: 
     rad: 0.08726646259971647
-  maximumDistance: 15.0
+  max_distance: 15.0
+  min_distance: 0.25
   resolution: 0.1
-  adcSetpointCh: 0
+  speed_of_sound: 1500.0
+  gain: 0.2
+  low_resolution: 0
+  continous: 1
+# the device port
 port: /dev/ttyF3
-timeout: 200
+# read_timeout
+read_timeout: 0.5
+# timeout for writing to the serial port in seconds
+write_timeout: 0.1
+# timeout for configuring the device in seconds
+configure_timeout: 10.0
+# timeout for the dst micron dst echo sounder. Set it to 0 if none is connected
+echo_sounder_timeout: 0.0
 --- name:studiobad
 config:
-  cont: 1
-  initialGain: 0.5
-  maximumDistance: 15.0
+  continous: 1
+  gain: 0.5
+  max_distance: 15.0
   resolution: 0.1
 port: /dev/ttyF3
 --- name:sonar_rear
 config: 
-  cont: 0
-  maximumDistance: 20.0
+  continous: 0
+  max_distance: 20.0
   resolution: 0.1
-  leftLimit:
+  left_limit:
     rad: 1.96349540849362
     #(90.0+22.5)/180.0*Math::PI
-  rightLimit:
+  right_limit:
     rad: 1.17809724509617
     #(90.0-22.5)/180.0*Math::PI
 port: /dev/ttyF1
+echo_sounder_timeout: 0.5
 --- name:wall_servoing
 config:
-  cont: 0
-  pingpong: 1
-  initialGain: 0.5
-  maximumDistance: 10.0
+  continous: 0
+  gain: 0.5
+  max_distance: 10.0
   resolution: 0.1
-  leftLimit:
+  left_limit:
     rad: 2.67
-  rightLimit:
+  right_limit:
     rad: 0.0
 port: /dev/ttyF3
 --- name:distance_estimation
 config:
-  cont: 0
-  pingpong: 1
-  maximumDistance: 20.0
-  leftLimit:
+  continous: 0
+  max_distance: 20.0
+  left_limit:
     rad: 0.01
-  rightLimit:
+  right_limit:
     rad: -0.01
 port: /dev/ttyF3
-
