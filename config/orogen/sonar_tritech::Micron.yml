@@ -15,7 +15,7 @@ config:
   low_resolution: 0
   continous: 1
 # the device port
-port: /dev/ttyF3
+port: /dev/ttyS7 #/dev/ttyF3
 # read_timeout
 read_timeout: 0.5
 # timeout for writing to the serial port in seconds
@@ -30,7 +30,7 @@ config:
   gain: 0.5
   max_distance: 15.0
   resolution: 0.1
-port: /dev/ttyF3
+port: /dev/ttyS7 #/dev/ttyF3
 --- name:sonar_rear
 config: 
   continous: 0
@@ -42,7 +42,7 @@ config:
   right_limit:
     rad: 1.17809724509617
     #(90.0-22.5)/180.0*Math::PI
-port: /dev/ttyF1
+port: /dev/ttyS5 #/dev/ttyF1
 echo_sounder_timeout: 0.5
 --- name:wall_servoing
 config:
@@ -54,7 +54,7 @@ config:
     rad: 2.67
   right_limit:
     rad: 0.0
-port: /dev/ttyF3
+port: /dev/ttyS7 #/dev/ttyF3
 --- name:distance_estimation
 config:
   continous: 0
@@ -63,4 +63,4 @@ config:
     rad: 0.01
   right_limit:
     rad: -0.01
-port: /dev/ttyF3
+port: /dev/ttyS7 #/dev/ttyF3
