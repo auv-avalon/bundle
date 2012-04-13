@@ -107,7 +107,7 @@ Robot.devices do
 	period(0.1)
 
     device(Dev::DepthReader, :ad => 'depth_reader').
-    	can_id(0x111,0x7F0).
+    	can_id(0x130,0x7F0).
 	period(0.1)
 
     device(Dev::SystemStatus).
