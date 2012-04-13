@@ -1,4 +1,5 @@
 load_system_model 'tasks/compositions/main'
+
 using_task_library 'avalon_control'
 using_task_library 'ekf_slam'
 using_task_library 'depth_reader'
@@ -18,6 +19,7 @@ using_task_library 'sonar_tritech'
 using_task_library 'wall_servoing'
 using_task_library 'sonar_feature_estimator'
 using_task_library 'uwv_dynamic_model'
+using_task_library 'sonar_wall_hough'
 
 # using_task_library 'rotation_experiment'
 # using_task_library 'asv_detector'
@@ -329,4 +331,11 @@ composition 'UwvModel' do
     export model.uwvstate
     provides Srv::SpeedWithOrientationWithZ
     provides Srv::RelativePose
+end
+
+composition 'SonarWallHough' do
+    add Srv::OrientationWithZ
+    add Srv::SonarScanProvider, :as => 'sonar'
+    add SonarWallHough::Task, :as => 'hough'
+    autoconnect
 end

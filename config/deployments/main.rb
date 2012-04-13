@@ -54,6 +54,9 @@ define('sonar_distance_detector', Cmp::WallDetector.use(sonar_device))
 #define('particle_localization', Cmp::Localization.use(ErasPositionEstimator::Task))
 #define('ekf_localization', Cmp::Localization.use(EkfSlam::Task))
 
+hough_sonar = device('sonar')
+define('sonar_wall_hough', Cmp::SonarWallHough.use(hough_sonar))
+
 model.data_service_type "NavigationMode"
 Cmp::ControlLoop.provides Srv::NavigationMode
 Cmp::VisualServoing.provides Srv::NavigationMode
