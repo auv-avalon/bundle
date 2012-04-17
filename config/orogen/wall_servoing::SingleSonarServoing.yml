@@ -4,7 +4,7 @@ enable_debug_output: 0
 # the exploration will simply drive forward in the origin serviong direction
 exploration_speed: 0.1
 # fading out factor for the features in center wall estimator
-fading_out_factor: 0.02
+fading_out_factor: 0.028
 # epsilon in one meter distance of dbscan algorithm. epsilon will be increased linear by the distance of the features
 dbscan_epsilon: 0.15
 # reference depth
