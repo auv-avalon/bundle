@@ -1,3 +1,4 @@
+### front sonar config
 --- name:default
 # Configuration for Sonar
 config: 
@@ -31,19 +32,6 @@ config:
   max_distance: 15.0
   resolution: 0.1
 port: /dev/ttyS7 #/dev/ttyF3
---- name:sonar_rear
-config: 
-  continous: 0
-  max_distance: 20.0
-  resolution: 0.1
-  left_limit:
-    rad: 1.96349540849362
-    #(90.0+22.5)/180.0*Math::PI
-  right_limit:
-    rad: 1.17809724509617
-    #(90.0-22.5)/180.0*Math::PI
-port: /dev/ttyS5 #/dev/ttyF1
-echo_sounder_timeout: 0.5
 --- name:wall_servoing
 config:
   continous: 0
@@ -64,3 +52,45 @@ config:
   right_limit:
     rad: -0.01
 port: /dev/ttyS7 #/dev/ttyF3
+
+
+
+### rear sonar config
+--- name:default_rear
+# Configuration for Sonar
+config: 
+  left_limit: 
+    rad: 3.141592653589793
+  right_limit: 
+    rad: 3.141592653589793
+  angular_resolution: 
+    rad: 0.08726646259971647
+  max_distance: 15.0
+  min_distance: 0.25
+  resolution: 0.1
+  speed_of_sound: 1500.0
+  gain: 0.2
+  low_resolution: 0
+  continous: 1
+# the device port
+port: /dev/ttyS5
+# read_timeout
+read_timeout: 0.5
+# timeout for writing to the serial port in seconds
+write_timeout: 0.1
+# timeout for configuring the device in seconds
+configure_timeout: 10.0
+# timeout for the dst micron dst echo sounder. Set it to 0 if none is connected
+echo_sounder_timeout: 0.5
+--- name:sonar_rear_ground
+config: 
+  continous: 0
+  max_distance: 20.0
+  resolution: 0.1
+  left_limit:
+    rad: 1.96349540849362
+    #(90.0+22.5)/180.0*Math::PI
+  right_limit:
+    rad: 1.17809724509617
+    #(90.0-22.5)/180.0*Math::PI
+port: /dev/ttyS5
