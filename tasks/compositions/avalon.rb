@@ -261,6 +261,30 @@ composition 'WallDetector' do
     provides Srv::RelativePositionDetector
 end
 
+composition 'DualSonarWallDetector' do
+    event :wall_servoing
+    event :searching_wall
+    event :detected_corner
+    event :misconfiguration
+
+    add(SonarTritech::Micron, :as => 'sonar_front')
+    add(SonarTritech::Micron, :as => 'sonar_rear')
+
+    add(SonarFeatureEstimator::Task, :as => 'laserscan_front')
+    add(SonarFeatureEstimator::Task, :as => 'laserscan_rear')
+
+    add Srv::Orientation
+    add_main WallServoing::DualSonarServoing , :as => 'servoing'
+    connect sonar_front.sonar_beam => laserscan_front.sonar_input
+    connect sonar_rear.sonar_beam => laserscan_rear.sonar_input
+    connect laserscan_front.new_feature => servoing.sonarbeam_feature_front
+    connect laserscan_rear.new_feature => servoing.sonarbeam_feature_rear
+    autoconnect
+
+    export servoing.position_command, :as => 'relative_position_command'
+    provides Srv::RelativePositionDetector
+end
+
 #Cmp::VisualServoing.specialize 'detector' => Cmp::WallDetector do
 ##servoingal things only needed when the 'detector' is Cmp::WallDetector.
 ##

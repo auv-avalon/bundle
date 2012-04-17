@@ -27,6 +27,11 @@ wall_right = Cmp::WallDetector.use(wall_device)
 wall_right.use(WallServoing::SingleSonarServoing.use_conf('default', 'wall_right'))
 define('wall_right', Cmp::VisualServoing.use(wall_right))
 
+sonar_wall_detector = Cmp::DualSonarWallDetector.
+    use('sonar_front' => device('sonar').use_conf('default', 'dual_wall_servoing'),
+        'sonar_rear' => device('sonar_rear').use_conf('default_rear', 'sonar_rear_right'))
+define('dual_wall', Cmp::VisualServoing.use(sonar_wall_detector))
+
 define('asv', Cmp::VisualServoing.use(Cmp::AsvDetector.use('left_unicap_camera')))
 define('asv_detector', Cmp::AsvDetector.use('left_unicap_camera'))
 

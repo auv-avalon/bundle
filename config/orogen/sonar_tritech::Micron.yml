@@ -52,6 +52,17 @@ config:
   right_limit:
     rad: -0.01
 port: /dev/ttyS7 #/dev/ttyF3
+--- name:dual_wall_servoing
+config:
+  continous: 0
+  gain: 0.5
+  max_distance: 10.0
+  resolution: 0.1
+  left_limit:
+    rad: 0.094 #0.03 * PI
+  right_limit:
+    rad: -1.67 #-0.53 * PI
+port: /dev/ttyS7
 
 
 
@@ -93,4 +104,14 @@ config:
   right_limit:
     rad: 1.17809724509617
     #(90.0-22.5)/180.0*Math::PI
+port: /dev/ttyS5
+--- name:sonar_rear_right
+config: 
+  continous: 0
+  max_distance: 10.0
+  resolution: 0.1
+  left_limit:
+    rad: 0.094 #0.03 * PI
+  right_limit:
+    rad: -0.094 #-0.03 * PI
 port: /dev/ttyS5
