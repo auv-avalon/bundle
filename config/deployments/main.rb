@@ -15,22 +15,31 @@ buoy_detector = Cmp::BuoyDetector.use('front_camera')
 define('buoy', Cmp::VisualServoing.use(buoy_detector))
 define('buoy_detector', buoy_detector)
 
-wall_device = device('sonar').use_conf('default', 'wall_servoing')
+## single sonar wall servoing
+wall_device = device('sonar').use_conf('default', 'wall_servoing_front')
 define('wall', Cmp::VisualServoing.use(Cmp::WallDetector.use(wall_device)))
 define('wall_detector', Cmp::WallDetector.use(wall_device))
+wall_front_left = Cmp::WallDetector.use(wall_device)
+wall_front_left.use(WallServoing::SingleSonarServoing.use_conf('default', 'wall_front_left'))
+define('wall_front_left', Cmp::VisualServoing.use(wall_front_left))
+wall_front_right = Cmp::WallDetector.use(wall_device)
+wall_front_right.use(WallServoing::SingleSonarServoing.use_conf('default', 'wall_front_right'))
+define('wall_front_right', Cmp::VisualServoing.use(wall_front_right))
 
-wall_left = Cmp::WallDetector.use(wall_device)
+wall_left = Cmp::WallDetector.use(device('sonar').use_conf('default', 'wall_servoing_left'))
 wall_left.use(WallServoing::SingleSonarServoing.use_conf('default', 'wall_left'))
 define('wall_left', Cmp::VisualServoing.use(wall_left))
 
-wall_right = Cmp::WallDetector.use(wall_device)
+wall_right = Cmp::WallDetector.use(device('sonar').use_conf('default', 'wall_servoing_right'))
 wall_right.use(WallServoing::SingleSonarServoing.use_conf('default', 'wall_right'))
 define('wall_right', Cmp::VisualServoing.use(wall_right))
 
-sonar_wall_detector = Cmp::DualSonarWallDetector.
+## dual sonar wall servoing
+dual_sonar_wall_detector = Cmp::DualSonarWallDetector.
     use('sonar_front' => device('sonar').use_conf('default', 'dual_wall_servoing'),
         'sonar_rear' => device('sonar_rear').use_conf('default_rear', 'sonar_rear_right'))
-define('dual_wall', Cmp::VisualServoing.use(sonar_wall_detector))
+define('dual_wall', Cmp::VisualServoing.use(dual_sonar_wall_detector))
+
 
 define('asv', Cmp::VisualServoing.use(Cmp::AsvDetector.use('left_unicap_camera')))
 define('asv_detector', Cmp::AsvDetector.use('left_unicap_camera'))

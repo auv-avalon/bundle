@@ -27,13 +27,25 @@ wall_estimation_ransac_threshold: 0.5
 left_opening_angle: 0.785
 # opening angle to the right of the supposed wall direction, always positive
 right_opening_angle: 0.785
---- name:wall_left
+--- name:wall_front_left
 servoing_wall_direction: -0.4
 servoing_speed: 0.5
 left_opening_angle: 1.01
 right_opening_angle: 0.785
---- name:wall_right
+--- name:wall_front_right
 servoing_wall_direction: 0.4
 servoing_speed: -0.5
 left_opening_angle: 0.785
 right_opening_angle: 1.01
+--- name:wall_left
+servoing_wall_direction: 1.57
+initial_wall_direction: 1.57
+servoing_speed: -0.25
+left_opening_angle: 1.1
+right_opening_angle: 1.57
+--- name:wall_right
+servoing_wall_direction: -1.57
+initial_wall_direction: -1.57
+servoing_speed: 0.25
+left_opening_angle: 1.57
+right_opening_angle: 1.1

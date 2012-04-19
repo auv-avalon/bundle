@@ -16,7 +16,7 @@ config:
   low_resolution: 0
   continous: 1
 # the device port
-port: /dev/ttyS7 #/dev/ttyF3
+port: /dev/ttyS7
 # read_timeout
 read_timeout: 0.5
 # timeout for writing to the serial port in seconds
@@ -31,8 +31,19 @@ config:
   gain: 0.5
   max_distance: 15.0
   resolution: 0.1
-port: /dev/ttyS7 #/dev/ttyF3
---- name:wall_servoing
+port: /dev/ttyS7
+--- name:wall_servoing_front
+config:
+  continous: 0
+  gain: 0.5
+  max_distance: 10.0
+  resolution: 0.1
+  left_limit:
+    rad: 1.01
+  right_limit:
+    rad: -1.01
+port: /dev/ttyS7
+--- name:wall_servoing_left
 config:
   continous: 0
   gain: 0.5
@@ -42,7 +53,18 @@ config:
     rad: 2.67
   right_limit:
     rad: 0.0
-port: /dev/ttyS7 #/dev/ttyF3
+port: /dev/ttyS7
+--- name:wall_servoing_right
+config:
+  continous: 0
+  gain: 0.5
+  max_distance: 10.0
+  resolution: 0.1
+  left_limit:
+    rad: 0.0
+  right_limit:
+    rad: -2.67
+port: /dev/ttyS7
 --- name:distance_estimation
 config:
   continous: 0
@@ -51,7 +73,7 @@ config:
     rad: 0.01
   right_limit:
     rad: -0.01
-port: /dev/ttyS7 #/dev/ttyF3
+port: /dev/ttyS7
 --- name:dual_wall_servoing
 config:
   continous: 0
