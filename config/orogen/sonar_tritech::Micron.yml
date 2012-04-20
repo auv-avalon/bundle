@@ -35,7 +35,7 @@ port: /dev/ttyS7
 --- name:wall_servoing_front
 config:
   continous: 0
-  gain: 0.5
+  gain: 0.2
   max_distance: 10.0
   resolution: 0.1
   left_limit:
@@ -46,7 +46,7 @@ port: /dev/ttyS7
 --- name:wall_servoing_left
 config:
   continous: 0
-  gain: 0.5
+  gain: 0.2
   max_distance: 10.0
   resolution: 0.1
   left_limit:
@@ -57,7 +57,7 @@ port: /dev/ttyS7
 --- name:wall_servoing_right
 config:
   continous: 0
-  gain: 0.5
+  gain: 0.2
   max_distance: 10.0
   resolution: 0.1
   left_limit:
@@ -77,7 +77,7 @@ port: /dev/ttyS7
 --- name:dual_wall_servoing
 config:
   continous: 0
-  gain: 0.5
+  gain: 0.2
   max_distance: 10.0
   resolution: 0.1
   left_limit:
@@ -128,7 +128,8 @@ config:
     #(90.0-22.5)/180.0*Math::PI
 port: /dev/ttyS5
 --- name:sonar_rear_right
-config: 
+config:
+  gain: 0.2 
   continous: 0
   max_distance: 10.0
   resolution: 0.1
