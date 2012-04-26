@@ -101,7 +101,8 @@ Robot.devices do
 	sample_size(4)
 
     hbridge.slave(Dev::Hbridges, :as => 'motors').
-  	select_ids(6,3,-2,1,4,5)
+  	select_ids(6,3,2,-1,4,5)
+	# 1 and 2 are left and right (maybe confused)
 
     device(Dev::Modem, :as => 'modem').
     	can_id(0x1E0, 0x7FF).
