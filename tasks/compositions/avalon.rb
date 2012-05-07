@@ -20,6 +20,7 @@ using_task_library 'wall_servoing'
 using_task_library 'sonar_feature_estimator'
 using_task_library 'uwv_dynamic_model'
 using_task_library 'sonar_wall_hough'
+using_task_library 'uw_particle_localization'
 
 # using_task_library 'rotation_experiment'
 # using_task_library 'asv_detector'
@@ -325,6 +326,8 @@ end
 
 composition 'UwvModel' do
     add AvalonControl::MotionControlTask, :as => 'motion_control'
+    add Srv::OrientationWithZ
+    #add Srv::ActuatorController
     add UwvDynamicModel::Task, :as => 'model'
     autoconnect
 
@@ -338,4 +341,19 @@ composition 'SonarWallHough' do
     add Srv::SonarScanProvider, :as => 'sonar'
     add SonarWallHough::Task, :as => 'hough'
     autoconnect
+end
+
+composition 'Localization' do
+    add UwParticleLocalization::Task, :as => 'localization'
+    add Srv::SonarScanProvider, :as => 'sonar'
+    add SonarFeatureEstimator::Task, :as => 'feature_estimator'
+    add Srv::OrientationWithZ, :as => 'orientation_samples'
+    add Cmp::UwvModel, :as => 'model'
+    connect sonar => feature_estimator
+    connect feature_estimator => localization
+    connect orientation_samples => feature_estimator
+    connect orientation_samples => localization.orientation_samples
+    connect model.uwvstate => localization.speed_samples
+
+    export localization.pose_samples
 end
