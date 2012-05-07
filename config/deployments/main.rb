@@ -57,6 +57,8 @@ define('sonar_distance_detector', Cmp::WallDetector.use(sonar_device))
 hough_sonar = device('sonar')
 define('sonar_wall_hough', Cmp::SonarWallHough.use(hough_sonar))
 
+define('localization', Cmp::Localization.use('sonar'))
+
 model.data_service_type "NavigationMode"
 Cmp::ControlLoop.provides Srv::NavigationMode
 Cmp::VisualServoing.provides Srv::NavigationMode
