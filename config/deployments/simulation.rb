@@ -8,6 +8,7 @@ Roby.app.load_orocos_deployment 'main'
 
 add_mission(Taskmon::Task)
 
+use Srv::Pose => AvalonSimulation::StateEstimator
 use Srv::Orientation => AvalonSimulation::StateEstimator
 use Srv::OrientationWithZ => AvalonSimulation::StateEstimator
 

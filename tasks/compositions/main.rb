@@ -35,6 +35,7 @@ Cmp::ControlLoop.controller_type 'Motion2D', '/base/MotionCommand2D'
 Cmp::ControlLoop.controller_type 'AUVMotion', '/base/AUVMotionCommand'
 
 using_task_library 'auv_rel_pos_controller'
+using_task_library 'auv_waypoint_navigator'
 using_task_library 'avalon_control'
 
 composition 'VisualServoing' do
@@ -46,4 +47,14 @@ composition 'VisualServoing' do
     autoconnect
 end
 
+composition 'Navigation' do
+    add Srv::Pose, :as => 'pose'
+    add AuvWaypointNavigator::Task, :as => 'navigator'
+    add(Cmp::ControlLoop, :as => 'control').
+        use('command' => AuvRelPosController::Task).
+        use('controller' => AvalonControl::MotionControlTask)
+
+    connect pose => navigator
+    connect navigator => control
+end
 

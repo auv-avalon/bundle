@@ -7,6 +7,8 @@ define('drive_simple', Cmp::ControlLoop.
     use('command' => Cmp::AUVJoystickCommand).
     use('controller' => AvalonControl::MotionControlTask))
 
+define('navigation', Cmp::Navigation)
+
 pipeline_detector = Cmp::PipelineDetector.use('bottom_camera')
 define('pipeline', Cmp::VisualServoing.use(pipeline_detector))
 define('pipeline_detector', pipeline_detector)
