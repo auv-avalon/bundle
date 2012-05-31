@@ -13,9 +13,6 @@ module Plan
     @logger.progname = "MainPlanner"
 end
 
-class MainPlanner < Roby::Planning::Planner
-end
-
 # normalize current angle to range between PI and -PI
 def normalize_angle(angle)
     if angle > Math::PI
@@ -35,5 +32,4 @@ end
 def robot_name?(name)
     return Roby.app.robot_name == name.to_s
 end
-
 
