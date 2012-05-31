@@ -54,4 +54,5 @@ end
 
 class AvalonSimulation::StateEstimator
     provides Srv::Pose
+    provides Srv::Speed
 end

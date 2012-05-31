@@ -8,9 +8,12 @@ Roby.app.load_orocos_deployment 'main'
 
 add_mission(Taskmon::Task)
 
-use Srv::Pose => AvalonSimulation::StateEstimator
+use Srv::Pose => Cmp::Localization
+use Srv::Speed => AvalonSimulation::StateEstimator
 use Srv::Orientation => AvalonSimulation::StateEstimator
 use Srv::OrientationWithZ => AvalonSimulation::StateEstimator
+
+use device("sonar") => device("sonar").use_deployments(/sonar/)
 
 class AvalonSimulation::StateEstimator
     on :start do |event|

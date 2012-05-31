@@ -1,4 +1,4 @@
-class MainPlanner < Roby::Planning::Planner
+class MainPlanner
    YAW_THRESHOLD = 10 * Math::PI / 180.0
    Z_THRESHOLD = 0.3
 
@@ -117,6 +117,8 @@ class MainPlanner < Roby::Planning::Planner
 
         control = self.relative_position_control
         control.script do
+            #orientation_with_z_child.orientation_z_samples.data_reader
+            #orientation = data_reader 'orientation_with_z', 'orientation_z_samples'
             data_reader 'orientation', ['orientation_with_z', 'orientation_z_samples']
             data_writer 'motion_command', ['controller', 'motion_commands']
 
@@ -250,6 +252,59 @@ class MainPlanner < Roby::Planning::Planner
     end
 
     # -------------------------------------------------------------------------
+    
+    describe("relative strafing with motion_control_task").
+        required_arg("waypoint", "next waypoint to follow").
+        optional_arg("yaw", "navigating yaw for this movement")
+    method(:navigate) do
+        waypoint = arguments[:waypoint]
+        yaw = if arguments[:yaw] then arguments[:yaw] else 10.0 end
+
+        trajectory = []
+
+        wp = Types::Base::Waypoint.new
+        wp.position = waypoint
+        wp.heading = yaw
+        wp.tol_position = 1.0
+        wp.tol_heading = 0.1
+
+        trajectory << wp
+
+        self.navigation.script do 
+            data_writer 'waypoint_command', ['navigator', 'trajectory']
+            data_reader 'queue_size', ['navigator', 'queue_size']
+
+            wait_any navigator_child.start_event
+            wait_any control_child.command_child.start_event
+
+            execute do
+                waypoint_command << wp
+            end
+
+            poll_until(navigator_child.dynamic_navigation_event) do
+                write_waypoint_command
+                Plan.info "1"
+            end 
+
+            execute do
+                Plan.info "Navigate to #{waypoint} with yaw #{yaw}"
+            end
+
+            poll do
+                unless queue_size > 0
+                    Plan.info "Done"
+                    transition!
+                end
+
+                sleep 1
+            end
+
+            emit :success
+        end
+    end
+ 
+    
+    # -------------------------------------------------------------------------
 
     describe("relative forward motion until a wall is found via ping-pong sonar config").
         required_arg("yaw", "initial search direction of this motion method").
@@ -296,7 +351,7 @@ class MainPlanner < Roby::Planning::Planner
 
             start_time = nil
             poll do
-                position_command.heading = yaw
+                position_command.heading = 0.0
                 position_command.z = z
                 position_command.x = 0.0
                 position_command.y = 0.0
@@ -324,14 +379,6 @@ class MainPlanner < Roby::Planning::Planner
 
             emit :success
         end
-    end
-
-    # -------------------------------------------------------------------------
-
-    describe("alignment depending on a found pipeline").
-        required_arg("prefered_heading", "aligning heading on a given pipeline")
-    method(:align_on_pipeline) do
-        # use pipeline detector for holding position on a pipeline and align
     end
 
     # -------------------------------------------------------------------------

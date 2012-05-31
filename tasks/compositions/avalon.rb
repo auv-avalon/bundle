@@ -270,16 +270,18 @@ composition 'DualSonarWallDetector' do
     event :detected_corner
     event :misconfiguration
 
-    add(SonarTritech::Micron, :as => 'sonar_front')
-    add(SonarTritech::Micron, :as => 'sonar_rear')
+#    add(SonarTritech::Micron, :as => 'sonar_front')
+#    add(SonarTritech::Micron, :as => 'sonar_rear')
+    add(Srv::SonarScanProvider, :as => 'sonar_front')
+    add(Srv::SonarScanProvider, :as => 'sonar_rear')
 
     add(SonarFeatureEstimator::Task, :as => 'laserscan_front')
     add(SonarFeatureEstimator::Task, :as => 'laserscan_rear')
 
     add Srv::Orientation
     add_main WallServoing::DualSonarServoing , :as => 'servoing'
-    connect sonar_front.sonar_beam => laserscan_front.sonar_input
-    connect sonar_rear.sonar_beam => laserscan_rear.sonar_input
+    connect sonar_front.sonarscan => laserscan_front.sonar_input
+    connect sonar_rear.sonarscan => laserscan_rear.sonar_input
     connect laserscan_front.new_feature => servoing.sonarbeam_feature_front
     connect laserscan_rear.new_feature => servoing.sonarbeam_feature_rear
     autoconnect
@@ -321,7 +323,7 @@ composition 'MotionEstimation' do
     add MotionEstimation::Task, :as => "motion"
     export motion.speed_samples
     autoconnect
-    provides Srv::SpeedWithOrientationWithZ
+    provides Srv::Speed
 end
 
 composition 'UwvModel' do
@@ -332,7 +334,7 @@ composition 'UwvModel' do
     autoconnect
 
     export model.uwvstate
-    provides Srv::SpeedWithOrientationWithZ
+    provides Srv::Speed
     provides Srv::RelativePose
 end
 
@@ -343,17 +345,23 @@ composition 'SonarWallHough' do
     autoconnect
 end
 
-composition 'Localization' do
+t = composition 'Localization' do
     add UwParticleLocalization::Task, :as => 'localization'
     add Srv::SonarScanProvider, :as => 'sonar'
     add SonarFeatureEstimator::Task, :as => 'feature_estimator'
-    add Srv::OrientationWithZ, :as => 'orientation_samples'
-    add Cmp::UwvModel, :as => 'model'
+    add Srv::OrientationWithZ, :as => 'orientation_with_z'
+    #add Cmp::UwvModel, :as => 'model'
+    #add AvalonSimulation::StateEstimator, :as => 'model'
+    add Srv::Speed, :as => 'model'
     connect sonar => feature_estimator
     connect feature_estimator => localization
-    connect orientation_samples => feature_estimator
-    connect orientation_samples => localization.orientation_samples
-    connect model.uwvstate => localization.speed_samples
+    connect orientation_with_z => feature_estimator
+    connect orientation_with_z => localization.orientation_samples
+    connect model.speed_samples => localization.speed_samples
 
     export localization.pose_samples
+
+    provides Srv::Pose
 end
+
+puts t

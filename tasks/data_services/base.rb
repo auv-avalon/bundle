@@ -4,7 +4,7 @@ import_types_from 'base'
 # pose estimation
 # -----------------------------------------------------------------------------
 
-data_service_type 'SpeedWithOrientationWithZ' do
+data_service_type 'Speed' do
     output_port 'speed_samples', '/base/samples/RigidBodyState'
 end
 
