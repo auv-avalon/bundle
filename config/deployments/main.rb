@@ -7,7 +7,6 @@ define('drive_simple', Cmp::ControlLoop.
     use('command' => Cmp::AUVJoystickCommand).
     use('controller' => AvalonControl::MotionControlTask))
 
-define('navigation', Cmp::Navigation)
 
 pipeline_detector = Cmp::PipelineDetector.use('bottom_camera')
 define('pipeline', Cmp::VisualServoing.use(pipeline_detector))
@@ -18,30 +17,33 @@ define('buoy', Cmp::VisualServoing.use(buoy_detector))
 define('buoy_detector', buoy_detector)
 
 ## single sonar wall servoing
-wall_device = device('sonar').use_conf('default', 'wall_servoing_front')
+wall_device = device('sonar').with_conf('default', 'wall_servoing_front')
 define('wall', Cmp::VisualServoing.use(Cmp::WallDetector.use(wall_device)))
 define('wall_detector', Cmp::WallDetector.use(wall_device))
 wall_front_left = Cmp::WallDetector.use(wall_device)
-wall_front_left.use(WallServoing::SingleSonarServoing.use_conf('default', 'wall_front_left'))
+wall_front_left.use(WallServoing::SingleSonarServoing.with_conf('default', 'wall_front_left'))
 define('wall_front_left', Cmp::VisualServoing.use(wall_front_left))
 wall_front_right = Cmp::WallDetector.use(wall_device)
-wall_front_right.use(WallServoing::SingleSonarServoing.use_conf('default', 'wall_front_right'))
+wall_front_right.use(WallServoing::SingleSonarServoing.with_conf('default', 'wall_front_right'))
 define('wall_front_right', Cmp::VisualServoing.use(wall_front_right))
 
-wall_left = Cmp::WallDetector.use(device('sonar').use_conf('default', 'wall_servoing_left'))
-wall_left.use(WallServoing::SingleSonarServoing.use_conf('default', 'wall_left'))
+wall_left = Cmp::WallDetector.use(device('sonar').with_conf('default', 'wall_servoing_left'))
+wall_left.use(WallServoing::SingleSonarServoing.with_conf('default', 'wall_left'))
 define('wall_left', Cmp::VisualServoing.use(wall_left))
 
-wall_right = Cmp::WallDetector.use(device('sonar').use_conf('default', 'wall_servoing_right'))
-wall_right.use(WallServoing::SingleSonarServoing.use_conf('default', 'wall_right'))
+wall_right = Cmp::WallDetector.use(device('sonar').with_conf('default', 'wall_servoing_right'))
+wall_right.use(WallServoing::SingleSonarServoing.with_conf('default', 'wall_right'))
 define('wall_right', Cmp::VisualServoing.use(wall_right))
 
 ## dual sonar wall servoing
 dual_sonar_wall_detector = Cmp::DualSonarWallDetector.
-    use('sonar_front' => device('sonar').use_conf('default', 'dual_wall_servoing'),
-        'sonar_rear' => device('sonar_rear').use_conf('default_rear', 'sonar_rear_right'))
+    use('sonar_front' => device('sonar').with_conf('default', 'dual_wall_servoing'),
+        'sonar_rear' => device('sonar_rear').with_conf('default_rear', 'sonar_rear_right'))
 define('dual_wall', Cmp::VisualServoing.use(dual_sonar_wall_detector))
 
+define('dual_distance_detector', Cmp::DualSonarWallDetector.
+       use('sonar_front' => device('sonar').with_conf('default', 'dual_distance_x'),
+           'sonar_rear'  => device('sonar_rear').with_conf('default_rear', 'dual_distance_y')))
 
 define('asv', Cmp::VisualServoing.use(Cmp::AsvDetector.use('left_unicap_camera')))
 define('asv_detector', Cmp::AsvDetector.use('left_unicap_camera'))
@@ -49,17 +51,11 @@ define('asv_detector', Cmp::AsvDetector.use('left_unicap_camera'))
 #define('pipeline_sonar', Cmp::VisualServoing.use(Cmp::PipelineSonarDetector))
 #define('pipeline_sonar_detector', Cmp::PipelineSonarDetector)
 
-sonar_device = device('sonar').use_conf('default', 'distance_estimation')
-define('sonar_distance', Cmp::VisualServoing.use(Cmp::WallDetector.use(sonar_device)))
-define('sonar_distance_detector', Cmp::WallDetector.use(sonar_device))
-
-#define('particle_localization', Cmp::Localization.use(ErasPositionEstimator::Task))
-#define('ekf_localization', Cmp::Localization.use(EkfSlam::Task))
-
 hough_sonar = device('sonar')
 define('sonar_wall_hough', Cmp::SonarWallHough.use(hough_sonar))
 
 define('localization', Cmp::Localization.use('sonar'))
+define('navigation', Cmp::Navigation.use(Cmp::Localization.use('sonar')))
 
 model.data_service_type "NavigationMode"
 Cmp::ControlLoop.provides Srv::NavigationMode
@@ -89,7 +85,7 @@ def define_wall_servoing(name, cmp, options = Hash.new)
 #    detector_config << options[:detector] if options[:detector]
 #    
 #    sonar = Roby.orocos_engine.device('sonar').
-#        use_conf(*sonar_config)
+#        with_conf(*sonar_config)
 #
 #    #task = if cmp == Cmp::WallDetector then
 #     #          Sonardetector::Task
@@ -100,7 +96,7 @@ def define_wall_servoing(name, cmp, options = Hash.new)
 #
 #    task = Sonardetector::Task
 #
-#    detector = cmp.use(sonar, task.use_conf(*detector_config))
+#    detector = cmp.use(sonar, task.with_conf(*detector_config))
 #    Roby.orocos_engine.define("#{name}_detector", detector)
 #    Roby.orocos_engine.define("#{name}", Cmp::VisualServoing.use(detector))
 end
@@ -121,10 +117,10 @@ end
 #define_wall_servoing 'wall_servoing_right_wall', Cmp::WallDetector, 
 #    :sonar => 'scan_right',        :detector => 'servo_right_wall'
 
-#narrow_sonar = device('sonar').use_conf('sonar', 'narrow_front')
+#narrow_sonar = device('sonar').with_conf('sonar', 'narrow_front')
 #define('wall_detector', Cmp::WallDetector.use(narrow_sonar))
 
-#narrow_sonar = device('sonar').use_conf('sonar', 'wall_approach')
+#narrow_sonar = device('sonar').with_conf('sonar', 'wall_approach')
 #define('wall_distance_estimator', Cmp::WallDetector.use(narrow_sonar))
 
 
