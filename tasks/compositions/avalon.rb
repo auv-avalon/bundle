@@ -122,7 +122,7 @@ composition 'PipelineDetector' do
     event :end_of_pipe
     event :weak_signal
 
-    add Srv::ImageProvider
+    add Srv::ImageProvider, :as => 'camera'
     add_main OffshorePipelineDetector::Task, :as => 'offshorePipelineDetector'
     add Srv::OrientationWithZ
     offshorePipelineDetector.altitude_samples.ignore
@@ -218,7 +218,7 @@ composition 'BuoyDetector' do
     event :cutting_success
     event :cutting_error
 
-    add Srv::ImageProvider
+    add Srv::ImageProvider, :as => 'camera'
     add Srv::OrientationWithZ    
     add_main Buoydetector::Task, :as => 'servoing'
     autoconnect
@@ -345,7 +345,7 @@ composition 'SonarWallHough' do
     autoconnect
 end
 
-t = composition 'Localization' do
+composition 'Localization' do
     add UwParticleLocalization::Task, :as => 'localization'
     add Srv::SonarScanProvider, :as => 'sonar'
     add SonarFeatureEstimator::Task, :as => 'feature_estimator'
@@ -364,4 +364,3 @@ t = composition 'Localization' do
     provides Srv::Pose
 end
 
-puts t
