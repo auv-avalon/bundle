@@ -2,7 +2,7 @@ class MainPlanner
    YAW_THRESHOLD = 10 * Math::PI / 180.0
    Z_THRESHOLD = 0.3
 
-   describe("simple movement").
+   describe("Simple Movement. Move for a certain distance in a certain direction at a certain speed at a certain depth. The depth can be reached before or while moving forward.").
         required_arg("z", "initial z value on which robot should rotate").
         optional_arg('forward_speed', 'if set to a non-zero value, the system will first go to position and then go forward for the specified duration at this speed').
         optional_arg('move_during_descent', 'if set to true and forward_speed to a non-zero value, the system will move even before having reached its specified heading and depth').
@@ -46,9 +46,7 @@ class MainPlanner
                 if relative_heading
                     target_heading += relative_heading
                 end
-                if target_heading > Math::PI then target_heading -= 2*Math::PI
-                elsif target_heading < -Math::PI then target_heading += 2*Math::PI
-                end
+                target_heading = normalize_angle(target_heading)
 
                 command_child.disconnect_ports(controller_child, [['motion_command', 'motion_commands']])
                 Plan.info "simple movement to yaw #{target_heading}, z #{z} with speed #{descent_speed}"
@@ -63,16 +61,14 @@ class MainPlanner
 
                 if current_pose = self.orientation
                     current_heading = current_pose.orientation.yaw
-                    heading_error = current_heading - target_heading
-                    if heading_error > Math::PI then heading_error -= (2 * Math::PI)
-                    elsif heading_error < -Math::PI then heading_error += (2 * Math::PI)
-                    end
-
+                    heading_error = normalize_angle(current_heading - target_heading)
                     depth_error = current_pose.position.z - z
 
                     if heading_error.abs < YAW_THRESHOLD && depth_error.abs < Z_THRESHOLD
                         transition!
                     end
+                else
+                    Plan.warn "No orientation samples!"
                 end
             end
 
@@ -93,7 +89,7 @@ class MainPlanner
                     motion_command.heading = target_heading
                     write_motion_command
 
-                    if Time.now - start_time > duration
+                    if time_over?(start_time, duration)
                         transition!
                     end
                 end
