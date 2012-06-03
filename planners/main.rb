@@ -1,5 +1,5 @@
 # Main planner. A planner of this model is automatically added
-# to the interface planner list. For Avalon it should provides
+# to the interface planner list. For Avalon it should provide
 # global utility functions used in plannning scripting.
 module Plan
     class << self
