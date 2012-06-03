@@ -327,8 +327,9 @@ composition 'MotionEstimation' do
 end
 
 composition 'UwvModel' do
-    add AvalonControl::MotionControlTask, :as => 'motion_control'
+    #add AvalonControl::MotionControlTask, :as => 'motion_control'
     add Srv::OrientationWithZ
+    add Srv::Actuators
     #add Srv::ActuatorController
     add UwvDynamicModel::Task, :as => 'model'
     autoconnect
