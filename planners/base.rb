@@ -1,5 +1,5 @@
 class MainPlanner
-   YAW_THRESHOLD = 10 * Math::PI / 180.0
+   YAW_THRESHOLD = deg_to_rad(10)
    Z_THRESHOLD = 0.3
 
    describe("Simple Movement. Move for a certain distance in a certain direction at a certain speed at a certain depth. The depth can be reached before or while moving forward.").
