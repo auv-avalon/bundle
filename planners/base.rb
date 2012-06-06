@@ -99,8 +99,9 @@ class MainPlanner
         end
     end
 
+    # -------------------------------------------------------------------------
 
-        describe("alignes to the given yaw and z depth and starts moving forward").
+    describe("alignes to the given yaw and z depth and starts moving forward").
         required_arg("yaw", "initial heading for alignment").
         required_arg("z", "initial z value for alignment").
         optional_arg("speed", "forward velocity for motion").
@@ -249,7 +250,7 @@ class MainPlanner
 
     # -------------------------------------------------------------------------
     
-    describe("relative strafing with motion_control_task").
+    describe("Navigation following defined waypoints").
         required_arg("waypoint", "next waypoint to follow").
         optional_arg("yaw", "navigating yaw for this movement")
     method(:navigate) do
