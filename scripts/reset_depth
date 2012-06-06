@@ -8,3 +8,7 @@ Orocos.initialize
 estimator = Orocos::TaskContext.get 'depth'
 estimator.resetPressure
 
+
+sleep 1
+
+
