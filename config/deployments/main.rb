@@ -11,8 +11,8 @@ define('drive_simple', Cmp::ControlLoop.
 
 define('uwv_dynamic_model', Cmp::UwvModel)
 define('hough_localization', Cmp::SonarWallHough.use('sonar'))
-define('particle_localization', Cmp::Localization.use('sonar'))
-define('navigation', Cmp::Navigation.use(Cmp::Localization.use('sonar')))
+define('particle_localization', Cmp::Localization.use('sonar').use(Cmp::UwvModel))
+define('navigation', Cmp::Navigation.use(Cmp::Localization.use('sonar').use(Cmp::UwvModel)))
 
 servoing = {
     'buoy' => Cmp::BuoyDetector.use('front_camera'),
