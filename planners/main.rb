@@ -24,6 +24,14 @@ def normalize_angle(angle)
     end
 end
 
+def deg_to_rad(angle)
+    angle * Math::PI / 180
+end
+
+def rad_to_deg(angle)
+    angle * 180 / Math::PI
+end
+
 def time_over?(start_time, duration)
     return (Time.now - start_time) > duration
 end

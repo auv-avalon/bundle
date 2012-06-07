@@ -2,8 +2,8 @@ class MainPlanner < Roby::Planning::Planner
     SEARCH_SPEED = 0.15
 
     PIPELINE_SEARCH_Z = -0.8
-    PIPELINE_SEARCH_YAW = -15 * Math::PI / 180
-    PIPELINE_PREFERED_YAW = -80 * Math::PI / 180
+    PIPELINE_SEARCH_YAW = deg_to_rad(-15)
+    PIPELINE_PREFERED_YAW = deg_to_rad(-80)
     PIPELINE_STABILIZE_YAW = Math::PI / 2.0
 
     WALL_SERVOING_Z = -1.1
@@ -11,7 +11,7 @@ class MainPlanner < Roby::Planning::Planner
     WALL_SERVOING_TIMEOUT = 240
 
     BUOY_SEARCH_Z = -0.8
-    BUOY_SEARCH_YAW = -5 * Math::PI / 180.0
+    BUOY_SEARCH_YAW = deg_to_rad(-5)
     BUOY_CUT_TIMEOUT = 240
 
     describe("run a complete autonomous mission for studiobad")
