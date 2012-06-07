@@ -1,6 +1,11 @@
---- name:default
+--- name:default_rear
 start_angle: 2.2
 end_angle: 0.95
 resolution: 0.1
 maximum_distance: 50.0
 ping_pong_mode: true
+--- name:straight_rear
+start_angle: 0.0
+end_angle: -0.2
+ping_pong_mode: true
+

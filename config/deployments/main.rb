@@ -14,6 +14,10 @@ define('hough_localization', Cmp::SonarWallHough.use('sonar'))
 define('particle_localization', Cmp::Localization.use('sonar'))
 define('navigation', Cmp::Navigation.use(Cmp::Localization.use('sonar')))
 
+define('cross_sonar', Cmp::DualSonarWallDetector. 
+       use('sonar_front' => device('sonar').use_conf('default', 'straight_front')).
+       use('sonar_rear' => device('sonar_rear').use_conf('default_rear', 'straight_rear')))
+
 servoing = {
     'buoy' => Cmp::BuoyDetector.use('front_camera'),
 
