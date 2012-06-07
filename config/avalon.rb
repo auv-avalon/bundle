@@ -36,7 +36,8 @@ Conf.orocos.disable_log_group "raw_camera"
 
 Orocos::RobyPlugin::StateEstimator::Task.worstcase_processing_time 1
 
-nav_modes = ['drive_simple', 'pipeline', 'wall', 'buoy']
+#nav_modes = ['drive_simple', 'pipeline', 'wall', 'buoy']
+nav_modes = ['drive_simple', 'wall_front_right', 'dual_wall', 'wall_left']
 
 State.navigation_mode = nav_modes
 
@@ -108,7 +109,7 @@ Robot.devices do
     	can_id(0x1E0, 0x7FF).
 	period(0.1)
 
-    device(Dev::DepthReader, :ad => 'depth_reader').
+    device(Dev::DepthReader, :as => 'depth_reader').
     	can_id(0x130,0x7F0).
 	period(0.1)
 

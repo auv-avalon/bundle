@@ -6,7 +6,7 @@ engine:
 # Logging configuration
 log:
   # Where log files go
-  dir: log
+  dir: /mnt/logs/
   
   # Log system events. It can be either true, false or stats. If true, all
   # plan-level events are logged, allowing to use the roby-log GUI to replay
@@ -42,7 +42,9 @@ log:
   # debugging output for the whole framework, set
   #
   levels:
-        roby: WARN
+        roby: FATAL
+  #levels:
+  #      roby: WARN
   #        orocos/roby_plugin: INFO:avalon_dataflow.txt
   #     roby/execution_engine: DEBUG
   #
