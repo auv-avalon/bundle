@@ -51,6 +51,7 @@ add_mission(Hbridge::Task)
 add_mission(Sysmon::Task)
 # Add modem-can, to get a com channel to the base station
 add_mission(ModemCan::Task)
+add_mission(BatteryManagement::Task)
 
 # add_mission(Taskmon::Task).on_server('localhost')
 # add_mission(Taskmon::Task).on_server('front')
