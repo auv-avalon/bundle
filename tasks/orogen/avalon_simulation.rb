@@ -33,6 +33,9 @@ class AvalonSimulation::FrontCamera
     driver_for Dev::MarsCamera
 end
 
+class AvalonSimulation::TopCamera
+    driver_for Dev::MarsCamera
+end
 
 class AvalonSimulation::SonarTop
     driver_for 'MarsSonar'

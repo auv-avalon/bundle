@@ -19,14 +19,17 @@ define('cross_sonar', Cmp::DualSonarWallDetector.
        use('sonar_rear' => device('sonar_rear').use_conf('default_rear', 'straight_rear')))
 
 servoing = {
+
+    'asv' => Cmp::AsvDetector.
+        use('camera_left' => device('left_unicap_camera')).
+        use('camera_right' => device('left_unicap_camera')),
+
     'buoy' => Cmp::BuoyDetector.use('front_camera'),
 
     'pipeline' => Cmp::PipelineDetector.use('bottom_camera'),
 
     'wall' => Cmp::WallDetector.
        use(device('sonar').use_conf('default', 'wall_servoing_front')),
-
-    'asv' => Cmp::AsvDetector.use('left_unicap_camera'),
 
     'dual_wall' => Cmp::DualSonarWallDetector.
        use('sonar_front' => device('sonar').use_conf('default', 'dual_wall_servoing')).

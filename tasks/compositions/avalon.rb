@@ -21,9 +21,8 @@ using_task_library 'sonar_feature_estimator'
 using_task_library 'uwv_dynamic_model'
 using_task_library 'sonar_wall_hough'
 using_task_library 'uw_particle_localization'
-
 # using_task_library 'rotation_experiment'
-# using_task_library 'asv_detector'
+using_task_library 'asv_detector'
 # using_task_library 'low_level_driver'
 
 # Composition that extracts the normal camera stream out of a "structured light"
@@ -296,15 +295,27 @@ end
 #end
 
 composition 'AsvDetector' do
-#    event :asv_found
-#    event :asv_lost
+    event :asv_follow
+    event :asv_lost_or_init
+    event :asv_found
+    event :searching
+    event :surfacing
+    event :asv_validate
 
-#    add Srv::ImageProvider
-#    add_main AsvDetector::Task, :as => 'detector'
-#    autoconnect
+    add Srv::ImageProvider, :as => 'camera_left'
+    add Srv::ImageProvider, :as => 'camera_right'
 
-#    export detector.position_command
-#    provides Srv::RelativePositionDetector
+    add Srv::OrientationWithZ, :as => 'orientation'
+    add_main AsvDetector::Task, :as => 'detector'
+
+    connect orientation.orientation_z_samples => detector.orientation_readings
+    connect camera_left.images => detector.left_image
+    
+    export detector.position_command
+    provides Srv::RelativePositionDetector
+end
+
+Cmp::VisualServoing.specialize 'detector' => Cmp::AsvDetector do
 end
 
 composition 'Rotation' do
