@@ -6,7 +6,8 @@ engine:
 # Logging configuration
 log:
   # Where log files go
-  dir: /mnt/logs/
+  #dir: /mnt/logs/ # <<<<<<<<<<< Use this on AVALON!!!
+  dir: log # <<<<<<<<<<< Use this on other computers!!!
   
   # Log system events. It can be either true, false or stats. If true, all
   # plan-level events are logged, allowing to use the roby-log GUI to replay

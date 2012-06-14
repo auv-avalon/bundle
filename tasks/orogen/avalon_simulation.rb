@@ -2,7 +2,7 @@ class AvalonSimulation::Task
     def configure
         autoproj = ENV['AUTOPROJ_PROJECT_BASE']
 
-        file = "demo.scn"
+        file = "avalon.scn"
 
         task = Orocos::TaskContext.get self.orocos_name
         task.scenefile = File.join(autoproj, 
@@ -33,6 +33,9 @@ class AvalonSimulation::FrontCamera
     driver_for Dev::MarsCamera
 end
 
+class AvalonSimulation::TopCamera
+    driver_for Dev::MarsCamera
+end
 
 class AvalonSimulation::SonarTop
     driver_for 'MarsSonar'
