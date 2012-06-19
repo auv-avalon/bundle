@@ -57,6 +57,7 @@ add_mission('front_camera')
 #add_mission('left_unicap_camera')
 #add_mission('right_unicap_camera')
 
+add_mission('gps')
 add_mission('sonar')
 add_mission('sonar_rear')
 
