@@ -29,6 +29,9 @@ Robot.devices do
     device(Dev::MarsCamera, :as => 'front_camera', :using => AvalonSimulation::FrontCamera).
         period(0.1)
 
+    device(Dev::MarsCamera, :as => 'left_unicap_camera', :using => AvalonSimulation::TopCamera).
+        period(0.1)
+
     device(Dev::MarsSonar, :as => 'sonar', :using => AvalonSimulation::SonarTop).
         period(0.1)
 

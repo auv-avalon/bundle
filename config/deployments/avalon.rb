@@ -4,7 +4,6 @@ Roby.app.load_orocos_deployment 'main'
 use Buoydetector::Task => Buoydetector::Task.
   use_conf("default", "testbed")
 
-
 use Srv::Orientation      => Cmp::OrientationEstimator
 use Srv::OrientationWithZ => Cmp::OrientationEstimator
 use Srv::Pose             => Cmp::PoseEstimator
@@ -13,6 +12,11 @@ use DataServices::AUVMotionController => AvalonControl::MotionControlTask
 
 use Cmp::OrientationEstimator => Cmp::OrientationEstimator.use('depth_reader') ##Depth Sensor as reference
 #use Cmp::OrientationEstimator => Cmp::OrientationEstimator.use('sonar_rear') ##Ground distance as 0 reference !
+
+# Connect right unicap camera only on AVALON, not in Simulation because there we have only one top cam
+Cmp::AsvDetector.specialize 'camera_left' => CameraUnicap::CameraTask do
+    connect camera_right.images => detector.right_image
+end
 
 wide_sonar = device('sonar').use_conf('sonar')
 use Cmp::PoseEstimator        => Cmp::PoseEstimator.use(wide_sonar, Cmp::OrientationEstimator)
@@ -47,6 +51,7 @@ add_mission(Hbridge::Task)
 add_mission(Sysmon::Task)
 # Add modem-can, to get a com channel to the base station
 add_mission(ModemCan::Task)
+add_mission(BatteryManagement::Task)
 
 # add_mission(Taskmon::Task).on_server('localhost')
 # add_mission(Taskmon::Task).on_server('front')

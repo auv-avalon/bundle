@@ -111,6 +111,10 @@ Robot.devices do
     	can_id(0x130,0x7F0).
 	period(0.1)
 
+    device(Dev::BatteryManagement, :as => 'battery_management').
+        can_id(0x120, 0x7F0).
+    period(0.1)
+
     device(Dev::SystemStatus).
 	can_id(0x101,0x7FF).
   	period(0.01)

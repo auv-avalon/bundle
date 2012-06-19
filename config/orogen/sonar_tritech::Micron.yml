@@ -139,6 +139,7 @@ config:
     rad: -0.094 #-0.03 * PI
 port: /dev/ttyS5
 --- name:straight_rear
+config:
   gain: 0.2
   continous: 0
   max_distance: 10.0

@@ -34,6 +34,9 @@ use SonarFeatureEstimator::Task => SonarFeatureEstimator::Task.
 use Buoydetector::Task => Buoydetector::Task.
   use_conf("default", "simulation")
 
+add_mission('bottom_camera')
+add_mission('front_camera')
+add_mission('left_unicap_camera')
 add_mission(AvalonSimulation::Task)
 add_mission(AvalonSimulation::StateEstimator)
 add_mission(AvalonSimulation::Actuators)
