@@ -263,7 +263,7 @@ configuration:
       tickDivider: 4
       ticksPerTurn: 93312
     base_config: 
-      maxCurrent: 8000
+      maxCurrent: 6500
       maxMotorTempCount: 200
       maxBoardTemp: 60
       timeout: 32000
