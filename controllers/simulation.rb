@@ -14,6 +14,27 @@ module Robot
         task.setYaw(yaw)
     end
 
+    # supply waypoints in this format: [[x1,y1],[x2,y2],...,[xn,yn]]
+    def self.sim_set_asv_waypoints(waypoints)
+        task = Orocos::TaskContext.get 'asv_navigation'
+        if waypoints.size > 0 
+            waypoints.each do |x,y|
+                task.addWaypoint(x,y)
+            end
+        end
+    end
+
+    def self.sim_moving_asv
+        waypoints = []
+        waypoints << [5.0, 2.0] << [3.0,5.0] << [-3.0,3.0]
+        sim_set_asv_waypoints(waypoints)
+    end
+
+    def self.sim_clear_asv_waypoints
+        task = Orocos::TaskContext.get 'asv_navigation'
+        task.clearWaypoints
+    end
+
     def self.sim_set_avalon(object)
         buoy = { :x => 55.0, :y => -1.0, :z => -2.5, :theta => Math::PI / 2.0 }
         pipe = { :x => 0.0, :y => 0.0, :z => -0.0, :theta => 0.0 }
