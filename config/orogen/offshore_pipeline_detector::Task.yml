@@ -28,7 +28,7 @@ out_of_center: 0.0
 # tries to follow the pipeline in this direction [rad], > PI = disabled
 prefered_heading: -1.57
 # no documentation available for this property
-use_channel: 3 # 1 # green channel
+use_channel: 0
 # offset between the center and the end of pipe during 
 # hovering [m] at the end (should be positvie)
 end_of_pipe_offset: 0.25

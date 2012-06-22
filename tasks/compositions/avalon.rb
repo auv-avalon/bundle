@@ -4,12 +4,13 @@ using_task_library 'avalon_control'
 using_task_library 'ekf_slam'
 using_task_library 'depth_reader'
 using_task_library 'xsens_imu'
+using_task_library 'gps'
 using_task_library 'fog_kvh'
 using_task_library 'state_estimator'
 using_task_library 'orientation_estimator'
 using_task_library 'structured_light'
 using_task_library 'offshore_pipeline_detector'
-using_task_library 'buoydetector'
+using_task_library 'buoy'
 using_task_library 'frame_demultiplexer'
 using_task_library 'controldev'
 using_task_library 'raw_control_command_converter'
@@ -219,12 +220,36 @@ composition 'BuoyDetector' do
 
     add Srv::ImageProvider, :as => 'camera'
     add Srv::OrientationWithZ    
-    add_main Buoydetector::Task, :as => 'servoing'
+    #add_main Buoydetector::Task, :as => 'servoing'
+    add_main Buoy::Detector, :as => 'detector'
+    add Buoy::Survey, :as => 'servoing'
     autoconnect
 
     export servoing.relative_position
     provides Srv::RelativePositionDetector
 end
+
+#composition 'BuoyDetector' do
+#    event :buoy_search
+#    event :buoy_detected
+#    event :buoy_lost
+#    event :buoy_arrived
+#    event :strafing
+#    event :strafe_finished
+#    event :strafe_error
+#    event :moving_to_cutting_distance
+#    event :cutting
+#    event :cutting_success
+#    event :cutting_error
+#
+#    add Srv::ImageProvider, :as => 'camera'
+#    add Srv::OrientationWithZ    
+#    add_main Buoydetector::Task, :as => 'servoing'
+#    autoconnect
+#
+#    export servoing.relative_position
+#    provides Srv::RelativePositionDetector
+#end
 
 
 Cmp::VisualServoing.specialize 'detector' => Cmp::BuoyDetector do

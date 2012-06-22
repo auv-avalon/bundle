@@ -62,7 +62,8 @@ Robot.devices do
     period(0.01)
  device(Dev::Dynamixel, :as => 'dynamixel').
     device_id("/dev/ttyS3")
- device(Dev::Gps, :as => 'gps').
+
+ device(Dev::Gps, :as => 'gpsd').
      period(0.01)
 
   #device(Dev::Micron, :as => "sonar_profiling_micron").
