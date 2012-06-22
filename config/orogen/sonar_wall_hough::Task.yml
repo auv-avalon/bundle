@@ -1,23 +1,23 @@
 --- name:default
 # the angle between orientation-zero and basin zero (in degree)
-angleDelta: 50.0
+angleDelta: 0.0
 # Number of Angle steps collected in 1 bin in houghspace
 anglesPerBin: 2
 # Height of the basin
-basinHeight: 9.0
+basinHeight: 10.0
 # Width of the basin
-basinWidth: 16.0
+basinWidth: 17.3
 # Number of distance bin in sonar beam collected in 1 bin in houghspace
 distancesPerBin: 4
 # bins in sonar beam with fewer entries will be ignored
-filterThreshold: 50
+filterThreshold: 30
 # Number of bins of the sonar
-maxDistance: 500
+maxDistance: 173
 # Minimum distance for sonar to filter out the auv itself
 minDistance: 2.5
 # Factor for sonar peaks; lines must have at least that many votes to be detected as lines
 minLineVotesRatio: 0.1
 # Angular resolution of sonar (in degree)
-sensorAngularResolution: 1.8
+sensorAngularResolution: 5.0
 # If the incoming beams should be filtered with a minimum filter first
-withMinimumFilter: 0
+withMinimumFilter: 1
