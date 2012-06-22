@@ -74,6 +74,7 @@ composition "OrientationEstimator" do
 
     export estimator.orientation_samples, :as => 'orientation_z_samples'
     provides Srv::OrientationWithZ
+    provides Srv::Speed
 end
 
 composition "DagonOrientationEstimator" do
@@ -415,8 +416,8 @@ composition 'DualLocalization' do
     #add AvalonSimulation::StateEstimator, :as => 'model'
     add Srv::Speed, :as => 'model'
     connect sonar => feature_estimator
+    connect sonar => hough
     connect feature_estimator => localization
-    connect feature_estimator => hough
     connect orientation_with_z => feature_estimator
     connect orientation_with_z => localization.orientation_samples
     connect orientation_with_z => hough
