@@ -50,17 +50,53 @@ class AvalonModelParameters
     # UWV interia + added mass Matrix
     # consider Avalon as one big cylinder
     def self.mass_matrix(task)
-        task.mass_matrix = [7.48,0,0,0,0,0,  0,16.29,0,0,0,0,  0,0,16.29,0,0,0,  0,0,0,0.61,0,0,  0,0,0,0,1.67,0,  0,0,0,0,0,1.67]
+#        task.mass_matrix = [7.48,0,0,0,0,0,  0,16.29,0,0,0,0,  0,0,16.29,0,0,0,  0,0,0,0.61,0,0,  0,0,0,0,1.67,0,  0,0,0,0,0,1.67]
+         task.massCoefficient[0].positive = 7.49
+         task.massCoefficient[0].negative = 7.49
+         task.massCoefficient[1].positive = 16.29
+         task.massCoefficient[1].negative = 16.29
+         task.massCoefficient[2].positive = 16.29
+         task.massCoefficient[2].negative = 16.29
+         task.massCoefficient[3].positive = 0.61
+         task.massCoefficient[3].negative = 0.61
+         task.massCoefficient[4].positive = 1.67
+         task.massCoefficient[4].negative = 1.67
+         task.massCoefficient[5].positive = 1.67
+         task.massCoefficient[5].negative = 1.67
     end
 
     # Linear damp coefficient
     def self.linDampCoeff(task)
-        task.linDampCoeff = [1.2832, 10, 10, 0, 1.7, 1.7 ]
+#        task.linDampCoeff = [1.2832, 10, 10, 0, 1.7, 1.7 ]
+	task.linDampCoeff[0].positive = 1.2832
+	task.linDampCoeff[0].negative = 1.2832
+	task.linDampCoeff[1].positive = 10
+	task.linDampCoeff[1].negative = 10
+	task.linDampCoeff[2].positive = 10
+	task.linDampCoeff[2].negative = 10
+	task.linDampCoeff[3].positive = 0.0
+	task.linDampCoeff[3].negative = 0.0
+	task.linDampCoeff[4].positive = 1.7
+	task.linDampCoeff[4].negative = 1.7
+	task.linDampCoeff[5].positive = 1.7
+	task.linDampCoeff[5].negative = 1.7
     end
 
     # Quadratic damp coefficient
     def self.quadDampCoeff(task)
-        task.quadDampCoeff = [8.962, 20, 20, 10, 50, 50]
+        # task.quadDampCoeff = [8.962, 20, 20, 10, 50, 50]
+	task.quadDampCoeff[0].positive = 8.962
+	task.quadDampCoeff[0].negative = 8.962
+	task.quadDampCoeff[1].positive = 20.0
+	task.quadDampCoeff[1].negative = 20.0
+	task.quadDampCoeff[2].positive = 20.0
+	task.quadDampCoeff[2].negative = 20.0
+	task.quadDampCoeff[3].positive = 10.0
+	task.quadDampCoeff[3].negative = 10.0
+	task.quadDampCoeff[4].positive = 50.0
+	task.quadDampCoeff[4].negative = 50.0
+	task.quadDampCoeff[5].positive = 50.0
+	task.quadDampCoeff[5].negative = 50.0
     end
     # ThrusterCoefficient
     def self.thrusterCoefficient(task)
