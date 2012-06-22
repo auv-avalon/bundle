@@ -22,7 +22,7 @@ minimum_perceptions: 3
 # no documentation available for this property
 orientation_period: 0.01
 # ratio for generating new particles after each measurement
-particle_interspersal_ratio: 0.0
+hough_interspersal_ratio: 0.0
 # number of used particles
 particle_number: 20
 # ignore velocity in speed samples for dynamic update

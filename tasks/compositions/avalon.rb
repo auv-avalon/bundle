@@ -355,6 +355,10 @@ composition 'SonarWallHough' do
     add Srv::SonarScanProvider, :as => 'sonar'
     add SonarWallHough::Task, :as => 'hough'
     autoconnect
+
+    export hough.position
+
+    provides Srv::Pose
 end
 
 composition 'Localization' do
@@ -369,6 +373,28 @@ composition 'Localization' do
     connect feature_estimator => localization
     connect orientation_with_z => feature_estimator
     connect orientation_with_z => localization.orientation_samples
+    connect model.speed_samples => localization.speed_samples
+
+    export localization.pose_samples
+
+    provides Srv::Pose
+end
+
+composition 'DualLocalization' do
+    add UwParticleLocalization::Task, :as => 'localization'
+    add SonarWallHough::Task, :as => 'hough'
+    add Srv::SonarScanProvider, :as => 'sonar'
+    add SonarFeatureEstimator::Task, :as => 'feature_estimator'
+    add Srv::OrientationWithZ, :as => 'orientation_with_z'
+    #add Cmp::UwvModel, :as => 'model'
+    #add AvalonSimulation::StateEstimator, :as => 'model'
+    add Srv::Speed, :as => 'model'
+    connect sonar => feature_estimator
+    connect feature_estimator => localization
+    connect feature_estimator => hough
+    connect orientation_with_z => feature_estimator
+    connect orientation_with_z => localization.orientation_samples
+    connect orientation_with_z => hough
     connect model.speed_samples => localization.speed_samples
 
     export localization.pose_samples
