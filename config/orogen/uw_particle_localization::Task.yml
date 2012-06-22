@@ -1,6 +1,4 @@
 --- name:default
-# fir size for pose aliasing on output port
-aliasing_buffer_size: 0
 # effective sample size threshold controls the resampling timing and uses values between 0.0 and 1.0 particles
 effective_sample_size_threshold: 0.9
 # no documentation available for this property
@@ -22,7 +20,7 @@ minimum_perceptions: 3
 # no documentation available for this property
 orientation_period: 0.01
 # ratio for generating new particles after each measurement
-hough_interspersal_ratio: 0.0
+# hough_interspersal_ratio: 0.0
 # number of used particles
 particle_number: 20
 # ignore velocity in speed samples for dynamic update
@@ -40,7 +38,7 @@ sonar_minimum_distance: 1.0
 # no documentation available for this property
 speed_period: 0.01
 # sets a static covariance for speed samples
-#static_motion_covariance: [5.0,0.0,0.0,  0.0,5.0,0.0,  0.0,0.0,0.0]
+static_motion_covariance: [5.0, 0.0, 0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0]
 # start map for localization algorithm
 yaml_map: ''
 # yaw offset if reference heading is not constistent with current mission
