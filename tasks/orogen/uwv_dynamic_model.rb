@@ -100,18 +100,35 @@ class AvalonModelParameters
     end
     # ThrusterCoefficient
     def self.thrusterCoefficient(task)
-        task.thruster_coefficient.surge.positive = 0.005#-0.000045#-0.0000045
-	task.thruster_coefficient.surge.negative = 0.005#-0.000045#-0.0000045
-	task.thruster_coefficient.sway.positive = 0.005#000045
-	task.thruster_coefficient.sway.negative = 0.005#000045
-	task.thruster_coefficient.heave.positive = 0.005#000045
-	task.thruster_coefficient.heave.negative = 0.005#000045
-	task.thruster_coefficient.roll.positive = 0.0
-	task.thruster_coefficient.roll.negative = 0.0
-	task.thruster_coefficient.pitch.positive = 0.0#000045
-	task.thruster_coefficient.pitch.negative = 0.0#000045
-	task.thruster_coefficient.yaw.positive = 0.0#000045
-	task.thruster_coefficient.yaw.negative = 0.0#000045
+        task.thruster_coefficient_pwm.surge.positive.coefficient_a = 0.005
+        task.thruster_coefficient_pwm.surge.positive.coefficient_b = 0.005
+        task.thruster_coefficient_pwm.surge.negative.coefficient_a = 0.005
+        task.thruster_coefficient_pwm.surge.negative.coefficient_b = 0.005
+ 
+        task.thruster_coefficient_pwm.sway.positive.coefficient_a = 0.005
+        task.thruster_coefficient_pwm.sway.positive.coefficient_b = 0.005
+        task.thruster_coefficient_pwm.sway.negative.coefficient_a = 0.005
+        task.thruster_coefficient_pwm.sway.negative.coefficient_b = 0.005
+ 
+        task.thruster_coefficient_pwm.heave.positive.coefficient_a = 0.005
+        task.thruster_coefficient_pwm.heave.positive.coefficient_b = 0.005
+        task.thruster_coefficient_pwm.heave.negative.coefficient_a = 0.005
+        task.thruster_coefficient_pwm.heave.negative.coefficient_b = 0.005
+ 
+        task.thruster_coefficient_pwm.roll.positive.coefficient_a = 0.0
+        task.thruster_coefficient_pwm.roll.positive.coefficient_b = 0.0
+        task.thruster_coefficient_pwm.roll.negative.coefficient_a = 0.0
+        task.thruster_coefficient_pwm.roll.negative.coefficient_b = 0.0
+ 
+        task.thruster_coefficient_pwm.pitch.positive.coefficient_a = 0.0
+        task.thruster_coefficient_pwm.pitch.positive.coefficient_b = 0.0
+        task.thruster_coefficient_pwm.pitch.negative.coefficient_a = 0.0
+        task.thruster_coefficient_pwm.pitch.negative.coefficient_b = 0.0
+ 
+        task.thruster_coefficient_pwm.yaw.positive.coefficient_a = 0.0
+        task.thruster_coefficient_pwm.yaw.positive.coefficient_b = 0.0
+        task.thruster_coefficient_pwm.yaw.negative.coefficient_a = 0.0
+        task.thruster_coefficient_pwm.yaw.negative.coefficient_b = 0.0
     end
 
     # Thruster mapping
