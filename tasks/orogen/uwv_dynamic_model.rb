@@ -68,12 +68,12 @@ class AvalonModelParameters
     # Linear damp coefficient
     def self.linDampCoeff(task)
 #        task.linDampCoeff = [1.2832, 10, 10, 0, 1.7, 1.7 ]
-	task.linDampCoeff[0].positive = 1.2832
-	task.linDampCoeff[0].negative = 1.2832
-	task.linDampCoeff[1].positive = 10
-	task.linDampCoeff[1].negative = 10
-	task.linDampCoeff[2].positive = 10
-	task.linDampCoeff[2].negative = 10
+	task.linDampCoeff[0].positive = 8.203187564
+	task.linDampCoeff[0].negative = 8.203187564
+	task.linDampCoeff[1].positive = 24.94216
+	task.linDampCoeff[1].negative = 24.94216
+	task.linDampCoeff[2].positive = 24
+	task.linDampCoeff[2].negative = 24
 	task.linDampCoeff[3].positive = 0.0
 	task.linDampCoeff[3].negative = 0.0
 	task.linDampCoeff[4].positive = 1.7
@@ -85,12 +85,12 @@ class AvalonModelParameters
     # Quadratic damp coefficient
     def self.quadDampCoeff(task)
         # task.quadDampCoeff = [8.962, 20, 20, 10, 50, 50]
-	task.quadDampCoeff[0].positive = 8.962
-	task.quadDampCoeff[0].negative = 8.962
-	task.quadDampCoeff[1].positive = 20.0
-	task.quadDampCoeff[1].negative = 20.0
-	task.quadDampCoeff[2].positive = 20.0
-	task.quadDampCoeff[2].negative = 20.0
+	task.quadDampCoeff[0].positive = 0.04959
+	task.quadDampCoeff[0].negative = 0.04959
+	task.quadDampCoeff[1].positive = 0.042393
+	task.quadDampCoeff[1].negative = 0.042393
+	task.quadDampCoeff[2].positive = 0.04
+	task.quadDampCoeff[2].negative = 0.04
 	task.quadDampCoeff[3].positive = 10.0
 	task.quadDampCoeff[3].negative = 10.0
 	task.quadDampCoeff[4].positive = 50.0
