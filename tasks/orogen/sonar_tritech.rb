@@ -1,7 +1,7 @@
 class SonarTritech::Micron
     driver_for "Dev::Micron" do
         provides Srv::SonarScanProvider
-        provides Srv::ZProvider
+	provides Srv::GroundDistance
     end
 end
 

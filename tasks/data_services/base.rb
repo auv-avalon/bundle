@@ -33,6 +33,11 @@ data_service_type 'OrientationWithZ' do
     provides Srv::ZProvider, 'z_samples' => 'orientation_z_samples'
 end
 
+#Prodived ground distance
+data_service_type 'GroundDistance' do
+    output_port 'distance', '/base/samples/RigidBodyState'
+end
+
 data_service_type 'Pose' do
     output_port 'pose_samples', '/base/samples/RigidBodyState'
     provides Srv::Position,    'position_samples' => 'pose_samples'
