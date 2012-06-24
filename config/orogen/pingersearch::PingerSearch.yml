@@ -1,0 +1,5 @@
+--- name:default
+# minimum number of perceptions before starting resampling
+minimum_perceptions: 5
+# number of used particles
+particle_number: 50

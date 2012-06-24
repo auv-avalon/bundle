@@ -1,0 +1,21 @@
+--- name:default
+# radius of the buoy in m
+buoy_radius: 0.05
+# number of frames a buoy is not detected in order to set BUOY_LOST
+buoy_timeout: 20
+# Sets test mode.
+debug_gui: 1
+# Buoy V value.
+edgeTh: 35
+# the time in s how long a buoy of the past is noticed by the filter.
+filter_timeout: 1.5
+# Buoy hue value.
+hValue: 55
+# Hough threshold.
+houghTh: 25
+# Buoy saturation value.
+sValue: 95
+# Step size to detect V value.
+steps: 5
+# Buoy hue value.
+vValue: 40
