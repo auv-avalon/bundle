@@ -118,3 +118,7 @@ end
 data_service_type 'Trigger' do
     output_port 'trigger', 'bool'
 end
+
+data_service_type 'SoundSourceDirection' do
+    output_port 'angle', '/base/Angle'
+end

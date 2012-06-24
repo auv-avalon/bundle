@@ -14,6 +14,7 @@ define('hough_localization', Cmp::SonarWallHough.use('sonar'))
 define('particle_localization', Cmp::Localization.use('sonar').use(Cmp::OrientationEstimator))
 define('localization', Cmp::DualLocalization.use('sonar').use(Cmp::OrientationEstimator))
 define('navigation', Cmp::Navigation.use(Cmp::DualLocalization.use('sonar').use(Cmp::OrientationEstimator)))
+define('pingersearch', Cmp::Pingersearch)
 
 define('cross_sonar', Cmp::DualSonarWallDetector. 
        use('sonar_front' => device('sonar').use_conf('default', 'straight_front')).

@@ -12,6 +12,7 @@ use Srv::Pose => Cmp::Localization
 use Srv::Speed => AvalonSimulation::StateEstimator
 use Srv::Orientation => AvalonSimulation::StateEstimator
 use Srv::OrientationWithZ => AvalonSimulation::StateEstimator
+use Srv::SoundSourceDirection => AvalonSimulation::PingerSearch
 
 use device("sonar") => device("sonar").use_deployments(/sonar/)
 

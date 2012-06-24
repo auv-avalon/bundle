@@ -25,6 +25,7 @@ using_task_library 'uw_particle_localization'
 # using_task_library 'rotation_experiment'
 using_task_library 'asv_detector'
 # using_task_library 'low_level_driver'
+using_task_library 'pingersearch'
 
 # Composition that extracts the normal camera stream out of a "structured light"
 # stream
@@ -428,3 +429,22 @@ composition 'DualLocalization' do
     provides Srv::Pose
 end
 
+composition 'Pingersearch' do
+    # Can be used in simulation as well since simulation omits audio capturing.
+    add Srv::SoundSourceDirection, :as => 'angle_estimation'
+    add Pingersearch::PingerSearch, :as => 'pingersearch' 
+    autoconnect
+    #connect angle_estimation.angle => pingersearch
+
+    #export angle_estimation.angle
+    #provides Srv::SoundSourceDirection
+
+    export pingersearch.relative_asv_position
+    #provides Srv::RelativePositionDetector
+end
+
+Cmp::Pingersearch.specialize 'angle_estimation' => Pingersearch::AngleEstimation do
+    # On AVALON, use audio reader for sound capturing
+    add AudioReader::Task, :as => 'audio_reader'
+    autoconnect
+end

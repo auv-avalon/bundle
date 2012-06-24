@@ -54,6 +54,9 @@ class AvalonSimulation::Actuators
     provides Srv::Actuators
 end
 
+class AvalonSimulation::PingerSearch
+    provides Srv::SoundSourceDirection
+end
 
 class AvalonSimulation::StateEstimator
     provides Srv::Pose
