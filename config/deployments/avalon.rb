@@ -15,16 +15,23 @@ use DataServices::AUVMotionController => AvalonControl::MotionControlTask
 use Cmp::OrientationEstimator => Cmp::OrientationEstimator.use('depth_reader') ##Depth Sensor as reference
 #use Cmp::OrientationEstimator => Cmp::OrientationEstimator.use('sonar_rear') ##Ground distance as 0 reference !
 
-# Connect right unicap camera only on AVALON, not in Simulation because there we have only one top cam
-Cmp::AsvDetector.specialize 'camera_left' => CameraUnicap::CameraTask do
-    connect camera_right.images => detector.right_image
-end
 
 wide_sonar = device('sonar').use_conf('sonar')
 use Cmp::PoseEstimator        => Cmp::PoseEstimator.use(wide_sonar, Cmp::OrientationEstimator)
 
 define('pose_estimator', Cmp::PoseEstimator)
 define('orientation_estimator', Cmp::OrientationEstimator)
+
+# Connect right unicap camera only on AVALON, not in Simulation because there we have only one top cam
+Cmp::AsvDetector.specialize 'camera_left' => CameraUnicap::CameraTask do
+    #add Srv::ImageProvider, :as => 'camera_right'
+    connect camera_right.images => detector.right_image
+end
+
+asv_cmp = Cmp::AsvDetector.
+    use('camera_right' => device('right_unicap_camera')).
+    use('camera_left' => device('left_unicap_camera'))
+define('asv', Cmp::VisualServoing.use(asv_cmp))
 
 detector_conf = ["default", "studiobad"]
 

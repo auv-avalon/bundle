@@ -16,6 +16,11 @@ use Srv::SoundSourceDirection => AvalonSimulation::PingerSearch
 
 use device("sonar") => device("sonar").use_deployments(/sonar/)
 
+asv_cmp = Cmp::AsvDetector.
+    use('camera_left' => device('left_unicap_camera')).
+    use('camera_right' => device('left_unicap_camera')) #calm roby by assigning an image provider to camera_right
+define('asv', Cmp::VisualServoing.use(asv_cmp))
+
 class AvalonSimulation::StateEstimator
     on :start do |event|
         @reader = data_reader :pose_samples

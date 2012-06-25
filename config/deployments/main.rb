@@ -21,10 +21,6 @@ define('cross_sonar', Cmp::DualSonarWallDetector.
 
 servoing = {
 
-    'asv' => Cmp::AsvDetector.
-        use('camera_left' => device('left_unicap_camera')).
-        use('camera_right' => device('left_unicap_camera')),
-
     'buoy' => Cmp::BuoyDetector.use('front_camera'),
 
     'pipeline' => Cmp::PipelineDetector.use('bottom_camera'),
@@ -65,6 +61,6 @@ Cmp::ControlLoop.provides Srv::NavigationMode
 Cmp::VisualServoing.provides Srv::NavigationMode
 
 modality_selection Srv::NavigationMode, 'drive_simple', 'relative_position_control', 
-    'pipeline', 'buoy', 'asv'
+    'pipeline', 'buoy'
 
 
