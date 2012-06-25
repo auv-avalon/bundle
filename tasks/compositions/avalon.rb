@@ -434,17 +434,17 @@ composition 'Pingersearch' do
     add Srv::SoundSourceDirection, :as => 'angle_estimation'
     add Pingersearch::PingerSearch, :as => 'pingersearch' 
     autoconnect
-    #connect angle_estimation.angle => pingersearch
 
-    #export angle_estimation.angle
-    #provides Srv::SoundSourceDirection
-
-    export pingersearch.relative_asv_position
-    #provides Srv::RelativePositionDetector
+    export pingersearch.position_command
+    provides Srv::RelativePositionDetector
 end
 
 Cmp::Pingersearch.specialize 'angle_estimation' => Pingersearch::AngleEstimation do
     # On AVALON, use audio reader for sound capturing
     add AudioReader::Task, :as => 'audio_reader'
     autoconnect
+end
+
+Cmp::VisualServoing.specialize 'detector' => Cmp::Pingersearch do
+
 end
