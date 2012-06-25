@@ -7,7 +7,7 @@ use Buoydetector::Task => Buoydetector::Task.
 use Srv::Orientation      => Cmp::OrientationEstimator
 use Srv::OrientationWithZ => Cmp::OrientationEstimator
 use Srv::Pose             => Cmp::PoseEstimator
-use Srv::GroundDistance   => device('sonar_rear') 
+#use Srv::GroundDistance   => device('sonar_rear') 
 use Srv::SoundSourceDirection => Pingersearch::AngleEstimation
 
 use DataServices::AUVMotionController => AvalonControl::MotionControlTask
