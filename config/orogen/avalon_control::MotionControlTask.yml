@@ -40,7 +40,7 @@ z_pid:
   p: -1.0
   min: -1.0
   i: -0.01
-use_min_ground_distance: false
+use_min_ground_distance: true 
 min_ground_distance: 0.2
 --- name:simulation
 z_coupling_factor: 0.0
