@@ -223,7 +223,12 @@ composition 'BuoyDetector' do
     add_main Buoy::Detector, :as => 'detector'
     add Buoy::Survey, :as => 'servoing'
     add ModemCan::Task, :as => 'modem'
-    autoconnect
+
+    connect camera => detector
+    connect orientation_with_z => servoing
+    connect servoing => modem
+    connect detector => modem
+    connect modem => servoing
 
     export servoing.relative_position
     provides Srv::RelativePositionDetector
