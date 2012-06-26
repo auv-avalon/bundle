@@ -29,3 +29,6 @@ strafe_angle: 0.95
 strafe_around: 0
 # intensity and direction of strafing (negative is right).
 strafe_intensity: -0.8
+--- name:simulation
+# the absolute high of the buoy in the water.
+buoy_depth: -2.2
