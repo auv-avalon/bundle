@@ -36,18 +36,18 @@ use Buoydetector::Task => Buoydetector::Task.
 use OffshorePipelineDetector::Task => OffshorePipelineDetector::Task.
     use_conf(*detector_conf)
 
-StateEstimator::Task.on :start do |event|
-   @orientation_reader = data_reader 'orientation_samples'
-end
-StateEstimator::Task.poll do
-   if rbs = @orientation_reader.read
-       State.pose.orientation = rbs.orientation
-       if !State.pose.respond_to?(:position)
-       	   State.pose.position = Eigen::Vector3.new(0, 0, 0)
-       end
-       State.pose.position.z = rbs.position.z
-   end
-end
+#StateEstimator::Task.on :start do |event|
+#   @orientation_reader = data_reader 'orientation_samples'
+#end
+#StateEstimator::Task.poll do
+#   if rbs = @orientation_reader.read
+#       State.pose.orientation = rbs.orientation
+#       if !State.pose.respond_to?(:position)
+#       	   State.pose.position = Eigen::Vector3.new(0, 0, 0)
+#       end
+#       State.pose.position.z = rbs.position.z
+#   end
+#end
 
 # Predeploy a few things to keep them always running
 add_mission(Hbridge::Task)

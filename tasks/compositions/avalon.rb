@@ -56,6 +56,20 @@ composition 'OrientationWithZ' do
     export fusion.pose_samples
     provides Srv::OrientationWithZ
     provides Srv::Speed
+
+    on :start do |event|
+        @pose_reader = data_reader 'pose_samples'
+    end
+
+    poll do 
+        if rbs = @pose_reader.read
+            State.pose.orientation = rbs.orientation
+            if !State.pose.repsond_to?(:position)
+                State.pose.posistion = Eigen::Vector3.new(0, 0, 0)
+            end
+            State.pose.position.z = rbs.position.z
+        end
+    end
 end
 
 composition "OrientationEstimator" do
