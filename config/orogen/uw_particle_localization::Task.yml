@@ -1,24 +1,16 @@
 --- name:default
 # effective sample size threshold controls the resampling timing and uses values between 0.0 and 1.0 particles
 effective_sample_size_threshold: 0.9
-# no documentation available for this property
-groundtruth_period: 0.01
-# no documentation available for this property
-hough_period: 0.1
 # initial centre position for all particles
 init_position: []
 # spatial covariance from initial centre position for initialization
 init_variance: []
-# no documentation available for this property
-laser_period: 0.1
 # Time in s the particle filter will wait for expected samples
 max_sample_delay: 2.0
 # minimum depth for collecting perception samples
 minimum_depth: -0.0
 # minimum number of perceptions before starting resampling
 minimum_perceptions: 3
-# no documentation available for this property
-orientation_period: 0.01
 # ratio for generating new particles after each measurement
 # hough_interspersal_ratio: 0.0
 # number of used particles
@@ -35,11 +27,10 @@ sonar_importance: 1.0
 sonar_maximum_distance: 20.0
 # set maximum distance for filtering sonar samples
 sonar_minimum_distance: 1.0
-# no documentation available for this property
-speed_period: 0.01
 # sets a static covariance for speed samples
 static_motion_covariance: [5.0, 0.0, 0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0]
 # start map for localization algorithm
 yaml_map: ''
 # yaw offset if reference heading is not constistent with current mission
 yaw_offset: 0.0
+
