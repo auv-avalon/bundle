@@ -46,6 +46,7 @@ end
 class AvalonSimulation::SonarRear
     driver_for 'MarsSonarBottom'
     provides Srv::SonarScanProvider
+    provides Srv::GroundDistance
 end
 
 
