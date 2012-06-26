@@ -1,3 +1,5 @@
 --- name:default
 # no documentation available for this property
 scale: 2.5
+sendInterval: 2.0
+

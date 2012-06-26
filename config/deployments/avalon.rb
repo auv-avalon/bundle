@@ -4,23 +4,19 @@ Roby.app.load_orocos_deployment 'main'
 use Buoydetector::Task => Buoydetector::Task.
   use_conf("default", "testbed")
 
-use Srv::Orientation      => Cmp::OrientationEstimator
-use Srv::OrientationWithZ => Cmp::OrientationEstimator
-use Srv::Pose             => Cmp::PoseEstimator
+use Cmp::OrientationWithZ => Cmp::OrientationWithZ.use('depth_reader').use(Cmp::DagonOrientationEstimator)
+
+use Srv::Orientation      => Cmp::OrientationWithZ
+use Srv::OrientationWithZ => Cmp::OrientationWithZ
+
 use Srv::GroundDistance   => device('sonar_rear') 
 use Srv::SoundSourceDirection => Pingersearch::AngleEstimation
 
 use DataServices::AUVMotionController => AvalonControl::MotionControlTask
 
-use Cmp::OrientationEstimator => Cmp::OrientationEstimator.use('depth_reader') ##Depth Sensor as reference
+#use Cmp::OrientationEstimator => Cmp::OrientationEstimator.use('depth_reader') ##Depth Sensor as reference
 #use Cmp::OrientationEstimator => Cmp::OrientationEstimator.use('sonar_rear') ##Ground distance as 0 reference !
 
-
-wide_sonar = device('sonar').use_conf('sonar')
-use Cmp::PoseEstimator        => Cmp::PoseEstimator.use(wide_sonar, Cmp::OrientationEstimator)
-
-define('pose_estimator', Cmp::PoseEstimator)
-define('orientation_estimator', Cmp::OrientationEstimator)
 
 # Connect right unicap camera only on AVALON, not in Simulation because there we have only one top cam
 Cmp::AsvDetector.specialize 'camera_left' => CameraUnicap::CameraTask do
@@ -75,8 +71,7 @@ add_mission('gpsd')
 add_mission('sonar')
 add_mission('sonar_rear')
 
-add_mission("orientation_estimator")
-add_mission(Cmp::DagonOrientationEstimator)
+add_mission(Cmp::OrientationWithZ)
 #add_mission(Cmp::UwvModel)
 #add_mission(Cmp::PipelineSonarDetector)
 

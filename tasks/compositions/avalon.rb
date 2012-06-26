@@ -4,6 +4,7 @@ using_task_library 'avalon_control'
 using_task_library 'ekf_slam'
 using_task_library 'depth_reader'
 using_task_library 'xsens_imu'
+using_task_library 'modem_can'
 using_task_library 'gps'
 using_task_library 'fog_kvh'
 using_task_library 'state_estimator'
@@ -14,7 +15,6 @@ using_task_library 'buoy'
 using_task_library 'frame_demultiplexer'
 using_task_library 'controldev'
 using_task_library 'raw_control_command_converter'
-#using_task_library 'pipline_tracker'
 using_task_library 'motion_estimation'
 using_task_library 'sonar_tritech'
 using_task_library 'wall_servoing'
@@ -22,9 +22,7 @@ using_task_library 'sonar_feature_estimator'
 using_task_library 'uwv_dynamic_model'
 using_task_library 'sonar_wall_hough'
 using_task_library 'uw_particle_localization'
-# using_task_library 'rotation_experiment'
 using_task_library 'asv_detector'
-# using_task_library 'low_level_driver'
 using_task_library 'pingersearch'
 
 # Composition that extracts the normal camera stream out of a "structured light"
@@ -47,18 +45,17 @@ composition 'StructuredLightInput' do
     autoconnect
 end
 
-composition 'PoseEstimator' do
-    add EkfSlam::Task, :as => 'slam'
-
+composition 'OrientationWithZ' do
+    add DepthReader::DepthAndOrientationFusion, :as => 'fusion'
     add Srv::Orientation
-    connect orientation => slam.orientation_samples
     add Srv::ZProvider
-    connect z_provider => slam.depth_samples
-    add Srv::SonarScanProvider
-    connect sonar_scan_provider => slam.SonarScan
 
-    export slam.pose_samples
-    provides Srv::Pose
+    connect orientation => fusion.orientation_samples
+    connect z_provider => fusion.depth_samples
+
+    export fusion.pose_samples
+    provides Srv::OrientationWithZ
+    provides Srv::Speed
 end
 
 composition "OrientationEstimator" do
@@ -225,6 +222,7 @@ composition 'BuoyDetector' do
     #add_main Buoydetector::Task, :as => 'servoing'
     add_main Buoy::Detector, :as => 'detector'
     add Buoy::Survey, :as => 'servoing'
+    add ModemCan::Task, :as => 'modem'
     autoconnect
 
     export servoing.relative_position
@@ -316,11 +314,6 @@ composition 'DualSonarWallDetector' do
     provides Srv::RelativePositionDetector
 end
 
-#Cmp::VisualServoing.specialize 'detector' => Cmp::WallDetector do
-##servoingal things only needed when the 'detector' is Cmp::WallDetector.
-##
-#end
-
 composition 'AsvDetector' do
     event :asv_follow
     event :asv_lost_or_init
@@ -343,15 +336,6 @@ composition 'AsvDetector' do
 end
 
 Cmp::VisualServoing.specialize 'detector' => Cmp::AsvDetector do
-end
-
-composition 'Rotation' do
-#    add Srv::ImageProvider
-#    add Srv::OrientationWithZ
-#    add_main RotationExperiment::Task, :as => 'rotator'
-#    autoconnect
-
-#    export rotator.position_command
 end
 
 
@@ -393,8 +377,6 @@ composition 'Localization' do
     add Srv::SonarScanProvider, :as => 'sonar'
     add SonarFeatureEstimator::Task, :as => 'feature_estimator'
     add Srv::OrientationWithZ, :as => 'orientation_with_z'
-    #add Cmp::UwvModel, :as => 'model'
-    #add AvalonSimulation::StateEstimator, :as => 'model'
     add Srv::Speed, :as => 'model'
     connect sonar => feature_estimator
     connect feature_estimator => localization
