@@ -8,6 +8,7 @@ use Cmp::OrientationWithZ => Cmp::OrientationWithZ.use('depth_reader').use(Cmp::
 
 use Srv::Orientation      => Cmp::OrientationWithZ
 use Srv::OrientationWithZ => Cmp::OrientationWithZ
+use Srv::Speed            => Cmp::OrientationWithZ
 
 use Srv::GroundDistance   => device('sonar_rear') 
 use Srv::SoundSourceDirection => Pingersearch::AngleEstimation
