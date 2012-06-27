@@ -26,7 +26,7 @@ module Robot
 
     def self.sim_moving_asv
         waypoints = []
-        waypoints << [5.0, 2.0] << [3.0,5.0] << [-3.0,3.0]
+        waypoints << [5.0, 2.0] << [0.0,-2.4] << [-3.0,3.0]
         sim_set_asv_waypoints(waypoints)
     end
 
