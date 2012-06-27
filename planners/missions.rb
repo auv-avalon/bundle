@@ -25,7 +25,8 @@ class MainPlanner < Roby::Planning::Planner
         buoy_task = buoy.script do
             Plan.info "Debug: in Buoy Script"
 
-	    execute { yaw = yaw.call } if yaw.respond_to?(:call)
+            execute { yaw = yaw.call } if yaw.respond_to?(:call)
+
             data_reader 'orientation', ['control', 'orientation_with_z', 'orientation_z_samples']
             data_writer 'buoy_cutting_command', ['detector', 'servoing', 'force_cutting']
             data_writer 'motion_command', ['control', 'controller', 'motion_commands']
@@ -62,10 +63,10 @@ class MainPlanner < Roby::Planning::Planner
                 ## Handle events
                 last_event = detector_child.history.last
 
-		if search_timeout and time_over?(start_time, search_timeout)
-			Plan.info "Buoy not found. Go to next task"
-			emit :success
-		end
+                if search_timeout and time_over?(start_time, search_timeout)
+                    Plan.info "Buoy not found. Go to next task"
+                    emit :success
+                end
 
                 # Buoy detected?
                 if detector_child.buoy_detected?
@@ -81,10 +82,10 @@ class MainPlanner < Roby::Planning::Planner
             if mode
                 start_time = nil
 
-		execute do
-		  start_time = Time.now
-		end
-                
+                execute do
+                    start_time = Time.now
+                end
+                    
                 poll do
                     # Check for mission timeout
                     if cut_timeout and time_over?(start_time, cut_timeout)
@@ -105,15 +106,15 @@ class MainPlanner < Roby::Planning::Planner
                         emit :success
                     end
 
-                    #if !cut_timeout and detector_child.moving_to_cutting_distance?
-		    #	Plan.info "Moving to cutting distanc and success emitted"
-                    #    transition! 
-                    #end
+                        #if !cut_timeout and detector_child.moving_to_cutting_distance?
+		        #	Plan.info "Moving to cutting distanc and success emitted"
+                        #    transition! 
+                        #end
 
-		    if detector_child.cutting_success?
-		    	Plan.info "Cutting success emitted"
-			transition!
-		    end
+		            if detector_child.cutting_success?
+                        Plan.info "Cutting success emitted"
+                        transition!
+		            end
                 end
             end
 
@@ -144,8 +145,8 @@ class MainPlanner < Roby::Planning::Planner
 
             connection = nil
 
-	    execute { yaw = yaw.call } if yaw.respond_to?(:call)
-	    execute { prefered_yaw = prefered_yaw.call } if prefered_yaw and prefered_yaw.respond_to?(:call)
+            execute { yaw = yaw.call } if yaw.respond_to?(:call)
+            execute { prefered_yaw = prefered_yaw.call } if prefered_yaw and prefered_yaw.respond_to?(:call)
             execute do
                 connection = control_child.command_child.disconnect_ports(control_child.controller_child, [['motion_command', 'motion_commands']])
                 follower = detector_child.offshorePipelineDetector_child
