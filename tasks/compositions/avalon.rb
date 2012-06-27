@@ -383,11 +383,13 @@ composition 'Localization' do
     add SonarFeatureEstimator::Task, :as => 'feature_estimator'
     add Srv::OrientationWithZ, :as => 'orientation_with_z'
     add Srv::Speed, :as => 'model'
+    add Srv::Actuators, :as => 'actuators'
     connect sonar => feature_estimator
     connect feature_estimator => localization
     connect orientation_with_z => feature_estimator
     connect orientation_with_z => localization.orientation_samples
-    connect model.speed_samples => localization.speed_samples
+    # connect model.speed_samples => localization.speed_samples
+    connect actuators => localization
 
     export localization.pose_samples
 
