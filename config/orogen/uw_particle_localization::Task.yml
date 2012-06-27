@@ -12,23 +12,31 @@ minimum_perceptions: 3
 # ratio for generating new particles after each measurement
 # hough_interspersal_ratio: 0.0
 # number of used particles
-particle_number: 20
+particle_number: 50
 # ignore velocity in speed samples for dynamic update
-pure_random_motion: true
+pure_random_motion: false
 # automatic reset of particle filter after not receiving any perception for X seconds
 reset_timeout: 10.0
 # sets sonar covariance for defining measurement uncertainty
-sonar_covariance: 2.0
+sonar_covariance: 4.0
 # sets importance ratio for sonar perception updates
 sonar_importance: 1.0
 # set maximum distance for filtering sonar samples
-sonar_maximum_distance: 20.0
+sonar_maximum_distance: 80.0
 # set maximum distance for filtering sonar samples
 sonar_minimum_distance: 1.0
 # sets a static covariance for speed samples
-static_motion_covariance: [5.0, 0.0, 0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0]
+static_motion_covariance: [0.0001, 0.0, 0.0, 0.0, 0.0001, 0.0, 0.0, 0.0, 0.0]
 # start map for localization algorithm
 yaml_map: ''
 # yaw offset if reference heading is not constistent with current mission
 yaw_offset: 0.0
-
+# interspersal ratio for hough position samples
+hough_interspersal_ratio: 0.1
+# streamaligner attributes
+aggregator_max_latency: 2.0
+laser_samples_period: 0.1
+orientation_samples_period: 0.01
+thruster_samples_period: 0.01
+speed_samples_period: 0.01
+pose_update_period: 0.1

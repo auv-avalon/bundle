@@ -6,7 +6,7 @@ class UwParticleLocalization::Task
 
         autoproj = ENV['AUTOPROJ_PROJECT_BASE']
 
-        map = "studiobad.yml"
+        map = "nurc.yml"
 
         orogen_task.yaml_map = File.join(autoproj, "supervision", "maps", map)
     end
