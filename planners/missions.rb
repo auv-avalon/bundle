@@ -1,4 +1,18 @@
 class MainPlanner < Roby::Planning::Planner
+
+    describe("dummy mission. to be used for temporary substitution of a real mission.").
+        required_arg("msg", "short description")
+    method(:dummy) do
+        task = Planning::Dummy.new
+        msg = arguments[:msg]        
+        task.script do
+            Plan.info "Dummy mission: #{msg}"
+            emit :success
+        end
+        task
+        
+    end    
+
     describe("run a complete buoy servoing with cutting given a found buoy using current alignment").
         required_arg("yaw", "initial search direction").
         required_arg("z", "initial z value for finding a buoy").
@@ -79,7 +93,7 @@ class MainPlanner < Roby::Planning::Planner
                 write_motion_command
             end
 
-            if mode
+            if mode # TODO no else case!! mode is optional argument!
                 start_time = nil
 
                 execute do
@@ -137,6 +151,7 @@ class MainPlanner < Roby::Planning::Planner
         prefered_yaw = arguments[:prefered_yaw]
         
         PIPELINE_SEARCH_CANDIDATE_SPEED = if speed > 0 then 0.1 else -0.1 end
+        PIPELINE_DETECTOR_CHANNEL = 3
 
         pipeline = self.pipeline
         task = pipeline.script do
@@ -152,8 +167,9 @@ class MainPlanner < Roby::Planning::Planner
                 follower = detector_child.offshorePipelineDetector_child
                 follower.orogen_task.prefered_heading = prefered_yaw if prefered_yaw
                 follower.orogen_task.depth = z
-		follower.orogen_task.use_channel = 3
-                Plan.info "Searching pipeline on yaw #{yaw} with z #{z}"
+                
+                follower.orogen_task.use_channel = PIPELINE_DETECTOR_CHANNEL
+                Plan.info "Searching pipeline on yaw #{yaw} with z #{z} using channel #{PIPELINE_DETECTOR_CHANNEL}"
             end
  
             if search_timeout
@@ -263,17 +279,15 @@ class MainPlanner < Roby::Planning::Planner
         optional_arg("ref_distance", "reference distance to wall").
         optional_arg("timeout", "timeout after successful corner passing")        
     method(:survey_wall) do
-        yaw = arguments[:servoing_wall_yaw]
+        servoing_wall_yaw = arguments[:servoing_wall_yaw]
         z = arguments[:z]
-        wall = arguments[:initial_wall_yaw]
+        initial_wall_yaw = arguments[:initial_wall_yaw]
         speed = arguments[:speed]
         ref_distance = arguments[:ref_distance]
         corners = arguments[:corners]
         timeout = arguments[:timeout]
 
-        PASSING_CORNER_TIMEOUT = 4
-
-        wall_servoing = self.wall
+        wall_servoing = self.wall # TODO use method argument to choose wall servoing mode
         roby_task = wall_servoing.script do
             wait_any detector_child.start_event
             wait_any control_child.command_child.start_event
@@ -281,20 +295,20 @@ class MainPlanner < Roby::Planning::Planner
             execute do 
                 survey = detector_child.servoing_child
                 survey.orogen_task.wall_distance = ref_distance if ref_distance
-                survey.orogen_task.servoing_wall_direction = Math::PI / 2.0
-                survey.orogen_task.initial_wall_direction = Math::PI / 2.0
+                survey.orogen_task.servoing_wall_direction = servoing_wall_yaw if servoing_wall_yaw
+                survey.orogen_task.initial_wall_direction = initial_wall_yaw if initial_wall_yaw
                 survey.orogen_task.servoing_speed = speed if speed
-                survey.orogen_task.right_opening_angle = 0.5 * Math::PI
-                survey.orogen_task.left_opening_angle = 0.35 * Math::PI
+                #survey.orogen_task.right_opening_angle = 0.5 * Math::PI
+                #survey.orogen_task.left_opening_angle = 0.35 * Math::PI
                 survey.orogen_task.fixed_depth = z
 
                 sonar = detector_child.sonar_child 
 
                 if robot_name?(:simulation)
-                    Plan.info "Overwrite configuration on avalon_simulation::SonarTop"
-                    sonar.orogen_task.start_angle = 0.75 * Math::PI
-                    sonar.orogen_task.end_angle = 0.0
-                    sonar.orogen_task.maximum_distance = 10.0
+                    #Plan.info "Overwrite configuration on avalon_simulation::SonarTop"
+                    #sonar.orogen_task.start_angle = 0.75 * Math::PI
+                    #sonar.orogen_task.end_angle = 0.0
+                    #sonar.orogen_task.maximum_distance = 10.0
                 else
                     Plan.info "Overwrite configuration on sonar_tritech::Micron"
                     sonar_config = sonar.orogen_task.config

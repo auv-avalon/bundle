@@ -35,4 +35,8 @@ module Planning
         #    Robot.emergency_surfacing
         #end
    end
+
+    class Dummy < Roby::Task
+        terminates
+    end
 end
