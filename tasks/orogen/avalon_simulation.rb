@@ -38,20 +38,20 @@ class AvalonSimulation::TopCamera
 end
 
 class AvalonSimulation::SonarTop
-    driver_for 'MarsSonar'
+    driver_for 'Dev::MarsSonar'
     provides Srv::SonarScanProvider
 end
 
 
 class AvalonSimulation::SonarRear
-    driver_for 'MarsSonarBottom'
+    driver_for 'Dev::MarsSonarBottom'
     provides Srv::SonarScanProvider
     provides Srv::GroundDistance
 end
 
 
 class AvalonSimulation::Actuators
-    driver_for 'MarsAvalonThrusters'
+    driver_for 'Dev::MarsAvalonThrusters'
     provides Srv::Actuators
 end
 
