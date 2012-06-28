@@ -411,6 +411,7 @@ end
 composition 'Pingersearch' do
     # Can be used in simulation as well since simulation omits audio capturing.
     add Srv::SoundSourceDirection, :as => 'angle_estimation'
+    add Srv::OrientationWithZ
     add Pingersearch::PingerSearch, :as => 'pingersearch' 
     autoconnect
 
