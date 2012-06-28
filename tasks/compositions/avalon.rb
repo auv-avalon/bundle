@@ -341,16 +341,6 @@ end
 Cmp::VisualServoing.specialize 'detector' => Cmp::AsvDetector do
 end
 
-
-#composition 'MotionEstimation' do
-#    add Srv::Actuators
-#    add Srv::OrientationWithZ
-#    add MotionEstimation::Task, :as => "motion"
-#    export motion.speed_samples
-#    autoconnect
-#    provides Srv::Speed
-#end
-
 composition 'UwvModel' do
     #add AvalonControl::MotionControlTask, :as => 'motion_control'
     add Srv::OrientationWithZ
