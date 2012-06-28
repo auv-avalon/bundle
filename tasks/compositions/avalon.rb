@@ -396,6 +396,13 @@ composition 'Localization' do
     provides Srv::Pose
 end
 
+composition 'ModemPositionOutput' do
+    add Srv::OrientationWithZ
+    add ModemCan::Task, :as => 'modem'
+#    connect pose.pose_samples => modem.position_samples
+    autoconnect
+end
+
 composition 'DualLocalization' do
     add UwParticleLocalization::Task, :as => 'localization'
     add SonarWallHough::Task, :as => 'hough'
