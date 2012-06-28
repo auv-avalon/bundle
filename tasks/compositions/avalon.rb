@@ -342,14 +342,14 @@ Cmp::VisualServoing.specialize 'detector' => Cmp::AsvDetector do
 end
 
 
-composition 'MotionEstimation' do
-    add Srv::Actuators
-    add Srv::OrientationWithZ
-    add MotionEstimation::Task, :as => "motion"
-    export motion.speed_samples
-    autoconnect
-    provides Srv::Speed
-end
+#composition 'MotionEstimation' do
+#    add Srv::Actuators
+#    add Srv::OrientationWithZ
+#    add MotionEstimation::Task, :as => "motion"
+#    export motion.speed_samples
+#    autoconnect
+#    provides Srv::Speed
+#end
 
 composition 'UwvModel' do
     #add AvalonControl::MotionControlTask, :as => 'motion_control'
@@ -380,7 +380,7 @@ composition 'Localization' do
     add Srv::SonarScanProvider, :as => 'sonar'
     add SonarFeatureEstimator::Task, :as => 'feature_estimator'
     add Srv::OrientationWithZ, :as => 'orientation_with_z'
-    add Srv::Speed, :as => 'model'
+    #add Srv::Speed, :as => 'model'
     add Srv::Actuators, :as => 'actuators'
     connect sonar => feature_estimator
     connect feature_estimator => localization
@@ -400,16 +400,18 @@ composition 'DualLocalization' do
     add Srv::SonarScanProvider, :as => 'sonar'
     add SonarFeatureEstimator::Task, :as => 'feature_estimator'
     add Srv::OrientationWithZ, :as => 'orientation_with_z'
+    add Srv::Actuators, :as => 'actuators'
     #add Cmp::UwvModel, :as => 'model'
     #add AvalonSimulation::StateEstimator, :as => 'model'
-    add Srv::Speed, :as => 'model'
+    #add Srv::Speed, :as => 'model'
     connect sonar => feature_estimator
     connect sonar => hough
     connect feature_estimator => localization
     connect orientation_with_z => feature_estimator
     connect orientation_with_z => localization.orientation_samples
     connect orientation_with_z => hough
-    connect model.speed_samples => localization.speed_samples
+    #connect model.speed_samples => localization.speed_samples
+    connect actuators => localization
 
     export localization.pose_samples
 
