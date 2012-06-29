@@ -227,6 +227,7 @@ composition 'BuoyDetector' do
     connect servoing => modem
     connect detector => modem
     connect modem => servoing
+    connect detector => servoing
 
     export servoing.relative_position
     provides Srv::RelativePositionDetector
