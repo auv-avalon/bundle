@@ -37,6 +37,8 @@ use AvalonControl::MotionControlTask => AvalonControl::MotionControlTask.
   use_conf("default", "simulation")
 use SonarFeatureEstimator::Task => SonarFeatureEstimator::Task.
   use_conf('default','simulation')
+use Buoy::Detector => Buoy::Detector.
+    use_conf('default','simulation')
 use Buoy::Survey => Buoy::Survey.
     use_conf('default','simulation')
 
