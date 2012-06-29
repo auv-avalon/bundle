@@ -220,7 +220,7 @@ composition 'BuoyDetector' do
     #add_main Buoydetector::Task, :as => 'servoing'
     add_main Buoy::Detector, :as => 'detector'
     add Buoy::Survey, :as => 'servoing'
-    add ModemCan::Task, :as => 'modem'
+    add Srv::ModemConnection, :as => 'modem'
 
     connect camera => detector
     connect orientation_with_z => servoing

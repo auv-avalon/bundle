@@ -50,6 +50,12 @@ class AvalonSimulation::SonarRear
 end
 
 
+class AvalonSimulation::Modem
+    driver_for 'Dev::MarsModem'
+    provides Srv::ModemConnection
+end
+
+
 class AvalonSimulation::Actuators
     driver_for 'Dev::MarsAvalonThrusters'
     provides Srv::Actuators

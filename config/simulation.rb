@@ -41,5 +41,8 @@ Robot.devices do
     device(Dev::MarsAvalonThrusters, :as => 'thrusters', :using => AvalonSimulation::Actuators).
         period(0.1)
 
+    device(Dev::MarsModem, :as => 'modem', :using => AvalonSimulation::Modem).
+        period(0.1)
+
     # TODO: Sonar device for bottom and top
 end

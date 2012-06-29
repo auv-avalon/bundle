@@ -122,3 +122,9 @@ end
 data_service_type 'SoundSourceDirection' do
     output_port 'angle', '/base/Angle'
 end
+
+data_service_type 'ModemConnection' do
+    input_port 'white_light', 'bool'
+    input_port 'position', '/base/samples/RigidBodyState'
+    output_port 'motion_command', '/base/AUVMotionCommand'
+end
