@@ -1,8 +1,8 @@
 --- name:default
 left_limit: 3.141592654
 right_limit: -3.141592654
-resolution: 0.1
-maximum_distance: 50.0
+resolution: 0.2
+maximum_distance: 80.0
 ping_pong_mode: false
 --- name:wall_servoing_front
 left_limit: 1.01
