@@ -1,0 +1,7 @@
+--- name:default
+# initial z value waiting for waypoint commands
+z_init: -1.0
+# tolerance of z for diving (keep in Mind: AuvRelPosController has probably also 0.3 tolerance)
+z_tolerance: 0.31
+# timeout if no pose samples are incoming
+timeout: 30

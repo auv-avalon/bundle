@@ -2,9 +2,9 @@
 # effective sample size threshold controls the resampling timing and uses values between 0.0 and 1.0 particles
 effective_sample_size_threshold: 0.9
 # initial centre position for all particles
-init_position: []
+init_position: [0.0, 0.0, 0.0]
 # spatial covariance from initial centre position for initialization
-init_variance: []
+init_variance: [5.0, 5.0, 0.0]
 # minimum depth for collecting perception samples
 minimum_depth: -0.0
 # minimum number of perceptions before starting resampling
@@ -16,9 +16,9 @@ particle_number: 50
 # ignore velocity in speed samples for dynamic update
 pure_random_motion: false
 # automatic reset of particle filter after not receiving any perception for X seconds
-reset_timeout: 10.0
+reset_timeout: 30.0
 # sets sonar covariance for defining measurement uncertainty
-sonar_covariance: 4.0
+sonar_covariance: 9.0
 # sets importance ratio for sonar perception updates
 sonar_importance: 1.0
 # set maximum distance for filtering sonar samples
@@ -40,3 +40,5 @@ orientation_samples_period: 0.01
 thruster_samples_period: 0.01
 speed_samples_period: 0.01
 pose_update_period: 0.1
+--- name:simulation
+
