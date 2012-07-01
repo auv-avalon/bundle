@@ -1,6 +1,6 @@
 class MainPlanner
    YAW_THRESHOLD = deg_to_rad(10)
-   Z_THRESHOLD = 0.3
+   Z_THRESHOLD = 0.31
 
    describe("Simple Movement. Move for a certain distance in a certain direction at a certain speed at a certain depth. The depth can be reached before or while moving forward.").
         required_arg("z", "initial z value on which robot should rotate").
