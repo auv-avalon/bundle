@@ -425,6 +425,7 @@ composition 'DualLocalization' do
     connect orientation_with_z => feature_estimator
     connect orientation_with_z => localization.orientation_samples
     connect orientation_with_z => hough
+    connect hough => localization.pose_update
     #connect model.speed_samples => localization.speed_samples
     connect actuators => localization
 
