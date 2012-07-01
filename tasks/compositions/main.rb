@@ -47,14 +47,4 @@ composition 'VisualServoing' do
     autoconnect
 end
 
-composition 'Navigation' do
-    add Srv::Pose, :as => 'pose'
-    add AuvWaypointNavigator::Task, :as => 'navigator'
-    add(Cmp::ControlLoop, :as => 'control').
-        use('command' => AuvRelPosController::Task).
-        use('controller' => AvalonControl::MotionControlTask)
-
-    connect pose => navigator
-    connect navigator => control
-end
 

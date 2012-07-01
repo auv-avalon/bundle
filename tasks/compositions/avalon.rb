@@ -366,6 +366,14 @@ composition 'SonarWallHough' do
     provides Srv::Pose
 end
 
+composition 'ModemPositionOutput' do
+    add Srv::OrientationWithZ
+    add ModemCan::Task, :as => 'modem'
+#    connect pose.pose_samples => modem.position_samples
+    autoconnect
+end
+
+
 composition 'Localization' do
     add UwParticleLocalization::Task, :as => 'localization'
     add Srv::SonarScanProvider, :as => 'sonar'
@@ -385,11 +393,20 @@ composition 'Localization' do
     provides Srv::Pose
 end
 
-composition 'ModemPositionOutput' do
-    add Srv::OrientationWithZ
-    add ModemCan::Task, :as => 'modem'
-#    connect pose.pose_samples => modem.position_samples
-    autoconnect
+composition 'Navigation' do
+    event :wait_for_waypoints
+    event :keep_waypoint
+    event :dynamic_navigation
+    event :static_navigation
+
+    add Srv::Pose, :as => 'pose'
+    add_main AuvWaypointNavigator::Task, :as => 'navigator'
+    add(Cmp::ControlLoop, :as => 'control').
+        use('command' => AuvRelPosController::Task).
+        use('controller' => AvalonControl::MotionControlTask)
+
+    connect pose => navigator
+    connect navigator => control
 end
 
 composition 'DualLocalization' do
