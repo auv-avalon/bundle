@@ -23,4 +23,10 @@ sensorAngularResolution: 5.0
 withMinimumFilter: 1
 # write continously last detected position sample to output
 continous_write: 0
+--- name:simulation
+basinHeight: 50.0
+basinWidth: 60.0
+maxDistance: 400
+minDistance: 2.5
+withMinimumFilter: 0
 
