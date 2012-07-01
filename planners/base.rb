@@ -252,22 +252,25 @@ class MainPlanner
     
     describe("Navigation following defined waypoints").
         required_arg("waypoint", "next waypoint to follow").
-        optional_arg("yaw", "navigating yaw for this movement")
-    method(:navigate) do
+        optional_arg("yaw", "navigating yaw for this movement").
+        optional_arg("keep_time", "number of seconds keeping this waypoint")
+    method(:navigate_to) do
         waypoint = arguments[:waypoint]
         yaw = if arguments[:yaw] then arguments[:yaw] else 10.0 end
+        keep_time = if arguments[:keep_time] then arguments[:keep_time] else 1.0 end
 
         trajectory = []
 
         wp = Types::Base::Waypoint.new
         wp.position = waypoint
         wp.heading = yaw
-        wp.tol_position = 1.0
-        wp.tol_heading = 0.1
+        wp.tol_position = 3.0
+        wp.tol_heading = 0.2
 
         trajectory << wp
 
-        self.navigation.script do 
+        nav = self.navigation
+        nav.script do 
             data_writer 'waypoint_command', ['navigator', 'trajectory']
             data_reader 'queue_size', ['navigator', 'queue_size']
 
@@ -280,21 +283,21 @@ class MainPlanner
 
             poll_until(navigator_child.dynamic_navigation_event) do
                 write_waypoint_command
-                Plan.info "1"
             end 
 
             execute do
                 Plan.info "Navigate to #{waypoint} with yaw #{yaw}"
             end
 
-            poll do
-                unless queue_size > 0
-                    Plan.info "Done"
-                    transition!
-                end
-
-                sleep 1
+            poll_until(navigator_child.keep_waypoint_event) do
+                sleep 0.1
             end
+
+            execute do
+                Plan.info "Keep this waypoint now for #{keep_time.to_f} seconds"
+            end
+
+            wait keep_time.to_f
 
             emit :success
         end

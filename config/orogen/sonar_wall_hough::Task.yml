@@ -21,3 +21,6 @@ minLineVotesRatio: 0.1
 sensorAngularResolution: 5.0
 # If the incoming beams should be filtered with a minimum filter first
 withMinimumFilter: 1
+# write continously last detected position sample to output
+continous_write: 0
+
