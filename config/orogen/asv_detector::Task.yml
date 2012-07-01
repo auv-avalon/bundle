@@ -1,9 +1,11 @@
 --- name:default
 camera_image_width: 251
 camera_image_height: 231
-fixed_depth_near: -1.3
-fixed_depth_far: -2.3
+shadow_threshold: 0.02
+shadow_sectors: 3
+fixed_depth_near: -2.0
+fixed_depth_far: -3.0
 stereoCamMode: false
-AsvHullWidth: 0.08
-AsvLength: 1.0
-AsvWidth: 1.0
+asvHullWidth: 0.08
+asvLength: 1.0
+asvWidth: 1.0
