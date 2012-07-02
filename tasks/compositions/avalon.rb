@@ -319,12 +319,11 @@ composition 'DualSonarWallDetector' do
 end
 
 composition 'AsvDetector' do
-    event :asv_follow
-    event :asv_lost_or_init
-    event :asv_found
     event :searching
+    event :following
+    event :standing
+    event :asv_lost
     event :surfacing
-    event :asv_validate
 
     add Srv::ImageProvider, :as => 'camera_left'
     add Srv::ImageProvider, :as => 'camera_right'
@@ -337,9 +336,6 @@ composition 'AsvDetector' do
     
     export detector.position_command
     provides Srv::RelativePositionDetector
-end
-
-Cmp::VisualServoing.specialize 'detector' => Cmp::AsvDetector do
 end
 
 composition 'UwvModel' do
@@ -452,5 +448,40 @@ Cmp::Pingersearch.specialize 'angle_estimation' => Pingersearch::AngleEstimation
 end
 
 Cmp::VisualServoing.specialize 'detector' => Cmp::Pingersearch do
+
+end
+
+composition 'AsvAndPingersearch' do
+    event :searching
+    event :following
+    event :standing
+    event :asv_lost
+    event :surfacing
+
+    add Cmp::Pingersearch, :as => 'pingersearch'
+    add Cmp::AsvDetector, :as => 'asv_detector'
+
+    add(Cmp::ControlLoop, :as => 'control').
+      use('command' => AuvRelPosController::Task).
+      use('controller' => AvalonControl::MotionControlTask)
+
+    connect pingersearch => control
+
+    puts "In Cmp::AsvAndPingersearch"
+
+    on :following do |event|
+        puts "ASV_FOLLOWING event received."
+        # Give control to asv detector
+        pingersearch_child.relative_position_command.disconnect_from control_child.command_child.position_command
+        asv_detector_child.relative_position_command.connect_to control_child.command_child.position_command
+    end
+    
+    on :asv_lost do |event|
+        puts "ASV_LOST event received."
+        # Give control to pinger search
+        asv_detector_child.relative_position_command.disconnect_from control_child.command_child.position_command
+        pingersearch_child.relative_position_command.connect_to control_child.command_child.position_command
+    end
+
 
 end
