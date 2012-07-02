@@ -6,7 +6,7 @@ Roby.app.load_orocos_deployment 'main'
 #add(Cmp::AUVJoystickCommand).
 #    use(Controldev::Local)
 
-add_mission(Taskmon::Task)
+#add_mission(Taskmon::Task)
 
 #use Srv::Pose => Cmp::Localization
 use Srv::Speed => AvalonSimulation::StateEstimator
