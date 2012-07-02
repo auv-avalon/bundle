@@ -1,9 +1,5 @@
 Roby.app.load_orocos_deployment 'main'
 
-# !!! Configure tasks for specific location !!!
-use Buoydetector::Task => Buoydetector::Task.
-  use_conf("default", "testbed")
-
 use Cmp::OrientationWithZ => Cmp::OrientationWithZ.use('depth_reader').use(Cmp::DagonOrientationEstimator)
 
 use Srv::Orientation      => Cmp::OrientationWithZ
@@ -18,6 +14,9 @@ use DataServices::AUVMotionController => AvalonControl::MotionControlTask
 #use Cmp::OrientationEstimator => Cmp::OrientationEstimator.use('depth_reader') ##Depth Sensor as reference
 #use Cmp::OrientationEstimator => Cmp::OrientationEstimator.use('sonar_rear') ##Ground distance as 0 reference !
 
+use Cmp::AsvDetector => Cmp::AsvDetector.
+    use('camera_right' => device('right_unicap_camera')).
+    use('camera_left' => device('left_unicap_camera'))
 
 # Connect right unicap camera only on AVALON, not in Simulation because there we have only one top cam
 Cmp::AsvDetector.specialize 'camera_left' => CameraUnicap::CameraTask do
@@ -25,15 +24,10 @@ Cmp::AsvDetector.specialize 'camera_left' => CameraUnicap::CameraTask do
     connect camera_right.images => detector.right_image
 end
 
-asv_cmp = Cmp::AsvDetector.
-    use('camera_right' => device('right_unicap_camera')).
-    use('camera_left' => device('left_unicap_camera'))
-define('asv', Cmp::VisualServoing.use(asv_cmp))
+define('asv', Cmp::VisualServoing.use(Cmp::AsvDetector))
 
+# !!! Configure tasks for specific location !!!
 detector_conf = ["default", "studiobad"]
-
-use Buoydetector::Task => Buoydetector::Task.
-    use_conf(*detector_conf)
 use OffshorePipelineDetector::Task => OffshorePipelineDetector::Task.
     use_conf(*detector_conf)
 
