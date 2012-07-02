@@ -1,9 +1,5 @@
 Roby.app.load_orocos_deployment 'main'
 
-# !!! Configure tasks for specific location !!!
-use Buoydetector::Task => Buoydetector::Task.
-  use_conf("default", "testbed")
-
 use Cmp::OrientationWithZ => Cmp::OrientationWithZ.use('depth_reader').use(Cmp::DagonOrientationEstimator)
 
 use Srv::Orientation      => Cmp::OrientationWithZ
@@ -30,10 +26,8 @@ asv_cmp = Cmp::AsvDetector.
     use('camera_left' => device('left_unicap_camera'))
 define('asv', Cmp::VisualServoing.use(asv_cmp))
 
+# !!! Configure tasks for specific location !!!
 detector_conf = ["default", "studiobad"]
-
-use Buoydetector::Task => Buoydetector::Task.
-    use_conf(*detector_conf)
 use OffshorePipelineDetector::Task => OffshorePipelineDetector::Task.
     use_conf(*detector_conf)
 
