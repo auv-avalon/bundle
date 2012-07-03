@@ -1,0 +1,13 @@
+--- name:default
+# maximum latency, in seconds, of the stream aligner. The aligner will start dropping samples if the difference between the last output and last input is greater than this
+aggregator_max_latency: 0.5
+# minimum time, in s, between two sequential samples arrive on depth_samples
+depth_samples_period: 0.01
+# no documentation available for this property
+heading_offset: 0.0
+# minimum time, in s, between two sequential samples arrive on orientation_samples
+orientation_samples_period: 0.01
+# minimum system time in s between two status readings
+stream_aligner_status_period: 1.0
+# no documentation available for this property
+use_initial_heading: 1

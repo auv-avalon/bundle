@@ -51,6 +51,7 @@ pitch_pid:
   i: 0.0
 heading_pid:
   i: 0.0
+  p: -2.0
 z_pid:
   i: 0.0
 use_min_ground_distance: false

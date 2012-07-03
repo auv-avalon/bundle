@@ -30,3 +30,5 @@ rel_z: 0
 timeout: 0.0
 # Timespan a meassage is considered to be valid.
 valid_timespan: 2.0
+--- name:absolute_heading
+rel_heading: 0
