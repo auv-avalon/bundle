@@ -356,4 +356,46 @@ class MainPlanner < Roby::Planning::Planner
             emit :success
         end
     end
+
+    describe("run a complete asv mission including pingersearch").
+        #required_arg("z", "servoing depth").
+        optional_arg("timeout","mission timeout in seconds")
+    method(:pingersearch_and_asv) do
+        #z = arguments[:z]
+        timeout = arguments[:timeout]
+        roby_task = self.asv_and_pinger.script do
+            data_reader 'orientation', ['control', 'orientation_with_z', 'orientation_z_samples']
+            data_writer 'surface_command', ['asv_detector', 'detector', 'do_surface']
+            
+            wait_any asv_detector_child.start_event
+            wait_any pingersearch_child.start_event
+            wait_any control_child.command_child.start_event
+
+	        start_time = nil
+
+	        execute do
+                Plan.info "Starting autonomous ASV following."
+	            start_time = Time.now
+	        end
+
+            poll do
+                if asv_detector_child.standing? # TODO not safe yet. ensure that following took place or some timeout fired.
+                    Plan.info "ASV is standing. Send surface command!"
+                    surface_command_writer.write true
+                end
+                current_z = orientation.orientation.z
+                if asv_detector_child.surfacing? and current_z > -1.0 # TODO make threshold
+                    Plan.info "Surfaced! (Reached z threshold. current depth: #{current_z}"
+                    emit :success
+                end
+                if timeout and time_over?(start_time, timeout)
+                    Plan.info "ASV Following mission timeout. Abort."
+                    emit :failed # TODO does this kill the whole mission sequence or just this mission?
+                end
+            end
+
+            emit :success
+        end
+    end
+    
 end
