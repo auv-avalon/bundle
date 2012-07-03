@@ -12,11 +12,11 @@ asvWidth: 1.96
 --- name:simulation
 camera_image_width: 251
 camera_image_height: 231
-shadow_threshold: 0.02
+shadow_threshold: 0.5
 shadow_sectors: 5
 fixed_depth_near: -2.0
 fixed_depth_far: -3.0
 stereoCamMode: false
-asvHullWidth: 0.08
+asvHullWidth: 0.07
 asvLength: 1.0
 asvWidth: 1.0
