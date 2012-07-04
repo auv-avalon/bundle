@@ -25,7 +25,7 @@ withMinimumFilter: 1
 continous_write: 0
 --- name:simulation
 basinHeight: 50.0
-basinWidth: 60.0
+basinWidth: 120.0
 maxDistance: 400
 minDistance: 2.5
 withMinimumFilter: 0
