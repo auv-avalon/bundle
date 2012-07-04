@@ -14,6 +14,8 @@ use DataServices::AUVMotionController => AvalonControl::MotionControlTask
 #use Cmp::OrientationEstimator => Cmp::OrientationEstimator.use('depth_reader') ##Depth Sensor as reference
 #use Cmp::OrientationEstimator => Cmp::OrientationEstimator.use('sonar_rear') ##Ground distance as 0 reference !
 
+use device("sonar") => device("sonar").use_deployments(/sonar/)
+
 use Cmp::AsvDetector => Cmp::AsvDetector.
     use('camera_right' => device('right_unicap_camera')).
     use('camera_left' => device('left_unicap_camera'))
