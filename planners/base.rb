@@ -251,23 +251,21 @@ class MainPlanner
     # -------------------------------------------------------------------------
     
     describe("Navigation following defined waypoints").
-        required_arg("waypoint", "next waypoint to follow").
-        optional_arg("yaw", "navigating yaw for this movement").
+        required_arg("waypoints", "next waypoint to follow").
         optional_arg("keep_time", "number of seconds keeping this waypoint")
     method(:navigate_to) do
-        waypoint = arguments[:waypoint]
-        yaw = if arguments[:yaw] then arguments[:yaw] else 10.0 end
+        waypoints = arguments[:waypoints]
         keep_time = if arguments[:keep_time] then arguments[:keep_time] else 1.0 end
 
-        trajectory = []
+        NAVIGATION_DELAY = 60.0
 
-        wp = Types::Base::Waypoint.new
-        wp.position = waypoint
-        wp.heading = yaw
-        wp.tol_position = 3.0
-        wp.tol_heading = 0.2
+#        wp = Types::Base::Waypoint.new
+#        wp.position = waypoint
+#        wp.heading = yaw
+#        wp.tol_position = 3.0
+#        wp.tol_heading = 0.2
 
-        trajectory << wp
+#        trajectory << wp
 
         nav = self.navigation
         nav.script do 
@@ -278,15 +276,22 @@ class MainPlanner
             wait_any control_child.command_child.start_event
 
             execute do
-                waypoint_command << wp
+                Plan.info "Wait #{NAVIGATION_DELAY.to_f} seconds for receiving updates from SonarWallHough"
             end
 
+            #waypoints.each do |wp|
+            #    waypoint_command << wp
+            #end
+            #
+
+            wait NAVIGATION_DELAY.to_f
+
             poll_until(navigator_child.dynamic_navigation_event) do
-                write_waypoint_command
+                waypoint_command_writer.write(waypoints)
             end 
 
             execute do
-                Plan.info "Navigate to #{waypoint} with yaw #{yaw}"
+                Plan.info "Start Navigating to #{waypoints.size} waypoints"
             end
 
             poll_until(navigator_child.keep_waypoint_event) do
