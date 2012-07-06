@@ -23,6 +23,13 @@ Conf.orocos.log_group "images" do
     add "/RTT/extras/ReadOnlyPointer</base/samples/frame/Frame>"
 end
 
+Conf.orocos_log_group "debug_images" do
+    add "buoy_detector.h_image"
+    add "buoy_detector.s_image"
+    add "pipeline_follower.debug_frame"
+    add "asv_detector.debug_image"
+end
+
 Conf.orocos.log_group "raw_camera" do
     # add "front_camera.frame_raw"
     # add "front_camera.frame"
@@ -32,6 +39,7 @@ Conf.orocos.log_group "raw_camera" do
 end
 
 #Conf.orocos.disable_log_group "images"
+#Conf.orocos.disable_log_group "debug_images"
 Conf.orocos.disable_log_group "raw_camera"
 
 Orocos::RobyPlugin::StateEstimator::Task.worstcase_processing_time 1
