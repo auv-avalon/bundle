@@ -1,0 +1,9 @@
+--- name:default
+# in ms
+constantInterval: 0
+# 0=no interval (manually switching), 1=constant interval, 2=random interval
+interval_mode: 0
+# in ms
+randomInterval_max: 0
+# in ms
+randomInterval_min: 0
