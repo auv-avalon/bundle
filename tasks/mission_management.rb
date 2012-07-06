@@ -58,15 +58,14 @@ module Planning
             # Overall timeout for the whole plan in seconds
             attr_accessor :timeout
         end
-    end
+    end ### module MissionManagement
+
+# -----------------------------------------------------------------
 
     MissionDependency = Struct.new(:task, :event)
 
     class MissionRun < Roby::Task
         terminates
-
-        # current missions for this autonomous run
-        attr_accessor :missions
 
         def initialize
             super()
