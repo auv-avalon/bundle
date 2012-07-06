@@ -21,4 +21,14 @@ class MainPlanner
 
         navigate_to(:waypoints => trajectory, :keep_time => 60.0)
     end
+
+    method(:quick_pipeline) do
+        find_follow_turn_pipeline(
+            :yaw => 0.5 * Math::PI,
+            :speed => 0.4,
+            :z => -7.0,
+            :prefered_yaw => 0.0,
+            :turns => 2,
+            :search_timeout => 180.0)
+    end
 end
