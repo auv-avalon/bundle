@@ -175,7 +175,7 @@ class MainPlanner < Roby::Planning::Planner
             if search_timeout
                 execute do
                     detector_child.align_auv_event.should_emit_after detector_child.start_event,
-                    :max_t => timeout
+                    :max_t => search_timeout
                 end
             end
 
