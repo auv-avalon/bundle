@@ -1,26 +1,4 @@
 module Planning
-    Waypoint = Struct.new(:position, :tolerance)
-
-    class SimpleMission < Roby::Task
-        terminates
-
-        attr_accessor :planning_method
-
-        def initialize(task)
-            super()
-
-            @planning_method = task
-            influenced_by(task)
-
-            task.should_start_after self.event(:start)
-
-            task.event(:success).forward_to self.event(:success)
-            task.event(:failed).forward_to self.event(:failed)
-            task.event(:stop).forward_to self.event(:stop)
-        end
-    end
-
-
     class TimeoutMission < Roby::Task
         terminates
 
@@ -88,68 +66,6 @@ module Planning
         end
     end
 
-
-    class MissionRun < Roby::Task
-        terminates
-
-        # current missions for this autonomous run
-        attr_accessor :missions
-
-        def initialize
-            super()
-
-            @missions = []
-        end
-
-        def design(&block)
-            self.instance_eval(&block)
-            self
-        end
-
-        def state(task)
-            mission = Planning::SimpleMission.new(task)
-            influenced_by(mission)
-            mission
-        end
-
-        def mission(name, task, timeout = nil, events = [])
-            mission = Planning::TimeoutMission.new(name, task, timeout)
-            influenced_by(mission)
-
-            @missions << mission
-            mission
-        end
-
-        def finish(task)
-            depends_on task
-
-            task.event(:success).forward_to self.event(:success)
-        end
-
-        def start(task1)
-            task1.should_start_after self.event(:start)
-        end
-
-        def transition(task1, map)
-            map.each do |k, v|
-                task1.event(k).forward_to v.event(:start)
-            end
-
-            task1.event(:failed).forward_to self.event(:failed) if !map.hasKey?(:failed)
-        end
-
-        on :stop do |event|
-            Plan.info "= REPORT ============================================="
-            @missions.each do |m|
-                Plan.info "#{m.name}: #{m.progress}"
-            end
-            Plan.info "======================================================"
-        end
-
-#        on :stop do |event|
-#            Robot.emergency_surfacing
-#        end
-    end
 
     class BaseTask < Roby::Task
         terminates

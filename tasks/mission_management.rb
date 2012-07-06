@@ -43,7 +43,7 @@ module Planning
                 @planning_method = planning_method
             end
         end
-        
+ 
         # Central Management of the process and progress of all missions in the plan.
         class MissionManagement
             # Complete list of all missions in the plan
@@ -58,8 +58,71 @@ module Planning
             # Overall timeout for the whole plan in seconds
             attr_accessor :timeout
         end
-        
     end
+
+    MissionDependency = Struct.new(:task, :event)
+
+    class MissionRun < Roby::Task
+        terminates
+
+        # current missions for this autonomous run
+        attr_accessor :missions
+
+        def initialize
+            super()
+
+            @mission_graph = {}
+        end
+
+        def design(&block)
+            self.instance_eval(&block)
+
+            @mission_graph.each do |task, dependency_list|
+                ev = nil
+
+                dependency_list.each do |dep|
+                    ev = if ev 
+                             (ev | dep.task.event(dep.event)) 
+                         else 
+                             dep.task.event(dep.event)
+                         end
+                end
+
+                task.should_start_after(ev)
+            end
+
+            self
+        end
+
+        def finish(task)
+            depends_on(task)
+            task.event(:success).forward_to self.event(:success)
+        end
+
+        def start(task)
+            @mission_graph[task] = [] unless @mission_graph[task]
+            @mission_graph[task] << Planning::MissionDependency.new(self, :start)
+        end
+
+        def transition(task, map)
+            map.each do |k, v|
+                v.influenced_by(task)
+                @mission_graph[v] = [] unless @mission_graph[v]
+                @mission_graph[v] << Planning::MissionDependency.new(task, k)
+            end
+
+            task.event(:failed).forward_to self.event(:failed) if !map.key(:failed)
+        end
+
+        on :stop do |event|
+            Plan.info "Autonomous run finished"
+        end
+
+        #        on :stop do |event|
+        #            Robot.emergency_surfacing
+        #        end
+    end
+
 end
 
 =begin
