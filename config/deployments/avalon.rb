@@ -32,6 +32,8 @@ define('asv', Cmp::VisualServoing.use(Cmp::AsvDetector))
 detector_conf = ["default", "studiobad"]
 use OffshorePipelineDetector::Task => OffshorePipelineDetector::Task.
     use_conf(*detector_conf)
+use OrientationEstimator::BaseEstimator => OrientationEstimator::BaseEstimator.
+    use_conf('default','sauce12')
 
 DepthReader::DepthAndOrientationFusion.on :start do |event|
    @pose_reader = data_reader 'pose_samples'

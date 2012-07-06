@@ -1,0 +1,30 @@
+--- name:default
+# maximum latency, in seconds, of the stream aligner. The aligner will start dropping samples if the difference between the last output and last input is greater than this
+aggregator_max_latency: 0.3
+# Altitude of Bremen in meters
+altitude: 12.0
+# Dip angle of Bremen in radians (equivalent to 68.05 degrees ).
+dip_angle: 1.187696556
+# minimum time, in s, between two sequential samples arrive on fog_samples
+fog_samples_period: 0.01
+# no documentation available for this property
+gbiasof: 
+  data: 
+  - 6.706471133e-315
+  - 6.94831688445967e-310
+  - 6.9483169829924e-310
+# minimum time, in s, between two sequential samples arrive on imu_orientation
+imu_orientation_period: 0.01
+# Latitude of Bremen in radians (equivalent to 53.083333 degrees).
+latitude: 0.926478944
+# Longitude of Bremen in radians (equivalent to 8.8 degrees).
+longitude: 0.153588974
+# Bremen magnetic declination in radians (equivalent to 1.35 degrees EAST).
+magnetic_declination: 0.023561944
+# The declination is positive when the magnetic north is east of true north
+magnetic_declination_mode: 1
+# minimum system time in s between two status readings
+stream_aligner_status_period: 1.0
+--- name:sauce12
+latitude: 0.385543 # resembles 22.09 deg
+longitude: 0.172089 # resembles 9.86 deg
