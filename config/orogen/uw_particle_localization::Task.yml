@@ -4,7 +4,7 @@ effective_sample_size_threshold: 0.9
 # initial centre position for all particles
 init_position: [0.0, 0.0, 0.0]
 # spatial covariance from initial centre position for initialization
-init_variance: [5.0, 5.0, 0.0]
+init_variance: [5.0, 5.0, 0.01]
 # minimum depth for collecting perception samples
 minimum_depth: -0.0
 # minimum number of perceptions before starting resampling
