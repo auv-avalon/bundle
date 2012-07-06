@@ -23,7 +23,7 @@ Conf.orocos.log_group "images" do
     add "/RTT/extras/ReadOnlyPointer</base/samples/frame/Frame>"
 end
 
-Conf.orocos_log_group "debug_images" do
+Conf.orocos.log_group "debug_images" do
     add "buoy_detector.h_image"
     add "buoy_detector.s_image"
     add "pipeline_follower.debug_frame"
