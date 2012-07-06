@@ -228,8 +228,8 @@ composition 'BuoyDetector' do
     connect detector => modem
     connect modem => servoing
     connect detector => servoing
-
-    export servoing.relative_position
+    
+    export servoing.relative_position, :as => 'relative_position_command'
     provides Srv::RelativePositionDetector
 end
 
@@ -334,7 +334,7 @@ composition 'AsvDetector' do
     connect orientation.orientation_z_samples => detector.orientation_readings
     connect camera_left.images => detector.left_image
     
-    export detector.position_command
+    export detector.position_command, :as => 'relative_position_command'
     provides Srv::RelativePositionDetector
 end
 
@@ -437,7 +437,7 @@ composition 'Pingersearch' do
     add Pingersearch::PingerSearch, :as => 'pingersearch' 
     autoconnect
 
-    export pingersearch.position_command
+    export pingersearch.position_command, :as => 'relative_position_command'
     provides Srv::RelativePositionDetector
 end
 
@@ -445,10 +445,6 @@ Cmp::Pingersearch.specialize 'angle_estimation' => Pingersearch::AngleEstimation
     # On AVALON, use audio reader for sound capturing
     add AudioReader::Task, :as => 'audio_reader'
     autoconnect
-end
-
-Cmp::VisualServoing.specialize 'detector' => Cmp::Pingersearch do
-
 end
 
 composition 'AsvAndPingersearch' do
@@ -459,29 +455,82 @@ composition 'AsvAndPingersearch' do
     event :surfacing
 
     add Cmp::Pingersearch, :as => 'pingersearch'
-    add Cmp::AsvDetector, :as => 'asv_detector'
+    add_main Cmp::AsvDetector, :as => 'asv_detector'
 
     add(Cmp::ControlLoop, :as => 'control').
       use('command' => AuvRelPosController::Task).
       use('controller' => AvalonControl::MotionControlTask)
 
     connect pingersearch => control
+    
+    # Define vehicle control policy: which task gets the vehicle control on which event.
+    on :start do |event|
+        asv_detector = event.task.asv_detector_child
+        asv_detector.on :following do |event|
+            # Give control to asv detector"
+            Robot.info "ASV detected. Give control to asv detector."
+            pingersearch_child.relative_position_command_port.disconnect_from control_child.command_child.position_command_port
+            asv_detector_child.relative_position_command_port.connect_to control_child.command_child.position_command_port
+        end
+        asv_detector.on :asv_lost do |event|
+            # Give control to pinger search
+            Robot.info "ASV lost. Give control to pinger search"
+            asv_detector_child.relative_position_command_port.disconnect_from control_child.command_child.position_command_port
+            pingersearch_child.relative_position_command_port.connect_to control_child.command_child.position_command_port
+        end
+    end
+end
 
-    puts "In Cmp::AsvAndPingersearch"
+composition 'TestBuoyAndPingersearch' do
 
-    on :following do |event|
-        puts "ASV_FOLLOWING event received."
-        # Give control to asv detector
-        pingersearch_child.relative_position_command.disconnect_from control_child.command_child.position_command
-        asv_detector_child.relative_position_command.connect_to control_child.command_child.position_command
+    event :buoy_search
+    event :buoy_detected
+    event :buoy_lost
+    event :buoy_arrived
+    event :strafing
+    event :strafe_finished
+    event :strafe_error
+    event :moving_to_cutting_distance
+    event :cutting
+    event :cutting_success
+    event :cutting_error
+
+    add Cmp::Pingersearch, :as => 'pingersearch'
+    add_main Cmp::BuoyDetector, :as => 'buoy_detector'
+
+    add(Cmp::ControlLoop, :as => 'control').
+      use('command' => AuvRelPosController::Task).
+      use('controller' => AvalonControl::MotionControlTask)
+
+    connect buoy_detector => control
+
+    on :start do |event|
+        buoy_servoing = event.task.buoy_detector_child.servoing_child
+        buoy_servoing.on :buoy_lost do |event|
+            # Give control to pinger search and take it away from buoy detector."
+            Robot.info "Buoy lost. Give control to pinger search and take it away from buoy detector."
+            buoy_detector_child.relative_position_command_port.disconnect_from control_child.command_child.position_command_port
+            pingersearch_child.relative_position_command_port.connect_to control_child.command_child.position_command_port
+        end
+        buoy_servoing.on :buoy_detected do |event|
+            Robot.info "******************* Buoy detected! But catched event deeply at task level."
+        end
+    end
+#    debugger
+    poll do
+        on :buoy_detected do |event|
+            Robot.info "**************************************** Buoy detected! First level event!"
+        end
     end
     
-    on :asv_lost do |event|
-        puts "ASV_LOST event received."
-        # Give control to pinger search
-        asv_detector_child.relative_position_command.disconnect_from control_child.command_child.position_command
-        pingersearch_child.relative_position_command.connect_to control_child.command_child.position_command
+    Cmp::BuoyDetector.on :buoy_lost do |event|
+        #puts "Lost buoy. Give control to pingersearch!"
+        #Robot.info "Lost buoy. Give control to pingersearch!"
+
+        # Give control to asv detector and take it away from pinger search
+        #buoy_detector_child.relative_position_command.disconnect_from control_child.command_child.position_command
+        #pingersearch_child.relative_position_command.connect_to control_child.command_child.position_command
+        Robot.info "In original buoy lost handler!!! Doing nothing."
     end
-
-
+   
 end

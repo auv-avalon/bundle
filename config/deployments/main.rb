@@ -1,4 +1,5 @@
     
+use Cmp::BuoyDetector => Cmp::BuoyDetector.use('front_camera')
 
 #Anything shared by the robot and the simulator
 define('relative_position_control', Cmp::ControlLoop.
@@ -22,7 +23,7 @@ define('cross_sonar', Cmp::DualSonarWallDetector.
 
 servoing = {
 
-    'buoy' => Cmp::BuoyDetector.use('front_camera'),
+    'buoy' => Cmp::BuoyDetector,
 
     'pipeline' => Cmp::PipelineDetector.use('bottom_camera'),
 

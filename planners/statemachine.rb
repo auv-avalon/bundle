@@ -1,17 +1,23 @@
 class MainPlanner < Roby::Planning::Planner
 
-    describe("test method for state machine based missions")
-    method(:state_run) do
-        dive_down = align_and_move(:yaw => 0.0, :z => -5.0)
-        dive_up = align_and_move(:yaw => 0.5 * Math::PI, :z => -1.0)
+    describe("test a mission")
+    method(:mission_test) do
+        moving = align_and_move(:yaw => 0.0, :z => -2.0)
+        diveup = align_and_strafe(:yaw => 0.3, :z => -1.0)
+        divedown = align_and_move(:yaw => 0.7, :z => -7.0)
 
-        run = Planning::AutonomousRun.new
-        run.design do 
-            start(dive_down)
+        run = Planning::MissionRun.new
+        run.design do
+            m_move = mission("Moving", moving, 120.0)
+            m_divedown = mission("Diving Down", divedown, 120.0)
+            m_diveup = state(diveup)
 
-            transition(dive_down, :success, dive_up)
+            start m_move 
+            finish m_divedown
 
-            finish(dive_up)
+            transition m_move, :success => m_diveup, :timeout => m_divedown
+            transition m_diveup, :success => m_divedown
+
         end
     end
 end
