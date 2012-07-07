@@ -3,8 +3,11 @@ class MainPlanner < Roby::Planning::Planner
     PIPELINE_SEARCH_SPEED = 0.50
     PIPELINE_SEARCH_Z = -2.7
     PIPELINE_SEARCH_YAW = Math::PI / 2.0
-    PIPELINE_PREFERED_YAW = 0#Math::PI
+    PIPELINE_PREFERED_YAW = 0.01 #Math::PI
 #    PIPELINE_STABILIZE_YAW = Math::PI / 2.0
+    PIPELINE_SEARCH_TIMEOUT = 60
+    PIPELINE_TURN_TIMEOUT = 40
+    PIPELINE_TURNS = 1
 
     WALL_SERVOING_Z = -2.2
     WALL_SERVOING_SPEED = -0.25
@@ -13,6 +16,19 @@ class MainPlanner < Roby::Planning::Planner
     BUOY_SEARCH_Z = -2.2
     BUOY_SEARCH_YAW = deg_to_rad(50)
 #    BUOY_CUT_TIMEOUT = 240
+
+
+    method(:sauce12_pipeline) do
+    
+        find_follow_turn_pipeline(:yaw => PIPELINE_SEARCH_YAW, 
+                                    :z => PIPELINE_SEARCH_Z,
+                                    :speed => PIPELINE_SEARCH_SPEED,
+                                    :prefered_yaw => PIPELINE_PREFERED_YAW,
+                                    :turns => PIPELINE_TURNS,
+                                    :search_timeout => PIPELINE_SEARCH_TIMEOUT,
+                                    :turn_timeout => PIPELINE_TURN_TIMEOUT)
+    end
+    
 
     describe("Autonomous mission SAUC-E'12")
     method(:sauce12_complete) do
@@ -26,7 +42,9 @@ class MainPlanner < Roby::Planning::Planner
                                     :z => PIPELINE_SEARCH_Z,
                                     :speed => PIPELINE_SEARCH_SPEED,
                                     :prefered_yaw => PIPELINE_PREFERED_YAW,
-                                    :turns => 1)
+                                    :turns => PIPELINE_TURNS,
+                                    :search_timeout => PIPELINE_SEARCH_TIMEOUT,
+                                    :turn_timeout => PIPELINE_TURN_TIMEOUT)
 
         #buoy_and_cut = survey_and_cut_buoy(:yaw => BUOY_SEARCH_YAW,
         #                                   :z => BUOY_SEARCH_Z,
