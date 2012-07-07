@@ -45,7 +45,7 @@ servoing = {
         use(WallServoing::SingleSonarServoing.use_conf('default', 'wall_front_right')),
 
    'wall_left' => Cmp::WallDetector.
-        use(device('sonar').use_conf('default', 'wall_serving_left')).
+        use(device('sonar').use_conf('default', 'wall_servoing_left')).
         use(WallServoing::SingleSonarServoing.use_conf('default', 'wall_left')),
 
    'wall_right' => Cmp::WallDetector.
