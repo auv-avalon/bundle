@@ -174,25 +174,25 @@ end
 
 class Orocos::RobyPlugin::OffshorePipelineDetector::Task
     on :start do |event|
-        Robot.info "overloading configuration of #{self}"
-        control_task = Roby.plan.find_tasks(Orocos::RobyPlugin::AuvRelPosController::Task).to_a.first
+        #Robot.info "overloading configuration of #{self}"
+        #control_task = Roby.plan.find_tasks(Orocos::RobyPlugin::AuvRelPosController::Task).to_a.first
 
-        if control_task
+        #if control_task
             #pid = control_task.orogen_task.controller_y
             #pid.Ti = 0.001
             #control_task.orogen_task.controller_y = pid
-        end
+        #end
     end
 
     on :stop do |event|
-        Robot.info "resetting configuration"
-        control_task = Roby.plan.find_tasks(Orocos::RobyPlugin::AuvRelPosController::Task).to_a.first
+        #Robot.info "resetting configuration"
+        #control_task = Roby.plan.find_tasks(Orocos::RobyPlugin::AuvRelPosController::Task).to_a.first
 
-        if control_task
+        #if control_task
             #pid = control_task.orogen_task.controller_y
             #pid.Ti = 0
             #control_task.orogen_task.controller_y = pid
-        end
+        #end
     end
 end
 
