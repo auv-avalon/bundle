@@ -114,12 +114,9 @@ module Planning
         end
 
         on :stop do |event|
-            Plan.info "Autonomous run finished"
+            Plan.info "Autonomous run finished. Emergency Surfacing Command."
+            Robot.emergency_surfacing
         end
-
-        #        on :stop do |event|
-        #            Robot.emergency_surfacing
-        #        end
     end
 
 end
