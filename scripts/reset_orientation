@@ -5,5 +5,5 @@ require 'orocos'
 Orocos::CORBA.name_service = 'avalon.local'
 Orocos.initialize
 
-estimator = Orocos::TaskContext.get 'orientation_estimator'
-estimator.resetInitialOrientation
+fusion = Orocos::TaskContext.get 'depth_orientation_fusion'
+fusion.resetInitialHeading
