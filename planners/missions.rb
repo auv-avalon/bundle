@@ -151,7 +151,7 @@ class MainPlanner < Roby::Planning::Planner
         prefered_yaw = arguments[:prefered_yaw]
         
         PIPELINE_SEARCH_CANDIDATE_SPEED = if speed > 0 then 0.1 else -0.1 end
-        PIPELINE_DETECTOR_CHANNEL = 3
+        #PIPELINE_DETECTOR_CHANNEL = 3
 
         pipeline = self.pipeline
         task = pipeline.script do
@@ -168,8 +168,8 @@ class MainPlanner < Roby::Planning::Planner
                 follower.orogen_task.prefered_heading = prefered_yaw if prefered_yaw
                 follower.orogen_task.depth = z
                 
-                follower.orogen_task.use_channel = PIPELINE_DETECTOR_CHANNEL
-                Plan.info "Searching pipeline on yaw #{yaw} with z #{z} using channel #{PIPELINE_DETECTOR_CHANNEL}"
+                #follower.orogen_task.use_channel = PIPELINE_DETECTOR_CHANNEL
+                Plan.info "Searching pipeline on yaw #{yaw} with z #{z} using channel #{follower.orogen_task.use_channel}"
             end
  
             if search_timeout
