@@ -54,4 +54,4 @@ default_x: 0.2
 depth: -0.8
 preprocessing_type: 0
 --- name:simulation
-
+use_channel: 0
