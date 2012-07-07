@@ -224,10 +224,11 @@ composition 'BuoyDetector' do
 
     connect camera => detector
     connect orientation_with_z => servoing
-    connect servoing => modem
-    connect detector => modem
-    connect modem => servoing
-    connect detector => servoing
+#    connect servoing => modem
+#    connect detector => modem
+#    connect modem => servoing
+    connect detector.light => servoing.light
+    connect detector.buoy => servoing.input_buoy
     
     export servoing.relative_position, :as => 'relative_position_command'
     provides Srv::RelativePositionDetector
