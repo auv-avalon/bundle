@@ -110,7 +110,7 @@ module Planning
                 @mission_graph[v] << Planning::MissionDependency.new(task, k)
             end
 
-            task.event(:failed).forward_to self.event(:failed) if !map.key(:failed)
+            task.event(:failed).forward_to self.event(:failed) if !map.key?(:failed)
         end
 
         on :stop do |event|
