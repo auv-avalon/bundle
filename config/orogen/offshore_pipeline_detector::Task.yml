@@ -26,9 +26,9 @@ min_width: 0.1
 # distance between center of gravity and camera
 out_of_center: 0.0
 # tries to follow the pipeline in this direction [rad], > PI = disabled
-prefered_heading: -1.57
+prefered_heading: 1.57
 # no documentation available for this property
-use_channel: -1
+use_channel: -1.0
 # offset between the center and the end of pipe during 
 # hovering [m] at the end (should be positvie)
 end_of_pipe_offset: 0.25

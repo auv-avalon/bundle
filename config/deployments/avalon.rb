@@ -29,7 +29,7 @@ end
 define('asv', Cmp::VisualServoing.use(Cmp::AsvDetector))
 
 # !!! Configure tasks for specific location !!!
-detector_conf = ["default", "studiobad"]
+detector_conf = ["default"]
 use OffshorePipelineDetector::Task => OffshorePipelineDetector::Task.
     use_conf(*detector_conf)
 use OrientationEstimator::BaseEstimator => OrientationEstimator::BaseEstimator.
@@ -66,9 +66,10 @@ add_mission('front_camera')
 #add_mission('left_unicap_camera')
 #add_mission('right_unicap_camera')
 
-add_mission('gpsd')
+#add_mission('gpsd')
 add_mission('sonar')
 add_mission('sonar_rear')
+#add_mission(Cmp::ModemPositionOutput)
 
 add_mission(Cmp::OrientationWithZ)
 #add_mission(Cmp::UwvModel)
