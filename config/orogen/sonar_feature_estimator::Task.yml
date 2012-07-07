@@ -23,5 +23,7 @@ enforce_line_rate: 0.5
 minimum_enforce_line_value: 1.0
 # feature extraction: covariance in meter on each beam in the distance of one meter
 enforce_line_beam_covariance: 0.2
+# radius of the boundary box of avalon
+avalon_boundary_box_size: 1.2
 --- name:simulation
 derivative_history_length: 1
