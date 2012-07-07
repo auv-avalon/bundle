@@ -2,9 +2,9 @@
 # no documentation available for this property
 debugging: 1
 # default value of x
-default_x: 0.2
+default_x: 0.4
 # default depth of operation [meter]
-depth: -1.0
+depth: -2.7
 # distance to pipe [meter], 0 = disabled
 distance_to_pipe: 0.0
 # minimum confidence for finding a pipeline
@@ -26,7 +26,7 @@ min_width: 0.1
 # distance between center of gravity and camera
 out_of_center: 0.0
 # tries to follow the pipeline in this direction [rad], > PI = disabled
-prefered_heading: 1.57
+prefered_heading: -1.57
 # no documentation available for this property
 use_channel: -1.0
 # offset between the center and the end of pipe during 
@@ -46,6 +46,12 @@ find_end_of_pipe: 0.4
 # will change to follow modex
 lose_end_of_pipe: 0.2
 preprocessing_type: 0
+# if the angle between the pipeline and the auv is bigger than delta_aligning the task goes into the state ALIGNING_AUV
+delta_aligning: 0.25
+# the pipeline is considert to be out of center if this value is smaller than the shortest distance in meter between the image center and the pipeline center --> turning will be disabled if the follower is in ALIGN_AUV
+max_center_dist: 0.4
+# fallback to ALIGN_AUV if out_of_center is exceeded during FOLLOWING_PIPE
+do_dynamic_aligning: 1
 --- name:studiobad
 invert_colors: 0
 use_channel: 3
