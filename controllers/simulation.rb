@@ -63,7 +63,7 @@ end
 
 module Robot
     def self.emergency_surfacing
-        task = Orocos::TaskContext.get('actuators_simulation')
+        task = Orocos::TaskContext.get('actuators')
 	task.command.disconnect_all
         writer = task.command.writer
         sample = writer.new_sample
