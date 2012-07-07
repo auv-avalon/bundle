@@ -110,16 +110,13 @@ module Planning
                 @mission_graph[v] << Planning::MissionDependency.new(task, k)
             end
 
-            task.event(:failed).forward_to self.event(:failed) if !map.key(:failed)
+            task.event(:failed).forward_to self.event(:failed) if !map.key?(:failed)
         end
 
         on :stop do |event|
-            Plan.info "Autonomous run finished"
+            Plan.info "Autonomous run finished. Emergency Surfacing Command."
+            Robot.emergency_surfacing
         end
-
-        #        on :stop do |event|
-        #            Robot.emergency_surfacing
-        #        end
     end
 
 end

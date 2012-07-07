@@ -40,7 +40,7 @@ module Robot
         pipe = { :x => 31.6, :y => 1.52, :z => -2.2, :theta => -0.10 } # rad
         wall = { :x => 45.0, :y => 2.5, :z => -4.5, :theta => 0.0 }
         #sauce_start = { :x => 30.0, :y => -26.0, :z => -2.5, :theta => Math::PI / 2.0 }
-        sauce_start = { :x => 32.0, :y => -7.84, :z => -2.5, :theta => Math::PI / 2.0 }
+        sauce_start = { :x => 23.0, :y => -16.0, :z => -2.5, :theta => Math::PI / 2.0 }
 
         position = nil
 
@@ -63,7 +63,7 @@ end
 
 module Robot
     def self.emergency_surfacing
-        task = Orocos::TaskContext.get('actuators_simulation')
+        task = Orocos::TaskContext.get('actuators')
 	task.command.disconnect_all
         writer = task.command.writer
         sample = writer.new_sample
