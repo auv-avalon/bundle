@@ -29,7 +29,7 @@ end
 define('asv', Cmp::VisualServoing.use(Cmp::AsvDetector))
 
 # !!! Configure tasks for specific location !!!
-detector_conf = ["default", "studiobad"]
+detector_conf = ["default"]
 use OffshorePipelineDetector::Task => OffshorePipelineDetector::Task.
     use_conf(*detector_conf)
 use OrientationEstimator::BaseEstimator => OrientationEstimator::BaseEstimator.
