@@ -10,14 +10,18 @@ edgeTh: 35
 # the time in s how long a buoy of the past is noticed by the filter.
 filter_timeout: 1.5
 # Buoy hue value.
-hValue: 55
+hValue: 65
 # Hough threshold.
 houghTh: 25
 # Buoy saturation value.
-sValue: 95
+sValue: 55
 # Step size to detect V value.
 steps: 5
 # Buoy hue value.
 vValue: 40
+roi_x: 0
+roi_y: -0.2
+roi_width: 3.0
+roi_height: 2.5
 --- name:simulation
 
