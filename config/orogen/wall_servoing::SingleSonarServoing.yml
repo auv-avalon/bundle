@@ -18,7 +18,7 @@ minimal_wall_distance: 0.75
 # set distance for the y axis, witch will result in a certain speed
 servoing_speed: 0.0
 # reference distance to wall
-wall_distance: 3.0
+wall_distance: 3.5
 # minimum count inliers of the point cloud in percent to be a valid model
 wall_estimation_ransac_min_inliers: 0.85
 # maximal inlier distance to the model
@@ -46,6 +46,6 @@ right_opening_angle: 1.57
 --- name:wall_right
 servoing_wall_direction: -1.57
 initial_wall_direction: -1.57
-servoing_speed: 0.25
+servoing_speed: 0.4
 left_opening_angle: 1.57
 right_opening_angle: 1.1
