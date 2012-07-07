@@ -4,25 +4,27 @@ angleDelta: 0.0
 # Number of Angle steps collected in 1 bin in houghspace
 anglesPerBin: 2
 # Height of the basin
-basinHeight: 10.0
+basinHeight: 50.0
 # Width of the basin
-basinWidth: 17.3
+basinWidth: 120.0
 # Number of distance bin in sonar beam collected in 1 bin in houghspace
 distancesPerBin: 4
 # bins in sonar beam with fewer entries will be ignored
-filterThreshold: 30
+filterThreshold: 50
 # Number of bins of the sonar
-maxDistance: 173
+maxDistance: 600
 # Minimum distance for sonar to filter out the auv itself
-minDistance: 2.5
+minDistance: 10.0
 # Factor for sonar peaks; lines must have at least that many votes to be detected as lines
 minLineVotesRatio: 0.1
 # Angular resolution of sonar (in degree)
-sensorAngularResolution: 5.0
+sensorAngularResolution: 2.5
 # If the incoming beams should be filtered with a minimum filter first
 withMinimumFilter: 1
 # write continously last detected position sample to output
 continous_write: 0
+# Shows sonar peaks, houghspace and lines as debug
+show_debug: 1
 --- name:simulation
 basinHeight: 50.0
 basinWidth: 120.0
