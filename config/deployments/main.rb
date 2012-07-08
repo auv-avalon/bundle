@@ -30,7 +30,8 @@ servoing = {
     'pingersearch' => Cmp::Pingersearch,
 
     'wall' => Cmp::WallDetector.
-       use(device('sonar').use_conf('default', 'wall_servoing_front')),
+       use(device('sonar').use_conf('default', 'wall_servoing_front')).
+        use(SonarFeatureEstimator::Task.use_conf('default', 'wall_servoing')),
 
     'dual_wall' => Cmp::DualSonarWallDetector.
        use('sonar_front' => device('sonar').use_conf('default', 'dual_wall_servoing')).
@@ -38,19 +39,23 @@ servoing = {
 
     'wall_front_left' => Cmp::WallDetector.
         use(device('sonar').use_conf('default', 'wall_servoing_front')).
-        use(WallServoing::SingleSonarServoing.use_conf('default', 'wall_front_left')),
+        use(WallServoing::SingleSonarServoing.use_conf('default', 'wall_front_left')).
+        use(SonarFeatureEstimator::Task.use_conf('default', 'wall_servoing')),
 
     'wall_front_right' => Cmp::WallDetector.
         use(device('sonar').use_conf('default', 'wall_servoing_front')).
-        use(WallServoing::SingleSonarServoing.use_conf('default', 'wall_front_right')),
+        use(WallServoing::SingleSonarServoing.use_conf('default', 'wall_front_right')).
+        use(SonarFeatureEstimator::Task.use_conf('default', 'wall_servoing')),
 
    'wall_left' => Cmp::WallDetector.
         use(device('sonar').use_conf('default', 'wall_servoing_left')).
-        use(WallServoing::SingleSonarServoing.use_conf('default', 'wall_left')),
+        use(WallServoing::SingleSonarServoing.use_conf('default', 'wall_left')).
+        use(SonarFeatureEstimator::Task.use_conf('default', 'wall_servoing')),
 
    'wall_right' => Cmp::WallDetector.
         use(device('sonar').use_conf('default', 'wall_servoing_right')).
-        use(WallServoing::SingleSonarServoing.use_conf('default', 'wall_right'))
+        use(WallServoing::SingleSonarServoing.use_conf('default', 'wall_right')).
+        use(SonarFeatureEstimator::Task.use_conf('default', 'wall_servoing'))
 }
 
 servoing.each do |name, cmp|
