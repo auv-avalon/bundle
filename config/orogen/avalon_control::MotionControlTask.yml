@@ -53,6 +53,6 @@ heading_pid:
   i: 0.0
   p: -2.0
 z_pid:
-  i: 0.0
+  i: -0.1
 use_min_ground_distance: false
 min_ground_distance: 0.2
