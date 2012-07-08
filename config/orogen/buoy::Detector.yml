@@ -22,6 +22,7 @@ vValue: 40
 roi_x: 0
 roi_y: -0.2
 roi_width: 3.0
-roi_height: 2.5
+roi_height: 3.0
+sat_th: 55
 --- name:simulation
 
