@@ -46,6 +46,12 @@ find_end_of_pipe: 0.4
 # will change to follow modex
 lose_end_of_pipe: 0.2
 preprocessing_type: 0
+# if the angle between the pipeline and the auv is bigger than delta_aligning the task goes into the state ALIGNING_AUV
+delta_aligning: 0.785
+# the pipeline is considert to be out of center if this value is smaller than the shortest distance in meter between the image center and the pipeline center --> turning will be disabled if the follower is in ALIGN_AUV
+max_center_dist: 0.4
+# fallback to ALIGN_AUV if out_of_center is exceeded during FOLLOWING_PIPE
+do_dynamic_aligning: 0
 --- name:studiobad
 invert_colors: 0
 use_channel: 3
