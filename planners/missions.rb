@@ -219,10 +219,10 @@ class MainPlanner < Roby::Planning::Planner
             emit :success
         end
 
-	task.on :success do |event|
+        task.on :success do |event|
             heading = event.task.detector_child.pipeline_heading
-	    Plan.info "Storing current pipeline heading on END_OF_PIPE: #{heading * 180 / Math::PI} deg, #{heading} rad"
-	    State.pipeline_heading = heading
+            Plan.info "Storing current pipeline heading on END_OF_PIPE: #{heading * 180 / Math::PI} deg, #{heading} rad"
+        State.pipeline_heading = heading
         end
     end
 
