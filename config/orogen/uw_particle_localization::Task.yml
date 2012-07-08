@@ -1,36 +1,40 @@
 --- name:default
 # effective sample size threshold controls the resampling timing and uses values between 0.0 and 1.0 particles
-effective_sample_size_threshold: 0.9
+effective_sample_size_threshold: 0.4
 # initial centre position for all particles
-init_position: [0.0, 0.0, 0.0]
+init_position: [40.0, -20.0, 0.0]
 # spatial covariance from initial centre position for initialization
-init_variance: [5.0, 5.0, 0.01]
+init_variance: [10.0, 10.0, 0.0001]
 # minimum depth for collecting perception samples
 minimum_depth: -0.0
 # minimum number of perceptions before starting resampling
-minimum_perceptions: 3
+minimum_perceptions: 20
 # ratio for generating new particles after each measurement
 # hough_interspersal_ratio: 0.0
 # number of used particles
-particle_number: 50
+particle_number: 90
 # ignore velocity in speed samples for dynamic update
 pure_random_motion: false
 # automatic reset of particle filter after not receiving any perception for X seconds
 reset_timeout: 30.0
 # sets sonar covariance for defining measurement uncertainty
-sonar_covariance: 9.0
+sonar_covariance: 25.0
 # sets importance ratio for sonar perception updates
 sonar_importance: 1.0
+# sets pipeline importance ratio for sonar perception updates
+pipeline_importance: 0.5
 # set maximum distance for filtering sonar samples
-sonar_maximum_distance: 80.0
+sonar_maximum_distance: 60.0
 # set maximum distance for filtering sonar samples
 sonar_minimum_distance: 1.0
 # sets a static covariance for speed samples
 static_motion_covariance: [0.0001, 0.0, 0.0, 0.0, 0.0001, 0.0, 0.0, 0.0, 0.0]
+# set history size for determining uncertainty_degree of best measurement samples
+perception_history_number: 20
+# waiting time for starting filtering
+init_sample_rejection: 100
 # start map for localization algorithm
 yaml_map: ''
-# yaw offset if reference heading is not constistent with current mission
-yaw_offset: 0.0
 # interspersal ratio for hough position samples
 hough_interspersal_ratio: 0.1
 # streamaligner attributes
