@@ -61,7 +61,6 @@ add_mission(ModemCan::Task)
 # add_mission(Taskmon::Task).on_server('front')
 
 add_mission('bottom_camera')
-
 add_mission('front_camera')
 #add_mission('left_unicap_camera')
 #add_mission('right_unicap_camera')
@@ -69,7 +68,7 @@ add_mission('front_camera')
 #add_mission('gpsd')
 add_mission('sonar')
 add_mission('sonar_rear')
-#add_mission(Cmp::ModemPositionOutput)
+add_mission(Cmp::ModemPositionOutput)
 
 add_mission(Cmp::OrientationWithZ)
 #add_mission(Cmp::UwvModel)
