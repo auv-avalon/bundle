@@ -3,9 +3,9 @@
 # Configuration for Sonar
 config: 
   left_limit: 
-    rad: 0.01 #3.141592653589793
+    rad: 0.05 #3.141592653589793
   right_limit: 
-    rad: -0.01 #3.141592653589793
+    rad: -0.05 #3.141592653589793
   angular_resolution: 
     rad: 0.0436 #0.08726646259971647
   max_distance: 60.0
@@ -58,7 +58,7 @@ port: /dev/ttyS7
 config:
   continous: 0
   gain: 0.2
-  max_distance: 8.0
+  max_distance: 10.0
   resolution: 0.1
   left_limit:
     rad: 0.0
@@ -79,8 +79,8 @@ port: /dev/ttyS7
 --- name:straight_front
 config:
   continous: 0
-  gain: 0.2
-  max_distance: 10.0
+  gain: 0.9
+  max_distance: 60.0
   resolution: 0.1
   left_limit:
     rad: 0.05
@@ -140,9 +140,9 @@ config:
 port: /dev/ttyS5
 --- name:straight_rear
 config:
-  gain: 0.2
+  gain: 0.9
   continous: 0
-  max_distance: 10.0
+  max_distance: 60.0
   resolution: 0.1
   left_limit:
     rad: 0.0
