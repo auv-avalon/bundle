@@ -313,7 +313,7 @@ class MainPlanner < Roby::Planning::Planner
                     # Turn on pipeline
                     execute do
                         follower = detector_child.offshorePipelineDetector_child
-                        follower.prefered_heading = normalize_angle(prefered_yaw + Math::PI)
+                        follower.prefered_heading = normalize_angle(State.pipeline_heading + Math::PI) #prefered_yaw + Math::PI)
                         Plan.info "Following pipeline until END_OF_PIPE is occuring"
                     end
 
