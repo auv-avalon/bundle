@@ -3,8 +3,8 @@ width: 648
 height: 468
 fps: 5
 whitebalance_mode: 'auto'
-gain: 1
-exposure: 160
+gain: 2
+exposure: 1
 trigger_mode: 'fixed'
 binning: 4
 output_format: 'rgb3'

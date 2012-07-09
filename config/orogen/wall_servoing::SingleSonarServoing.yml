@@ -27,6 +27,8 @@ wall_estimation_ransac_threshold: 0.2
 left_opening_angle: 0.785
 # opening angle to the right of the supposed wall direction, always positive
 right_opening_angle: 0.785
+# waiting time in seconds until the wall servoing will start, this helps to get better data from the estimator
+wait_until_start: 3.0
 --- name:wall_front_left
 servoing_wall_direction: -0.4
 servoing_speed: 0.5

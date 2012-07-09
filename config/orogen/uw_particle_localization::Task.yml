@@ -19,16 +19,18 @@ pure_random_motion: false
 reset_timeout: 30.0
 # sets sonar covariance for defining measurement uncertainty
 sonar_covariance: 25.0
+# sets pipeline covariance for measurements
+pipeline_covariance: 2.0
 # sets importance ratio for sonar perception updates
 sonar_importance: 1.0
 # sets pipeline importance ratio for sonar perception updates
-pipeline_importance: 0.5
+pipeline_importance: 0.3
 # set maximum distance for filtering sonar samples
 sonar_maximum_distance: 60.0
 # set maximum distance for filtering sonar samples
 sonar_minimum_distance: 1.0
 # sets a static covariance for speed samples
-static_motion_covariance: [0.0001, 0.0, 0.0, 0.0, 0.0001, 0.0, 0.0, 0.0, 0.0]
+static_motion_covariance: [0.0001, 0.0, 0.0, 0.0, 0.00005, 0.0, 0.0, 0.0, 0.0]
 # set history size for determining uncertainty_degree of best measurement samples
 perception_history_number: 20
 # waiting time for starting filtering
@@ -42,6 +44,7 @@ aggregator_max_latency: 2.0
 laser_samples_period: 0.1
 orientation_samples_period: 0.01
 thruster_samples_period: 0.01
+pipeline_samples_period: 0.1
 speed_samples_period: 0.01
 pose_update_period: 0.1
 --- name:simulation
