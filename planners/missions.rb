@@ -418,10 +418,10 @@ class MainPlanner < Roby::Planning::Planner
     describe("run a complete wall servoing using current alignment to wall").
         required_arg("z", "servoing depth").
         required_arg("corners", "number of serving corners").
-        optional_arg("speed", "servoing speed for wall survey").
-        optional_arg("initial_wall_yaw", "servoing wall in this direction").
-        optional_arg("servoing_wall_yaw", "direction for a wall in survey").
-        optional_arg("ref_distance", "reference distance to wall").
+        #optional_arg("speed", "servoing speed for wall survey").
+        #optional_arg("initial_wall_yaw", "servoing wall in this direction").
+        #optional_arg("servoing_wall_yaw", "direction for a wall in survey").
+        #optional_arg("ref_distance", "reference distance to wall").
         optional_arg("timeout", "timeout after successful corner passing")        
     method(:survey_wall) do
         servoing_wall_yaw = arguments[:servoing_wall_yaw]
@@ -432,20 +432,20 @@ class MainPlanner < Roby::Planning::Planner
         corners = arguments[:corners]
         timeout = arguments[:timeout]
 
-        wall_servoing = self.wall # TODO use method argument to choose wall servoing mode
+        wall_servoing = self.wall_right # TODO use method argument to choose wall servoing mode
         roby_task = wall_servoing.script do
             wait_any detector_child.start_event
             wait_any control_child.command_child.start_event
 
             execute do 
                 survey = detector_child.servoing_child
-                survey.orogen_task.wall_distance = ref_distance if ref_distance
-                survey.orogen_task.servoing_wall_direction = servoing_wall_yaw if servoing_wall_yaw
-                survey.orogen_task.initial_wall_direction = initial_wall_yaw if initial_wall_yaw
-                survey.orogen_task.servoing_speed = speed if speed
+                #survey.orogen_task.wall_distance = ref_distance if ref_distance
+                #survey.orogen_task.servoing_wall_direction = servoing_wall_yaw if servoing_wall_yaw
+                #survey.orogen_task.initial_wall_direction = initial_wall_yaw if initial_wall_yaw
+                #survey.orogen_task.servoing_speed = speed if speed
                 #survey.orogen_task.right_opening_angle = 0.5 * Math::PI
                 #survey.orogen_task.left_opening_angle = 0.35 * Math::PI
-                survey.orogen_task.fixed_depth = z
+                #survey.orogen_task.fixed_depth = z
 
                 sonar = detector_child.sonar_child 
 
@@ -455,19 +455,19 @@ class MainPlanner < Roby::Planning::Planner
                     #sonar.orogen_task.end_angle = 0.0
                     #sonar.orogen_task.maximum_distance = 10.0
                 else
-                    Plan.info "Overwrite configuration on sonar_tritech::Micron"
-                    sonar_config = sonar.orogen_task.config
-                    sonar_config.rightLimit.rad = 0.0
-                    sonar_config.leftLimit.rad = 0.85 * Math::PI
-                    sonar_config.cont = 0.0
-                    sonar_config.initialGain = 0.5
-                    sonar_config.maximumDistance = 10.0
-                    sonar.orogen_task.config = sonar_config
+                    #Plan.info "Overwrite configuration on sonar_tritech::Micron"
+                    #sonar_config = sonar.orogen_task.config
+                    #sonar_config.rightLimit.rad = 0.0
+                    #sonar_config.leftLimit.rad = 0.85 * Math::PI
+                    #sonar_config.cont = 0.0
+                    #sonar_config.initialGain = 0.5
+                    #sonar_config.maximumDistance = 10.0
+                    #sonar.orogen_task.config = sonar_config
                 end
             end
 
             execute do
-                Plan.info "Survey #{timeout} seconds until finish"
+                Plan.info "Survey #{timeout} seconds until timeout"
             end
 
 	    start_time = nil
@@ -543,4 +543,29 @@ class MainPlanner < Roby::Planning::Planner
         end
     end
     
+    describe("Go forward until suitable distance to wall is reached. The deployment wall_front defines this distance.").
+        optional_arg("mission_timeout","")
+    method(:goto_wall) do
+        mission_timeout = arguments[:mission_timeout]
+        
+        task = self.wall_front_align
+        task.script do
+            wait_any detector_child.start_event
+            wait_any control_child.command_child.start_event
+            
+            execute do
+                start_time = Time.now
+                Plan.info "Going forward until we reach the wall."
+            end
+            
+            poll_until detector_child.wall_servoing_event do
+                if mission_timeout and time_over?(start_time, mission_timeout)
+                    Plan.warn "Mission timeout! (goto_wall)"
+                    emit :success
+                end
+            end
+            
+            
+        end
+    end
 end
