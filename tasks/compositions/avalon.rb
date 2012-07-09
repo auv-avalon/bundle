@@ -231,11 +231,7 @@ composition 'BuoyDetector' do
 #    connect modem => servoing
     connect detector.light => servoing.light
     connect detector.buoy => servoing.input_buoy
-
-    on(:buoy_detected) do 
-        Plan.info "Buoy detected by Cmp::BuoyDetector"
-    end
-    
+   
     export servoing.relative_position, :as => 'relative_position_command'
     provides Srv::RelativePositionDetector
 end
