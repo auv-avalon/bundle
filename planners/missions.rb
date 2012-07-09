@@ -179,6 +179,7 @@ class MainPlanner < Roby::Planning::Planner
                 
                 follower = detector_child.offshorePipelineDetector_child
                 follower.orogen_task.default_x = follow_speed
+                follower.orogen_task.weak_signal_x = 0.5 * follow_speed
 
                 if controlled_turn_on_pipe
                     # set preferred heading later in order to avoid immediate align_auv
@@ -235,6 +236,8 @@ class MainPlanner < Roby::Planning::Planner
                    # set preferred heading => go to align_auv
                    follower = detector_child.offshorePipelineDetector_child
                    follower.orogen_task.prefered_heading = prefered_yaw if prefered_yaw
+                   follower.orogen_task.default_x = follow_speed
+                   follower.orogen_task.weak_signal_x = 0.5 * follow_speed
                    control_child.command_child.connect_ports(control_child.controller_child, connection)
                 end
 
@@ -285,7 +288,6 @@ class MainPlanner < Roby::Planning::Planner
                     execute do
                         control_child.command_child.connect_ports(control_child.controller_child, connection)
                         follower = detector_child.offshorePipelineDetector_child
-                        follower.following_speed = -follower.following_speed
                     end
                     
                     # Move back with detector assistance for some time
