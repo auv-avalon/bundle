@@ -205,21 +205,23 @@ end
 composition 'BuoyDetector' do
     event :buoy_search
     event :buoy_detected
-    event :buoy_lost
     event :buoy_arrived
+    event :buoy_lost
     event :strafing
     event :strafe_finished
-    event :strafe_error
-    event :moving_to_cutting_distance
-    event :cutting
-    event :cutting_success
-    event :cutting_error
+    event :strafe_to_angle
+    event :angle_arrived
+#    event :buoy_arrived
+#    event :strafe_error
+#    event :moving_to_cutting_distance
+#    event :cutting
+#    event :cutting_success
+#    event :cutting_error
 
     add Srv::ImageProvider, :as => 'camera'
     add Srv::OrientationWithZ    
-    #add_main Buoydetector::Task, :as => 'servoing'
-    add_main Buoy::Detector, :as => 'detector'
-    add Buoy::Survey, :as => 'servoing'
+    add Buoy::Detector, :as => 'detector'
+    add_main Buoy::Survey, :as => 'servoing'
     add Srv::ModemConnection, :as => 'modem'
 
     connect camera => detector
@@ -229,6 +231,10 @@ composition 'BuoyDetector' do
 #    connect modem => servoing
     connect detector.light => servoing.light
     connect detector.buoy => servoing.input_buoy
+
+    on(:buoy_detected) do 
+        Plan.info "Buoy detected by Cmp::BuoyDetector"
+    end
     
     export servoing.relative_position, :as => 'relative_position_command'
     provides Srv::RelativePositionDetector
