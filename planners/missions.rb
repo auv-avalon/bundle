@@ -141,6 +141,7 @@ class MainPlanner < Roby::Planning::Planner
         required_arg("yaw", "initial search direction for pipeilne").
         required_arg("z", "initial z value for pipeline following").
         required_arg("speed", "searching velocity for finding pipeline").
+        required_arg("follow_speed", "speed on pipeline following").
         optional_arg("prefered_yaw", "alignment yaw and enabling pipeline following").
         optional_arg("search_timeout", "timeout for searching pipeline").
         optional_arg("mission_timeout", "timeout for the whole pipeline following. expected to be greater than search_timeout.").
@@ -152,6 +153,7 @@ class MainPlanner < Roby::Planning::Planner
         search_timeout = arguments[:search_timeout] 
         yaw = arguments[:yaw]
         prefered_yaw = arguments[:prefered_yaw]
+        follow_speed = arguments[:follow_speed]
         mission_timeout = arguments[:mission_timeout]
         do_safe_turn = arguments[:do_safe_turn]
         controlled_turn_on_pipe = arguments[:controlled_turn_on_pipe] || false
@@ -175,26 +177,24 @@ class MainPlanner < Roby::Planning::Planner
                  # Take away control from detector in order to move forward blind to search pipe
                  connection = control_child.command_child.disconnect_ports(control_child.controller_child, [['motion_command', 'motion_commands']])
                 
+                follower = detector_child.offshorePipelineDetector_child
+                follower.orogen_task.default_x = follow_speed
+
                 if controlled_turn_on_pipe
                     # set preferred heading later in order to avoid immediate align_auv
-                    follower = detector_child.offshorePipelineDetector_child
                     follower.orogen_task.prefered_heading = prefered_yaw if prefered_yaw #debug
                     follower.orogen_task.depth = z
                     control_child.command_child.connect_ports(control_child.controller_child, connection)
                     
                     Plan.info "Executing controlled turn on pipe on yaw #{yaw} with z #{z} using channel #{follower.orogen_task.use_channel}. Preferred yaw: #{prefered_yaw}"
                 else
-                    follower = detector_child.offshorePipelineDetector_child
                     follower.orogen_task.prefered_heading = prefered_yaw if prefered_yaw
                     follower.orogen_task.depth = z
+
                     
                     #follower.orogen_task.use_channel = PIPELINE_DETECTOR_CHANNEL
                     Plan.info "Searching pipeline on yaw #{yaw} with z #{z} using channel #{follower.orogen_task.use_channel}. Preferred yaw: #{prefered_yaw}"
                 
-                    if search_timeout and time_over?(start_time, search_timeout)
-                        Plan.warn "Search timeout pipeline following (find_and_follow_pipeline)!"
-                        emit :success
-                    end
                 end
             end
 
@@ -202,11 +202,11 @@ class MainPlanner < Roby::Planning::Planner
             wait_any control_child.command_child.start_event
 
             poll do
-                if mission_timeout and time_over?(start_time, mission_timeout)
-                    Plan.warn "Mission timeout pipeline following (find_and_follow_pipeline)!"
+                if search_timeout and time_over?(start_time, search_timeout)
+                    Plan.warn "Search timeout pipeline following (find_and_follow_pipeline)!"
                     emit :success
                 end
-                
+               
                 motion_command.heading = yaw
                 motion_command.z = z
                 motion_command.y_speed = 0
@@ -310,7 +310,6 @@ class MainPlanner < Roby::Planning::Planner
                     end
                     
                     #TODO mission timeout in on :start
-                        
                 end
                 
             end
@@ -353,6 +352,7 @@ class MainPlanner < Roby::Planning::Planner
                                                   :z => z, 
                                                   :prefered_yaw => prefered_yaw, 
                                                   :speed => speed,
+                                                  :follow_speed => 0.4,
                                                   :search_timeout => search_timeout,
                                                   :do_safe_turn => false,
                                                   :controlled_turn_on_pipe => false)
@@ -368,7 +368,8 @@ class MainPlanner < Roby::Planning::Planner
                                                             :z => z, 
                                                             :prefered_yaw => prefered_yaw, 
                                                             :speed => -0.05,
-                                                            :search_timeout => 10, # TODO set correct timeout
+                                                            :follow_speed => -0.4,
+                                                            :search_timeout => 40, # TODO set correct timeout
                                                             :mission_timeout => 20,
                                                             :do_safe_turn => false,
                                                             :controlled_turn_on_pipe => false)
@@ -382,9 +383,10 @@ class MainPlanner < Roby::Planning::Planner
             turn_follower = find_and_follow_pipeline(:yaw => proc { State.pipeline_heading }, 
                                        :z => z, 
                                        :speed => speed,
+                                       :follow_speed => 0.4,
                                        :prefered_yaw => normalize_angle(prefered_yaw + Math::PI + 0.1), #proc { normalize_angle(prefered_yaw + Math::PI)},
-                                       :search_timeout => 10,  # TODO set correct timeout
-                                       :mission_timeout => 60,
+                                       :search_timeout => 40,  # TODO set correct timeout
+                                       :mission_timeout => 500,
                                        :do_safe_turn => false,
                                        :controlled_turn_on_pipe => true)
 
