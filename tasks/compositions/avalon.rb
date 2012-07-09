@@ -227,7 +227,7 @@ composition 'BuoyDetector' do
     connect camera => detector
     connect orientation_with_z => servoing
 #    connect servoing => modem
-#    connect detector => modem
+    connect detector => modem
 #    connect modem => servoing
     connect detector.light => servoing.light
     connect detector.buoy => servoing.input_buoy
