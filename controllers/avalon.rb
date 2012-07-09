@@ -52,7 +52,7 @@ Roby.every(0.1, :on_error => :disable) do
                 last_navigation_task = nil
             end
         #elsif State.lowlevel_state == 5 or State.lowlevel_state == 3
-        elsif State.lowlevel_state == 3
+        elsif (State.lowlevel_state == 3) and false
             if !State.navigation_mode?
                 Robot.warn "switched to mode 3, but no navigation mode is selected in State.navigation_mode"
             elsif !navigation_mode

@@ -1,5 +1,6 @@
 class UwParticleLocalization::Task
     provides Srv::PoseEstimator
+    provides Srv::Pose
 
     def configure
         super
