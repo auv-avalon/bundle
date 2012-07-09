@@ -364,10 +364,10 @@ composition 'SonarWallHough' do
 end
 
 composition 'ModemPositionOutput' do
-    add Srv::OrientationWithZ
+    add Srv::Pose, :as => 'pose'
     add ModemCan::Task, :as => 'modem'
-#    connect pose.pose_samples => modem.position_samples
-    autoconnect
+    connect pose.pose_samples => modem.position_samples
+#    autoconnect
 end
 
 

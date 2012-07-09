@@ -5,6 +5,7 @@ use Cmp::OrientationWithZ => Cmp::OrientationWithZ.use('depth_reader').use(Cmp::
 use Srv::Orientation      => Cmp::OrientationWithZ
 use Srv::OrientationWithZ => Cmp::OrientationWithZ
 use Srv::Speed            => Cmp::OrientationWithZ
+use Srv::Pose             => Cmp::Localization.use('sonar')
 
 use Srv::GroundDistance   => device('sonar_rear') 
 use Srv::SoundSourceDirection => Pingersearch::AngleEstimation
@@ -62,13 +63,14 @@ add_mission(ModemCan::Task)
 
 add_mission('bottom_camera')
 add_mission('front_camera')
+add_mission('particle_localization')
+add_mission(Cmp::ModemPositionOutput)
 #add_mission('left_unicap_camera')
 #add_mission('right_unicap_camera')
 
 #add_mission('gpsd')
 add_mission('sonar')
 add_mission('sonar_rear')
-add_mission(Cmp::ModemPositionOutput)
 
 add_mission(Cmp::OrientationWithZ)
 #add_mission(Cmp::UwvModel)
