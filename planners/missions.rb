@@ -398,7 +398,7 @@ class MainPlanner < Roby::Planning::Planner
                                        :z => z, 
                                        :speed => speed,
                                        :follow_speed => 0.4,
-                                       :prefered_yaw => normalize_angle(prefered_yaw + Math::PI + 0.1), #proc { normalize_angle(prefered_yaw + Math::PI)},
+                                       :prefered_yaw => proc { normalize_angle(State.pipeline_heading + Math::PI + 0.1) }, #proc { normalize_angle(prefered_yaw + Math::PI)},
                                        :search_timeout => 40,  # TODO set correct timeout
                                        :mission_timeout => 500,
                                        :do_safe_turn => false,
