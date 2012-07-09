@@ -241,12 +241,24 @@ class MainPlanner < Roby::Planning::Planner
                    control_child.command_child.connect_ports(control_child.controller_child, connection)
                 end
 
-                wait detector_child.follow_pipe_event
+                #wait detector_child.follow_pipe_event
+                poll_until detector_child.follow_pipe_event do
+                    if mission_timeout and time_over?(start_time, mission_timeout)
+                        Plan.warn "Mission timeout pipeline following (find_and_follow_pipeline)!"
+                        emit :success
+                    end
+                end
                 execute do
                     Plan.info "Following pipeline until END_OF_PIPE is occuring"
                 end
 
-                wait detector_child.end_of_pipe_event
+                #wait detector_child.end_of_pipe_event
+                poll_until detector_child.end_of_pipe_event do
+                    if mission_timeout and time_over?(start_time, mission_timeout)
+                        Plan.warn "Mission timeout pipeline following (find_and_follow_pipeline)!"
+                        emit :success
+                    end
+                end
 
                 execute do
                     Plan.info "Possible END_OF_PIPE detected"
