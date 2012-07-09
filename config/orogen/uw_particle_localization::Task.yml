@@ -24,13 +24,13 @@ pipeline_covariance: 2.0
 # sets importance ratio for sonar perception updates
 sonar_importance: 1.0
 # sets pipeline importance ratio for sonar perception updates
-pipeline_importance: 0.7
+pipeline_importance: 0.3
 # set maximum distance for filtering sonar samples
 sonar_maximum_distance: 60.0
 # set maximum distance for filtering sonar samples
 sonar_minimum_distance: 1.0
 # sets a static covariance for speed samples
-static_motion_covariance: [0.0001, 0.0, 0.0, 0.0, 0.0001, 0.0, 0.0, 0.0, 0.0]
+static_motion_covariance: [0.0001, 0.0, 0.0, 0.0, 0.00005, 0.0, 0.0, 0.0, 0.0]
 # set history size for determining uncertainty_degree of best measurement samples
 perception_history_number: 20
 # waiting time for starting filtering
