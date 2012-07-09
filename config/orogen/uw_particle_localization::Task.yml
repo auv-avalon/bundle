@@ -44,6 +44,7 @@ aggregator_max_latency: 2.0
 laser_samples_period: 0.1
 orientation_samples_period: 0.01
 thruster_samples_period: 0.01
+pipeline_samples_period: 0.1
 speed_samples_period: 0.01
 pose_update_period: 0.1
 --- name:simulation
