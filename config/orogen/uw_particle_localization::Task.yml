@@ -19,10 +19,12 @@ pure_random_motion: false
 reset_timeout: 30.0
 # sets sonar covariance for defining measurement uncertainty
 sonar_covariance: 25.0
+# sets pipeline covariance for measurements
+pipeline_covariance: 2.0
 # sets importance ratio for sonar perception updates
 sonar_importance: 1.0
 # sets pipeline importance ratio for sonar perception updates
-pipeline_importance: 0.5
+pipeline_importance: 0.7
 # set maximum distance for filtering sonar samples
 sonar_maximum_distance: 60.0
 # set maximum distance for filtering sonar samples
