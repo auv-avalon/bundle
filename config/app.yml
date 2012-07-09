@@ -43,7 +43,7 @@ log:
   # debugging output for the whole framework, set
   #
   levels:
-        roby: FATAL
+        roby: ERROR
   #levels:
   #      roby: WARN
   #        orocos/roby_plugin: INFO:avalon_dataflow.txt

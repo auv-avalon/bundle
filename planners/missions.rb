@@ -198,7 +198,6 @@ class MainPlanner < Roby::Planning::Planner
                 
                 end
             end
-
             wait_any detector_child.start_event
             wait_any control_child.command_child.start_event
 
@@ -222,7 +221,7 @@ class MainPlanner < Roby::Planning::Planner
                         write_motion_command ## for z
                         transition!
                     end
-                elsif detector_child.found_pipe?
+                elsif detector_child.found_pipe? || detector_child.align_auv?
                     Plan.info "Pipeline detected and found"
                     transition!
                 else
@@ -362,6 +361,8 @@ class MainPlanner < Roby::Planning::Planner
         turn_timeout = arguments[:turn_timeout]
         turns = if arguments[:turns] then arguments[:turns] else 0 end
 
+	Plan.info "search timeout: #{search_timeout}"
+
         start_follower = find_and_follow_pipeline(:yaw => yaw, 
                                                   :z => z, 
                                                   :prefered_yaw => prefered_yaw, 
@@ -381,9 +382,9 @@ class MainPlanner < Roby::Planning::Planner
             move_back_controlled = find_and_follow_pipeline(:yaw => proc { State.pipeline_heading }, 
                                                             :z => z, 
                                                             :prefered_yaw => prefered_yaw, 
-                                                            :speed => -0.05,
-                                                            :follow_speed => -0.4,
-                                                            :search_timeout => 40, # TODO set correct timeout
+                                                            :speed => -0.4,
+                                                            :follow_speed => -0.3,
+                                                            :search_timeout => 20, # TODO set correct timeout
                                                             :mission_timeout => 20,
                                                             :do_safe_turn => false,
                                                             :controlled_turn_on_pipe => false)
