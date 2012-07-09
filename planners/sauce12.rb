@@ -51,8 +51,48 @@ class MainPlanner < Roby::Planning::Planner
                                  :mission_timeout => 60,
                                  :do_safe_turn => false)
     end
-    end
     
+
+    method(:sauce12_simple) do
+        pos_align = align_and_move(:z => -1.0, :yaw => PIPELINE_SEARCH_YAW)
+        surface = simple_move(:z => 0)
+
+        pipeline_reverse = find_and_follow_pipeline(
+            :yaw => PIPELINE_SEARCH_YAW,
+            :z => PIPELINE_SEARCH_Z,
+            :speed => PIPELINE_SEARCH_SPEED,
+            :follow_speed => -0.4,
+            :prefered_yaw => 0.01,
+            :search_timeout => 120,
+            :mission_timeout => 6000,
+            :do_safe_turn => false,
+            :controlled_turn_on_pipe => false)
+
+        pipeline_follow = find_and_follow_pipeline(
+            :yaw => proc { State.pipeline_heading },
+            :z => PIPELINE_SEARCH_Z,
+            :speed => PIPELINE_SEARCH_SPEED - 0.1,
+            :follow_speed => 0.4,
+            :prefered_yaw => 0.01,
+            :search_timeout => 120,
+            :mission_timeout => 6000,
+            :do_safe_turn => false,
+            :controlled_turn_on_pipe => false)
+
+        run = Planning::MissionRun.new
+        run.design do
+            # Define start and end states
+            start(pos_align)
+            finish(surface)
+            
+            # Set up state machine
+            transition(pos_align, :success => pipeline_reverse, :failed => surface)
+            transition(pipeline_reverse, :success => pipeline_follow, :failed => surface)
+            transition(pipeline_follow, :success => surface, :failed => surface)
+        end        
+ 
+
+    end
 
     describe("Autonomous mission SAUC-E'12")
     method(:sauce12_complete) do
