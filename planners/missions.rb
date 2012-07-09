@@ -141,14 +141,22 @@ class MainPlanner < Roby::Planning::Planner
         required_arg("yaw", "initial search direction for pipeilne").
         required_arg("z", "initial z value for pipeline following").
         required_arg("speed", "searching velocity for finding pipeline").
+        required_arg("follow_speed", "speed on pipeline following").
         optional_arg("prefered_yaw", "alignment yaw and enabling pipeline following").
-        optional_arg("search_timeout", "timeout for searching pipeline")
+        optional_arg("search_timeout", "timeout for searching pipeline").
+        optional_arg("mission_timeout", "timeout for the whole pipeline following. expected to be greater than search_timeout.").
+        optional_arg("do_safe_turn", "set to true if you want to do one safe turn and follow the pipe until the other end.").
+        optional_arg("controlled_turn_on_pipe", "set to true if you want to do a controlled turn on the pipe as soon as possible. this is acquired by inverting the preferred heading.")
     method(:find_and_follow_pipeline) do
         z = arguments[:z]
         speed = arguments[:speed]
         search_timeout = arguments[:search_timeout] 
         yaw = arguments[:yaw]
         prefered_yaw = arguments[:prefered_yaw]
+        follow_speed = arguments[:follow_speed]
+        mission_timeout = arguments[:mission_timeout]
+        do_safe_turn = arguments[:do_safe_turn]
+        controlled_turn_on_pipe = arguments[:controlled_turn_on_pipe] || false
         
         PIPELINE_SEARCH_CANDIDATE_SPEED = if speed > 0 then 0.1 else -0.1 end
         #PIPELINE_DETECTOR_CHANNEL = 3
@@ -159,23 +167,34 @@ class MainPlanner < Roby::Planning::Planner
             data_writer 'motion_command', ['control', 'controller', 'motion_commands']
 
             connection = nil
+            start_time = nil
 
             execute { yaw = yaw.call } if yaw.respond_to?(:call)
             execute { prefered_yaw = prefered_yaw.call } if prefered_yaw and prefered_yaw.respond_to?(:call)
             execute do
-                connection = control_child.command_child.disconnect_ports(control_child.controller_child, [['motion_command', 'motion_commands']])
-                follower = detector_child.offshorePipelineDetector_child
-                follower.orogen_task.prefered_heading = prefered_yaw if prefered_yaw
-                follower.orogen_task.depth = z
+                start_time = Time.now
                 
-                #follower.orogen_task.use_channel = PIPELINE_DETECTOR_CHANNEL
-                Plan.info "Searching pipeline on yaw #{yaw} with z #{z} using channel #{follower.orogen_task.use_channel}"
-            end
- 
-            if search_timeout
-                execute do
-                    detector_child.align_auv_event.should_emit_after detector_child.start_event,
-                    :max_t => search_timeout
+                 # Take away control from detector in order to move forward blind to search pipe
+                 connection = control_child.command_child.disconnect_ports(control_child.controller_child, [['motion_command', 'motion_commands']])
+                
+                follower = detector_child.offshorePipelineDetector_child
+                follower.orogen_task.default_x = follow_speed
+
+                if controlled_turn_on_pipe
+                    # set preferred heading later in order to avoid immediate align_auv
+                    follower.orogen_task.prefered_heading = prefered_yaw if prefered_yaw #debug
+                    follower.orogen_task.depth = z
+                    control_child.command_child.connect_ports(control_child.controller_child, connection)
+                    
+                    Plan.info "Executing controlled turn on pipe on yaw #{yaw} with z #{z} using channel #{follower.orogen_task.use_channel}. Preferred yaw: #{prefered_yaw}"
+                else
+                    follower.orogen_task.prefered_heading = prefered_yaw if prefered_yaw
+                    follower.orogen_task.depth = z
+
+                    
+                    #follower.orogen_task.use_channel = PIPELINE_DETECTOR_CHANNEL
+                    Plan.info "Searching pipeline on yaw #{yaw} with z #{z} using channel #{follower.orogen_task.use_channel}. Preferred yaw: #{prefered_yaw}"
+                
                 end
             end
 
@@ -183,13 +202,25 @@ class MainPlanner < Roby::Planning::Planner
             wait_any control_child.command_child.start_event
 
             poll do
+                if search_timeout and time_over?(start_time, search_timeout)
+                    Plan.warn "Search timeout pipeline following (find_and_follow_pipeline)!"
+                    emit :success
+                end
+               
                 motion_command.heading = yaw
                 motion_command.z = z
                 motion_command.y_speed = 0
+                #motion_command.x_speed = 0 # default for controlled_turn case
 
                 last_event = detector_child.history.last
                 if last_event.symbol == :check_candidate
                     motion_command.x_speed = PIPELINE_SEARCH_CANDIDATE_SPEED
+                elsif controlled_turn_on_pipe
+                    # We are already on the pipe so no need to find it.
+                    if detector_child.follow_pipe? || detector_child.align_auv?
+                        write_motion_command ## for z
+                        transition!
+                    end
                 elsif detector_child.found_pipe?
                     Plan.info "Pipeline detected and found"
                     transition!
@@ -201,6 +232,9 @@ class MainPlanner < Roby::Planning::Planner
 
             if prefered_yaw
                 execute do
+                   # set preferred heading => go to align_auv
+                   follower = detector_child.offshorePipelineDetector_child
+                   follower.orogen_task.prefered_heading = prefered_yaw if prefered_yaw
                    control_child.command_child.connect_ports(control_child.controller_child, connection)
                 end
 
@@ -214,17 +248,87 @@ class MainPlanner < Roby::Planning::Planner
                 execute do
                     Plan.info "Possible END_OF_PIPE detected"
                 end
+                
+                if do_safe_turn
+                    SAFE_TURN_TIMEOUT = 2
+                    CONTROLLED_MOVE_BACK_TIMEOUT = 5
+                
+                    safe_turn_timer = Time.now
+                    
+                    # Take away control from detector
+                    execute do
+                        connection = control_child.command_child.disconnect_ports(control_child.controller_child, [['motion_command', 'motion_commands']])
+                    end
+                    
+                    # Move back blindly and pass gates safely
+                    execute {Plan.info "Move back blindly in order to return to pipe and pass gates."}
+                    poll do
+                        if time_over?(safe_turn_timer, SAFE_TURN_TIMEOUT)
+                            Plan.warn "Pipeline follower: safe turn timeout."
+                            transition! 
+                        end
+                        
+                        last_event = detector_child.history.last
+                        if last_event.symbol == :align_auv || last_event.symbol == :follow_pipe
+                            Plan.info "Found pipe after moving back."
+                            transition!
+                        else
+                            motion_command.heading = yaw
+                            motion_command.z = z
+                            motion_command.y_speed = 0
+                            motion_command.x_speed = -0.05 # move back slowly
+                            write_motion_command
+                        end
+                    end
+                    
+                    # Give control back to detector
+                    execute do
+                        control_child.command_child.connect_ports(control_child.controller_child, connection)
+                        follower = detector_child.offshorePipelineDetector_child
+                        follower.following_speed = -follower.following_speed
+                    end
+                    
+                    # Move back with detector assistance for some time
+                    poll do
+                        if time_over?(safe_turn_timer, SAFE_TURN_TIMEOUT)
+                            Plan.warn "Pipeline follower: safe turn timeout."
+                            transition! 
+                        end
+                    end
+                    
+                    # Turn on pipeline
+                    execute do
+                        follower = detector_child.offshorePipelineDetector_child
+                        follower.prefered_heading = normalize_angle(prefered_yaw + Math::PI)
+                        Plan.info "Following pipeline until END_OF_PIPE is occuring"
+                    end
+
+                    wait detector_child.end_of_pipe_event
+
+                    execute do
+                        Plan.info "Possible END_OF_PIPE detected"
+                    end
+                    
+                    #TODO mission timeout in on :start
+                end
+                
             end
 
             emit :success
         end
 
-	task.on :success do |event|
+        task.on :success do |event|
             heading = event.task.detector_child.pipeline_heading
-	    Plan.info "Storing current pipeline heading on END_OF_PIPE: #{heading * 180 / Math::PI} deg, #{heading} rad"
-	    State.pipeline_heading = heading
+            if heading
+                Plan.info "Storing current pipeline heading on END_OF_PIPE: #{heading * 180 / Math::PI} deg, #{heading} rad"
+                State.pipeline_heading = heading
+            else
+                Plan.warn "Could not store current pipeline heading."
+            end
         end
     end
+
+
 
     describe("simplified find, follow and turn on pipeline").
         required_arg("yaw", "initial search yaw for finding pipeline").
@@ -232,35 +336,61 @@ class MainPlanner < Roby::Planning::Planner
         required_arg("z", "initial z value for pipeline following").
         required_arg("prefered_yaw", "prefered heading on pipeline").
         optional_arg("turns", "number of turns on pipeline").
-        optional_arg("search_timeout", "search timeout for finding pipeline")
+        optional_arg("search_timeout", "search timeout for finding pipeline").
+        optional_arg("turn_timeout", "timeout for turning on end of pipeline")
+        # TODO Mission Timeout!
     method(:find_follow_turn_pipeline) do
         z = arguments[:z]
         prefered_yaw = arguments[:prefered_yaw]
         speed = arguments[:speed]
         yaw = arguments[:yaw]
         search_timeout = arguments[:search_timeout]
+        turn_timeout = arguments[:turn_timeout]
         turns = if arguments[:turns] then arguments[:turns] else 0 end
 
         start_follower = find_and_follow_pipeline(:yaw => yaw, 
                                                   :z => z, 
                                                   :prefered_yaw => prefered_yaw, 
                                                   :speed => speed,
-                                                  :search_timeout => search_timeout)
+                                                  :follow_speed => 0.4,
+                                                  :search_timeout => search_timeout,
+                                                  :do_safe_turn => false,
+                                                  :controlled_turn_on_pipe => false)
 
         sequence = [start_follower]
 
         turns.times do |i|
-            move_back_blind = align_and_move(:yaw => proc { State.pipeline_heading }, 
-                                             :z => z,
-                                             :speed => -0.05, 
-                                             :duration => 1.0)
+            #move_back_blind = align_and_move(:yaw => proc { State.pipeline_heading }, 
+            #                                 :z => z,
+            #                                 :speed => -0.05, 
+            #                                 :duration => 1.0)
+            move_back_controlled = find_and_follow_pipeline(:yaw => proc { State.pipeline_heading }, 
+                                                            :z => z, 
+                                                            :prefered_yaw => prefered_yaw, 
+                                                            :speed => -0.05,
+                                                            :follow_speed => -0.4,
+                                                            :search_timeout => 40, # TODO set correct timeout
+                                                            :mission_timeout => 20,
+                                                            :do_safe_turn => false,
+                                                            :controlled_turn_on_pipe => false)
+            #move_back_controlled.on :start do |event|
+            #    on :follow_pipe do |event|
+            #        Plan.info "Finished controlled back movement. Found pipe."
+            #        emit :success
+            #    end
+            #end
 
             turn_follower = find_and_follow_pipeline(:yaw => proc { State.pipeline_heading }, 
                                        :z => z, 
                                        :speed => speed,
-                                       :prefered_yaw => proc { normalize_angle(State.pipeline_heading + Math::PI)}) 
+                                       :follow_speed => 0.4,
+                                       :prefered_yaw => normalize_angle(prefered_yaw + Math::PI + 0.1), #proc { normalize_angle(prefered_yaw + Math::PI)},
+                                       :search_timeout => 40,  # TODO set correct timeout
+                                       :mission_timeout => 500,
+                                       :do_safe_turn => false,
+                                       :controlled_turn_on_pipe => true)
 
-            sequence << move_back_blind << turn_follower
+            sequence << move_back_controlled << turn_follower
         end
         
         task = Planning::BaseTask.new
