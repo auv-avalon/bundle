@@ -35,14 +35,6 @@ class MainPlanner < Roby::Planning::Planner
                                   :search_timeout => PIPELINE_SEARCH_TIMEOUT,
                                   :turn_timeout => PIPELINE_TURN_TIMEOUT,
                                   :mission_timeout => PIPELINE_MISSION_TIMEOUT)
-        
-        #find_and_follow_pipeline(:yaw => PIPELINE_SEARCH_YAW, 
-        #                         :z => PIPELINE_SEARCH_Z, 
-        #                         :prefered_yaw => PIPELINE_PREFERED_YAW, 
-        #                         :speed => PIPELINE_SEARCH_SPEED,
-        #                         :search_timeout => PIPELINE_SEARCH_TIMEOUT,
-        #                         :mission_timeout => PIPELINE_MISSION_TIMEOUT,
-        #                         :do_safe_turn => true)
     end
     
     method(:sauce12_align_on_pipe) do

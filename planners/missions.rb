@@ -227,10 +227,10 @@ class MainPlanner < Roby::Planning::Planner
                     Plan.info "Following pipeline until END_OF_PIPE is occuring"
                 end
                 
-		# Ensure that we do not perceive the pipeline end we are coming from
+                # Ensure that we do not perceive the pipeline end we are coming from
                 execute do
-		    wait 5
-		end
+                    wait 5
+                end
 
                 #wait detector_child.end_of_pipe_event
                 poll_until detector_child.end_of_pipe_event do
@@ -242,68 +242,6 @@ class MainPlanner < Roby::Planning::Planner
 
                 execute do
                     Plan.info "Possible END_OF_PIPE detected"
-                end
-                
-                if do_safe_turn
-                    SAFE_TURN_TIMEOUT = 2
-                    CONTROLLED_MOVE_BACK_TIMEOUT = 5
-                
-                    safe_turn_timer = Time.now
-                    
-                    # Take away control from detector
-                    execute do
-                        connection = control_child.command_child.disconnect_ports(control_child.controller_child, [['motion_command', 'motion_commands']])
-                    end
-                    
-                    # Move back blindly and pass gates safely
-                    execute {Plan.info "Move back blindly in order to return to pipe and pass gates."}
-                    poll do
-                        if time_over?(safe_turn_timer, SAFE_TURN_TIMEOUT)
-                            Plan.warn "Pipeline follower: safe turn timeout."
-                            transition! 
-                        end
-                        
-                        last_event = detector_child.history.last
-                        if last_event.symbol == :align_auv || last_event.symbol == :follow_pipe
-                            Plan.info "Found pipe after moving back."
-                            transition!
-                        else
-                            motion_command.heading = yaw
-                            motion_command.z = z
-                            motion_command.y_speed = 0
-                            motion_command.x_speed = -0.05 # move back slowly
-                            write_motion_command
-                        end
-                    end
-                    
-                    # Give control back to detector
-                    execute do
-                        control_child.command_child.connect_ports(control_child.controller_child, connection)
-                        follower = detector_child.offshorePipelineDetector_child
-                    end
-                    
-                    # Move back with detector assistance for some time
-                    poll do
-                        if time_over?(safe_turn_timer, SAFE_TURN_TIMEOUT)
-                            Plan.warn "Pipeline follower: safe turn timeout."
-                            transition! 
-                        end
-                    end
-                    
-                    # Turn on pipeline
-                    execute do
-                        follower = detector_child.offshorePipelineDetector_child
-                        follower.prefered_heading = normalize_angle(State.pipeline_heading + Math::PI) #prefered_yaw + Math::PI)
-                        Plan.info "Following pipeline until END_OF_PIPE is occuring"
-                    end
-
-                    wait detector_child.end_of_pipe_event
-
-                    execute do
-                        Plan.info "Possible END_OF_PIPE detected"
-                    end
-                    
-                    #TODO mission timeout in on :start
                 end
                 
             end
