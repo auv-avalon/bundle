@@ -1,5 +1,3 @@
-require 'ruby-debug'
-
 class MainPlanner < Roby::Planning::Planner
 
     describe("dummy mission. to be used for temporary substitution of a real mission.").
