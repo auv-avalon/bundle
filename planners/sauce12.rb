@@ -17,12 +17,12 @@ class MainPlanner < Roby::Planning::Planner
     GOTO_WALL_ALIGNMENT_ANGLE = 0.0 #deg_to_rad(-10)
     GOTO_WALL_TIMEOUT = 90
 
+    BUOY_SEARCH_TIMEOUT = 60
+    BUOY_MISSION_TIMEOUT = 10
     BUOY_SEARCH_Z = -2.5
-    BUOY_SEARCH_YAW = deg_to_rad(40)
-    BUOY_SEARCH_SPEED = 0.5
-#    BUOY_CUT_TIMEOUT = 240
-    BUOY_MODE = :serve_180
-#    BUOY_SEARCH_TIMEOUT =
+    BUOY_SEARCH_YAW = deg_to_rad(0)
+    BUOY_SEARCH_SPEED = 0.0
+    BUOY_MODE = :serve_360
 
 
     method(:sauce12_pipeline) do
@@ -56,14 +56,26 @@ class MainPlanner < Roby::Planning::Planner
     end
     
     method(:sauce12_buoy) do
-        survey_buoy(:yaw => BUOY_SEARCH_YAW,
-                   :z => BUOY_SEARCH_Z,
-                   :speed => BUOY_SEARCH_SPEED,
-                   :mode => BUOY_MODE#,
-                   #:search_timeout => BUOY_SEARCH_TIMEOUT
-                   )    
+        pos_align = align_and_move(:z => -2.7,:yaw => BUOY_SEARCH_YAW)
+
+        s = survey_buoy(:yaw => BUOY_SEARCH_YAW,
+                    :z => BUOY_SEARCH_Z,
+                    :speed => BUOY_SEARCH_SPEED,
+                    :mode => BUOY_MODE,
+                    :search_timeout => BUOY_SEARCH_TIMEOUT,
+                    :mission_timeout => BUOY_MISSION_TIMEOUT
+                   )   
+
+
+        run = Planning::MissionRun.new
+        run.design do
+            start(pos_align)
+            finish(s)
+
+            transition(pos_align, :success => s)
+        end        
     end
-    
+
     method(:sauce12_wall) do
         survey_wall(:z => WALL_SERVOING_Z,
            #        :speed => WALL_SERVOING_SPEED, 
