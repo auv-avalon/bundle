@@ -112,7 +112,7 @@ class MainPlanner < Roby::Planning::Planner
         
         surface = simple_move(:z => 0)
 
-        find_follow_turn_pipeline(:yaw => PIPELINE_SEARCH_YAW, 
+        follow_pipe = find_follow_turn_pipeline(:yaw => PIPELINE_SEARCH_YAW, 
                                   :z => PIPELINE_SEARCH_Z,
                                   :speed => PIPELINE_SEARCH_SPEED,
                                   :prefered_yaw => PIPELINE_PREFERED_YAW,
