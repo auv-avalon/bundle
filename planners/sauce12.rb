@@ -37,6 +37,7 @@ class MainPlanner < Roby::Planning::Planner
                                   :mission_timeout => PIPELINE_MISSION_TIMEOUT)
     end
     
+    # For debugging of pipeline turn (ALIGN_AUV with inverted preferred heading). Assumes that we are on the pipe.
     method(:sauce12_align_on_pipe) do
         find_and_follow_pipeline(:yaw => 0, ## we are already on pipe, so yaw is not important
                                  :z => PIPELINE_SEARCH_Z, 
