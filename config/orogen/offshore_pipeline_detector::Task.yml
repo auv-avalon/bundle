@@ -4,7 +4,7 @@ debugging: 1
 # default value of x
 default_x: 0.4
 # default depth of operation [meter]
-depth: -2.7
+depth: -2.9
 # distance to pipe [meter], 0 = disabled
 distance_to_pipe: 0.0
 # minimum confidence for finding a pipeline
@@ -54,6 +54,7 @@ max_center_dist: 0.4
 min_center_dist: 0.2
 # fallback to ALIGN_AUV if out_of_center is exceeded during FOLLOWING_PIPE
 do_dynamic_aligning: 1
+weak_signal: 0.25
 --- name:studiobad
 invert_colors: 0
 use_channel: 3
