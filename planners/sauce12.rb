@@ -83,7 +83,7 @@ class MainPlanner < Roby::Planning::Planner
             :z => PIPELINE_SEARCH_Z,
             :speed => PIPELINE_SEARCH_SPEED - 0.1,
             :follow_speed => 0.4,
-            :prefered_yaw => 0.01,
+            :prefered_yaw => proc { normalize_angle(State.pipeline_heading + 0.1) },
             :search_timeout => 120,
             :mission_timeout => 6000,
             :do_safe_turn => false,
