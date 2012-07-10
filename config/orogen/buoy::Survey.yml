@@ -30,4 +30,7 @@ strafe_around: 1
 # intensity and direction of strafing (negative is right).
 strafe_intensity: 0.8
 --- name:simulation
+buoy_depth: -2.50
+strafe_intensity: 0.2
+lost_timeout: 60
 
