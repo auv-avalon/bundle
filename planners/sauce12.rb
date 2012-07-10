@@ -76,7 +76,37 @@ class MainPlanner < Roby::Planning::Planner
                    #:servoing_wall_yaw => 0.0, # Math::PI / 2.0,
                    #:ref_distance => 4.5,
                    :timeout => WALL_SERVOING_TIMEOUT,
-                   :corners => 2)
+                   :corners => 1)
+    end
+
+    method(:sauce12_pipeline_and_wall) do
+    
+        follow_pipe = sauce12_pipeline
+
+        align_for_goto_wall = align_and_move(:z => WALL_SERVOING_Z,
+                                             :yaw => GOTO_WALL_ALIGNMENT_ANGLE)
+
+        drive_to_wall = goto_wall(:mission_timeout => GOTO_WALL_TIMEOUT)
+
+        wall = survey_wall(:z => WALL_SERVOING_Z,
+                   :timeout => WALL_SERVOING_TIMEOUT,
+                   :corners => 1)
+
+        surface = simple_move(:z => 0)
+        
+        run = Planning::MissionRun.new
+        run.design do
+            # Define start and end states
+            start(follow_pipe)
+            finish(surface)
+
+            # Set up state machine 
+	        transition(follow_pipe, :success => align_for_goto_wall, :failed => surface)
+            transition(align_for_goto_wall, :success => drive_to_wall, :failed => drive_to_wall)
+            transition(drive_to_wall, :success => wall, :failed => surface)
+            transition(wall, :success => surface, :failed => surface)         
+        end    
+
     end
     
 
@@ -204,6 +234,57 @@ class MainPlanner < Roby::Planning::Planner
             #transition(wall, :success => surface, :failed => surface)            
         end        
         
+    end
+
+
+    ########################################################################
+    # Practice Area Missions                                               #
+    ########################################################################
+
+    PRACTICE_BUOY_SEARCH_YAW = deg_to_rad(180)
+    PRACTICE_PIPELINE_PREFERED_YAW = 0
+
+    method(:sauce12_practice_pipeline) do
+    
+        find_follow_turn_pipeline(:yaw => PIPELINE_SEARCH_YAW, 
+                                  :z => PIPELINE_SEARCH_Z,
+                                  :speed => PIPELINE_SEARCH_SPEED,
+                                  :prefered_yaw => PRACTICE_PIPELINE_PREFERED_YAW,
+                                  :turns => PIPELINE_TURNS,
+                                  :search_timeout => PIPELINE_SEARCH_TIMEOUT,
+                                  :turn_timeout => PIPELINE_TURN_TIMEOUT,
+                                  :mission_timeout => PIPELINE_MISSION_TIMEOUT)
+    end
+
+    method(:sauce12_practice_buoy) do
+        pos_align = align_and_move(:z => BUOY_SEARCH_Z,:yaw => PRACTICE_BUOY_SEARCH_YAW)
+
+        s = survey_buoy(:yaw => PRACTICE_BUOY_SEARCH_YAW,
+                    :z => BUOY_SEARCH_Z,
+                    :speed => BUOY_SEARCH_SPEED,
+                    :mode => BUOY_MODE,
+                    :search_timeout => BUOY_SEARCH_TIMEOUT,
+                    :mission_timeout => BUOY_MISSION_TIMEOUT
+                   )   
+
+
+        run = Planning::MissionRun.new
+        run.design do
+            start(pos_align)
+            finish(s)
+
+            transition(pos_align, :success => s)
+        end        
+    end
+
+    method(:sauce12_practice_wall) do
+        survey_wall(:z => WALL_SERVOING_Z,
+           #        :speed => WALL_SERVOING_SPEED, 
+                   #:initial_wall_yaw => 0.0, # Math::PI / 2.0,
+                   #:servoing_wall_yaw => 0.0, # Math::PI / 2.0,
+                   #:ref_distance => 4.5,
+                   :timeout => WALL_SERVOING_TIMEOUT,
+                   :corners => 0)
     end
 
 end
