@@ -1,21 +1,21 @@
 class MainPlanner < Roby::Planning::Planner
 
-    PIPELINE_SEARCH_SPEED = 0.50
+    PIPELINE_SEARCH_SPEED = 0.40
     PIPELINE_SEARCH_Z = -2.7
     PIPELINE_SEARCH_YAW = Math::PI / 2.0
     PIPELINE_PREFERED_YAW = Math::PI ### MATH::PI ==> turn left;    0 ==> turn right
 #    PIPELINE_STABILIZE_YAW = Math::PI / 2.0
-    PIPELINE_SEARCH_TIMEOUT = 160
+    PIPELINE_SEARCH_TIMEOUT = 120
     PIPELINE_TURN_TIMEOUT = 50
-    PIPELINE_MISSION_TIMEOUT = 500
+    PIPELINE_MISSION_TIMEOUT = 360
     PIPELINE_TURNS = 1
 
     WALL_SERVOING_Z = -1.1
-    WALL_SERVOING_TIMEOUT = 3
+    WALL_SERVOING_TIMEOUT = 180
     WALL_ALIGNMENT_ANGLE = Math::PI/2.0
     
-    GOTO_WALL_ALIGNMENT_ANGLE = 0.0 #deg_to_rad(-10)
-    GOTO_WALL_TIMEOUT = 90
+    GOTO_WALL_ALIGNMENT_ANGLE = 0.0
+    GOTO_WALL_TIMEOUT = 30
 
     BUOY_SEARCH_TIMEOUT = 60
     BUOY_MISSION_TIMEOUT = 10
@@ -154,24 +154,28 @@ class MainPlanner < Roby::Planning::Planner
         
 #       buoy_and_cut = dummy(:msg => "BuoyDetector")
 
-        drive_to_wall = goto_wall(:mission_timeout => GOTO_WALL_TIMEOUT = 90) # TODO mission timeout
+        #drive_to_wall = goto_wall(:mission_timeout => GOTO_WALL_TIMEOUT = 90) # TODO mission timeout
 
-        wall = survey_wall(:z => WALL_SERVOING_Z,
-                   #        :speed => WALL_SERVOING_SPEED, 
-                           #:initial_wall_yaw => 0.0, # Math::PI / 2.0,
-                           #:servoing_wall_yaw => 0.0, # Math::PI / 2.0,
-                           #:ref_distance => 4.5,
-                           :timeout => WALL_SERVOING_TIMEOUT,
-                           :corners => 2)
+        #wall = survey_wall(:z => WALL_SERVOING_Z,
+        #           #        :speed => WALL_SERVOING_SPEED, 
+        #                   #:initial_wall_yaw => 0.0, # Math::PI / 2.0,
+        #                   #:servoing_wall_yaw => 0.0, # Math::PI / 2.0,
+        #                   #:ref_distance => 4.5,
+        #                   :timeout => WALL_SERVOING_TIMEOUT,
+        #                   :corners => 2)
 
         #nav = navigate(:waypoint => Eigen::Vector3.new(0.0, 0.0, -2.2))
         
-        align_for_goto_wall = align_and_move(:z => WALL_SERVOING_Z,
-                                             :yaw => GOTO_WALL_ALIGNMENT_ANGLE)
+        #align_for_goto_wall = align_and_move(:z => WALL_SERVOING_Z,
+        #                                     :yaw => GOTO_WALL_ALIGNMENT_ANGLE)
         
-        align_to_wall = align_and_move(:z => WALL_SERVOING_Z,
-                                       :yaw => WALL_ALIGNMENT_ANGLE)
+        #align_to_wall = align_and_move(:z => WALL_SERVOING_Z,
+        #                               :yaw => WALL_ALIGNMENT_ANGLE)
         
+	#left_area_move_back = simple_move(:forward_speed => -PIPELINE_SEARCH_SPEED,
+	#                                  :z => WALL_SERVOING_Z,
+#					  :yaw => proc {State.pipeline_heading},
+#					  :duration => 5)
 
         run = Planning::MissionRun.new
         run.design do
@@ -180,7 +184,7 @@ class MainPlanner < Roby::Planning::Planner
             start(follow_pipe)
             #start(align_for_goto_wall)
             finish(surface)
-            finish(wall)
+            #finish(wall)
             
             
             
@@ -190,11 +194,21 @@ class MainPlanner < Roby::Planning::Planner
             
             #transition(dive_and_align, :success => follow_pipe)
             
-            transition(follow_pipe, :success => align_for_goto_wall, :failed => surface)
-            transition(align_for_goto_wall, :success => drive_to_wall, :failed => surface)
-            transition(drive_to_wall, :success => align_to_wall, :failed => surface)
-            transition(align_to_wall, :success => wall, :failed => surface)
-            transition(wall, :success => surface, :failed => surface)            
+	    ### right area
+            
+	    transition(follow_pipe, :success => surface, :failed => surface)
+	    #transition(follow_pipe, :success => align_for_goto_wall, :failed => surface)
+            #transition(align_for_goto_wall, :success => drive_to_wall, :failed => surface)
+            
+	    ### left area
+	    #transition(follow_pipe, :success => left_area_move_back, :failed => surface)
+            #transition(left_area_move_back, :success => align_for_goto_wall, :failed => surface)
+            #transition(align_for_goto_wall, :success => drive_to_wall, :failed => surface)
+            
+
+            #transition(drive_to_wall, :success => align_to_wall, :failed => surface)
+            #transition(align_to_wall, :success => wall, :failed => surface)
+            #transition(wall, :success => surface, :failed => surface)            
         end        
         
     end
