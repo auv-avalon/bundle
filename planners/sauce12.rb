@@ -8,11 +8,15 @@ class MainPlanner < Roby::Planning::Planner
     PIPELINE_SEARCH_TIMEOUT = 160
     PIPELINE_TURN_TIMEOUT = 50
     PIPELINE_MISSION_TIMEOUT = 500
+    PIPELINE_MISSION_TIMEOUT = 120
     PIPELINE_TURNS = 1
 
     WALL_SERVOING_Z = -2.2
     WALL_SERVOING_SPEED = -0.25
     WALL_SERVOING_TIMEOUT = 240
+    WALL_ALIGNMENT_ANGLE = Math::PI/2.0
+    
+    GOTO_WALL_ALIGNMENT_ANGLE = 0.0 #deg_to_rad(-10)
 
     BUOY_SEARCH_Z = -2.5
     BUOY_SEARCH_YAW = deg_to_rad(40)
@@ -63,12 +67,12 @@ class MainPlanner < Roby::Planning::Planner
     
     method(:sauce12_wall) do
         survey_wall(:z => WALL_SERVOING_Z,
-                             :speed => WALL_SERVOING_SPEED, 
-                             #:initial_wall_yaw => 0.0, # Math::PI / 2.0,
-                             #:servoing_wall_yaw => 0.0, # Math::PI / 2.0,
-                             :ref_distance => 4.5,
-                             :timeout => WALL_SERVOING_TIMEOUT,
-                             :corners => 1)
+           #        :speed => WALL_SERVOING_SPEED, 
+                   #:initial_wall_yaw => 0.0, # Math::PI / 2.0,
+                   #:servoing_wall_yaw => 0.0, # Math::PI / 2.0,
+                   #:ref_distance => 4.5,
+                   :timeout => WALL_SERVOING_TIMEOUT,
+                   :corners => 2)
     end
     
 
@@ -117,7 +121,7 @@ class MainPlanner < Roby::Planning::Planner
     method(:sauce12_complete) do
 
         # Submerge and align to start heading
-        dive_and_align = align_and_move(:z => PIPELINE_SEARCH_Z, :yaw => PIPELINE_SEARCH_YAW)
+        #dive_and_align = align_and_move(:z => PIPELINE_SEARCH_Z, :yaw => PIPELINE_SEARCH_YAW)
         
         surface = simple_move(:z => 0)
 
@@ -150,21 +154,36 @@ class MainPlanner < Roby::Planning::Planner
                            :corners => 2)
 
         #nav = navigate(:waypoint => Eigen::Vector3.new(0.0, 0.0, -2.2))
-
+        
+        align_for_goto_wall = align_and_move(:z => WALL_SERVOING_Z,
+                                             :yaw => GOTO_WALL_ALIGNMENT_ANGLE)
+        
+        align_to_wall = align_and_move(:z => WALL_SERVOING_Z,
+                                       :yaw => WALL_ALIGNMENT_ANGLE)
+        
 
         run = Planning::MissionRun.new
         run.design do
             # Define start and end states
             #start(dive_and_align)
             start(follow_pipe)
+            #start(align_for_goto_wall)
             finish(surface)
             finish(wall)
             
-            # Set up state machine
-            #transition(dive_and_align, :success => follow_pipe)
-            transition(follow_pipe, :success => drive_to_wall, :failed => surface)
-            transition(drive_to_wall, :success => wall, :failed => surface)
             
+            
+            # Set up state machine
+            
+            # TODO Do not surface all the time in case of an error! Do other missions!
+            
+            #transition(dive_and_align, :success => follow_pipe)
+            
+            transition(follow_pipe, :success => align_for_goto_wall, :failed => surface)
+            transition(align_for_goto_wall, :success => drive_to_wall, :failed => surface)
+            transition(drive_to_wall, :success => align_to_wall, :failed => surface)
+            transition(align_to_wall, :success => wall, :failed => surface)
+            transition(wall, :success => surface, :failed => surface)            
         end        
         
     end

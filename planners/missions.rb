@@ -1,3 +1,5 @@
+require 'ruby-debug'
+
 class MainPlanner < Roby::Planning::Planner
 
     describe("dummy mission. to be used for temporary substitution of a real mission.").
@@ -584,6 +586,11 @@ class MainPlanner < Roby::Planning::Planner
 	    is_corner_detected = false;
 
         poll do
+            if timeout and time_over?(start_time, timeout)
+                Plan.warn "Mission timeout wall servoing (survey_wall)!"
+                emit :success
+            end
+                
             if detector_child.misconfiguration?
                 Plan.info "Misconfiguration failure on sonar found"
                 emit :failed
@@ -598,8 +605,6 @@ class MainPlanner < Roby::Planning::Planner
 		    end
 
             # transition! if corners and corner_counter >= corners
-
-            transition! if timeout and time_over?(start_time, timeout)
         end
 
             emit :success
@@ -669,7 +674,7 @@ class MainPlanner < Roby::Planning::Planner
                 end
             end
             
-            
+            emit :success
         end
     end
 end
