@@ -18,9 +18,10 @@ class MainPlanner < Roby::Planning::Planner
         required_arg("z", "initial z value for finding a buoy").
         required_arg("speed", "search speed for a buoy").
         optional_arg("mode", ":serve_180, :serve_360 (180 or 360 degree servoing").
-        optional_arg("search_timeout", "search timeout for finding buoy")#.
+        optional_arg("search_timeout", "search timeout for finding buoy").
+        optional_arg("mission_timeout", "timeout for the whole mission incl. search").
         #optional_arg("survey_distance", "distance to a buoy").
-        #optional_arg("strafe_distance", "strafing distance for :serve_180")
+        optional_arg("strafe_distance", "strafing distance for :serve_180")
     method(:survey_buoy) do
         yaw = arguments[:yaw]
         z = arguments[:z]
@@ -28,12 +29,11 @@ class MainPlanner < Roby::Planning::Planner
         mode = arguments[:mode]
         #servey_distance = arguments[:servey_distance]
         search_timeout = arguments[:search_timeout]
-        #strafe_distance = arguments[:strafe_distance]
+        strafe_distance = arguments[:strafe_distance]
 
         # Specify buoy task operations for later use
         buoy = self.buoy
         buoy_task = buoy.script do
-            Plan.info "Debug: in Buoy Script"
 
             execute { yaw = yaw.call } if yaw.respond_to?(:call)
 
@@ -43,6 +43,7 @@ class MainPlanner < Roby::Planning::Planner
             wait_any detector_child.start_event
 
             connection = nil
+            start_time = nil
             
             # Take motion control away from detector task
             execute do
@@ -53,9 +54,9 @@ class MainPlanner < Roby::Planning::Planner
                                 
                 connection = control_child.command_child.disconnect_ports(control_child.controller_child, [['motion_command', 'motion_commands']])
             
-                buoy_servoing.orogen_task.buoy_depth = z
+                #buoy_servoing.orogen_task.buoy_depth = z
                 #buoy_servoing.orogen_task.max_buoy_distance = servey_distance if servey_distance
-                #buoy_servoing.orogen_task.strafe_angle = strafe_distance if strafe_distance
+                buoy_servoing.orogen_task.strafe_angle = strafe_distance if strafe_distance
 
                 if mode
                    buoy_servoing.orogen_task.strafe_around = true if mode == :serve_360
@@ -76,7 +77,7 @@ class MainPlanner < Roby::Planning::Planner
                 last_event = detector_child.history.last
 
                 if search_timeout and time_over?(start_time, search_timeout)
-                    Plan.info "Buoy not found. Go to next task"
+                    Plan.info "Buoy search timeout."
                     emit :success
                 end
 
@@ -92,13 +93,13 @@ class MainPlanner < Roby::Planning::Planner
             end
 
             if mode # TODO no else case!! mode is optional argument!
-                start_time = nil
-
-                execute do
-                    start_time = Time.now
-                end
-                    
+ 
                 poll do
+                    if mission_timeout and time_over?(start_time, mision_timeout)
+                        Plan.info "Buoy mission timeout."
+                        emit :success
+                    end
+                
                     if detector_child.buoy_lost? 
                         # TODO: recovery behavior!
                         Plan.info "Buoy lost. Abort."
@@ -465,8 +466,6 @@ class MainPlanner < Roby::Planning::Planner
         turn_timeout = arguments[:turn_timeout]
         turns = if arguments[:turns] then arguments[:turns] else 0 end
 
-	Plan.info "search timeout: #{search_timeout}"
-
         start_follower = find_and_follow_pipeline(:yaw => yaw, 
                                                   :z => z, 
                                                   :prefered_yaw => prefered_yaw, 
@@ -591,7 +590,7 @@ class MainPlanner < Roby::Planning::Planner
                 
             if detector_child.misconfiguration?
                 Plan.info "Misconfiguration failure on sonar found"
-                emit :failed
+                emit :failed #  TODO handle this!
             end
 
 		    if detector_child.detected_corner? and is_corner_detected == false
