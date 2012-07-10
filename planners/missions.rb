@@ -132,6 +132,8 @@ class MainPlanner < Roby::Planning::Planner
         controlled_turn_on_pipe = arguments[:controlled_turn_on_pipe] || false
         
         PIPELINE_SEARCH_CANDIDATE_SPEED = if speed > 0 then 0.1 else -0.1 end
+        #PIPELINE_SEARCH_CANDIDATE_SPEED = if follow_speed > 0 then 0.1 else -0.1 end
+	
         #PIPELINE_DETECTOR_CHANNEL = 3
 
         pipeline = self.pipeline
@@ -152,7 +154,7 @@ class MainPlanner < Roby::Planning::Planner
                 
                 follower = detector_child.offshorePipelineDetector_child
                 follower.orogen_task.default_x = follow_speed
-                follower.orogen_task.weak_signal_x = 0.5 * follow_speed
+                follower.orogen_task.weak_signal_x = 0.25 * follow_speed
 
                 if controlled_turn_on_pipe
                     # set preferred heading later in order to avoid immediate align_auv
@@ -162,6 +164,7 @@ class MainPlanner < Roby::Planning::Planner
                     
                     Plan.info "Executing controlled turn on pipe on yaw #{yaw} with z #{z} using channel #{follower.orogen_task.use_channel}. Preferred yaw: #{prefered_yaw}"
                 else
+		    Plan.info "Overriding prefered heading to #{prefered_yaw}" if prefered_yaw
                     follower.orogen_task.prefered_heading = prefered_yaw if prefered_yaw
                     follower.orogen_task.depth = z
 
@@ -209,7 +212,7 @@ class MainPlanner < Roby::Planning::Planner
                    follower = detector_child.offshorePipelineDetector_child
                    follower.orogen_task.prefered_heading = prefered_yaw if prefered_yaw
                    follower.orogen_task.default_x = follow_speed
-                   follower.orogen_task.weak_signal_x = 0.5 * follow_speed
+                   follower.orogen_task.weak_signal_x = 0.25 * follow_speed
                    control_child.command_child.connect_ports(control_child.controller_child, connection)
                 end
 
@@ -223,6 +226,11 @@ class MainPlanner < Roby::Planning::Planner
                 execute do
                     Plan.info "Following pipeline until END_OF_PIPE is occuring"
                 end
+                
+		# Ensure that we do not perceive the pipeline end we are coming from
+                execute do
+		    wait 5
+		end
 
                 #wait detector_child.end_of_pipe_event
                 poll_until detector_child.end_of_pipe_event do
@@ -340,6 +348,7 @@ class MainPlanner < Roby::Planning::Planner
                                                   :speed => speed,
                                                   :follow_speed => 0.4,
                                                   :search_timeout => search_timeout,
+						  :mission_timeout => 500,
                                                   :do_safe_turn => false,
                                                   :controlled_turn_on_pipe => false)
 
@@ -372,7 +381,7 @@ class MainPlanner < Roby::Planning::Planner
                                        :follow_speed => 0.4,
                                        :prefered_yaw => proc { normalize_angle(State.pipeline_heading + Math::PI + 0.1) }, #proc { normalize_angle(prefered_yaw + Math::PI)},
                                        :search_timeout => 40,  # TODO set correct timeout
-                                       :mission_timeout => 500,
+                                       :mission_timeout => 180,
                                        :do_safe_turn => false,
                                        :controlled_turn_on_pipe => true)
 
