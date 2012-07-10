@@ -95,7 +95,7 @@ class MainPlanner < Roby::Planning::Planner
                 if detector_child.buoy_lost? 
                     # TODO: recovery behavior!
                     Plan.info "Buoy lost. Abort."
-                    emit :failed
+                    emit :success
                 end
 
                 if detector_child.strafe_finished?
