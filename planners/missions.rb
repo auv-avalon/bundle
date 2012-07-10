@@ -117,7 +117,7 @@ class MainPlanner < Roby::Planning::Planner
         required_arg("follow_speed", "speed on pipeline following").
         optional_arg("prefered_yaw", "alignment yaw and enabling pipeline following").
         optional_arg("search_timeout", "timeout for searching pipeline").
-        optional_arg("mission_timeout", "timeout for the whole pipeline following. expected to be greater than search_timeout.").
+        optional_arg("mission_timeout", "timeout for the whole pipeline following incl. search. expected to be greater than search_timeout.").
         optional_arg("do_safe_turn", "set to true if you want to do one safe turn and follow the pipe until the other end.").
         optional_arg("controlled_turn_on_pipe", "set to true if you want to do a controlled turn on the pipe as soon as possible. this is acquired by inverting the preferred heading.")
     method(:find_and_follow_pipeline) do
@@ -132,10 +132,7 @@ class MainPlanner < Roby::Planning::Planner
         controlled_turn_on_pipe = arguments[:controlled_turn_on_pipe] || false
         
         PIPELINE_SEARCH_CANDIDATE_SPEED = if speed > 0 then 0.1 else -0.1 end
-        #PIPELINE_SEARCH_CANDIDATE_SPEED = if follow_speed > 0 then 0.1 else -0.1 end
 	
-        #PIPELINE_DETECTOR_CHANNEL = 3
-
         pipeline = self.pipeline
         task = pipeline.script do
             data_reader 'pipeline_info', ['detector', 'offshorePipelineDetector', 'pipeline']
@@ -152,6 +149,7 @@ class MainPlanner < Roby::Planning::Planner
                  # Take away control from detector in order to move forward blind to search pipe
                  connection = control_child.command_child.disconnect_ports(control_child.controller_child, [['motion_command', 'motion_commands']])
                 
+                # TODO maybe remove this?
                 follower = detector_child.offshorePipelineDetector_child
                 follower.orogen_task.default_x = follow_speed
                 follower.orogen_task.weak_signal_x = 0.25 * follow_speed
@@ -168,8 +166,6 @@ class MainPlanner < Roby::Planning::Planner
                     follower.orogen_task.prefered_heading = prefered_yaw if prefered_yaw
                     follower.orogen_task.depth = z
 
-                    
-                    #follower.orogen_task.use_channel = PIPELINE_DETECTOR_CHANNEL
                     Plan.info "Searching pipeline on yaw #{yaw} with z #{z} using channel #{follower.orogen_task.use_channel}. Preferred yaw: #{prefered_yaw}"
                 
                 end
@@ -190,23 +186,23 @@ class MainPlanner < Roby::Planning::Planner
 
                 last_event = detector_child.history.last
                 if last_event.symbol == :check_candidate
+                    # Reduce speed to take time for checking candidate
                     motion_command.x_speed = PIPELINE_SEARCH_CANDIDATE_SPEED
-                elsif controlled_turn_on_pipe
-                    # We are already on the pipe so no need to find it.
-                    if detector_child.follow_pipe? || detector_child.align_auv?
-                        write_motion_command ## for z
-                        transition!
-                    end
-                elsif detector_child.found_pipe? || detector_child.align_auv?
+                elsif detector_child.found_pipe? || detector_child.follow_pipe? || detector_child.align_auv?
+                    # Give control to detector
                     Plan.info "Pipeline detected and found"
                     transition!
                 else
+                    # Simply drive forward (or backward if negative speed)
                     motion_command.x_speed = speed
+                    if controlled_turn_timeout
+                        # TODO We lost the pipe in a case where we were absolutely sure of being on it. Recovery might be hard.
+                    end
                 end
                 write_motion_command
             end
 
-            if prefered_yaw
+            if prefered_yaw # Careful: We do not follow the pipe at all in that case!
                 execute do
                    # set preferred heading => go to align_auv
                    follower = detector_child.offshorePipelineDetector_child
@@ -215,8 +211,8 @@ class MainPlanner < Roby::Planning::Planner
                    follower.orogen_task.weak_signal_x = 0.25 * follow_speed
                    control_child.command_child.connect_ports(control_child.controller_child, connection)
                 end
-
-                #wait detector_child.follow_pipe_event
+                
+                # Wait for alignment (preferred heading)
                 poll_until detector_child.follow_pipe_event do
                     if mission_timeout and time_over?(start_time, mission_timeout)
                         Plan.warn "Mission timeout pipeline following (find_and_follow_pipeline)!"
@@ -315,7 +311,7 @@ class MainPlanner < Roby::Planning::Planner
 
             turn_follower = find_and_follow_pipeline(:yaw => proc { State.pipeline_heading }, 
                                        :z => z, 
-                                       :speed => speed,
+                                       :speed => speed, # dangerous but o.k. because we are already on the pipe and search timeout will be fired immediately
                                        :follow_speed => 0.4,
                                        :prefered_yaw => proc { normalize_angle(State.pipeline_heading + Math::PI + 0.1) }, #proc { normalize_angle(prefered_yaw + Math::PI)},
                                        :search_timeout => 40,  # TODO set correct timeout

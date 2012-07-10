@@ -1,6 +1,6 @@
 class MainPlanner < Roby::Planning::Planner
 
-    PIPELINE_SEARCH_SPEED = 0.40
+    PIPELINE_SEARCH_SPEED = 0.50
     PIPELINE_SEARCH_Z = -2.7
     PIPELINE_SEARCH_YAW = Math::PI / 2.0
     PIPELINE_PREFERED_YAW = Math::PI ### MATH::PI ==> turn left;    0 ==> turn right
