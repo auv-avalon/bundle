@@ -28,6 +28,7 @@ Cmp::AsvDetector.specialize 'camera_left' => CameraUnicap::CameraTask do
 end
 
 define('asv', Cmp::VisualServoing.use(Cmp::AsvDetector))
+define('asv_detector', Cmp::AsvDetector)
 
 # !!! Configure tasks for specific location !!!
 detector_conf = ["default"]
