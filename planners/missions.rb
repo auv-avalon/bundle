@@ -228,9 +228,9 @@ class MainPlanner < Roby::Planning::Planner
                 end
                 
                 # Ensure that we do not perceive the pipeline end we are coming from
-                execute do
+                #execute do
                     wait 5
-                end
+                #end
 
                 #wait detector_child.end_of_pipe_event
                 poll_until detector_child.end_of_pipe_event do
