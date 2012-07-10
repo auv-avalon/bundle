@@ -76,7 +76,37 @@ class MainPlanner < Roby::Planning::Planner
                    #:servoing_wall_yaw => 0.0, # Math::PI / 2.0,
                    #:ref_distance => 4.5,
                    :timeout => WALL_SERVOING_TIMEOUT,
-                   :corners => 2)
+                   :corners => 1)
+    end
+
+    method(:sauce12_pipeline_and_wall) do
+    
+        follow_pipe = sauce12_pipeline
+
+        align_for_goto_wall = align_and_move(:z => WALL_SERVOING_Z,
+                                             :yaw => GOTO_WALL_ALIGNMENT_ANGLE)
+
+        drive_to_wall = goto_wall(:mission_timeout => GOTO_WALL_TIMEOUT)
+
+        wall = survey_wall(:z => WALL_SERVOING_Z,
+                   :timeout => WALL_SERVOING_TIMEOUT,
+                   :corners => 1)
+
+        surface = simple_move(:z => 0)
+        
+        run = Planning::MissionRun.new
+        run.design do
+            # Define start and end states
+            start(follow_pipe)
+            finish(surface)
+
+            # Set up state machine 
+	        transition(follow_pipe, :success => align_for_goto_wall, :failed => surface)
+            transition(align_for_goto_wall, :success => drive_to_wall, :failed => drive_to_wall)
+            transition(drive_to_wall, :success => wall, :failed => surface)
+            transition(wall, :success => surface, :failed => surface)         
+        end    
+
     end
     
 
