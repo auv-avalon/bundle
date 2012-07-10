@@ -52,6 +52,15 @@ class MainPlanner < Roby::Planning::Planner
                                  :do_safe_turn => false)
     end
     
+    method(:sauce12_buoy) do
+        survey_buoy(:yaw => BUOY_SEARCH_YAW,
+                   :z => BUOY_SEARCH_Z,
+                   :speed => BUOY_SEARCH_SPEED,
+                   :mode => BUOY_MODE#,
+                   #:search_timeout => BUOY_SEARCH_TIMEOUT
+                   )    
+    end
+    
     method(:sauce12_wall) do
         survey_wall(:z => WALL_SERVOING_Z,
                              :speed => WALL_SERVOING_SPEED, 
