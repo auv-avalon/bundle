@@ -75,7 +75,7 @@ class MainPlanner < Roby::Planning::Planner
                 end
 
                 # Buoy detected?
-                if detector_child.buoy_detected?
+                if detector_child.buoy_detected? or detector_child.buoy_arrived?
                     # Give control back to detector task
                     Plan.info "Buoy detected: Start Servoing"
                     control_child.command_child.connect_ports(control_child.controller_child, connection)
@@ -93,7 +93,6 @@ class MainPlanner < Roby::Planning::Planner
                 end
 
                 if detector_child.buoy_lost? 
-                    # TODO: recovery behavior!
                     Plan.info "Buoy lost. Abort."
                     emit :success
                 end
@@ -389,17 +388,8 @@ class MainPlanner < Roby::Planning::Planner
     describe("run a complete wall servoing using current alignment to wall").
         required_arg("z", "servoing depth").
         required_arg("corners", "number of serving corners").
-        #optional_arg("speed", "servoing speed for wall survey").
-        #optional_arg("initial_wall_yaw", "servoing wall in this direction").
-        #optional_arg("servoing_wall_yaw", "direction for a wall in survey").
-        #optional_arg("ref_distance", "reference distance to wall").
         optional_arg("timeout", "timeout after successful corner passing")        
     method(:survey_wall) do
-        servoing_wall_yaw = arguments[:servoing_wall_yaw]
-        z = arguments[:z]
-        initial_wall_yaw = arguments[:initial_wall_yaw]
-        speed = arguments[:speed]
-        ref_distance = arguments[:ref_distance]
         corners = arguments[:corners]
         timeout = arguments[:timeout]
 
@@ -407,35 +397,6 @@ class MainPlanner < Roby::Planning::Planner
         roby_task = wall_servoing.script do
             wait_any detector_child.start_event
             wait_any control_child.command_child.start_event
-
-            execute do 
-                survey = detector_child.servoing_child
-                #survey.orogen_task.wall_distance = ref_distance if ref_distance
-                #survey.orogen_task.servoing_wall_direction = servoing_wall_yaw if servoing_wall_yaw
-                #survey.orogen_task.initial_wall_direction = initial_wall_yaw if initial_wall_yaw
-                #survey.orogen_task.servoing_speed = speed if speed
-                #survey.orogen_task.right_opening_angle = 0.5 * Math::PI
-                #survey.orogen_task.left_opening_angle = 0.35 * Math::PI
-                #survey.orogen_task.fixed_depth = z
-
-                sonar = detector_child.sonar_child 
-
-                if robot_name?(:simulation)
-                    #Plan.info "Overwrite configuration on avalon_simulation::SonarTop"
-                    #sonar.orogen_task.start_angle = 0.75 * Math::PI
-                    #sonar.orogen_task.end_angle = 0.0
-                    #sonar.orogen_task.maximum_distance = 10.0
-                else
-                    #Plan.info "Overwrite configuration on sonar_tritech::Micron"
-                    #sonar_config = sonar.orogen_task.config
-                    #sonar_config.rightLimit.rad = 0.0
-                    #sonar_config.leftLimit.rad = 0.85 * Math::PI
-                    #sonar_config.cont = 0.0
-                    #sonar_config.initialGain = 0.5
-                    #sonar_config.maximumDistance = 10.0
-                    #sonar.orogen_task.config = sonar_config
-                end
-            end
 
             execute do
                 Plan.info "Survey #{timeout} seconds until timeout"
@@ -470,7 +431,7 @@ class MainPlanner < Roby::Planning::Planner
 		    end
 
             # transition! if corners and corner_counter >= corners
-        end
+            end
 
             emit :success
         end
