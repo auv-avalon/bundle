@@ -24,4 +24,8 @@ ping_pong_mode: true
 left_limit: 0.05
 right_limit: -0.05
 ping_pong_mode: true
+--- name:wall_servoing_front_far
+ping_pong_mode: 1
+left_limit: 0.785
+right_limit: -0.785
 
