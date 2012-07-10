@@ -49,7 +49,7 @@ class MainPlanner < Roby::Planning::Planner
     end
     
     method(:sauce12_buoy) do
-        pos_align = align_and_move(:z => -2.7,:yaw => BUOY_SEARCH_YAW)
+        pos_align = align_and_move(:z => BUOY_SEARCH_Z,:yaw => BUOY_SEARCH_YAW)
 
         s = survey_buoy(:yaw => BUOY_SEARCH_YAW,
                     :z => BUOY_SEARCH_Z,
