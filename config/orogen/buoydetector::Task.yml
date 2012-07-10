@@ -1,3 +1,7 @@
+##
+## !!!!! THIS IS THE OLD BUOY DETECTOR!!! THIS FILE EXISTS JUST FOR BACKWARD COMPATIBILITY!!! [2012-07-10]
+##
+##
 --- name:default
 lost_timeout: 15
 # number of frames a buoy is not detected in order to set BUOY_LOST
