@@ -8,15 +8,14 @@ class MainPlanner < Roby::Planning::Planner
     PIPELINE_SEARCH_TIMEOUT = 160
     PIPELINE_TURN_TIMEOUT = 50
     PIPELINE_MISSION_TIMEOUT = 500
-    PIPELINE_MISSION_TIMEOUT = 120
     PIPELINE_TURNS = 1
 
-    WALL_SERVOING_Z = -2.2
-    WALL_SERVOING_SPEED = -0.25
-    WALL_SERVOING_TIMEOUT = 240
+    WALL_SERVOING_Z = -1.1
+    WALL_SERVOING_TIMEOUT = 3
     WALL_ALIGNMENT_ANGLE = Math::PI/2.0
     
     GOTO_WALL_ALIGNMENT_ANGLE = 0.0 #deg_to_rad(-10)
+    GOTO_WALL_TIMEOUT = 90
 
     BUOY_SEARCH_Z = -2.5
     BUOY_SEARCH_YAW = deg_to_rad(40)
@@ -143,7 +142,7 @@ class MainPlanner < Roby::Planning::Planner
         
 #       buoy_and_cut = dummy(:msg => "BuoyDetector")
 
-        drive_to_wall = goto_wall() # TODO mission timeout
+        drive_to_wall = goto_wall(:mission_timeout => GOTO_WALL_TIMEOUT = 90) # TODO mission timeout
 
         wall = survey_wall(:z => WALL_SERVOING_Z,
                    #        :speed => WALL_SERVOING_SPEED, 
