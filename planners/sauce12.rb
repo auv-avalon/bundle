@@ -6,8 +6,8 @@ class MainPlanner < Roby::Planning::Planner
     PIPELINE_PREFERED_YAW = Math::PI ### MATH::PI ==> turn left;    0 ==> turn right
 #    PIPELINE_STABILIZE_YAW = Math::PI / 2.0
     PIPELINE_SEARCH_TIMEOUT = 160
-    PIPELINE_TURN_TIMEOUT = 5
-    PIPELINE_MISSION_TIMEOUT = 120
+    PIPELINE_TURN_TIMEOUT = 50
+    PIPELINE_MISSION_TIMEOUT = 500
     PIPELINE_TURNS = 1
 
     WALL_SERVOING_Z = -2.2
@@ -92,7 +92,7 @@ class MainPlanner < Roby::Planning::Planner
             :z => PIPELINE_SEARCH_Z,
             :speed => PIPELINE_SEARCH_SPEED - 0.1,
             :follow_speed => 0.4,
-            :prefered_yaw => 0.01,
+            :prefered_yaw => proc { normalize_angle(State.pipeline_heading + 0.1) },
             :search_timeout => 120,
             :mission_timeout => 6000,
             :do_safe_turn => false,
@@ -121,7 +121,7 @@ class MainPlanner < Roby::Planning::Planner
         
         surface = simple_move(:z => 0)
 
-        find_follow_turn_pipeline(:yaw => PIPELINE_SEARCH_YAW, 
+        follow_pipe = find_follow_turn_pipeline(:yaw => PIPELINE_SEARCH_YAW, 
                                   :z => PIPELINE_SEARCH_Z,
                                   :speed => PIPELINE_SEARCH_SPEED,
                                   :prefered_yaw => PIPELINE_PREFERED_YAW,
