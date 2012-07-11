@@ -88,9 +88,7 @@ class MainPlanner < Roby::Planning::Planner
 
         drive_to_wall = goto_wall(:mission_timeout => GOTO_WALL_TIMEOUT)
 
-        wall = survey_wall(:z => WALL_SERVOING_Z,
-                   :timeout => WALL_SERVOING_TIMEOUT,
-                   :corners => 1)
+        wall = sauce12_wall
 
         surface = simple_move(:z => 0)
         
