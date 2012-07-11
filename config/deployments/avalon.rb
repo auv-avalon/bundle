@@ -69,7 +69,7 @@ add_mission(Cmp::ModemPositionOutput)
 #add_mission('left_unicap_camera')
 #add_mission('right_unicap_camera')
 
-#add_mission('gpsd')
+add_mission('gps')
 add_mission('sonar')
 add_mission('sonar_rear')
 
