@@ -39,6 +39,8 @@ class MainPlanner < Roby::Planning::Planner
     
    
     method(:sauce12_buoy) do
+        sequence = []
+
         pos_align = align_and_move(:z => BUOY_SEARCH_Z,:yaw => BUOY_SEARCH_YAW)
 
         s = survey_buoy(:yaw => BUOY_SEARCH_YAW,
@@ -49,13 +51,10 @@ class MainPlanner < Roby::Planning::Planner
                     :mission_timeout => BUOY_MISSION_TIMEOUT
                    )   
 
-        run = Planning::MissionRun.new
-        run.design do
-            start(pos_align)
-            finish(s)
-
-            transition(pos_align, :success => s, :failed => s)
-        end        
+        task = Planning::BaseTask.new
+        sequence << pos_align << s
+        task.add_task_sequence(sequence)
+        task
     end
 
     method(:sauce12_wall) do
@@ -88,14 +87,14 @@ class MainPlanner < Roby::Planning::Planner
 
         surface = simple_move(:z => 0)
         
-        run = Planning::MissionRun.new
+        run = Planning::MissionRun.new(:timeout => 10.0 * 60.0)
         run.design do
             # Define start and end states
             start(follow_pipe)
             finish(surface)
 
             # Set up state machine 
-	        transition(follow_pipe, :success => align_for_goto_wall, :failed => surface)
+	    transition(follow_pipe, :success => align_for_goto_wall, :failed => surface)
             transition(align_for_goto_wall, :success => drive_to_wall, :failed => drive_to_wall)
             transition(drive_to_wall, :success => wall, :failed => surface)
             transition(wall, :success => surface, :failed => surface)         
@@ -129,7 +128,7 @@ class MainPlanner < Roby::Planning::Planner
             :do_safe_turn => false,
             :controlled_turn_on_pipe => false)
 
-        run = Planning::MissionRun.new
+        run = Planning::MissionRun.new(:timeout => 1.0 * 60.0)
         run.design do
             # Define start and end states
             start(pos_align)
@@ -179,7 +178,7 @@ class MainPlanner < Roby::Planning::Planner
 #					  :yaw => proc {State.pipeline_heading},
 #					  :duration => 5)
 
-        run = Planning::MissionRun.new
+        run = Planning::MissionRun.new(:timeout => 20.0 * 60.0)
         run.design do
             # Define start and end states
             #start(dive_and_align)
@@ -236,6 +235,8 @@ class MainPlanner < Roby::Planning::Planner
     end
 
     method(:sauce12_practice_buoy) do
+        sequence = []
+
         pos_align = align_and_move(:z => BUOY_SEARCH_Z,:yaw => PRACTICE_BUOY_SEARCH_YAW)
 
         s = survey_buoy(:yaw => PRACTICE_BUOY_SEARCH_YAW,
@@ -246,14 +247,10 @@ class MainPlanner < Roby::Planning::Planner
                     :mission_timeout => BUOY_MISSION_TIMEOUT
                    )   
 
-
-        run = Planning::MissionRun.new
-        run.design do
-            start(pos_align)
-            finish(s)
-
-            transition(pos_align, :success => s)
-        end        
+        task = Planning::BaseTask.new
+        sequence << pos_align << s
+        task.add_task_sequence(sequence)
+        task
     end
 
     method(:sauce12_practice_wall) do
