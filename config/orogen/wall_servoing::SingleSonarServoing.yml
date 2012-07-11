@@ -32,8 +32,8 @@ wait_until_start: 3.0
 --- name:wall_front
 servoing_wall_direction: 0.0
 servoing_speed: 0.0
-left_opening_angle: 0.785
-right_opening_angle: 0.785
+left_opening_angle: 0.393
+right_opening_angle: 0.393
 wall_distance: 5.0
 --- name:wall_front_left
 servoing_wall_direction: -0.4

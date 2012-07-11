@@ -46,13 +46,13 @@ port: /dev/ttyS7
 --- name:wall_servoing_front_far
 config:
   continous: 0
-  gain: 0.5
+  gain: 0.8
   max_distance: 25.0
   resolution: 0.1
   left_limit:
-    rad: 0.785
+    rad: 0.393
   right_limit:
-    rad: -0.785
+    rad: -0.393
 port: /dev/ttyS7
 --- name:wall_servoing_left
 config:
