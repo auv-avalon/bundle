@@ -140,7 +140,7 @@ class MainPlanner < Roby::Planning::Planner
 
         buoy = sauce12_buoy
 
-        goto_modem_pos = align_and_move(:speed => MODEM_GOTO_SPEED
+        goto_modem_pos = align_and_move(:speed => MODEM_GOTO_SPEED,
                                         :z => WALL_SERVOING_Z,
                                         :yaw => MODEM_WAIT_POS_ANGLE,
                                         :duration => MODEM_GOTO_DURATION)
