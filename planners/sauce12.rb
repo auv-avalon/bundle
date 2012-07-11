@@ -29,6 +29,12 @@ class MainPlanner < Roby::Planning::Planner
     MODEM_GOTO_DURATION = 2
     MODEM_WAIT_FOR_COMMAND_TIME = 10
 
+    # must be greater PI for dynamic modus
+    NAVIGATION_DYNAMIC_YAW = 10 
+    NAVIGATION_YAW_TOLERANCE = 0.2
+    NAVIGATION_POS_TOLERANCE = 3.0
+    NAVIGATION_MISSION_TIMEOUT = 30.0
+    NAVIGATION_HOLD_POSITION_TIMEOUT = 20.0
 
     method(:sauce12_pipeline) do
     
@@ -208,6 +214,22 @@ class MainPlanner < Roby::Planning::Planner
             transition(pipeline_reverse, :success => pipeline_follow, :failed => surface)
             transition(pipeline_follow, :success => surface, :failed => surface)
         end        
+    end
+
+    describe("Navigation method with localization")
+    method(:sauce12_navigation_center) do
+        center = Types::Base::Waypoint.new
+        center.position = Eigen::Vector3.new(45.0, 0.0, -1.2)
+        center.heading = NAVIGATION_DYNAMIC_YAW
+        center.tol_position = NAVIGATION_POS_TOLERANCE
+        center.tol_heading = NAVIGATION_YAW_TOLERANCE
+
+        trajectory = []
+        trajectory << center
+
+        navigate_to(:waypoints => trajectory, 
+                    :mission_timeout => NAVIGATION_MISSION_TIMEOUT, 
+                    :keep_time => NAVIGATION_HOLD_POSITION_TIMEOUT)
     end
 
     describe("Autonomous mission SAUC-E'12")

@@ -252,12 +252,14 @@ class MainPlanner
     
     describe("Navigation following defined waypoints").
         required_arg("waypoints", "next waypoint to follow").
+        required_arg("mission_timeout", "timeout for navigation").
         optional_arg("keep_time", "number of seconds keeping this waypoint")
     method(:navigate_to) do
         waypoints = arguments[:waypoints]
+        mission_timeout = arguments[:mission_timeout]
         keep_time = if arguments[:keep_time] then arguments[:keep_time] else 1.0 end
 
-        NAVIGATION_DELAY = 60.0
+        NAVIGATION_DELAY = 90.0
 
 #        wp = Types::Base::Waypoint.new
 #        wp.position = waypoint
@@ -275,14 +277,12 @@ class MainPlanner
             wait_any navigator_child.start_event
             wait_any control_child.command_child.start_event
 
-            execute do
-                Plan.info "Wait #{NAVIGATION_DELAY.to_f} seconds for receiving updates from SonarWallHough"
-            end
+            start_time = nil
 
-            #waypoints.each do |wp|
-            #    waypoint_command << wp
-            #end
-            #
+            execute do
+                Plan.info "Wait #{NAVIGATION_DELAY.to_f} seconds for receiving updates from SonarWallHough, navigation mission counter at #{mission_timeout}"
+                start_time = Time.now
+            end
 
             wait NAVIGATION_DELAY.to_f
 
@@ -295,14 +295,17 @@ class MainPlanner
             end
 
             poll_until(navigator_child.keep_waypoint_event) do
-                sleep 0.1
+                if time_over?(start_time,  NAVIGATION_DELAY + mission_timeout)
+                    Plan.info "Navigation mission timeout fired"
+                    emit :success 
+                end
             end
 
             execute do
                 Plan.info "Keep this waypoint now for #{keep_time.to_f} seconds"
             end
 
-            wait keep_time.to_f
+            wait keep_time.to_i
 
             emit :success
         end
