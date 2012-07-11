@@ -281,8 +281,16 @@ class MainPlanner < Roby::Planning::Planner
     # Practice Area Missions                                               #
     ########################################################################
 
-    PRACTICE_BUOY_SEARCH_YAW = deg_to_rad(180)
     PRACTICE_PIPELINE_PREFERED_YAW = 0
+
+    PRACTICE_GOTO_WALL_ALIGNMENT_ANGLE = -Math::PI * 0.5
+    PRACTICE_WALL_ALIGNMENT_ANGLE = 0
+    PRACTICE_GOTO_WALL_TIMEOUT = 40
+
+    PRACTICE_BUOY_SEARCH_YAW = deg_to_rad(-90)
+    PRACTICE_BUOY_SEARCH_TIMEOUT = 40
+
+    PRACTICE_MODEM_WAIT_POS_ANGLE = 0
 
     method(:sauce12_practice_pipeline) do
     
@@ -299,13 +307,13 @@ class MainPlanner < Roby::Planning::Planner
     method(:sauce12_practice_buoy) do
         sequence = []
 
-        goto_depth = simple_and_move(:z => BUOY_SEARCH_Z)
+        goto_depth = simple_move(:z => BUOY_SEARCH_Z)
 
         s = survey_buoy(:yaw => PRACTICE_BUOY_SEARCH_YAW,
                     :z => BUOY_SEARCH_Z,
                     :speed => BUOY_SEARCH_SPEED,
                     :mode => BUOY_MODE,
-                    :search_timeout => BUOY_SEARCH_TIMEOUT,
+                    :search_timeout => PRACTICE_BUOY_SEARCH_TIMEOUT,
                     :mission_timeout => BUOY_MISSION_TIMEOUT
                    )   
 
@@ -323,6 +331,140 @@ class MainPlanner < Roby::Planning::Planner
                    #:ref_distance => 4.5,
                    :timeout => WALL_SERVOING_TIMEOUT,
                    :corners => 0)
+    end
+
+    method(:sauce12_practice_pipeline_and_wall) do
+    
+        follow_pipe = sauce12_practice_pipeline
+
+        align_for_goto_wall = align_and_move(:z => WALL_SERVOING_Z,
+                                             :yaw => PRACTICE_GOTO_WALL_ALIGNMENT_ANGLE)
+
+        drive_to_wall = goto_wall(:mission_timeout => GOTO_WALL_TIMEOUT)
+
+        align_to_wall = align_and_move(:z => WALL_SERVOING_Z,
+                                       :yaw => PRACTICE_WALL_ALIGNMENT_ANGLE)
+
+        wall = sauce12_practice_wall
+
+        surface = simple_move(:z => 0)
+        
+        run = Planning::MissionRun.new(:timeout => 15.0 * 60.0)
+        run.design do
+            # Define start and end states
+            start(follow_pipe)
+            finish(surface)
+
+            # Set up state machine 
+	        transition(follow_pipe, :success => align_for_goto_wall, :failed => surface)
+            transition(align_for_goto_wall, :success => drive_to_wall, :failed => drive_to_wall)
+            transition(drive_to_wall, :success => align_to_wall, :failed => align_to_wall)
+            transition(align_to_wall, :success => wall, :failed => surface)
+            transition(wall, :success => surface, :failed => surface)         
+        end    
+    end
+
+    method(:sauce12_practice_pipeline_and_buoy) do
+    
+        follow_pipe = sauce12_practice_pipeline
+
+        align_for_goto_buoy = align_and_move(:z => BUOY_SEARCH_Z,
+                                             :yaw => PRACTICE_BUOY_SEARCH_YAW)
+
+        buoy = sauce12_practice_buoy
+
+        surface = simple_move(:z => 0)
+        
+        run = Planning::MissionRun.new(:timeout => 15.0 * 60.0)
+        run.design do
+            # Define start and end states
+            start(follow_pipe)
+            finish(surface)
+
+            # Set up state machine 
+	        transition(follow_pipe, :success => align_for_goto_buoy, :failed => surface)
+            transition(align_for_goto_buoy, :success => buoy, :failed => buoy)
+            transition(buoy, :success => surface, :failed => surface)         
+        end    
+
+    end
+
+    method(:sauce12_practice_buoy_and_wall) do
+
+        buoy = sauce12_practice_buoy
+
+        goto_modem_pos = align_and_move(:speed => MODEM_GOTO_SPEED,
+                                        :z => WALL_SERVOING_Z,
+                                        :yaw => PRACTICE_MODEM_WAIT_POS_ANGLE,
+                                        :duration => MODEM_GOTO_DURATION)
+
+        wait_for_modem_command = simple_move(:z => WALL_SERVOING_Z,
+                                             :duration => MODEM_WAIT_FOR_COMMAND_TIME)
+
+        align_to_wall = align_and_move(:z => WALL_SERVOING_Z,
+                                       :yaw => PRACTICE_WALL_ALIGNMENT_ANGLE)
+
+        wall = sauce12_practice_wall
+
+        surface = simple_move(:z => 0)
+        
+        run = Planning::MissionRun.new(:timeout => 15.0 * 60.0)
+        run.design do
+            # Define start and end states
+            start(buoy)
+            finish(surface)
+
+            # Set up state machine 
+	        transition(buoy, :success => goto_modem_pos, :failed => goto_modem_pos)
+            transition(goto_modem_pos, :success => wait_for_modem_command, :failed => wait_for_modem_command)
+            transition(wait_for_modem_command, :success => align_to_wall, :failed => align_to_wall)  
+            transition(align_to_wall, :success => wall, :failed => surface)  
+            transition(wall, :success => surface, :failed => surface)       
+        end    
+
+    end
+
+    method(:sauce12_practice_complete) do
+
+        follow_pipe = sauce12_practice_pipeline
+
+        align_for_goto_buoy = align_and_move(:z => BUOY_SEARCH_Z,
+                                             :yaw => PRACTICE_BUOY_SEARCH_YAW)
+
+        buoy = sauce12_practice_buoy
+
+        goto_modem_pos = align_and_move(:speed => MODEM_GOTO_SPEED,
+                                        :z => WALL_SERVOING_Z,
+                                        :yaw => PRACTICE_MODEM_WAIT_POS_ANGLE,
+                                        :duration => MODEM_GOTO_DURATION)
+
+        wait_for_modem_command = simple_move(:z => WALL_SERVOING_Z,
+                                             :duration => MODEM_WAIT_FOR_COMMAND_TIME)
+
+        align_to_wall = align_and_move(:z => WALL_SERVOING_Z,
+                                       :yaw => PRACTICE_WALL_ALIGNMENT_ANGLE)
+
+        wall = sauce12_practice_wall
+
+        surface = simple_move(:z => 0)
+
+        #nav = navigate(:waypoint => Eigen::Vector3.new(0.0, 0.0, -2.2))
+
+        run = Planning::MissionRun.new(:timeout => 20.0 * 60.0)
+        run.design do
+            # Define start and end states
+            start(follow_pipe)
+            finish(surface)
+            
+	        transition(follow_pipe, :success => align_for_goto_buoy, :failed => surface)
+            transition(align_for_goto_buoy, :success => buoy, :failed => buoy)
+	        transition(buoy, :success => goto_modem_pos, :failed => goto_modem_pos)
+            transition(goto_modem_pos, :success => wait_for_modem_command, :failed => wait_for_modem_command)
+            transition(wait_for_modem_command, :success => align_to_wall, :failed => align_to_wall)  
+            transition(align_to_wall, :success => wall, :failed => surface)  
+            transition(wall, :success => surface, :failed => surface)               
+        end        
+        
     end
 
 end
