@@ -20,7 +20,7 @@ class MainPlanner < Roby::Planning::Planner
     BUOY_SEARCH_TIMEOUT = 60
     BUOY_MISSION_TIMEOUT = 10
     BUOY_SEARCH_Z = -2.5
-    BUOY_SEARCH_YAW = deg_to_rad(0)
+    BUOY_SEARCH_YAW = deg_to_rad(10)
     BUOY_SEARCH_SPEED = 0.3
     BUOY_MODE = :serve_360
 
@@ -39,7 +39,7 @@ class MainPlanner < Roby::Planning::Planner
     
    
     method(:sauce12_buoy) do
-        pos_align = align_and_move(:z => BUOY_SEARCH_Z,:yaw => BUOY_SEARCH_YAW)
+        goto_depth = simple_move(:z => BUOY_SEARCH_Z)
 
         s = survey_buoy(:yaw => BUOY_SEARCH_YAW,
                     :z => BUOY_SEARCH_Z,
@@ -51,10 +51,10 @@ class MainPlanner < Roby::Planning::Planner
 
         run = Planning::MissionRun.new
         run.design do
-            start(pos_align)
+            start(goto_depth)
             finish(s)
 
-            transition(pos_align, :success => s, :failed => s)
+            transition(goto_depth, :success => s, :failed => s)
         end        
     end
 
@@ -101,9 +101,34 @@ class MainPlanner < Roby::Planning::Planner
             transition(wall, :success => surface, :failed => surface)         
         end    
     end
+
+    method(:sauce12_pipeline_and_buoy) do
+    
+        follow_pipe = sauce12_pipeline
+
+        align_for_goto_buoy = align_and_move(:z => BUOY_SEARCH_Z,
+                                             :yaw => BUOY_SEARCH_YAW)
+
+        buoy = sauce12_buoy
+
+        surface = simple_move(:z => 0)
+        
+        run = Planning::MissionRun.new
+        run.design do
+            # Define start and end states
+            start(follow_pipe)
+            finish(surface)
+
+            # Set up state machine 
+	        transition(follow_pipe, :success => align_for_goto_buoy, :failed => surface)
+            transition(align_for_goto_buoy, :success => buoy, :failed => buoy)
+            transition(buoy, :success => surface, :failed => surface)         
+        end    
+
+    end
     
 
-    method(:sauce12_simple) do
+    method(:sauce12_pipeline_reverse) do
         pos_align = align_and_move(:z => -1.0, :yaw => PIPELINE_SEARCH_YAW)
         surface = simple_move(:z => 0)
 
