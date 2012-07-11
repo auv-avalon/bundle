@@ -24,6 +24,11 @@ class MainPlanner < Roby::Planning::Planner
     BUOY_SEARCH_SPEED = 0.3
     BUOY_MODE = :serve_360
 
+    MODEM_WAIT_POS_ANGLE = Math::PI / 2.0
+    MODEM_GOTO_SPEED = -0.4
+    MODEM_GOTO_DURATION = 2
+    MODEM_WAIT_FOR_COMMAND_TIME = 10
+
 
     method(:sauce12_pipeline) do
     
@@ -84,6 +89,9 @@ class MainPlanner < Roby::Planning::Planner
 
         drive_to_wall = goto_wall(:mission_timeout => GOTO_WALL_TIMEOUT)
 
+        align_to_wall = align_and_move(:z => WALL_SERVOING_Z,
+                                       :yaw => WALL_ALIGNMENT_ANGLE)
+
         wall = sauce12_wall
 
         surface = simple_move(:z => 0)
@@ -97,7 +105,8 @@ class MainPlanner < Roby::Planning::Planner
             # Set up state machine 
 	        transition(follow_pipe, :success => align_for_goto_wall, :failed => surface)
             transition(align_for_goto_wall, :success => drive_to_wall, :failed => drive_to_wall)
-            transition(drive_to_wall, :success => wall, :failed => surface)
+            transition(drive_to_wall, :success => align_to_wall, :failed => align_to_wall)
+            transition(align_to_wall, :success => wall, :failed => surface)
             transition(wall, :success => surface, :failed => surface)         
         end    
     end
@@ -123,6 +132,41 @@ class MainPlanner < Roby::Planning::Planner
 	        transition(follow_pipe, :success => align_for_goto_buoy, :failed => surface)
             transition(align_for_goto_buoy, :success => buoy, :failed => buoy)
             transition(buoy, :success => surface, :failed => surface)         
+        end    
+
+    end
+
+    method(:sauce12_buoy_and_wall) do
+
+        buoy = sauce12_buoy
+
+        goto_modem_pos = align_and_move(:speed => MODEM_GOTO_SPEED
+                                        :z => WALL_SERVOING_Z,
+                                        :yaw => MODEM_WAIT_POS_ANGLE,
+                                        :duration => MODEM_GOTO_DURATION)
+
+        wait_for_modem_command = simple_move(:z => WALL_SERVOING_Z,
+                                             :duration => MODEM_WAIT_FOR_COMMAND_TIME)
+
+        align_to_wall = align_and_move(:z => WALL_SERVOING_Z,
+                                       :yaw => WALL_ALIGNMENT_ANGLE)
+
+        wall = sauce12_wall
+
+        surface = simple_move(:z => 0)
+        
+        run = Planning::MissionRun.new
+        run.design do
+            # Define start and end states
+            start(buoy)
+            finish(surface)
+
+            # Set up state machine 
+	        transition(buoy, :success => goto_modem_pos, :failed => goto_modem_pos)
+            transition(goto_modem_pos, :success => wait_for_modem_command, :failed => wait_for_modem_command)
+            transition(wait_for_modem_command, :success => align_to_wall, :failed => align_to_wall)  
+            transition(align_to_wall, :success => wall, :failed => surface)  
+            transition(wall, :success => surface, :failed => surface)       
         end    
 
     end
