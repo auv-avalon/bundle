@@ -21,7 +21,7 @@ class MainPlanner < Roby::Planning::Planner
     BUOY_MISSION_TIMEOUT = 10
     BUOY_SEARCH_Z = -2.5
     BUOY_SEARCH_YAW = deg_to_rad(0)
-    BUOY_SEARCH_SPEED = 0.0
+    BUOY_SEARCH_SPEED = 0.3
     BUOY_MODE = :serve_360
 
 
@@ -37,17 +37,7 @@ class MainPlanner < Roby::Planning::Planner
                                   :mission_timeout => PIPELINE_MISSION_TIMEOUT)
     end
     
-    # For debugging of pipeline turn (ALIGN_AUV with inverted preferred heading). Assumes that we are on the pipe.
-    method(:sauce12_align_on_pipe) do
-        find_and_follow_pipeline(:yaw => 0, ## we are already on pipe, so yaw is not important
-                                 :z => PIPELINE_SEARCH_Z, 
-                                 :speed => PIPELINE_SEARCH_SPEED,
-                                 :prefered_yaw => 0,
-                                 :search_timeout => 10,  # TODO set correct timeout
-                                 :mission_timeout => 60,
-                                 :do_safe_turn => false)
-    end
-    
+   
     method(:sauce12_buoy) do
         pos_align = align_and_move(:z => BUOY_SEARCH_Z,:yaw => BUOY_SEARCH_YAW)
 
@@ -59,26 +49,32 @@ class MainPlanner < Roby::Planning::Planner
                     :mission_timeout => BUOY_MISSION_TIMEOUT
                    )   
 
-
         run = Planning::MissionRun.new
         run.design do
             start(pos_align)
             finish(s)
 
-            transition(pos_align, :success => s)
+            transition(pos_align, :success => s, :failed => s)
         end        
     end
 
     method(:sauce12_wall) do
-        survey_wall(:z => WALL_SERVOING_Z,
-           #        :speed => WALL_SERVOING_SPEED, 
-                   #:initial_wall_yaw => 0.0, # Math::PI / 2.0,
-                   #:servoing_wall_yaw => 0.0, # Math::PI / 2.0,
-                   #:ref_distance => 4.5,
-                   :timeout => WALL_SERVOING_TIMEOUT,
-                   :corners => 1)
+        # Z VALUE FOR WALL SERVOING IS CURRENTLY ONLY CONTROLLED BY YAML CONFIGURATION
+        survey_wall(:timeout => WALL_SERVOING_TIMEOUT,
+                   :corners => 2)
     end
 
+    # For debugging of pipeline turn (ALIGN_AUV with inverted preferred heading). Assumes that we are on the pipe.
+    method(:sauce12_align_on_pipe) do
+        find_and_follow_pipeline(:yaw => 0, ## we are already on pipe, so yaw is not important
+                                 :z => PIPELINE_SEARCH_Z, 
+                                 :speed => PIPELINE_SEARCH_SPEED,
+                                 :prefered_yaw => 0,
+                                 :search_timeout => 10,  # TODO set correct timeout
+                                 :mission_timeout => 60,
+                                 :do_safe_turn => false)
+    end
+ 
     method(:sauce12_pipeline_and_wall) do
     
         follow_pipe = sauce12_pipeline
@@ -106,7 +102,6 @@ class MainPlanner < Roby::Planning::Planner
             transition(drive_to_wall, :success => wall, :failed => surface)
             transition(wall, :success => surface, :failed => surface)         
         end    
-
     end
     
 
@@ -147,13 +142,13 @@ class MainPlanner < Roby::Planning::Planner
             transition(pipeline_reverse, :success => pipeline_follow, :failed => surface)
             transition(pipeline_follow, :success => surface, :failed => surface)
         end        
- 
-
     end
 
     describe("Autonomous mission SAUC-E'12")
     method(:sauce12_complete) do
-
+        # EXAMPLE:
+        # buoy_and_cut = dummy(:msg => "BuoyDetector")
+        
         # Submerge and align to start heading
         #dive_and_align = align_and_move(:z => PIPELINE_SEARCH_Z, :yaw => PIPELINE_SEARCH_YAW)
         
@@ -167,26 +162,12 @@ class MainPlanner < Roby::Planning::Planner
                                   :search_timeout => PIPELINE_SEARCH_TIMEOUT,
                                   :turn_timeout => PIPELINE_TURN_TIMEOUT,
                                   :mission_timeout => PIPELINE_MISSION_TIMEOUT)
-
-        #buoy_and_cut = survey_and_cut_buoy(:yaw => BUOY_SEARCH_YAW,
-        #                                   :z => BUOY_SEARCH_Z,
-        #                                   :speed => BUOY_SEARCH_SPEED,
-        #                                   :mode => BUOY_MODE#,
-        #                                   #:search_timeout => BUOY_SEARCH_TIMEOUT
-        #                                   )
-        
-#       buoy_and_cut = dummy(:msg => "BuoyDetector")
+       
 
         #drive_to_wall = goto_wall(:mission_timeout => GOTO_WALL_TIMEOUT = 90) # TODO mission timeout
 
-        #wall = survey_wall(:z => WALL_SERVOING_Z,
-        #           #        :speed => WALL_SERVOING_SPEED, 
-        #                   #:initial_wall_yaw => 0.0, # Math::PI / 2.0,
-        #                   #:servoing_wall_yaw => 0.0, # Math::PI / 2.0,
-        #                   #:ref_distance => 4.5,
-        #                   :timeout => WALL_SERVOING_TIMEOUT,
-        #                   :corners => 2)
-
+        wall = survey_wall(:timeout => WALL_SERVOING_TIMEOUT,
+                           :corners => 2)
         #nav = navigate(:waypoint => Eigen::Vector3.new(0.0, 0.0, -2.2))
         
         #align_for_goto_wall = align_and_move(:z => WALL_SERVOING_Z,

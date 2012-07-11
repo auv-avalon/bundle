@@ -211,12 +211,12 @@ composition 'BuoyDetector' do
     event :strafe_finished
     event :strafe_to_angle
     event :angle_arrived
-#    event :buoy_arrived
 #    event :strafe_error
 #    event :moving_to_cutting_distance
 #    event :cutting
 #    event :cutting_success
 #    event :cutting_error
+    event :timeout
 
     add Srv::ImageProvider, :as => 'camera'
     add Srv::OrientationWithZ    
