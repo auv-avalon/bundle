@@ -95,7 +95,7 @@ class MainPlanner < Roby::Planning::Planner
 
         surface = simple_move(:z => 0)
         
-        run = Planning::MissionRun.new(:timeout => 10.0 * 60.0)
+        run = Planning::MissionRun.new(:timeout => 15.0 * 60.0)
         run.design do
             # Define start and end states
             start(follow_pipe)
@@ -121,7 +121,7 @@ class MainPlanner < Roby::Planning::Planner
 
         surface = simple_move(:z => 0)
         
-        run = Planning::MissionRun.new
+        run = Planning::MissionRun.new(:timeout => 15.0 * 60.0)
         run.design do
             # Define start and end states
             start(follow_pipe)
@@ -154,7 +154,7 @@ class MainPlanner < Roby::Planning::Planner
 
         surface = simple_move(:z => 0)
         
-        run = Planning::MissionRun.new
+        run = Planning::MissionRun.new(:timeout => 15.0 * 60.0)
         run.design do
             # Define start and end states
             start(buoy)
@@ -197,7 +197,7 @@ class MainPlanner < Roby::Planning::Planner
             :do_safe_turn => false,
             :controlled_turn_on_pipe => false)
 
-        run = Planning::MissionRun.new(:timeout => 1.0 * 60.0)
+        run = Planning::MissionRun.new(:timeout => 10.0 * 60.0)
         run.design do
             # Define start and end states
             start(pos_align)
