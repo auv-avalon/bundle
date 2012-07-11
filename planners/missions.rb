@@ -194,9 +194,9 @@ class MainPlanner < Roby::Planning::Planner
                 else
                     # Simply drive forward (or backward if negative speed)
                     motion_command.x_speed = speed
-                    if controlled_turn_timeout
+                    #if controlled_turn_timeout
                         # TODO We lost the pipe in a case where we were absolutely sure of being on it. Recovery might be hard.
-                    end
+                    #end
                 end
                 write_motion_command
             end
