@@ -5,7 +5,7 @@ class MainPlanner < Roby::Planning::Planner
     PIPELINE_SEARCH_YAW = Math::PI / 2.0
     PIPELINE_PREFERED_YAW = Math::PI ### MATH::PI ==> turn left;    0 ==> turn right
 #    PIPELINE_STABILIZE_YAW = Math::PI / 2.0
-    PIPELINE_SEARCH_TIMEOUT = 120
+    PIPELINE_SEARCH_TIMEOUT = 90
     PIPELINE_TURN_TIMEOUT = 50
     PIPELINE_MISSION_TIMEOUT = 360
     PIPELINE_TURNS = 1
