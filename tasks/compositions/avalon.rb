@@ -335,7 +335,7 @@ composition 'AsvDetector' do
     add_main AsvDetector::Task, :as => 'detector'
 
     connect orientation.orientation_z_samples => detector.orientation_readings
-    connect camera_left.images => detector.front_cam
+    connect camera_left.images => detector.left_image
     
     export detector.position_command, :as => 'relative_position_command'
     provides Srv::RelativePositionDetector
