@@ -16,6 +16,7 @@ define('particle_localization', Cmp::Localization.use('sonar'))
 define('localization', Cmp::DualLocalization.use('sonar'))
 define('navigation', Cmp::Navigation.use(Cmp::Localization.use('sonar')))
 define('asv_and_pinger', Cmp::AsvAndPingersearch)
+define('modem_listener', Cmp::ModemListener)
 
 define('cross_sonar', Cmp::DualSonarWallDetector. 
        use('sonar_front' => device('sonar').use_conf('default', 'straight_front')).
@@ -67,6 +68,7 @@ servoing.each do |name, cmp|
     define(name, Cmp::VisualServoing.use(cmp))
     define("#{name}_detector", cmp)
 end
+#Cmp::VisualServoing => Cmp::VisualServoing.use(Cmp::Pingersearch.use(AUVRelPosController::Task.use_conf('default','absolute_heading')))
 
 model.data_service_type "NavigationMode"
 Cmp::ControlLoop.provides Srv::NavigationMode
