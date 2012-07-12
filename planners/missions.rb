@@ -175,7 +175,7 @@ class MainPlanner < Roby::Planning::Planner
             poll do
                 if search_timeout and time_over?(start_time, search_timeout)
                     Plan.warn "Search timeout pipeline following (find_and_follow_pipeline)!"
-                    emit :success
+                    emit :failed
                 end
                
                 motion_command.heading = yaw
