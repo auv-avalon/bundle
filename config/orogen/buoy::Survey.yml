@@ -20,7 +20,7 @@ lost_timeout: 17
 # maximum x value for strafing
 maxX: 0.2
 # maximum buoy distance in m
-max_buoy_distance: 0.9
+max_buoy_distance: 1.2 #0.9
 # Step size to detect V value.
 steps: 5
 # no documentation available for this property
