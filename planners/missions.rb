@@ -450,7 +450,7 @@ class MainPlanner < Roby::Planning::Planner
     describe("Wait for modem messages. They contain heading and depth commands. Write them into actual motion commands.").
         required_arg("z", "depth").
         required_arg("duration","seconds to wait after aligning to received heading").
-        required_arg("send_interval","reduced interval for sending position updates for the time waiting on heading commands."
+        required_arg("send_interval","reduced interval for sending position updates for the time waiting on heading commands.").
         optional_arg("mission_timeout","")
     method(:modem_aligner) do
         z = arguments[:z]
