@@ -43,6 +43,7 @@ end
 Conf.orocos.disable_log_group "raw_camera"
 
 Orocos::RobyPlugin::StateEstimator::Task.worstcase_processing_time 1
+Orocos::RobyPlugin::ModemCan::Task.worstcase_processing_time 1
 
 #nav_modes = ['drive_simple', 'pipeline', 'wall', 'buoy']
 nav_modes = ['sauce12_complete', 'sauce12_pipeline', 'sauce12_buoy', 'sauce12_wall', 'drive_simple', 'wall_front_right', 'dual_wall', 'wall_left']

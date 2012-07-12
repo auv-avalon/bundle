@@ -372,6 +372,10 @@ composition 'ModemPositionOutput' do
 #    autoconnect
 end
 
+composition 'ModemListener' do
+    add Srv::ModemConnection, :as => 'modem'
+end
+
 
 composition 'Localization' do
     add UwParticleLocalization::Task, :as => 'localization'
