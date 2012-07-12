@@ -20,7 +20,7 @@ class MainPlanner < Roby::Planning::Planner
     BUOY_SEARCH_TIMEOUT = 20
     BUOY_MISSION_TIMEOUT = 10 * 60
     BUOY_SEARCH_Z = -1.5 #always change also the property in the config
-    BUOY_SEARCH_YAW = deg_to_rad(25)
+    BUOY_SEARCH_YAW = deg_to_rad(35)
     BUOY_SEARCH_SPEED = 0.3
     BUOY_MODE = :serve_360
 
@@ -36,6 +36,10 @@ class MainPlanner < Roby::Planning::Planner
     NAVIGATION_POS_TOLERANCE = 3.0
     NAVIGATION_MISSION_TIMEOUT = 30.0
     NAVIGATION_HOLD_POSITION_TIMEOUT = 20.0
+
+    ASV_TIMEOUT = 3 * 60
+    PIPELINE_TO_ASV_SEARCH_YAW = -Math::PI / 2.0
+    PIPELINE_TO_ASV_MISSION_TIMEOUT = 3 * 60
 
     method(:sauce12_pipeline) do
     
@@ -73,6 +77,10 @@ class MainPlanner < Roby::Planning::Planner
         # Z VALUE FOR WALL SERVOING IS CURRENTLY ONLY CONTROLLED BY YAML CONFIGURATION
         survey_wall(:timeout => WALL_SERVOING_TIMEOUT,
                    :corners => 2)
+    end
+
+    method(:sauce12_asv) do
+        pingersearch_and_asv(:timeout => ASV_TIMEOUT)
     end
 
     # For debugging of pipeline turn (ALIGN_AUV with inverted preferred heading). Assumes that we are on the pipe.
@@ -255,6 +263,18 @@ class MainPlanner < Roby::Planning::Planner
                                        :yaw => WALL_ALIGNMENT_ANGLE)
 
         wall = sauce12_wall
+    
+        follow_pipe_to_asv = find_and_follow_pipeline(:yaw => PIPELINE_TO_ASV_SEARCH_YAW, 
+                                                  :z => PIPELINE_SEARCH_Z, 
+                                                  :prefered_yaw => PIPELINE_PREFERED_YAW, 
+                                                  :speed => 0.4,
+                                                  :follow_speed => PIPELINE_SEARCH_SPEED,
+                                                  :search_timeout => PIPELINE_SEARCH_TIMEOUT,
+					          :mission_timeout => PIPELINE_TO_ASV_MISSION_TIMEOUT,
+                                                  :do_safe_turn => false,
+                                                  :controlled_turn_on_pipe => false)
+
+        asv = sauce12_asv
 
         surface = simple_move(:z => 0)
 
@@ -272,7 +292,9 @@ class MainPlanner < Roby::Planning::Planner
             transition(goto_modem_pos, :success => wait_for_modem_command, :failed => wait_for_modem_command)
             transition(wait_for_modem_command, :success => align_to_wall, :failed => align_to_wall)  
             transition(align_to_wall, :success => wall, :failed => surface)  
-            transition(wall, :success => surface, :failed => surface)               
+            transition(wall, :success => follow_pipe_to_asv, :failed => follow_pipe_to_asv)
+            transition(follow_pipe_to_asv, :success => asv, :failed => asv)
+            transition(asv, :success => surface, :failed => surface)
         end        
         
     end
