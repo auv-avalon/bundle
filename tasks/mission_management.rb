@@ -67,10 +67,16 @@ module Planning
     class MissionRun < Roby::Task
         terminates
 
-        def initialize
+        def initialize(options)
             super()
 
             @mission_graph = {}
+            @timeout = options[:timeout]
+            @start_time = nil
+
+            if !@timeout
+                raise "No mission timeout is defined for this autonomous run mission"
+            end
         end
 
         def design(&block)
@@ -111,6 +117,18 @@ module Planning
             end
 
             task.event(:failed).forward_to self.event(:failed) if !map.key?(:failed)
+        end
+
+        on :start do |event|
+            @start_time = Time.now
+            Plan.info "Set global timeout to #{@timeout} seconds for this mission"
+        end
+
+        poll do
+            if time_over?(@start_time, @timeout)
+                Plan.info "Global timeout fired for autonomous run"
+                emit :success
+            end
         end
 
         on :stop do |event|

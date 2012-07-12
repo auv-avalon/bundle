@@ -45,7 +45,7 @@ Conf.orocos.disable_log_group "raw_camera"
 Orocos::RobyPlugin::StateEstimator::Task.worstcase_processing_time 1
 
 #nav_modes = ['drive_simple', 'pipeline', 'wall', 'buoy']
-nav_modes = ['drive_simple', 'wall_front_right', 'dual_wall', 'wall_left']
+nav_modes = ['sauce12_complete', 'sauce12_pipeline', 'sauce12_buoy', 'sauce12_wall', 'drive_simple', 'wall_front_right', 'dual_wall', 'wall_left']
 
 State.navigation_mode = nav_modes
 
@@ -71,7 +71,7 @@ Robot.devices do
  device(Dev::Dynamixel, :as => 'dynamixel').
     device_id("/dev/ttyS3")
 
- device(Dev::Gps, :as => 'gpsd').
+ device(Dev::Gps, :as => 'gps').
      period(0.01)
 
   #device(Dev::Micron, :as => "sonar_profiling_micron").

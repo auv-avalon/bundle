@@ -28,7 +28,7 @@ out_of_center: 0.0
 # tries to follow the pipeline in this direction [rad], > PI = disabled
 prefered_heading: 3.14
 # no documentation available for this property
-use_channel: -1.0
+use_channel: -1
 # offset between the center and the end of pipe during 
 # hovering [m] at the end (should be positvie)
 end_of_pipe_offset: 0.25
@@ -55,12 +55,5 @@ min_center_dist: 0.2
 # fallback to ALIGN_AUV if out_of_center is exceeded during FOLLOWING_PIPE
 do_dynamic_aligning: 1
 weak_signal: 0.25
---- name:studiobad
-invert_colors: 0
-use_channel: 3
-weak_signal: 0.1
-default_x: 0.2
-depth: -0.8
-preprocessing_type: 0
 --- name:simulation
 use_channel: 0

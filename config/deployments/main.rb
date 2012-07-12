@@ -14,7 +14,7 @@ define('uwv_dynamic_model', Cmp::UwvModel)
 define('hough_localization', Cmp::SonarWallHough.use('sonar'))
 define('particle_localization', Cmp::Localization.use('sonar'))
 define('localization', Cmp::DualLocalization.use('sonar'))
-define('navigation', Cmp::Navigation.use(Cmp::DualLocalization.use('sonar')))
+define('navigation', Cmp::Navigation.use(Cmp::Localization.use('sonar')))
 define('asv_and_pinger', Cmp::AsvAndPingersearch)
 define('modem_listener', Cmp::ModemListener)
 
