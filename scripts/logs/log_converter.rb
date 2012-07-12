@@ -3,7 +3,7 @@
 # Each team will produce a log file of the mission within around 10 minutes of the end of the run. The format of the log file will be a comma separated ASCII file of the format: Time, position, action, a comment between simple quotes.
 # (SSSSS,XXX.x,YYY.y,ZZZ.z,AA.aa). Logged data will be plotted by plotting routine written by the organising committee. This will be used to score the log file. For ASV tracking task the additional file of range and bearing data from the AUV to the pinger will need to be provided.
 
-require 'eigen'
+#require 'eigen'
 require 'roby/standalone'
 require 'roby/log/event_stream'
 require 'roby/log/plan_rebuilder'
@@ -76,15 +76,18 @@ end
 
 desired_models = [
     'Orocos::RobyPlugin::OffshorePipelineDetector::Task',
-    'Orocos::RobyPlugin::BuoyDetector::Task',
-    'Orocos::RobyPlugin::SonarServoing::Task',
-    'Orocos::RobyPlugin::ASVDetector::Task',
-    'SaucE::Mission',
-    'SaucE::PipelineAndGates',
-    'SaucE::BuoyAndWall',
-    'SaucE::LookForBuoy',
-    'SaucE::Wall',
-    'SaucE::ASVFromWall'
+    'Orocos::RobyPlugin::Buoy::Survey',
+    'Orocos::RobyPlugin::WallServoing::SingleSonarServoing'#,
+    #'Orocos::RobyPlugin::OrientationEstimator::Baseestimator'
+    #'Orocos::RobyPlugin::DepthReader::depth_and_orientation_fusion'
+#    'Orocos::RobyPlugin::SonarServoing::Task',
+#    'Orocos::RobyPlugin::ASVDetector::Task',
+#    'SaucE::Mission',
+#    'SaucE::PipelineAndGates',
+#    'SaucE::BuoyAndWall',
+#    'SaucE::LookForBuoy',
+#    'SaucE::Wall',
+#    'SaucE::ASVFromWall'
 ]
 
 OUTPUT_LOGFILE_NAME = "DFKI-Bremen_AVALON.txt"
@@ -97,23 +100,29 @@ heading = 0
 x_speed = 0
 y_speed = 0
 last_time = 0
-position_estimate = Eigen::Vector3.new
+position_estimate = []
 position_estimate[0] = 0
 position_estimate[1] = 0
 position_estimate[2] = 0
 
-pos_output_file = File.new("position.txt","w")
+pose = ['n','n','n']
+
+#pos_output_file = File.new("position.txt","w")
 log_output_file = File.new(OUTPUT_LOGFILE_NAME,"w")
 
 # TODO usability
 puts "#~#~#~#~#~# IMPORTANT: You have to run this script out of the log folder!!! #~#~#~#~#~#"
 
 #Get stream for orientation logfile
-orientation_logfile = Pocolog::Logfiles.open('orientation_estimator.0.log') #TODO add constant
-orientation_stream = orientation_logfile.stream('orientation_estimator.orientation_samples')
-relpos_logfile = Pocolog::Logfiles.open('auv_rel_pos_controller.0.log')
-relpos_stream = relpos_logfile.stream('auv_rel_pos_controller.motion_command')
-
+#orientation_logfile = Pocolog::Logfiles.open('orientation_estimator.0.log') #TODO add constant
+#base_control_logfile = Pocolog::Logfiles.open('avalon_back_base_control.0.log') #TODO add constant
+#orientation_stream = orientation_logfile.stream('orientation_estimator.attitude_b_g')
+#relpos_logfile = Pocolog::Logfiles.open('auv_rel_pos_controller.0.log')
+#relpos_stream = relpos_logfile.stream('auv_rel_pos_controller.motion_command')
+#pipeline_logfile = Pocolog::Logfiles.open('pipeline_follower.0.log')
+#pipeline_stream = pipeline_logfile.stream('')
+localization_logfile = Pocolog::Logfiles.open('uw_particle_localization.0.log')
+localization_stream = localization_logfile.stream('uw_particle_localization.pose_samples')
 
 # Get tasks of all desired models
 desired_models.each do |arg|
@@ -160,17 +169,18 @@ all.sort_by { |ev| ev.time }.each do |ev|
 
     #puts "********** Time interval array size:" << orientation_stream.time_interval.size.to_s
 
-    if(ev.time <= orientation_stream.time_interval[1])
-	orientation_stream.seek(ev.time)
-	sample = orientation_stream.next[2]
-
+    if(ev.time <= localization_stream.time_interval[1])
+	localization_stream.seek(ev.time)
+	sample = localization_stream.next[2]
+    
+    pose = sample.position
 	depth = sample.position[2]
 	headingRad = sample.orientation.yaw
 	heading = (180 / Math::PI) * headingRad
 
-	relpos = relpos_stream.next[2]
+	#relpos = relpos_stream.next[2]
 
-	world_speed = sample.orientation * Eigen::Vector3.new(relpos.x_speed,relpos.y_speed,0)
+#	world_speed = sample.orientation * Eigen::Vector3.new(relpos.x_speed,relpos.y_speed,0)
 	#puts "************************ World Speed type: " << world_speed.class.to_s
 
 
@@ -179,14 +189,14 @@ all.sort_by { |ev| ev.time }.each do |ev|
 	last_time = ev.time
 
 	# delta p
-	world_pos_offset = world_speed * time_offset
+#	world_pos_offset = world_speed * time_offset
 
 	# update position
-	position_estimate[0] += position_estimate[0] + world_pos_offset[0]
-	position_estimate[1] += position_estimate[1] + world_pos_offset[1]
-	position_estimate[2] += depth
+#	position_estimate[0] += position_estimate[0] + world_pos_offset[0]
+#	position_estimate[1] += position_estimate[1] + world_pos_offset[1]
+#	position_estimate[2] += depth
 
-	pos_output_file.puts "#{position_estimate[0]} #{position_estimate[1]}"
+#	pos_output_file.puts "#{position_estimate[0]} #{position_estimate[1]}"
 	# call gnuplot with
 	# echo "plot 'position.txt' using 1:2 with lines " | gnuplot -persist
 
@@ -194,7 +204,7 @@ all.sort_by { |ev| ev.time }.each do |ev|
         puts "WARNING: Some events happened after last orientation sample."
     end
 
-    log_converter.addSample(LogSample.new(time,"#{position_estimate[0]}","#{position_estimate[1]}","#{depth.to_s.rjust(5, '0')}","#{action}.#{ev.symbol}","heading = #{heading}"))
+    log_converter.addSample(LogSample.new(time,"#{pose[0]}","#{pose[1]}","#{depth.to_s.rjust(5, '0')}","#{action}.#{ev.symbol}","heading = #{heading}"))
 
 end
 
