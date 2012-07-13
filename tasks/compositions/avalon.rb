@@ -353,7 +353,13 @@ composition 'ModemPositionOutput' do
 end
 
 composition 'ModemListener' do
-    add Srv::ModemConnection, :as => 'modem'
+   add(Cmp::ControlLoop, :as => 'control').
+      use('command' => AuvRelPosController::Task).
+      use('controller' => AvalonControl::MotionControlTask)
+
+   add Srv::ModemConnection, :as => 'modem'
+
+   add Srv::OrientationWithZ
 end
 
 
