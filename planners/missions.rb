@@ -508,7 +508,7 @@ class MainPlanner < Roby::Planning::Planner
             
             execute do
                 start_time = Time.now
-                old_send_interval = 5.0
+                old_send_interval = 2.0
                 connection = control_child.command_child.disconnect_ports(control_child.controller_child, [['motion_command', 'motion_commands']])
                 
                 Plan.info "Reducing modem send interval while listening for heading commands."
