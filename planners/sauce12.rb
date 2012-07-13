@@ -7,18 +7,18 @@ class MainPlanner < Roby::Planning::Planner
 #    PIPELINE_STABILIZE_YAW = Math::PI / 2.0
     PIPELINE_SEARCH_TIMEOUT = 90
     PIPELINE_TURN_TIMEOUT = 50
-    PIPELINE_MISSION_TIMEOUT = 360
+    PIPELINE_MISSION_TIMEOUT = 6 * 60
     PIPELINE_TURNS = 1
 
     WALL_SERVOING_Z = -1.1 #always change also the property in the config
-    WALL_SERVOING_TIMEOUT = 5 * 60
+    WALL_SERVOING_TIMEOUT = (4 * 60) + 40
     WALL_ALIGNMENT_ANGLE = Math::PI/2.0
     
     GOTO_WALL_ALIGNMENT_ANGLE = 0.0
     GOTO_WALL_TIMEOUT = 30
 
     BUOY_SEARCH_TIMEOUT = 20
-    BUOY_MISSION_TIMEOUT = 10 * 60
+    BUOY_MISSION_TIMEOUT = 8 * 60
     BUOY_SEARCH_Z = -1.55 #always change also the property in the config
     BUOY_SEARCH_YAW = deg_to_rad(35)
     BUOY_SEARCH_SPEED = 0.3
@@ -37,7 +37,7 @@ class MainPlanner < Roby::Planning::Planner
     NAVIGATION_MISSION_TIMEOUT = 30.0
     NAVIGATION_HOLD_POSITION_TIMEOUT = 20.0
 
-    ASV_TIMEOUT = 3 * 60
+    ASV_TIMEOUT = 5 * 60
     PIPELINE_TO_ASV_SEARCH_YAW = -Math::PI / 2.0
     PIPELINE_TO_ASV_MISSION_TIMEOUT = 3 * 60
 
