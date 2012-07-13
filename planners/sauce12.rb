@@ -264,7 +264,7 @@ class MainPlanner < Roby::Planning::Planner
                                         :yaw => MODEM_WAIT_POS_ANGLE,
                                         :duration => MODEM_GOTO_DURATION)
 
-        #wait_for_modem_command = simple_move(:z => MODEM_WAIT_Z,
+        #modem_align = simple_move(:z => MODEM_WAIT_Z,
         #                                     :duration => MODEM_WAIT_FOR_COMMAND_TIMEOUT)
 
         modem_align = sauce12_modem
@@ -299,8 +299,8 @@ class MainPlanner < Roby::Planning::Planner
 	    transition(follow_pipe, :success => align_for_goto_buoy, :failed => surface)
             transition(align_for_goto_buoy, :success => buoy, :failed => buoy)
 	    transition(buoy, :success => goto_modem_pos, :failed => goto_modem_pos)
-            transition(goto_modem_pos, :success => wait_for_modem_command, :failed => wait_for_modem_command)
-            transition(wait_for_modem_command, :success => align_to_wall, :failed => align_to_wall)  
+            transition(goto_modem_pos, :success => modem_align, :failed => modem_align)
+            transition(modem_align, :success => align_to_wall, :failed => align_to_wall)  
             transition(align_to_wall, :success => wall, :failed => surface)  
             transition(wall, :success => follow_pipe_to_asv, :failed => follow_pipe_to_asv)
             transition(follow_pipe_to_asv, :success => asv, :failed => asv)
