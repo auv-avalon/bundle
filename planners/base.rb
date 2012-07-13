@@ -120,6 +120,7 @@ class MainPlanner
             data_writer 'motion_command', ['controller', 'motion_commands']
 
             execute { yaw = yaw.call } if yaw.respond_to?(:call)
+            execute { z = z.call } if yaw.respond_to?(:call)
 
             wait_any command_child.start_event
 
