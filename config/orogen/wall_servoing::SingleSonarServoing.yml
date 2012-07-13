@@ -1,6 +1,6 @@
 --- name:default
 # enables the debug output port
-enable_debug_output: 0
+enable_debug_output: 1
 # the exploration will simply drive forward in the origin serviong direction
 exploration_speed: 0.1
 # fading out factor for the features in center wall estimator
