@@ -28,7 +28,7 @@ class MainPlanner < Roby::Planning::Planner
     MODEM_WAIT_Z = -2.2 #has to be >= 2.0, because of the switch to wall_servoing
     MODEM_GOTO_SPEED = -0.4
     MODEM_GOTO_DURATION = 2
-    MODEM_HOLD_RECIVED_HEADING = 5
+    MODEM_HOLD_RECIVED_HEADING = 10
     MODEM_WAIT_FOR_COMMAND_TIMEOUT = 60
 
     # must be greater PI for dynamic modus
