@@ -380,6 +380,32 @@ class MainPlanner < Roby::Planning::Planner
         end
     end
 
+    describe("search the asv with sonar").
+        required_arg("mission_timeout", "timeout for this mission")
+    method(:search_asv) do
+        mission_timeout = arguments[:mission_timeout]
+
+        task = asv.script do 
+            wait_any detector_child.start_event
+
+            start_time = nil
+
+            execute do
+                Plan.info "Start searching the asv with sonar."
+                start_time = Time.now
+            end
+
+            poll_until detector_child.ready_for_surfacing_event do
+                if mission_timeout and time_over?(start_time, mission_timeout)
+                    Plan.warn "Search timeout sonar asv search (search_asv)!"
+                    emit :failed
+                end
+            end
+
+            emit :success
+        end
+    end
+
     describe("run a complete asv mission including pingersearch").
         #required_arg("z", "servoing depth").
         optional_arg("timeout","mission timeout in seconds")
