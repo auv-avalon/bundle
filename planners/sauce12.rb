@@ -38,7 +38,7 @@ class MainPlanner < Roby::Planning::Planner
     NAVIGATION_MISSION_TIMEOUT = 30.0
     NAVIGATION_HOLD_POSITION_TIMEOUT = 20.0
 
-    ASV_TIMEOUT = 5 * 60
+    ASV_TIMEOUT = 10 * 60
     PIPELINE_TO_ASV_SEARCH_YAW = -Math::PI / 2.0
     PIPELINE_TO_ASV_MISSION_TIMEOUT = 3 * 60
 
@@ -81,7 +81,7 @@ class MainPlanner < Roby::Planning::Planner
     end
 
     method(:sauce12_asv) do
-        pingersearch_and_asv(:timeout => ASV_TIMEOUT)
+        search_asv(:mission_timeout => ASV_TIMEOUT)
     end
 
     # For debugging of pipeline turn (ALIGN_AUV with inverted preferred heading). Assumes that we are on the pipe.
