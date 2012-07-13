@@ -508,7 +508,7 @@ class MainPlanner < Roby::Planning::Planner
         #    end
         #end
         
-        align = align_and_move(:z => z, 
+        align = align_and_move(:z => z,  #TODO: use desired z from the modem command
                                :yaw => proc { State.modem_desired_heading },
                                :duration => duration,
                                :speed => 0.0)
