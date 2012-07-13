@@ -458,20 +458,22 @@ class MainPlanner < Roby::Planning::Planner
         send_interval = arguments[:send_interval]
         mission_timeout = arguments[:mission_timeout] if mission_timeout
         
-        desired_heading = nil
-        old_send_interval = nil
         
         listener = self.modem_listener
         listener.script do
             data_reader 'modem_message', ['modem', 'motion_command']
             wait_any modem_child.start_event
+
+            start_time = nil
+            desired_heading = nil
+            old_send_interval = nil
             
             execute do
                 start_time = Time.now
                 old_send_interval = modem_child.orogen_task.sendInterval
                 
                 Plan.info "Reducing modem send interval while listening for heading commands."
-                modem_child.orogen_task.send_interval = send_interval
+                modem_child.orogen_task.sendInterval = send_interval
                 
                 Plan.info "Start waiting for modem messages."
             end
@@ -479,27 +481,38 @@ class MainPlanner < Roby::Planning::Planner
             poll do
                 if mission_timeout and time_over?(start_time, mission_timeout)
                     Plan.warn "Mission timeout! (modem_listener)"
+                    Plan.info "Reset send interval to #{old_send_interval}."
+                    modem_child.orogen_task.sendInterval = old_send_interval
+
                     emit :failed
                 end
-                
+
                 message = modem_message_reader.read
                 if message
-                    desired_heading = message.orientation.heading
+                    desired_heading = message.heading
                     Plan.info "Modem Listener: Received heading message: #{desired_heading} rad, #{rad_to_deg(desired_heading)} deg.}"
+
+                    Plan.info "Reset send interval to #{old_send_interval}."
+                    modem_child.orogen_task.sendInterval = old_send_interval
+
+                    State.modem_desired_heading = desired_heading
+
                     emit :success
                 end
             end
         end
-        listener.on :stop do
-            execute do
-                Plan.info "Reset send interval to #{old_send_interval}."
-                modem_child.orogen_task.sendInterval = old_send_interval
-            end
-        end
+
+        #listener.on :stop do
+        #    execute do
+        #        Plan.info "Reset send interval to #{old_send_interval}."
+        #        modem_child.orogen_task.sendInterval = old_send_interval
+        #    end
+        #end
         
         align = align_and_move(:z => z, 
-                               :yaw => desired_heading,
-                               :duration => duration)
+                               :yaw => proc { State.modem_desired_heading },
+                               :duration => duration,
+                               :speed => 0.0)
         
         sequence = []
         sequence << listener << align
