@@ -38,8 +38,6 @@ use Buoy::Survey => Buoy::Survey.
     use_conf('default','simulation')
 use SonarWallHough::Task => SonarWallHough::Task.
     use_conf('default', 'simulation')
-use AsvDetector::Task => AsvDetector::Task.
-    use_conf('default', 'simulation')
 use OffshorePipelineDetector::Task => OffshorePipelineDetector::Task.
     use_conf('default', 'simulation')
 
