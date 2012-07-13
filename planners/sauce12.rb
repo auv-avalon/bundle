@@ -28,7 +28,8 @@ class MainPlanner < Roby::Planning::Planner
     MODEM_WAIT_Z = -2.2 #has to be >= 2.0, because of the switch to wall_servoing
     MODEM_GOTO_SPEED = -0.4
     MODEM_GOTO_DURATION = 2
-    MODEM_WAIT_FOR_COMMAND_TIME = 10
+    MODEM_HOLD_RECIVED_HEADING = 5
+    MODEM_WAIT_FOR_COMMAND_TIMEOUT = 60
 
     # must be greater PI for dynamic modus
     NAVIGATION_DYNAMIC_YAW = 10 
@@ -256,8 +257,13 @@ class MainPlanner < Roby::Planning::Planner
                                         :yaw => MODEM_WAIT_POS_ANGLE,
                                         :duration => MODEM_GOTO_DURATION)
 
-        wait_for_modem_command = simple_move(:z => MODEM_WAIT_Z,
-                                             :duration => MODEM_WAIT_FOR_COMMAND_TIME)
+        #wait_for_modem_command = simple_move(:z => MODEM_WAIT_Z,
+        #                                     :duration => MODEM_WAIT_FOR_COMMAND_TIMEOUT)
+
+        modem_align = modem_aligner(:z => MODEM_WAIT_Z,
+                                    :duration => MODEM_HOLD_RECIVED_HEADING,
+                                    :send_interval => MODEM_WAIT_FOR_COMMAND_TIMEOUT,
+                                    :mission_timeout => MODEM_WAIT_FOR_COMMAND_TIMEOUT)
 
         align_to_wall = align_and_move(:z => MODEM_WAIT_Z,
                                        :yaw => WALL_ALIGNMENT_ANGLE)
