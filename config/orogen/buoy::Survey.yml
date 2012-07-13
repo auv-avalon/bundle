@@ -1,6 +1,6 @@
 --- name:default
 # the absolute high of the buoy in the water.
-buoy_depth: -1.50
+buoy_depth: -1.55
 # no documentation available for this property
 cutting_hight: -0.25
 # time for the cutting-action in seconds.

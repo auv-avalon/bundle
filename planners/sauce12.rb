@@ -19,7 +19,7 @@ class MainPlanner < Roby::Planning::Planner
 
     BUOY_SEARCH_TIMEOUT = 20
     BUOY_MISSION_TIMEOUT = 10 * 60
-    BUOY_SEARCH_Z = -1.5 #always change also the property in the config
+    BUOY_SEARCH_Z = -1.55 #always change also the property in the config
     BUOY_SEARCH_YAW = deg_to_rad(35)
     BUOY_SEARCH_SPEED = 0.3
     BUOY_MODE = :serve_360
