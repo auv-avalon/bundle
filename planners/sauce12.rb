@@ -84,6 +84,13 @@ class MainPlanner < Roby::Planning::Planner
         search_asv(:mission_timeout => ASV_TIMEOUT)
     end
 
+    method(:sauce12_modem) do
+        modem_aligner(:wait_z => MODEM_WAIT_Z,
+                    :duration => MODEM_HOLD_RECIVED_HEADING,
+                    :send_interval => MODEM_WAIT_FOR_COMMAND_TIMEOUT,
+                    :mission_timeout => MODEM_WAIT_FOR_COMMAND_TIMEOUT)
+    end
+
     # For debugging of pipeline turn (ALIGN_AUV with inverted preferred heading). Assumes that we are on the pipe.
     method(:sauce12_align_on_pipe) do
         find_and_follow_pipeline(:yaw => 0, ## we are already on pipe, so yaw is not important
@@ -260,10 +267,7 @@ class MainPlanner < Roby::Planning::Planner
         #wait_for_modem_command = simple_move(:z => MODEM_WAIT_Z,
         #                                     :duration => MODEM_WAIT_FOR_COMMAND_TIMEOUT)
 
-        modem_align = modem_aligner(:z => MODEM_WAIT_Z,
-                                    :duration => MODEM_HOLD_RECIVED_HEADING,
-                                    :send_interval => MODEM_WAIT_FOR_COMMAND_TIMEOUT,
-                                    :mission_timeout => MODEM_WAIT_FOR_COMMAND_TIMEOUT)
+        modem_align = sauce12_modem
 
         align_to_wall = align_and_move(:z => MODEM_WAIT_Z,
                                        :yaw => WALL_ALIGNMENT_ANGLE)
