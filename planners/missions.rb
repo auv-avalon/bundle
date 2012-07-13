@@ -456,8 +456,7 @@ class MainPlanner < Roby::Planning::Planner
         z = arguments[:z]
         duration = arguments[:duration]
         send_interval = arguments[:send_interval]
-        mission_timeout = arguments[:mission_timeout] if mission_timeout
-        
+        mission_timeout = arguments[:mission_timeout] if arguments[:mission_timeout]
         
         listener = self.modem_listener
         listener.script do
