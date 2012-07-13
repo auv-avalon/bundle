@@ -321,26 +321,6 @@ composition 'DualSonarWallDetector' do
     provides Srv::RelativePositionDetector
 end
 
-composition 'AsvDetector' do
-    event :searching
-    event :following
-    event :standing
-    event :asv_lost
-    event :surfacing
-
-    add Srv::ImageProvider, :as => 'camera_left'
-    add Srv::ImageProvider, :as => 'camera_right'
-
-    add Srv::OrientationWithZ, :as => 'orientation'
-    add_main AsvDetector::Task, :as => 'detector'
-
-    connect orientation.orientation_z_samples => detector.orientation_readings
-    connect camera_left.images => detector.left_image
-    
-    export detector.position_command, :as => 'relative_position_command'
-    provides Srv::RelativePositionDetector
-end
-
 composition 'UwvModel' do
     #add AvalonControl::MotionControlTask, :as => 'motion_control'
     add Srv::OrientationWithZ
@@ -437,6 +417,21 @@ composition 'DualLocalization' do
     provides Srv::Pose
 end
 
+composition 'SonarAsvDetector' do
+    event :searching
+    event :ready_for_surfacing
+    event :following
+    event :approaching
+
+    add Srv::SonarScanProvider, :as => 'sonar'
+    add_main AsvDetector::Task, :as => 'detector'
+
+    connect sonar => detector
+
+    export detector.position_command, :as => 'relative_position_command' 
+    provides Srv::RelativePositionDetector
+end
+
 composition 'Pingersearch' do
     # Can be used in simulation as well since simulation omits audio capturing.
     add Srv::SoundSourceDirection, :as => 'angle_estimation'
@@ -452,40 +447,6 @@ Cmp::Pingersearch.specialize 'angle_estimation' => Pingersearch::AngleEstimation
     # On AVALON, use audio reader for sound capturing
     add AudioReader::Task, :as => 'audio_reader'
     autoconnect
-end
-
-composition 'AsvAndPingersearch' do
-    event :searching
-    event :following
-    event :standing
-    event :asv_lost
-    event :surfacing
-
-    add Cmp::Pingersearch, :as => 'pingersearch'
-    add_main Cmp::AsvDetector, :as => 'asv_detector'
-
-    add(Cmp::ControlLoop, :as => 'control').
-      use('command' => AuvRelPosController::Task).
-      use('controller' => AvalonControl::MotionControlTask)
-
-    connect pingersearch => control
-    
-    # Define vehicle control policy: which task gets the vehicle control on which event.
-    on :start do |event|
-        asv_detector = event.task.asv_detector_child
-        asv_detector.on :following do |event|
-            # Give control to asv detector"
-            Robot.info "ASV detected. Give control to asv detector."
-            pingersearch_child.relative_position_command_port.disconnect_from control_child.command_child.position_command_port
-            asv_detector_child.relative_position_command_port.connect_to control_child.command_child.position_command_port
-        end
-        asv_detector.on :asv_lost do |event|
-            # Give control to pinger search
-            Robot.info "ASV lost. Give control to pinger search"
-            asv_detector_child.relative_position_command_port.disconnect_from control_child.command_child.position_command_port
-            pingersearch_child.relative_position_command_port.connect_to control_child.command_child.position_command_port
-        end
-    end
 end
 
 composition 'TestBuoyAndPingersearch' do

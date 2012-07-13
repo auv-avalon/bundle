@@ -17,19 +17,6 @@ use DataServices::AUVMotionController => AvalonControl::MotionControlTask
 
 use device("sonar") => device("sonar").use_deployments(/sonar/)
 
-use Cmp::AsvDetector => Cmp::AsvDetector.
-    use('camera_right' => device('right_unicap_camera')).
-    use('camera_left' => device('left_unicap_camera'))
-
-# Connect right unicap camera only on AVALON, not in Simulation because there we have only one top cam
-Cmp::AsvDetector.specialize 'camera_left' => CameraUnicap::CameraTask do
-    #add Srv::ImageProvider, :as => 'camera_right'
-    connect camera_right.images => detector.right_image
-end
-
-define('asv', Cmp::VisualServoing.use(Cmp::AsvDetector))
-define('asv_detector', Cmp::AsvDetector)
-
 # !!! Configure tasks for specific location !!!
 detector_conf = ["default"]
 use OffshorePipelineDetector::Task => OffshorePipelineDetector::Task.
