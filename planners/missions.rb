@@ -297,8 +297,8 @@ class MainPlanner < Roby::Planning::Planner
                                                             :prefered_yaw => prefered_yaw, 
                                                             :speed => -0.4,
                                                             :follow_speed => -0.3,
-                                                            :search_timeout => 20, # TODO set correct timeout
-                                                            :mission_timeout => 20,
+                                                            :search_timeout => 30, # TODO set correct timeout
+                                                            :mission_timeout => 30,
                                                             :do_safe_turn => false,
                                                             :controlled_turn_on_pipe => false)
             #move_back_controlled.on :start do |event|
@@ -314,7 +314,7 @@ class MainPlanner < Roby::Planning::Planner
                                        :follow_speed => 0.4,
                                        :prefered_yaw => proc { normalize_angle(State.pipeline_heading + Math::PI + 0.1) }, #proc { normalize_angle(prefered_yaw + Math::PI)},
                                        :search_timeout => 40,  # TODO set correct timeout
-                                       :mission_timeout => 180,
+                                       :mission_timeout => 1000,
                                        :do_safe_turn => false,
                                        :controlled_turn_on_pipe => true)
 
@@ -374,6 +374,32 @@ class MainPlanner < Roby::Planning::Planner
 		    end
 
             # transition! if corners and corner_counter >= corners
+            end
+
+            emit :success
+        end
+    end
+
+    describe("search the asv with sonar").
+        required_arg("mission_timeout", "timeout for this mission")
+    method(:search_asv) do
+        mission_timeout = arguments[:mission_timeout]
+
+        task = asv.script do 
+            wait_any detector_child.start_event
+
+            start_time = nil
+
+            execute do
+                Plan.info "Start searching the asv with sonar."
+                start_time = Time.now
+            end
+
+            poll_until detector_child.ready_for_surfacing_event do
+                if mission_timeout and time_over?(start_time, mission_timeout)
+                    Plan.warn "Search timeout sonar asv search (search_asv)!"
+                    emit :failed
+                end
             end
 
             emit :success
@@ -448,28 +474,42 @@ class MainPlanner < Roby::Planning::Planner
     end
     
     describe("Wait for modem messages. They contain heading and depth commands. Write them into actual motion commands.").
-        required_arg("z", "depth").
+        required_arg("wait_z", "depth").
         required_arg("duration","seconds to wait after aligning to received heading").
         required_arg("send_interval","reduced interval for sending position updates for the time waiting on heading commands.").
         optional_arg("mission_timeout","")
     method(:modem_aligner) do
-        z = arguments[:z]
+        wait_z = arguments[:wait_z]
         duration = arguments[:duration]
         send_interval = arguments[:send_interval]
         mission_timeout = arguments[:mission_timeout] if arguments[:mission_timeout]
+        wait_yaw = 0.0
         
         listener = self.modem_listener
         listener.script do
+            data_reader 'orientation', ['orientation_with_z', 'orientation_z_samples']
             data_reader 'modem_message', ['modem', 'motion_command']
+            data_writer 'motion_command', ['control', 'controller', 'motion_commands']
+            
             wait_any modem_child.start_event
+            wait_any control_child.command_child.start_event
+
+            poll do 
+                if o = orientation
+                    wait_yaw = o.orientation.yaw
+                    transition!
+                end
+            end
 
             start_time = nil
             desired_heading = nil
             old_send_interval = nil
+                
             
             execute do
                 start_time = Time.now
-                old_send_interval = modem_child.orogen_task.sendInterval
+                old_send_interval = 2.0
+                connection = control_child.command_child.disconnect_ports(control_child.controller_child, [['motion_command', 'motion_commands']])
                 
                 Plan.info "Reducing modem send interval while listening for heading commands."
                 modem_child.orogen_task.sendInterval = send_interval
@@ -483,42 +523,55 @@ class MainPlanner < Roby::Planning::Planner
                     Plan.info "Reset send interval to #{old_send_interval}."
                     modem_child.orogen_task.sendInterval = old_send_interval
 
-                    emit :failed
+                    State.modem_desired_heading = wait_yaw
+                    State.modem_desired_z = wait_z
+
+                    emit :success
                 end
+
+                motion_command.x_speed = 0.0
+                motion_command.y_speed = 0.0
+                motion_command.z = wait_z
+                motion_command.heading = wait_yaw
+                write_motion_command
 
                 message = modem_message_reader.read
                 if message
                     desired_heading = message.heading
+                    desired_z = message.z
+
                     Plan.info "Modem Listener: Received heading message: #{desired_heading} rad, #{rad_to_deg(desired_heading)} deg.}"
+
+                    Plan.info "Modem Listener: Received z message: #{desired_z}"
 
                     Plan.info "Reset send interval to #{old_send_interval}."
                     modem_child.orogen_task.sendInterval = old_send_interval
 
                     State.modem_desired_heading = desired_heading
 
-                    emit :success
+                    State.modem_desired_z = if desired_z < -1.1 then
+                                                desired_z
+                                            else
+                                                -1.1
+                                            end
+
+                    Plan.info "Modem Listener: move to #{rad_to_deg(State.modem_desired_heading)} rad, z #{State.modem_desired_z}"
+                    transition!
                 end
             end
-        end
 
-        #listener.on :stop do
-        #    execute do
-        #        Plan.info "Reset send interval to #{old_send_interval}."
-        #        modem_child.orogen_task.sendInterval = old_send_interval
-        #    end
-        #end
-        
-        align = align_and_move(:z => z, 
+            emit :success
+        end
+        align = align_and_move(:z => proc { State.modem_desired_z },  #TODO: use desired z from the modem command
                                :yaw => proc { State.modem_desired_heading },
                                :duration => duration,
                                :speed => 0.0)
-        
+
         sequence = []
         sequence << listener << align
-        
+
         task = Planning::BaseTask.new
         task.add_task_sequence(sequence)
         task
-        
     end
 end

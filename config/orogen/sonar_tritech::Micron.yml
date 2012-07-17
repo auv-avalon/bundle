@@ -98,6 +98,19 @@ config:
   right_limit:
     rad: -0.05
 port: /dev/ttyS7
+--- name:asv_search
+config:
+  continous: 0
+  gain: 0.55
+  max_distance: 20.0
+  resolution: 0.1
+  left_limit:
+    rad: 0.7853
+  right_limit:
+    rad: -0.7853
+port: /dev/ttyS7
+
+
 
 ### rear sonar config
 --- name:default_rear

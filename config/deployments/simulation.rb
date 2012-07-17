@@ -16,11 +16,6 @@ use Srv::SoundSourceDirection => AvalonSimulation::PingerSearch
 
 use device("sonar") => device("sonar").use_deployments(/sonar/)
 
-use Cmp::AsvDetector => Cmp::AsvDetector.
-    use('camera_left' => device('left_unicap_camera')).
-    use('camera_right' => device('left_unicap_camera')) #calm roby by assigning an image provider to camera_right
-define('asv', Cmp::VisualServoing.use(Cmp::AsvDetector))
-
 class AvalonSimulation::StateEstimator
     on :start do |event|
         @reader = data_reader :pose_samples
@@ -43,8 +38,6 @@ use Buoy::Survey => Buoy::Survey.
     use_conf('default','simulation')
 use SonarWallHough::Task => SonarWallHough::Task.
     use_conf('default', 'simulation')
-use AsvDetector::Task => AsvDetector::Task.
-    use_conf('default', 'simulation')
 use OffshorePipelineDetector::Task => OffshorePipelineDetector::Task.
     use_conf('default', 'simulation')
 
@@ -58,6 +51,7 @@ add_mission(AvalonSimulation::PingerSearch)
 add_mission(AvalonSimulation::AsvNavigation)
 add_mission(AvalonSimulation::ASVActuators)
 add_mission(AvalonSimulation::WhiteLight)
+add_mission(AvalonSimulation::Modem)
 add_mission("sonar")
 add_mission("sonar_rear")
 #add_mission(Cmp::UwvModel)

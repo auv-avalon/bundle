@@ -1,25 +1,25 @@
 class MainPlanner < Roby::Planning::Planner
 
     PIPELINE_SEARCH_SPEED = 0.50
-    PIPELINE_SEARCH_Z = -2.9 #always change also the property in the config
+    PIPELINE_SEARCH_Z = -3.0 #always change also the property in the config
     PIPELINE_SEARCH_YAW = Math::PI / 2.0
     PIPELINE_PREFERED_YAW = Math::PI ### MATH::PI ==> turn left;    0 ==> turn right
 #    PIPELINE_STABILIZE_YAW = Math::PI / 2.0
     PIPELINE_SEARCH_TIMEOUT = 90
     PIPELINE_TURN_TIMEOUT = 50
-    PIPELINE_MISSION_TIMEOUT = 360
+    PIPELINE_MISSION_TIMEOUT = (7 * 60) + 30
     PIPELINE_TURNS = 1
 
     WALL_SERVOING_Z = -1.1 #always change also the property in the config
-    WALL_SERVOING_TIMEOUT = 5 * 60
+    WALL_SERVOING_TIMEOUT = (4 * 60) + 30
     WALL_ALIGNMENT_ANGLE = Math::PI/2.0
     
     GOTO_WALL_ALIGNMENT_ANGLE = 0.0
     GOTO_WALL_TIMEOUT = 30
 
-    BUOY_SEARCH_TIMEOUT = 20
-    BUOY_MISSION_TIMEOUT = 10 * 60
-    BUOY_SEARCH_Z = -1.5 #always change also the property in the config
+    BUOY_SEARCH_TIMEOUT = 30
+    BUOY_MISSION_TIMEOUT = 8 * 60
+    BUOY_SEARCH_Z = -1.55 #always change also the property in the config
     BUOY_SEARCH_YAW = deg_to_rad(35)
     BUOY_SEARCH_SPEED = 0.3
     BUOY_MODE = :serve_360
@@ -28,7 +28,8 @@ class MainPlanner < Roby::Planning::Planner
     MODEM_WAIT_Z = -2.2 #has to be >= 2.0, because of the switch to wall_servoing
     MODEM_GOTO_SPEED = -0.4
     MODEM_GOTO_DURATION = 2
-    MODEM_WAIT_FOR_COMMAND_TIME = 10
+    MODEM_HOLD_RECIVED_HEADING = 10
+    MODEM_WAIT_FOR_COMMAND_TIMEOUT = 60
 
     # must be greater PI for dynamic modus
     NAVIGATION_DYNAMIC_YAW = 10 
@@ -37,7 +38,7 @@ class MainPlanner < Roby::Planning::Planner
     NAVIGATION_MISSION_TIMEOUT = 30.0
     NAVIGATION_HOLD_POSITION_TIMEOUT = 20.0
 
-    ASV_TIMEOUT = 3 * 60
+    ASV_TIMEOUT = 10 * 60
     PIPELINE_TO_ASV_SEARCH_YAW = -Math::PI / 2.0
     PIPELINE_TO_ASV_MISSION_TIMEOUT = 3 * 60
 
@@ -80,7 +81,14 @@ class MainPlanner < Roby::Planning::Planner
     end
 
     method(:sauce12_asv) do
-        pingersearch_and_asv(:timeout => ASV_TIMEOUT)
+        search_asv(:mission_timeout => ASV_TIMEOUT)
+    end
+
+    method(:sauce12_modem) do
+        modem_aligner(:wait_z => MODEM_WAIT_Z,
+                    :duration => MODEM_HOLD_RECIVED_HEADING,
+                    :send_interval => MODEM_WAIT_FOR_COMMAND_TIMEOUT,
+                    :mission_timeout => MODEM_WAIT_FOR_COMMAND_TIMEOUT)
     end
 
     # For debugging of pipeline turn (ALIGN_AUV with inverted preferred heading). Assumes that we are on the pipe.
@@ -256,8 +264,10 @@ class MainPlanner < Roby::Planning::Planner
                                         :yaw => MODEM_WAIT_POS_ANGLE,
                                         :duration => MODEM_GOTO_DURATION)
 
-        wait_for_modem_command = simple_move(:z => MODEM_WAIT_Z,
-                                             :duration => MODEM_WAIT_FOR_COMMAND_TIME)
+        #modem_align = simple_move(:z => MODEM_WAIT_Z,
+        #                                     :duration => MODEM_WAIT_FOR_COMMAND_TIMEOUT)
+
+        modem_align = sauce12_modem
 
         align_to_wall = align_and_move(:z => MODEM_WAIT_Z,
                                        :yaw => WALL_ALIGNMENT_ANGLE)
@@ -280,7 +290,7 @@ class MainPlanner < Roby::Planning::Planner
 
         #nav = navigate(:waypoint => Eigen::Vector3.new(0.0, 0.0, -2.2))
 
-        run = Planning::MissionRun.new(:timeout => 20.0 * 60.0)
+        run = Planning::MissionRun.new(:timeout => 7.0 * 60.0)
         run.design do
             # Define start and end states
             start(follow_pipe)
@@ -289,8 +299,8 @@ class MainPlanner < Roby::Planning::Planner
 	    transition(follow_pipe, :success => align_for_goto_buoy, :failed => surface)
             transition(align_for_goto_buoy, :success => buoy, :failed => buoy)
 	    transition(buoy, :success => goto_modem_pos, :failed => goto_modem_pos)
-            transition(goto_modem_pos, :success => wait_for_modem_command, :failed => wait_for_modem_command)
-            transition(wait_for_modem_command, :success => align_to_wall, :failed => align_to_wall)  
+            transition(goto_modem_pos, :success => modem_align, :failed => modem_align)
+            transition(modem_align, :success => align_to_wall, :failed => align_to_wall)  
             transition(align_to_wall, :success => wall, :failed => surface)  
             transition(wall, :success => follow_pipe_to_asv, :failed => follow_pipe_to_asv)
             transition(follow_pipe_to_asv, :success => asv, :failed => asv)
@@ -310,7 +320,7 @@ class MainPlanner < Roby::Planning::Planner
     PRACTICE_WALL_ALIGNMENT_ANGLE = 0
     PRACTICE_GOTO_WALL_TIMEOUT = 40
 
-    PRACTICE_BUOY_SEARCH_YAW = deg_to_rad(-90)
+    PRACTICE_BUOY_SEARCH_YAW = deg_to_rad(0)
     PRACTICE_BUOY_SEARCH_TIMEOUT = 40
 
     PRACTICE_MODEM_WAIT_POS_ANGLE = 0

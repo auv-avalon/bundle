@@ -15,7 +15,6 @@ define('hough_localization', Cmp::SonarWallHough.use('sonar'))
 define('particle_localization', Cmp::Localization.use('sonar'))
 define('localization', Cmp::DualLocalization.use('sonar'))
 define('navigation', Cmp::Navigation.use(Cmp::Localization.use('sonar')))
-define('asv_and_pinger', Cmp::AsvAndPingersearch)
 define('modem_listener', Cmp::ModemListener)
 
 define('cross_sonar', Cmp::DualSonarWallDetector. 
@@ -29,6 +28,8 @@ servoing = {
     'pipeline' => Cmp::PipelineDetector.use('bottom_camera'),
 
     'pingersearch' => Cmp::Pingersearch,
+
+    'asv' => Cmp::SonarAsvDetector.use(device('sonar').use_conf('default','asv_search')),
 
     'wall' => Cmp::WallDetector.
        use(device('sonar').use_conf('default', 'wall_servoing_front')).

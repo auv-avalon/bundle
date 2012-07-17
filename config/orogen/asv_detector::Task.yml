@@ -1,22 +1,21 @@
 --- name:default
-camera_image_width: 2592
-camera_image_height: 1944
-shadow_threshold: 0.02
-shadow_sectors: 5
-fixed_depth_near: -2.0
-fixed_depth_far: -3.0
-stereoCamMode: true
-asvHullWidth: 0.35
-asvLength: 4.0
-asvWidth: 1.96
---- name:simulation
-camera_image_width: 251
-camera_image_height: 231
-shadow_threshold: 0.5
-shadow_sectors: 5
-fixed_depth_near: -2.0
-fixed_depth_far: -3.0
-stereoCamMode: false
-asvHullWidth: 0.07
-asvLength: 1.0
-asvWidth: 1.0
+# reference depth far
+fixed_depth: -1.1
+# distance to keep while following
+follow_dist: 5.0
+# In degree. If we are heading towards the asv with a delte less then heading_threshold, we start moving
+heading_threshold: 5.0
+# Angle threshold in degree
+iir_angle_threshold: 10.0
+# Range Threshold in meters
+iir_range_threshold: 2.0
+# Don't move is the delta of desired and actual distance is smaller than motion_threshold
+motion_threshold: 1.0
+# Range Threshold in meters
+not_detected_delay: 20
+# The factor for the motion commands in x and y direction (1.0 is same as distance in meters)
+speed: 1.0
+# How many seconds the movement command must be near zero to change to standing state
+standDuration: 5
+# distance for surfacing
+surface_dist: 3.0
