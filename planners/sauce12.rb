@@ -1,23 +1,23 @@
 class MainPlanner < Roby::Planning::Planner
 
     PIPELINE_SEARCH_SPEED = 0.50
-    PIPELINE_SEARCH_Z = -2.9 #always change also the property in the config
+    PIPELINE_SEARCH_Z = -3.0 #always change also the property in the config
     PIPELINE_SEARCH_YAW = Math::PI / 2.0
     PIPELINE_PREFERED_YAW = Math::PI ### MATH::PI ==> turn left;    0 ==> turn right
 #    PIPELINE_STABILIZE_YAW = Math::PI / 2.0
     PIPELINE_SEARCH_TIMEOUT = 90
     PIPELINE_TURN_TIMEOUT = 50
-    PIPELINE_MISSION_TIMEOUT = 6 * 60
+    PIPELINE_MISSION_TIMEOUT = (7 * 60) + 30
     PIPELINE_TURNS = 1
 
     WALL_SERVOING_Z = -1.1 #always change also the property in the config
-    WALL_SERVOING_TIMEOUT = (4 * 60) + 40
+    WALL_SERVOING_TIMEOUT = (4 * 60) + 30
     WALL_ALIGNMENT_ANGLE = Math::PI/2.0
     
     GOTO_WALL_ALIGNMENT_ANGLE = 0.0
     GOTO_WALL_TIMEOUT = 30
 
-    BUOY_SEARCH_TIMEOUT = 20
+    BUOY_SEARCH_TIMEOUT = 30
     BUOY_MISSION_TIMEOUT = 8 * 60
     BUOY_SEARCH_Z = -1.55 #always change also the property in the config
     BUOY_SEARCH_YAW = deg_to_rad(35)
@@ -290,7 +290,7 @@ class MainPlanner < Roby::Planning::Planner
 
         #nav = navigate(:waypoint => Eigen::Vector3.new(0.0, 0.0, -2.2))
 
-        run = Planning::MissionRun.new(:timeout => 20.0 * 60.0)
+        run = Planning::MissionRun.new(:timeout => 7.0 * 60.0)
         run.design do
             # Define start and end states
             start(follow_pipe)
@@ -320,7 +320,7 @@ class MainPlanner < Roby::Planning::Planner
     PRACTICE_WALL_ALIGNMENT_ANGLE = 0
     PRACTICE_GOTO_WALL_TIMEOUT = 40
 
-    PRACTICE_BUOY_SEARCH_YAW = deg_to_rad(-90)
+    PRACTICE_BUOY_SEARCH_YAW = deg_to_rad(0)
     PRACTICE_BUOY_SEARCH_TIMEOUT = 40
 
     PRACTICE_MODEM_WAIT_POS_ANGLE = 0
