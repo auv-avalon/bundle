@@ -297,8 +297,8 @@ class MainPlanner < Roby::Planning::Planner
                                                             :prefered_yaw => prefered_yaw, 
                                                             :speed => -0.4,
                                                             :follow_speed => -0.3,
-                                                            :search_timeout => 20, # TODO set correct timeout
-                                                            :mission_timeout => 20,
+                                                            :search_timeout => 30, # TODO set correct timeout
+                                                            :mission_timeout => 30,
                                                             :do_safe_turn => false,
                                                             :controlled_turn_on_pipe => false)
             #move_back_controlled.on :start do |event|
@@ -314,7 +314,7 @@ class MainPlanner < Roby::Planning::Planner
                                        :follow_speed => 0.4,
                                        :prefered_yaw => proc { normalize_angle(State.pipeline_heading + Math::PI + 0.1) }, #proc { normalize_angle(prefered_yaw + Math::PI)},
                                        :search_timeout => 40,  # TODO set correct timeout
-                                       :mission_timeout => 180,
+                                       :mission_timeout => 1000,
                                        :do_safe_turn => false,
                                        :controlled_turn_on_pipe => true)
 
@@ -562,7 +562,6 @@ class MainPlanner < Roby::Planning::Planner
 
             emit :success
         end
-
         align = align_and_move(:z => proc { State.modem_desired_z },  #TODO: use desired z from the modem command
                                :yaw => proc { State.modem_desired_heading },
                                :duration => duration,
