@@ -75,9 +75,9 @@ case ARGV.size
 end
 
 desired_models = [
-    'Orocos::RobyPlugin::OffshorePipelineDetector::Task',
-    'Orocos::RobyPlugin::Buoy::Survey',
-    'Orocos::RobyPlugin::WallServoing::SingleSonarServoing'#,
+#    'Orocos::RobyPlugin::OffshorePipelineDetector::Task',
+    'Orocos::RobyPlugin::Buoy::Survey'#,
+#    'Orocos::RobyPlugin::WallServoing::SingleSonarServoing'#,
     #'Orocos::RobyPlugin::OrientationEstimator::Baseestimator'
     #'Orocos::RobyPlugin::DepthReader::depth_and_orientation_fusion'
 #    'Orocos::RobyPlugin::SonarServoing::Task',
@@ -157,54 +157,89 @@ end #while
 
 #symbol_width = all.map(&:symbol).map(&:to_s).map(&:size).max
 
+localization_sample = localization_stream.first
+while localization_sample and localization_sample != localization_stream.last do
+    puts "Localziation sample time: #{localization_sample[1]}"
+    a = localization_sample[2]
+    if not a.time
+        a.time = localization_sample[1]
+    end
+    all << a # ocalization_sample
+    localization_sample = localization_stream.next
+end
+
+last_action = nil
+last_time = nil
+last_ev = nil 
+
 all.sort_by { |ev| ev.time }.each do |ev|
+
+    puts "Time: #{ev.time}"
 
     #puts "%s   %-#{symbol_width}s   %s" % [Roby.format_time(ev.time), ev.symbol, ev.task]
     #puts ev.symbol
     #puts (Roby.format_time ev.time)
 
     time = (ev.time - all[0].time).to_s.split('.').first.rjust(5, '0')
-    action = ev.task.class.name.gsub('Orocos::RobyPlugin::', '')
-    #puts "********** Sample time: " << ev.time.to_s
-
-    #puts "********** Time interval array size:" << orientation_stream.time_interval.size.to_s
-
-    if(ev.time <= localization_stream.time_interval[1])
-	localization_stream.seek(ev.time)
-	sample = localization_stream.next[2]
-    
-    pose = sample.position
-	depth = sample.position[2]
-	headingRad = sample.orientation.yaw
-	heading = (180 / Math::PI) * headingRad
-
-	#relpos = relpos_stream.next[2]
-
-#	world_speed = sample.orientation * Eigen::Vector3.new(relpos.x_speed,relpos.y_speed,0)
-	#puts "************************ World Speed type: " << world_speed.class.to_s
-
-
-	# delta t
-	time_offset = ev.time - last_time
-	last_time = ev.time
-
-	# delta p
-#	world_pos_offset = world_speed * time_offset
-
-	# update position
-#	position_estimate[0] += position_estimate[0] + world_pos_offset[0]
-#	position_estimate[1] += position_estimate[1] + world_pos_offset[1]
-#	position_estimate[2] += depth
-
-#	pos_output_file.puts "#{position_estimate[0]} #{position_estimate[1]}"
-	# call gnuplot with
-	# echo "plot 'position.txt' using 1:2 with lines " | gnuplot -persist
-
+    action = nil
+    puts ev.methods.sort.to_s
+    if ev.respond_to? :task
+        # We have an actual event
+        action = ev.task.class.name.gsub('Orocos::RobyPlugin::', '')
+        last_action = action
+        last_ev = ev
     else
-        puts "WARNING: Some events happened after last orientation sample."
-    end
+        puts "does not respond to task"
+        if last_action
+            puts "we have last action"
+            action = last_action
+            # Sample only 1Hz
+            if last_time and last_time + 1 < ev.time
+                puts "in last time block"
+                # Ignore samples with timestamp before 0 seconds
+                if(ev.time <= localization_stream.time_interval[1])
+                    puts "bla"
+	                #localization_stream.seek(ev.time)
+	                #sample = localization_stream.next[2]
+                        
+                    sample = ev
+                    pp sample.methods.sort.to_s
+                    pose = sample.task.position
+	                depth = sample.task.position[2]
+	                headingRad = sample.task.orientation.yaw
+	                heading = (180 / Math::PI) * headingRad
 
-    log_converter.addSample(LogSample.new(time,"#{pose[0]}","#{pose[1]}","#{depth.to_s.rjust(5, '0')}","#{action}.#{ev.symbol}","heading = #{heading}"))
+	                #relpos = relpos_stream.next[2]
+
+                #	world_speed = sample.orientation * Eigen::Vector3.new(relpos.x_speed,relpos.y_speed,0)
+	                #puts "************************ World Speed type: " << world_speed.class.to_s
+
+
+	                # delta t
+	                time_offset = ev.time - last_time
+	                last_time = ev.time
+
+	                # delta p
+                #	world_pos_offset = world_speed * time_offset
+
+	                # update position
+                #	position_estimate[0] += position_estimate[0] + world_pos_offset[0]
+                #	position_estimate[1] += position_estimate[1] + world_pos_offset[1]
+                #	position_estimate[2] += depth
+
+                #	pos_output_file.puts "#{position_estimate[0]} #{position_estimate[1]}"
+	                # call gnuplot with
+	                # echo "plot 'position.txt' using 1:2 with lines " | gnuplot -persist
+
+                    else
+                        puts "WARNING: Some events happened after last orientation sample."
+                    end
+                    
+                    log_converter.addSample(LogSample.new(time,"#{pose[0]}","#{pose[1]}","#{depth.to_s.rjust(5, '0')}","#{action}.#{last_ev.symbol}","heading = #{heading}"))
+            end
+        end
+        last_time = ev.time   
+    end
 
 end
 
