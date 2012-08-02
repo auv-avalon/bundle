@@ -9,6 +9,9 @@ class SonarTritech::Echosounder
     driver_for "Dev::Echosounder" do
         provides Srv::GroundDistance
     end
+    def configure
+       super
+    end
 end
 
 #class SonarTritech::Profiling

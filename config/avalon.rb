@@ -83,7 +83,7 @@ Robot.devices do
 #    period(0.01).
 #    use_conf('default_rear','sonar_rear_right')
   device(Dev::Echosounder, :as => "echosounder").
-    period(0.01).
+    period(0.01)
 
 
 

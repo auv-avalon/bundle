@@ -173,4 +173,3 @@ config:
   right_limit:
     rad: -0.2
 port: /dev/ttyS5
-

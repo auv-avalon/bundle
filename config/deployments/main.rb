@@ -17,9 +17,9 @@ define('localization', Cmp::DualLocalization.use('sonar'))
 define('navigation', Cmp::Navigation.use(Cmp::Localization.use('sonar')))
 define('modem_listener', Cmp::ModemListener)
 
-define('cross_sonar', Cmp::DualSonarWallDetector. 
-       use('sonar_front' => device('sonar').use_conf('default', 'straight_front')).
-       use('sonar_rear' => device('sonar_rear').use_conf('default_rear', 'straight_rear')))
+#define('cross_sonar', Cmp::DualSonarWallDetector. 
+#       use('sonar_front' => device('sonar').use_conf('default', 'straight_front')).
+#       use('sonar_rear' => device('sonar_rear').use_conf('default_rear', 'straight_rear')))
 
 servoing = {
 
@@ -35,9 +35,9 @@ servoing = {
        use(device('sonar').use_conf('default', 'wall_servoing_front')).
         use(SonarFeatureEstimator::Task.use_conf('default', 'wall_servoing')),
 
-    'dual_wall' => Cmp::DualSonarWallDetector.
-       use('sonar_front' => device('sonar').use_conf('default', 'dual_wall_servoing')).
-       use('sonar_rear' => device('sonar_rear').use_conf('default_rear', 'sonar_rear_right')),
+#    'dual_wall' => Cmp::DualSonarWallDetector.
+#       use('sonar_front' => device('sonar').use_conf('default', 'dual_wall_servoing')).
+#       use('sonar_rear' => device('sonar_rear').use_conf('default_rear', 'sonar_rear_right')),
 
     'wall_front_align' => Cmp::WallDetector.
         use(device('sonar').use_conf('default', 'wall_servoing_front_far')).
