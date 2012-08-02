@@ -5,6 +5,12 @@ class SonarTritech::Micron
     end
 end
 
+class SonarTritech::Echosounder
+    driver_for "Dev::Echosounder" do
+        provides Srv::GroundDistance
+    end
+end
+
 #class SonarTritech::Profiling
 #    driver_for "Dev::Profiling"
 #end

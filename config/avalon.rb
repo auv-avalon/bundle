@@ -79,9 +79,12 @@ Robot.devices do
   #  period(0.01).
   #  use_conf('sonar_profiling_micron')
 
-  device(Dev::Micron, :as => "sonar_rear").
+#  device(Dev::Micron, :as => "sonar_rear").
+#    period(0.01).
+#    use_conf('default_rear','sonar_rear_right')
+  device(Dev::Echosounder, :as => "echosounder").
     period(0.01).
-    use_conf('default_rear','sonar_rear_right')
+
 
 
   device(Dev::CameraProsilica, :as => "front_camera").

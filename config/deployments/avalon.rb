@@ -7,7 +7,8 @@ use Srv::OrientationWithZ => Cmp::OrientationWithZ
 use Srv::Speed            => Cmp::OrientationWithZ
 use Srv::Pose             => Cmp::Localization.use('sonar')
 
-use Srv::GroundDistance   => device('sonar_rear') 
+#use Srv::GroundDistance   => device('sonar_rear') 
+use Srv::GroundDistance   => device('echosounder') 
 use Srv::SoundSourceDirection => Pingersearch::AngleEstimation
 
 use DataServices::AUVMotionController => AvalonControl::MotionControlTask
@@ -58,7 +59,8 @@ add_mission(Cmp::ModemPositionOutput)
 
 add_mission('gps')
 add_mission('sonar')
-add_mission('sonar_rear')
+add_mission('echosounder')
+#add_mission('sonar_rear')
 
 add_mission(Cmp::OrientationWithZ)
 #add_mission(Cmp::UwvModel)
