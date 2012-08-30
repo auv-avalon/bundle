@@ -10,7 +10,7 @@ define('drive_simple', Cmp::ControlLoop.
     use('command' => Cmp::AUVJoystickCommand).
     use('controller' => AvalonControl::MotionControlTask))
 
-define('uwv_dynamic_model', Cmp::UwvModel)
+#define('uwv_dynamic_model', Cmp::UwvModel)
 define('hough_localization', Cmp::SonarWallHough.use('sonar'))
 define('particle_localization', Cmp::Localization.use('sonar'))
 define('localization', Cmp::DualLocalization.use('sonar'))

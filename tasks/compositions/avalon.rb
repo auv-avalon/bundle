@@ -17,7 +17,7 @@ using_task_library 'raw_control_command_converter'
 using_task_library 'sonar_tritech'
 using_task_library 'wall_servoing'
 using_task_library 'sonar_feature_estimator'
-using_task_library 'uwv_dynamic_model'
+#using_task_library 'uwv_dynamic_model'
 using_task_library 'sonar_wall_hough'
 using_task_library 'uw_particle_localization'
 using_task_library 'asv_detector'
@@ -321,18 +321,18 @@ composition 'DualSonarWallDetector' do
     provides Srv::RelativePositionDetector
 end
 
-composition 'UwvModel' do
-    #add AvalonControl::MotionControlTask, :as => 'motion_control'
-    add Srv::OrientationWithZ
-    add Srv::Actuators
-    #add Srv::ActuatorController
-    add UwvDynamicModel::Task, :as => 'model'
-    autoconnect
-
-    export model.uwvstate
-    provides Srv::Speed
-    provides Srv::RelativePose
-end
+#composition 'UwvModel' do
+#    #add AvalonControl::MotionControlTask, :as => 'motion_control'
+#    add Srv::OrientationWithZ
+#    add Srv::Actuators
+#    #add Srv::ActuatorController
+#    add UwvDynamicModel::Task, :as => 'model'
+#    autoconnect
+#
+#    export model.uwvstate
+#    provides Srv::Speed
+#    provides Srv::RelativePose
+#end
 
 composition 'SonarWallHough' do
     add Srv::OrientationWithZ
