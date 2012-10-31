@@ -133,7 +133,7 @@ class MainPlanner < Roby::Planning::Planner
         PIPELINE_SEARCH_CANDIDATE_SPEED = if speed > 0 then 0.1 else -0.1 end
 	
         pipeline = self.pipeline
-        task = pipeline.script do
+        pipeline.script do
             data_reader 'pipeline_info', ['detector', 'offshorePipelineDetector', 'pipeline']
             data_writer 'motion_command', ['control', 'controller', 'motion_commands']
 
@@ -244,7 +244,7 @@ class MainPlanner < Roby::Planning::Planner
             emit :success
         end
 
-        task.on :success do |event|
+        pipeline.on :success do |event|
             heading = event.task.detector_child.pipeline_heading
             if heading
                 Plan.info "Storing current pipeline heading on END_OF_PIPE: #{heading * 180 / Math::PI} deg, #{heading} rad"
@@ -337,7 +337,7 @@ class MainPlanner < Roby::Planning::Planner
         timeout = arguments[:timeout]
 
         wall_servoing = self.wall_right # TODO use method argument to choose wall servoing mode
-        roby_task = wall_servoing.script do
+        wall_servoing.script do
             wait_any detector_child.start_event
             wait_any control_child.command_child.start_event
 
@@ -412,7 +412,7 @@ class MainPlanner < Roby::Planning::Planner
     method(:pingersearch_and_asv) do
         #z = arguments[:z]
         timeout = arguments[:timeout]
-        roby_task = self.asv_and_pinger.script do
+        self.asv_and_pinger.script do
             data_reader 'orientation', ['control', 'orientation_with_z', 'orientation_z_samples']
             data_writer 'surface_command', ['asv_detector', 'detector', 'do_surface']
             
