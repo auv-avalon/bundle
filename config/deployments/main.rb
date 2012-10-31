@@ -75,7 +75,8 @@ model.data_service_type "NavigationMode"
 Cmp::ControlLoop.provides Srv::NavigationMode
 Cmp::VisualServoing.provides Srv::NavigationMode
 
-modality_selection Srv::NavigationMode, 'drive_simple', 'relative_position_control', 
-    'pipeline', 'buoy'
+# 31.10.2012 Modularity Selection is broken an will be removd from Roby in general in future, so it should not hurt os to disable this "feature"
+# modality_selection Srv::NavigationMode, 'drive_simple', 'relative_position_control', 
+#     'pipeline', 'buoy'
 
 
