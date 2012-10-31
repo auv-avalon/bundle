@@ -6,8 +6,9 @@ engine:
 # Logging configuration
 log:
   # Where log files go
-  dir: /mnt/logs/ # <<<<<<<<<<< Use this on AVALON!!!
+  #dir: /mnt/logs/ # <<<<<<<<<<< Use this on AVALON!!!
   #dir: log # <<<<<<<<<<< Use this on other computers!!!
+  #filter_backtraces: false
   
   # Log system events. It can be either true, false or stats. If true, all
   # plan-level events are logged, allowing to use the roby-log GUI to replay
@@ -44,6 +45,7 @@ log:
   #
   levels:
         roby: ERROR
+  #      roby/planning: DEBUG
   #levels:
   #      roby: WARN
   #        orocos/roby_plugin: INFO:avalon_dataflow.txt
