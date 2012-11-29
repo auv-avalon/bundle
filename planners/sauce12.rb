@@ -17,8 +17,8 @@ class MainPlanner < Roby::Planning::Planner
     GOTO_WALL_ALIGNMENT_ANGLE = 0.0
     GOTO_WALL_TIMEOUT = 30
 
-    BUOY_SEARCH_TIMEOUT = 60 
-    BUOY_MISSION_TIMEOUT = 8 * 60
+    BUOY_SEARCH_TIMEOUT = 50 
+    BUOY_MISSION_TIMEOUT = 2 * 60
     BUOY_SEARCH_Z = -1.55 #always change also the property in the config
     BUOY_SEARCH_YAW = deg_to_rad(35)
     BUOY_SEARCH_SPEED = 0.3
@@ -29,7 +29,7 @@ class MainPlanner < Roby::Planning::Planner
     MODEM_GOTO_SPEED = -0.4
     MODEM_GOTO_DURATION = 2
     MODEM_HOLD_RECIVED_HEADING = 10
-    MODEM_WAIT_FOR_COMMAND_TIMEOUT = 60
+    MODEM_WAIT_FOR_COMMAND_TIMEOUT = 30 
 
     # must be greater PI for dynamic modus
     NAVIGATION_DYNAMIC_YAW = 10 
@@ -249,6 +249,7 @@ class MainPlanner < Roby::Planning::Planner
                     :keep_time => NAVIGATION_HOLD_POSITION_TIMEOUT)
     end
 
+
     describe("Autonomous mission SAUC-E'12")
     method(:sauce12_complete) do
 
@@ -309,7 +310,56 @@ class MainPlanner < Roby::Planning::Planner
         
     end
 
+    method(:full_demo) do
+        first_task = demo
+        first_task.on :stop do |context|
+            Robot.second_step!
+        end
+    end
 
+    method(:second_step) do
+        second_task = align_and_move(:speed => 0.5,
+                                        :z => -2.0,
+                                        :yaw => -Math::PI/2.0,
+                                        :duration => 30)
+
+        second_task.on :stop do |context|
+            Robot.full_demo!
+        end
+    end
+
+
+    describe("Autonomous mission demo for SAUC-E'12")
+    method(:demo) do
+        
+        complete_mission = sauce12_complete
+
+        
+        submerge = simple_move(:z => -2)
+        surface = simple_move(:z => 0)
+        
+        run = Planning::MissionRun.new(:timeout => 60.0 * 60.0 * 8) #8 hours!
+
+        #sim_set_avalon(:sauce_start)
+        run.design do
+            # Define start and end states
+            start(submerge)
+            finish(surface)
+            
+	    transition(submerge, :success => complete_mission, :failed => surface)
+            transition(complete_mission, :success => surface, :failed => surface)
+        end        
+    end
+
+#    method(:infloop) do
+#        loop do
+#            t = demo!
+#            sleep 5
+#            while(t.running?)
+#                sleep 5
+#            end
+#        end
+#    end
     ########################################################################
     # Practice Area Missions                                               #
     ########################################################################

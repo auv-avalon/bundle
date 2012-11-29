@@ -54,6 +54,6 @@ right_opening_angle: 1.57
 --- name:wall_right
 servoing_wall_direction: -1.57
 initial_wall_direction: -1.57
-servoing_speed: 0.4
+servoing_speed: 0.2
 left_opening_angle: 1.57
 right_opening_angle: 1.1

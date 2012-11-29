@@ -35,6 +35,17 @@ module Robot
         task.clearWaypoints
     end
 
+    def self.loopinf
+        sim_set_avalon(:sauce_start)
+        loop do
+            t = demo!
+            sleep 10 
+            while(t.running?)
+                sleep 5
+            end
+        end
+    end
+
     def self.sim_set_avalon(object)
         buoy = { :x => 37.43, :y => -0.36, :z => -1.16, :theta => 0.0 } #rad
         pipe = { :x => 31.6, :y => 1.52, :z => -2.2, :theta => -0.10 } # rad
