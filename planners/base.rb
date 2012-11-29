@@ -64,6 +64,7 @@ class MainPlanner
                     heading_error = normalize_angle(current_heading - target_heading)
                     depth_error = current_pose.position.z - z
 
+                    Plan.info "Still doing simple movement, Yaw error: #{heading_error.abs} Depth error: #{depth_error.abs}"
                     if heading_error.abs < YAW_THRESHOLD && depth_error.abs < Z_THRESHOLD
                         transition!
                     end
@@ -143,7 +144,7 @@ class MainPlanner
 
                     yaw_error = normalize_angle(current_yaw - yaw)
                     depth_error = current_depth - z
-
+                    Plan.info "Still doing aling and move, Yaw error: #{yaw_error.abs} Depth error: #{depth_error.abs}"
                     transition! if yaw_error.abs < YAW_THRESHOLD and depth_error.abs < Z_THRESHOLD
                  end
             end

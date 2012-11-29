@@ -75,7 +75,7 @@ class MainPlanner < Roby::Planning::Planner
                 end
 
                 # Buoy detected?
-                if detector_child.buoy_detected? or detector_child.buoy_arrived?
+                if detector_child.buoy_detected? or detector_child.buoy_arrived? 
                     # Give control back to detector task
                     Plan.info "Buoy detected: Start Servoing"
                     control_child.command_child.connect_ports(control_child.controller_child, connection)

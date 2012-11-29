@@ -25,4 +25,6 @@ roi_width: 3.5
 roi_height: 3.5
 sat_th: 55
 --- name:simulation
-
+sValue: 215 
+hValue: 25
+buoy_radius: 0.05

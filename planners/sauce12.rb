@@ -17,7 +17,7 @@ class MainPlanner < Roby::Planning::Planner
     GOTO_WALL_ALIGNMENT_ANGLE = 0.0
     GOTO_WALL_TIMEOUT = 30
 
-    BUOY_SEARCH_TIMEOUT = 30
+    BUOY_SEARCH_TIMEOUT = 60 
     BUOY_MISSION_TIMEOUT = 8 * 60
     BUOY_SEARCH_Z = -1.55 #always change also the property in the config
     BUOY_SEARCH_YAW = deg_to_rad(35)

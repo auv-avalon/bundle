@@ -36,7 +36,7 @@ module Robot
     end
 
     def self.sim_set_avalon(object)
-        buoy = { :x => 43.58, :y => 0.56, :z => -2.21, :theta => 1.3 } #rad
+        buoy = { :x => 37.43, :y => -0.36, :z => -1.16, :theta => 0.0 } #rad
         pipe = { :x => 31.6, :y => 1.52, :z => -2.2, :theta => -0.10 } # rad
         wall = { :x => 45.0, :y => 2.5, :z => -4.5, :theta => 0.0 }
         sauce_start = { :x => 31.0, :y => -8.0, :z => -2.5, :theta => Math::PI / 2.0 }
@@ -56,7 +56,7 @@ module Robot
             position = pipe
         end
 
-        sim_set_pose(position[:x], position[:y], position[:z], position[:theta])
+        sim_set_pose(position[:x], position[:y], position[:z], 0)#position[:theta])
     end
 end
 
