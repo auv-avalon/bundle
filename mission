@@ -1,0 +1,746 @@
+14:40:52.190 (Robot) turning ON MQueue usage
+14:40:59.102 (avalon) Current Button Mapping:
+14:40:59.102 (avalon)  on Fire: Idle mode
+14:40:59.102 (avalon)  on 2: Preoperation mode
+14:40:59.102 (avalon)  on 3: Manual Control
+14:40:59.102 (avalon)  on 4: Supervision Control
+14:40:59.102 (avalon)  on 5: Supervision Autonoum (Amber)
+14:40:59.102 (avalon)  on 7: sauce12_complete
+14:40:59.102 (avalon)  on 8: sauce12_pipeline
+14:40:59.102 (avalon)  on 9: sauce12_buoy
+14:40:59.102 (avalon)  on 10: sauce12_wall
+14:40:59.102 (avalon)  on 11: drive_simple
+14:40:59.102 (avalon)  on 12: wall_front_right
+14:40:59.102 (avalon)  on 13: dual_wall
+14:40:59.102 (avalon)  on 14: wall_left
+[35mOrocos[WARN]: ignoring configuration file /home/auv/next/supervision/config/orogen/avalon_simulation::WhiteLight.yml as there are no corresponding task model
+[0m[35mOrocos[WARN]: ignoring configuration file /home/auv/next/supervision/config/orogen/avalon_simulation::StateEstimator.yml as there are no corresponding task model
+[0m[35mOrocos[WARN]: ignoring configuration file /home/auv/next/supervision/config/orogen/avalon_simulation::Actuators.yml as there are no corresponding task model
+[0m[35mOrocos[WARN]: ignoring configuration file /home/auv/next/supervision/config/orogen/avalon_simulation::SonarTop.yml as there are no corresponding task model
+[0m[35mOrocos[WARN]: ignoring configuration file /home/auv/next/supervision/config/orogen/avalon_simulation::SonarRear.yml as there are no corresponding task model
+[0m[35mOrocos[WARN]: ignoring configuration file /home/auv/next/supervision/config/orogen/avalon_simulation::FrontCamera.yml as there are no corresponding task model
+[0m[35mOrocos[WARN]: ignoring configuration file /home/auv/next/supervision/config/orogen/avalon_simulation::BottomCamera.yml as there are no corresponding task model
+[0m[35mOrocos[WARN]: ignoring configuration file /home/auv/next/supervision/config/orogen/avalon_simulation::Task.yml as there are no corresponding task model
+[0m14:40:59.752 (avalon) loaded Roby 0.8.0 on ruby 1.9.2p0 (2010-08-18 revision 29036) [x86_64-linux]
+14:40:59.787 (avalon) loading controller file /home/auv/next/supervision/controllers/avalon.rb
+[35mOrocos[WARN]: cannot compute input period for aligned port Orocos::RobyPlugin::UwParticleLocalization::Task:0x6a25638:speed_samples, setting period to 0
+[0m[35mOrocos[WARN]: cannot compute input period for aligned port Orocos::RobyPlugin::UwParticleLocalization::Task:0x6a25638:pipeline_samples, setting period to 0
+[0m[35mOrocos[WARN]: cannot compute input period for aligned port Orocos::RobyPlugin::UwParticleLocalization::Task:0x6a25638:pose_update, setting period to 0
+[0m14:41:00.814 (avalon) not logging camera_base::Task:state
+14:41:00.817 (avalon) not logging canbus::Task:state
+14:41:00.817 (avalon) not logging canbus::Task:hbridge_set
+14:41:00.817 (avalon) not logging canbus::Task:experiment_markers
+14:41:00.818 (avalon) not logging canbus::Task:system_status
+14:41:00.818 (avalon) not logging canbus::Task:remote_joystick
+14:41:00.818 (avalon) not logging canbus::Task:battery_management
+14:41:00.818 (avalon) not logging canbus::Task:depth_reader
+14:41:00.818 (avalon) not logging canbus::Task:modem
+14:41:00.818 (avalon) not logging depth_reader::Task:canOut
+14:41:00.819 (avalon) not logging depth_reader::Task:state
+14:41:00.819 (avalon) not logging hbridge::Task:state
+14:41:00.819 (avalon) not logging hbridge::Task:can_out
+14:41:00.819 (avalon) not logging depth_reader::depth_and_orientation_fusion:state
+14:41:00.822 (avalon) not logging orientation_estimator::BaseEstimator:state
+14:41:00.825 (avalon) not logging xsens_imu::Task:state
+14:41:00.827 (avalon) not logging fog_kvh::Dsp3000Task:state
+14:41:00.829 (avalon) not logging sonar_tritech::Micron:state
+14:41:00.832 (avalon) not logging sonar_tritech::Micron:state
+14:41:00.834 (avalon) not logging sysmon::Task:state
+14:41:00.836 (avalon) not logging modem_can::Task:canOut
+14:41:00.837 (avalon) not logging modem_can::Task:state
+14:41:00.839 (avalon) not logging sonar_feature_estimator::Task:state
+[35mOrocos[WARN]: deployment dual_wall_servoing has no logger (dual_wall_servoing_Logger)
+[0m14:41:00.841 (avalon) not logging uw_particle_localization::Task:state
+14:41:00.843 (avalon) not logging gps::BaseTask:state
+14:41:00.846 (avalon) not logging camera_base::Task:state
+14:41:00.866 (avalon) done initialization
+14:41:00.866 (avalon) syslevel=- pos=- heading=-
+14:41:01.337 (avalon) ready
+14:41:01.338 (avalon) syslevel=- pos=- heading=-
+14:41:03.114 (avalon) syslevel=- pos=- heading=-
+14:41:03.116 (avalon) setting up Orocos::RobyPlugin::CameraProsilica::Task:0x47e8b10{orocos_name => bottom_camera, camera_prosilica_name => bottom_camera, conf => [default, bottom_camera]}[]
+14:41:03.142 (avalon) applied configuration [default, bottom_camera] to bottom_camera
+14:41:05.321 (avalon) setting up Orocos::RobyPlugin::OrientationEstimator::BaseEstimator:0x65a8880{orocos_name => orientation_estimator, conf => [default, sauce12]}[]
+14:41:05.332 (avalon) applied configuration [default, sauce12] to orientation_estimator
+14:41:05.334 (avalon) setting up Orocos::RobyPlugin::XsensImu::Task:0x65d5290{orocos_name => xsens, xsens_imu_name => imu, conf => [default]}[]
+14:41:05.337 (avalon) applied configuration [default] to xsens
+14:41:05.479 (avalon) setting up Orocos::RobyPlugin::FogKvh::Dsp3000Task:0x661b650{orocos_name => fog, dsp3000_name => fog, conf => [default]}[]
+14:41:05.482 (avalon) applied configuration [default] to fog
+14:41:05.483 (avalon) setting up Orocos::RobyPlugin::SonarTritech::Micron:0x664aab8{orocos_name => sonar, micron_name => sonar, conf => [default]}[]
+14:41:05.489 (avalon) applied configuration [default] to sonar
+14:41:06.284 (avalon) setting up Orocos::RobyPlugin::SonarTritech::Micron:0x6678440{orocos_name => sonar_rear, micron_name => sonar_rear, conf => [default_rear, sonar_rear_right]}[]
+14:41:06.291 (avalon) applied configuration [default_rear, sonar_rear_right] to sonar_rear
+14:41:06.983 (avalon) setting up Orocos::RobyPlugin::Sysmon::Task:0x66eaef0{orocos_name => sysmon, experiment_markers_name => experiment_markers, system_status_name => system_status, experiment_markers_com_bus => can0, system_status_com_bus => can0, conf => [default]}[]
+14:41:06.984 (avalon) setting up Orocos::RobyPlugin::ModemCan::Task:0x671c310{orocos_name => modem, modem_name => modem, modem_com_bus => can0, conf => [default]}[]
+14:41:06.986 (avalon) applied configuration [default] to modem
+14:41:06.987 (avalon) setting up Orocos::RobyPlugin::SonarFeatureEstimator::Task:0x68862c8{orocos_name => sonar_feature_estimator_2, conf => [default]}[]
+14:41:06.999 (avalon) applied configuration [default] to sonar_feature_estimator_2
+14:41:07.000 (avalon) setting up Orocos::RobyPlugin::Gps::GPSDTask:0x69edf80{orocos_name => gps, gps_name => gps, conf => [default]}[]
+14:41:07.003 (avalon) applied configuration [default] to gps
+14:41:07.007 (avalon) setting up Orocos::RobyPlugin::UwParticleLocalization::Task:0x6a25638{orocos_name => uw_particle_localization, conf => [default]}[]
+14:41:07.035 (avalon) applied configuration [default] to uw_particle_localization
+14:41:07.037 (avalon) setting up Orocos::RobyPlugin::CameraProsilica::Task:0x6b29bb0{orocos_name => front_camera, camera_prosilica_name => front_camera, conf => [default, front_camera]}[]
+14:41:07.060 (avalon) applied configuration [default, front_camera] to front_camera
+14:41:09.246 (avalon) reconfiguring Orocos::RobyPlugin::Logger::Logger:0x6ce4bf8{orocos_name => bottom_camera_Logger, conf => [default]}[]: the task is marked as needing reconfiguration
+14:41:09.247 (avalon) setting up Orocos::RobyPlugin::Logger::Logger:0x6ce4bf8{orocos_name => bottom_camera_Logger, conf => [default]}[]
+14:41:09.294 (avalon) reconfiguring Orocos::RobyPlugin::Logger::Logger:0x6d63bb0{orocos_name => orientation_estimator_Logger, conf => [default]}[]: the task is marked as needing reconfiguration
+14:41:09.294 (avalon) setting up Orocos::RobyPlugin::Logger::Logger:0x6d63bb0{orocos_name => orientation_estimator_Logger, conf => [default]}[]
+14:41:09.349 (avalon) reconfiguring Orocos::RobyPlugin::Logger::Logger:0x6d9d040{orocos_name => xsens_Logger, conf => [default]}[]: the task is marked as needing reconfiguration
+14:41:09.349 (avalon) setting up Orocos::RobyPlugin::Logger::Logger:0x6d9d040{orocos_name => xsens_Logger, conf => [default]}[]
+14:41:09.409 (avalon) reconfiguring Orocos::RobyPlugin::Logger::Logger:0x6dc8240{orocos_name => fog_Logger, conf => [default]}[]: the task is marked as needing reconfiguration
+14:41:09.409 (avalon) setting up Orocos::RobyPlugin::Logger::Logger:0x6dc8240{orocos_name => fog_Logger, conf => [default]}[]
+14:41:09.463 (avalon) reconfiguring Orocos::RobyPlugin::Logger::Logger:0x6df42a0{orocos_name => sonar_Logger, conf => [default]}[]: the task is marked as needing reconfiguration
+14:41:09.464 (avalon) setting up Orocos::RobyPlugin::Logger::Logger:0x6df42a0{orocos_name => sonar_Logger, conf => [default]}[]
+14:41:09.513 (avalon) reconfiguring Orocos::RobyPlugin::Logger::Logger:0x6e203f0{orocos_name => sonar_rear_Logger, conf => [default]}[]: the task is marked as needing reconfiguration
+14:41:09.513 (avalon) setting up Orocos::RobyPlugin::Logger::Logger:0x6e203f0{orocos_name => sonar_rear_Logger, conf => [default]}[]
+14:41:09.569 (avalon) reconfiguring Orocos::RobyPlugin::Logger::Logger:0x6e4b2a8{orocos_name => sysmon_Logger, conf => [default]}[]: the task is marked as needing reconfiguration
+14:41:09.569 (avalon) setting up Orocos::RobyPlugin::Logger::Logger:0x6e4b2a8{orocos_name => sysmon_Logger, conf => [default]}[]
+14:41:09.595 (avalon) reconfiguring Orocos::RobyPlugin::Logger::Logger:0x6e84058{orocos_name => modem_Logger, conf => [default]}[]: the task is marked as needing reconfiguration
+14:41:09.595 (avalon) setting up Orocos::RobyPlugin::Logger::Logger:0x6e84058{orocos_name => modem_Logger, conf => [default]}[]
+14:41:09.638 (avalon) reconfiguring Orocos::RobyPlugin::Logger::Logger:0x6ed67b8{orocos_name => uw_particle_localization_Logger, conf => [default]}[]: the task is marked as needing reconfiguration
+14:41:09.638 (avalon) setting up Orocos::RobyPlugin::Logger::Logger:0x6ed67b8{orocos_name => uw_particle_localization_Logger, conf => [default]}[]
+14:41:09.723 (avalon) reconfiguring Orocos::RobyPlugin::Logger::Logger:0x6f003d8{orocos_name => avalon_gps_Logger, conf => [default]}[]: the task is marked as needing reconfiguration
+14:41:09.723 (avalon) setting up Orocos::RobyPlugin::Logger::Logger:0x6f003d8{orocos_name => avalon_gps_Logger, conf => [default]}[]
+14:41:09.764 (avalon) reconfiguring Orocos::RobyPlugin::Logger::Logger:0x6f2ce60{orocos_name => front_camera_Logger, conf => [default]}[]: the task is marked as needing reconfiguration
+14:41:09.764 (avalon) setting up Orocos::RobyPlugin::Logger::Logger:0x6f2ce60{orocos_name => front_camera_Logger, conf => [default]}[]
+14:41:10.159 (avalon) syslevel=- pos=- heading=-
+14:41:10.160 (avalon) setting up Orocos::RobyPlugin::Hbridge::Task<hbridge_set>:0x418c460{hbridge_set_name => hbridge_set, hbridge_set_com_bus => can0, conf => [default], orocos_name => hbridge}[]
+14:41:10.170 (avalon) applied configuration [default] to hbridge
+14:41:10.173 (avalon) hbridge: dispatching [6, 3, 2, -1, 4, 5] on motors [RW]
+14:41:10.178 (avalon) setting up Orocos::RobyPlugin::DepthReader::Task:0x6558fd8{orocos_name => depth, depth_reader_name => depth_reader, depth_reader_com_bus => can0, conf => [default]}[]
+14:41:10.186 (avalon) applied configuration [default] to depth
+14:41:10.187 (avalon) setting up Orocos::RobyPlugin::DepthReader::DepthAndOrientationFusion:0x6561ac0{orocos_name => depth_orientation_fusion, conf => [default]}[]
+14:41:10.193 (avalon) applied configuration [default] to depth_orientation_fusion
+14:41:10.194 (avalon) setting up Orocos::RobyPlugin::Canbus::Task:0x65718d0{orocos_name => can, canbus_name => can0, conf => [default]}[]
+14:41:10.196 (avalon) applied configuration [default] to can
+14:41:10.197 (avalon) can0: watching hbridge_set on 0x0/700
+14:41:10.199 (avalon) can0: watching modem on 0x1e0/7ff
+14:41:10.203 (avalon) can0: watching depth_reader on 0x130/7f0
+14:41:10.207 (avalon) can0: watching battery_management on 0x120/7f0
+14:41:10.211 (avalon) can0: watching system_status on 0x101/7ff
+14:41:10.215 (avalon) can0: watching remote_joystick on 0x100/7ff
+14:41:10.219 (avalon) can0: watching experiment_markers on 0x1c0/7ff
+14:41:10.224 (avalon) reconfiguring Orocos::RobyPlugin::Logger::Logger:0x6d2e2a8{orocos_name => avalon_back_base_control_Logger, conf => [default]}[]: the task is marked as needing reconfiguration
+14:41:10.224 (avalon) setting up Orocos::RobyPlugin::Logger::Logger:0x6d2e2a8{orocos_name => avalon_back_base_control_Logger, conf => [default]}[]
+[35mOrocos[WARN]: the MQ transport could be selected, but the marshalling size of samples from the output port hbridge.status_motors, of type /base/actuators/Status, is unknown
+[0m[35mOrocos[WARN]: the MQ transport could be selected, but the marshalling size of samples from the output port orientation_estimator.attitude_b_g, of type /base/samples/RigidBodyState_m, is unknown
+[0m[35mOrocos[WARN]: the MQ transport could be selected, but the marshalling size of samples from the output port depth_orientation_fusion.pose_samples, of type /base/samples/RigidBodyState_m, is unknown
+[0m[35mOrocos[WARN]: the MQ transport could be selected, but the marshalling size of samples from the output port depth_orientation_fusion.pose_samples, of type /base/samples/RigidBodyState_m, is unknown
+[0m[35mOrocos[WARN]: failed to create a connection from can.modem to modem.canModem using the MQ transport, falling back to CORBA
+[0m[35mOrocos[WARN]: the MQ transport could be selected, but the marshalling size of samples from the output port xsens.orientation_samples, of type /base/samples/RigidBodyState_m, is unknown
+[0m[35mOrocos[WARN]: the MQ transport could be selected, but the marshalling size of samples from the output port sonar.sonar_beam, of type /base/samples/SonarBeam, is unknown
+[0m[35mOrocos[WARN]: the MQ transport could be selected, but the marshalling size of samples from the output port uw_particle_localization.pose_samples, of type /base/samples/RigidBodyState_m, is unknown
+[0m[35mOrocos[WARN]: the MQ transport could be selected, but the marshalling size of samples from the output port sonar_feature_estimator_2.new_feature, of type /base/samples/LaserScan, is unknown
+[0m14:41:10.510 (avalon) starting Orocos::RobyPlugin::SonarFeatureEstimator::Task:0x68862c8{orocos_name => sonar_feature_estimator_2, conf => [default]}[] (sonar_feature_estimator_2)
+14:41:10.560 (avalon) starting Orocos::RobyPlugin::Logger::Logger:0x6ce4bf8{orocos_name => bottom_camera_Logger, conf => [default]}[] (bottom_camera_Logger)
+14:41:10.662 (avalon) starting Orocos::RobyPlugin::Logger::Logger:0x6d2e2a8{orocos_name => avalon_back_base_control_Logger, conf => [default]}[] (avalon_back_base_control_Logger)
+14:41:10.760 (avalon) starting Orocos::RobyPlugin::Logger::Logger:0x6d63bb0{orocos_name => orientation_estimator_Logger, conf => [default]}[] (orientation_estimator_Logger)
+14:41:10.860 (avalon) starting Orocos::RobyPlugin::Logger::Logger:0x6d9d040{orocos_name => xsens_Logger, conf => [default]}[] (xsens_Logger)
+14:41:10.960 (avalon) starting Orocos::RobyPlugin::Logger::Logger:0x6dc8240{orocos_name => fog_Logger, conf => [default]}[] (fog_Logger)
+14:41:11.060 (avalon) starting Orocos::RobyPlugin::Logger::Logger:0x6df42a0{orocos_name => sonar_Logger, conf => [default]}[] (sonar_Logger)
+14:41:11.160 (avalon) starting Orocos::RobyPlugin::Logger::Logger:0x6e203f0{orocos_name => sonar_rear_Logger, conf => [default]}[] (sonar_rear_Logger)
+14:41:11.260 (avalon) starting Orocos::RobyPlugin::Logger::Logger:0x6e4b2a8{orocos_name => sysmon_Logger, conf => [default]}[] (sysmon_Logger)
+14:41:11.360 (avalon) starting Orocos::RobyPlugin::Logger::Logger:0x6e84058{orocos_name => modem_Logger, conf => [default]}[] (modem_Logger)
+14:41:11.461 (avalon) starting Orocos::RobyPlugin::Logger::Logger:0x6ed67b8{orocos_name => uw_particle_localization_Logger, conf => [default]}[] (uw_particle_localization_Logger)
+14:41:11.560 (avalon) starting Orocos::RobyPlugin::Logger::Logger:0x6f003d8{orocos_name => avalon_gps_Logger, conf => [default]}[] (avalon_gps_Logger)
+14:41:11.660 (avalon) starting Orocos::RobyPlugin::Logger::Logger:0x6f2ce60{orocos_name => front_camera_Logger, conf => [default]}[] (front_camera_Logger)
+14:41:11.677 (avalon) starting Orocos::RobyPlugin::Canbus::Task:0x65718d0{orocos_name => can, canbus_name => can0, conf => [default]}[] (can)
+14:41:11.683 (avalon) starting Orocos::RobyPlugin::Hbridge::Task<hbridge_set>:0x418c460{hbridge_set_name => hbridge_set, hbridge_set_com_bus => can0, conf => [default], orocos_name => hbridge}[] (hbridge)
+14:41:11.687 (avalon) starting Orocos::RobyPlugin::CameraProsilica::Task:0x47e8b10{orocos_name => bottom_camera, camera_prosilica_name => bottom_camera, conf => [default, bottom_camera]}[] (bottom_camera)
+14:41:12.802 (avalon) starting Orocos::RobyPlugin::DepthReader::Task:0x6558fd8{orocos_name => depth, depth_reader_name => depth_reader, depth_reader_com_bus => can0, conf => [default]}[] (depth)
+14:41:12.807 (avalon) starting Orocos::RobyPlugin::DepthReader::DepthAndOrientationFusion:0x6561ac0{orocos_name => depth_orientation_fusion, conf => [default]}[] (depth_orientation_fusion)
+14:41:12.815 (avalon) starting Orocos::RobyPlugin::OrientationEstimator::BaseEstimator:0x65a8880{orocos_name => orientation_estimator, conf => [default, sauce12]}[] (orientation_estimator)
+14:41:12.821 (avalon) starting Orocos::RobyPlugin::XsensImu::Task:0x65d5290{orocos_name => xsens, xsens_imu_name => imu, conf => [default]}[] (xsens)
+14:41:13.316 (avalon) starting Orocos::RobyPlugin::FogKvh::Dsp3000Task:0x661b650{orocos_name => fog, dsp3000_name => fog, conf => [default]}[] (fog)
+14:41:13.323 (avalon) starting Orocos::RobyPlugin::SonarTritech::Micron:0x664aab8{orocos_name => sonar, micron_name => sonar, conf => [default]}[] (sonar)
+14:41:13.410 (avalon) starting Orocos::RobyPlugin::SonarTritech::Micron:0x6678440{orocos_name => sonar_rear, micron_name => sonar_rear, conf => [default_rear, sonar_rear_right]}[] (sonar_rear)
+14:41:13.431 (avalon) starting Orocos::RobyPlugin::Sysmon::Task:0x66eaef0{orocos_name => sysmon, experiment_markers_name => experiment_markers, system_status_name => system_status, experiment_markers_com_bus => can0, system_status_com_bus => can0, conf => [default]}[] (sysmon)
+14:41:13.439 (avalon) starting Orocos::RobyPlugin::ModemCan::Task:0x671c310{orocos_name => modem, modem_name => modem, modem_com_bus => can0, conf => [default]}[] (modem)
+14:41:13.443 (avalon) starting Orocos::RobyPlugin::Gps::GPSDTask:0x69edf80{orocos_name => gps, gps_name => gps, conf => [default]}[] (gps)
+14:41:13.449 (avalon) starting Orocos::RobyPlugin::UwParticleLocalization::Task:0x6a25638{orocos_name => uw_particle_localization, conf => [default]}[] (uw_particle_localization)
+14:41:13.455 (avalon) starting Orocos::RobyPlugin::CameraProsilica::Task:0x6b29bb0{orocos_name => front_camera, camera_prosilica_name => front_camera, conf => [default, front_camera]}[] (front_camera)
+14:41:14.588 (avalon) syslevel=- pos=- heading=-
+14:41:15.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.12)[0m heading=(-20.90 deg, -0.36 rad)[0m
+14:41:16.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.11)[0m heading=(-44.55 deg, -0.78 rad)[0m
+14:41:17.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.11)[0m heading=(-59.23 deg, -1.03 rad)[0m
+14:41:18.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.14)[0m heading=(-65.82 deg, -1.15 rad)[0m
+14:41:19.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.15)[0m heading=(-77.87 deg, -1.36 rad)[0m
+14:41:20.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.12)[0m heading=(-97.97 deg, -1.71 rad)[0m
+14:41:21.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.10)[0m heading=(-102.40 deg, -1.79 rad)[0m
+14:41:22.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.09)[0m heading=(-96.94 deg, -1.69 rad)[0m
+14:41:23.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.09)[0m heading=(-96.78 deg, -1.69 rad)[0m
+14:41:24.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.11)[0m heading=(-95.30 deg, -1.66 rad)[0m
+14:41:25.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.10)[0m heading=(-91.08 deg, -1.59 rad)[0m
+14:41:26.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.08)[0m heading=(-86.99 deg, -1.52 rad)[0m
+14:41:27.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.08)[0m heading=(-84.39 deg, -1.47 rad)[0m
+14:41:28.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.11)[0m heading=(-77.37 deg, -1.35 rad)[0m
+14:41:29.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.17)[0m heading=(-72.08 deg, -1.26 rad)[0m
+14:41:30.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.16)[0m heading=(-74.54 deg, -1.30 rad)[0m
+14:41:31.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.14)[0m heading=(-78.51 deg, -1.37 rad)[0m
+14:41:32.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.15)[0m heading=(-83.26 deg, -1.45 rad)[0m
+14:41:33.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.13)[0m heading=(-87.76 deg, -1.53 rad)[0m
+14:41:34.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.12)[0m heading=(-92.03 deg, -1.61 rad)[0m
+14:41:35.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.10)[0m heading=(-95.23 deg, -1.66 rad)[0m
+14:41:36.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.09)[0m heading=(-97.74 deg, -1.71 rad)[0m
+14:41:37.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.10)[0m heading=(-97.94 deg, -1.71 rad)[0m
+14:41:38.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.10)[0m heading=(-99.37 deg, -1.73 rad)[0m
+14:41:39.589 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.10)[0m heading=(-93.73 deg, -1.64 rad)[0m
+14:41:40.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.11)[0m heading=(-83.45 deg, -1.46 rad)[0m
+14:41:41.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.10)[0m heading=(-70.09 deg, -1.22 rad)[0m
+14:41:42.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.09)[0m heading=(-51.71 deg, -0.90 rad)[0m
+14:41:43.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.08)[0m heading=(-29.37 deg, -0.51 rad)[0m
+14:41:44.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.08)[0m heading=(-7.45 deg, -0.13 rad)[0m
+14:41:45.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.08)[0m heading=(8.52 deg, 0.15 rad)[0m
+14:41:46.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.09)[0m heading=(25.64 deg, 0.45 rad)[0m
+14:41:47.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.10)[0m heading=(42.05 deg, 0.73 rad)[0m
+14:41:48.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.10)[0m heading=(60.85 deg, 1.06 rad)[0m
+14:41:49.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.09)[0m heading=(79.46 deg, 1.39 rad)[0m
+14:41:50.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.09)[0m heading=(89.52 deg, 1.56 rad)[0m
+14:41:51.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.12)[0m heading=(83.47 deg, 1.46 rad)[0m
+14:41:52.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.13)[0m heading=(79.76 deg, 1.39 rad)[0m
+14:41:53.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.16)[0m heading=(78.21 deg, 1.37 rad)[0m
+14:41:54.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.15)[0m heading=(80.37 deg, 1.40 rad)[0m
+14:41:55.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.13)[0m heading=(84.03 deg, 1.47 rad)[0m
+14:41:56.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.11)[0m heading=(86.75 deg, 1.51 rad)[0m
+14:41:57.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.11)[0m heading=(88.97 deg, 1.55 rad)[0m
+14:41:58.587 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.10)[0m heading=(88.13 deg, 1.54 rad)[0m
+14:41:59.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=0.12)[0m heading=(86.15 deg, 1.50 rad)[0m
+14:42:00.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=0.11)[0m heading=(87.29 deg, 1.52 rad)[0m
+14:42:01.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=0.11)[0m heading=(85.23 deg, 1.49 rad)[0m
+14:42:02.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=0.08)[0m heading=(85.32 deg, 1.49 rad)[0m
+14:42:03.008 (MainPlanner) Set global timeout to 1200.0 seconds for this mission
+[35mOrocos[WARN]: cannot compute input period for aligned port Orocos::RobyPlugin::UwParticleLocalization::Task:0x492f0a0:speed_samples, setting period to 0
+[0m[35mOrocos[WARN]: cannot compute input period for aligned port Orocos::RobyPlugin::UwParticleLocalization::Task:0x492f0a0:pipeline_samples, setting period to 0
+[0m[35mOrocos[WARN]: cannot compute input period for aligned port Orocos::RobyPlugin::UwParticleLocalization::Task:0x492f0a0:pose_update, setting period to 0
+[0m14:42:05.738 (avalon) not logging sonar_feature_estimator::Task:state
+14:42:05.743 (avalon) not logging auv_rel_pos_controller::Task:state
+14:42:05.746 (avalon) not logging offshore_pipeline_detector::Task:state
+14:42:05.749 (avalon) not logging avalon_control::MotionControlTask:estimated_ground_pos
+14:42:05.749 (avalon) not logging avalon_control::MotionControlTask:state
+14:42:05.750 (avalon) not logging canbus::Task:state
+14:42:05.750 (avalon) not logging canbus::Task:hbridge_set
+14:42:05.750 (avalon) not logging canbus::Task:modem
+14:42:05.750 (avalon) not logging canbus::Task:remote_joystick
+14:42:05.750 (avalon) not logging canbus::Task:experiment_markers
+14:42:05.750 (avalon) not logging canbus::Task:system_status
+14:42:05.750 (avalon) not logging canbus::Task:battery_management
+14:42:05.751 (avalon) not logging canbus::Task:depth_reader
+14:42:05.751 (avalon) not logging depth_reader::Task:canOut
+14:42:05.751 (avalon) not logging depth_reader::Task:state
+14:42:05.751 (avalon) not logging hbridge::Task:state
+14:42:05.751 (avalon) not logging hbridge::Task:can_out
+14:42:05.752 (avalon) not logging depth_reader::depth_and_orientation_fusion:state
+14:42:05.786 (avalon) not logging camera_base::Task:state
+14:42:05.789 (avalon) not logging orientation_estimator::BaseEstimator:state
+14:42:05.791 (avalon) not logging xsens_imu::Task:state
+14:42:05.794 (avalon) not logging fog_kvh::Dsp3000Task:state
+14:42:05.796 (avalon) not logging sonar_tritech::Micron:state
+14:42:05.799 (avalon) not logging sonar_tritech::Micron:state
+14:42:05.800 (avalon) not logging sysmon::Task:state
+14:42:05.802 (avalon) not logging modem_can::Task:canOut
+14:42:05.803 (avalon) not logging modem_can::Task:state
+14:42:05.804 (avalon) not logging uw_particle_localization::Task:state
+14:42:05.806 (avalon) not logging gps::BaseTask:state
+14:42:05.807 (avalon) not logging camera_base::Task:state
+14:42:06.282 (avalon) interrupting Orocos::RobyPlugin::SonarFeatureEstimator::Task:0x68862c8
+14:42:06.288 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=0.08)[0m heading=(84.97 deg, 1.48 rad)[0m
+[35mOrocos[WARN]: got 200 state updates for Orocos::RobyPlugin::DepthReader::DepthAndOrientationFusion:0x6561ac0{orocos_name => depth_orientation_fusion, conf => [default]}[], we might have lost some state updates in the process
+[0m14:42:06.522 (avalon) setting up Orocos::RobyPlugin::AvalonControl::MotionControlTask:0x83e53c0{orocos_name => motion_control, conf => [default]}[]
+14:42:06.747 (avalon) applied configuration [default] to motion_control
+14:42:07.217 (avalon) stopped Orocos::RobyPlugin::SonarFeatureEstimator::Task:0x68862c8{orocos_name => sonar_feature_estimator_2, conf => [default]}[]
+14:42:07.237 (MainPlanner) Overriding prefered heading to 3.141592653589793
+14:42:07.238 (MainPlanner) Searching pipeline on yaw 1.5707963267948966 with z -2.9 using channel -1. Preferred yaw: 3.141592653589793
+14:42:07.243 (avalon) hb is of class #<specialized from Orocos::RobyPlugin::Hbridge::Task services: hbridge_set[Dev::HbridgeSet], hbridge_set.motors[Hbridge::Task<hbridge_set>.Dev::Hbridges<motors>]>
+14:42:07.244 (avalon) timout started
+14:42:07.244 (avalon) delaying read_only errors by 10 seconds
+14:42:07.261 (avalon) setting up Orocos::RobyPlugin::SonarFeatureEstimator::Task:0x4de5a40{orocos_name => sonar_feature_estimator, conf => [default]}[]
+14:42:07.274 (avalon) applied configuration [default] to sonar_feature_estimator
+14:42:07.275 (avalon) setting up Orocos::RobyPlugin::AuvRelPosController::Task:0x55812b8{orocos_name => auv_rel_pos_controller, conf => [default]}[]
+14:42:07.280 (avalon) applied configuration [default] to auv_rel_pos_controller
+14:42:07.285 (avalon) setting up Orocos::RobyPlugin::OffshorePipelineDetector::Task:0x7a801e0{orocos_name => pipeline_follower, conf => [default]}[]
+14:42:07.302 (avalon) applied configuration [default] to pipeline_follower
+14:42:07.302 (avalon) reconfiguring Orocos::RobyPlugin::Logger::Logger:0x7dc8550{orocos_name => pipeline_follower_Logger, conf => [default]}[]: the task is marked as needing reconfiguration
+14:42:07.303 (avalon) setting up Orocos::RobyPlugin::Logger::Logger:0x7dc8550{orocos_name => pipeline_follower_Logger, conf => [default]}[]
+14:42:07.377 (avalon) reconfiguring Orocos::RobyPlugin::Logger::Logger:0x7e0a950{orocos_name => auv_rel_pos_controller_Logger, conf => [default]}[]: the task is marked as needing reconfiguration
+14:42:07.377 (avalon) setting up Orocos::RobyPlugin::Logger::Logger:0x7e0a950{orocos_name => auv_rel_pos_controller_Logger, conf => [default]}[]
+14:42:07.428 (avalon) reconfiguring Orocos::RobyPlugin::Logger::Logger:0x7e288b0{orocos_name => sonar_feature_estimator_Logger, conf => [default]}[]: the task is marked as needing reconfiguration
+14:42:07.428 (avalon) setting up Orocos::RobyPlugin::Logger::Logger:0x7e288b0{orocos_name => sonar_feature_estimator_Logger, conf => [default]}[]
+[35mOrocos[WARN]: the MQ transport could be selected, but the marshalling size of samples from the output port bottom_camera.frame, of type /base/samples/frame/Frame, is unknown
+[0m[35mOrocos[WARN]: the MQ transport could be selected, but the marshalling size of samples from the output port depth_orientation_fusion.pose_samples, of type /base/samples/RigidBodyState_m, is unknown
+[0m[35mOrocos[WARN]: the MQ transport could be selected, but the marshalling size of samples from the output port sonar.sonar_beam, of type /base/samples/SonarBeam, is unknown
+[0m[35mOrocos[WARN]: the MQ transport could be selected, but the marshalling size of samples from the output port sonar_feature_estimator.new_feature, of type /base/samples/LaserScan, is unknown
+[0m[35mOrocos[WARN]: the MQ transport could be selected, but the marshalling size of samples from the output port depth_orientation_fusion.pose_samples, of type /base/samples/RigidBodyState_m, is unknown
+[0m[35mOrocos[WARN]: the MQ transport could be selected, but the marshalling size of samples from the output port sonar_rear.ground_distance, of type /base/samples/RigidBodyState_m, is unknown
+[0m14:42:07.591 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=0.10)[0m heading=(85.60 deg, 1.49 rad)[0m
+14:42:07.603 (avalon) Event: [14:42:07.603 @490] Orocos::RobyPlugin::Hbridge::Task<hbridge_set>:0x418c460{hbridge_set_name => hbridge_set, hbridge_set_com_bus => can0, conf => [default], orocos_name => hbridge}[]/read_write is calles
+14:42:07.604 (avalon) hbridge switched to read_write, resuming handling of hbridge errors
+14:42:07.607 (avalon) starting Orocos::RobyPlugin::Logger::Logger:0x7dc8550{orocos_name => pipeline_follower_Logger, conf => [default]}[] (pipeline_follower_Logger)
+14:42:07.618 (avalon) starting Orocos::RobyPlugin::Logger::Logger:0x7e0a950{orocos_name => auv_rel_pos_controller_Logger, conf => [default]}[] (auv_rel_pos_controller_Logger)
+14:42:07.710 (avalon) starting Orocos::RobyPlugin::Logger::Logger:0x7e288b0{orocos_name => sonar_feature_estimator_Logger, conf => [default]}[] (sonar_feature_estimator_Logger)
+14:42:07.721 (avalon) starting Orocos::RobyPlugin::AvalonControl::MotionControlTask:0x83e53c0{orocos_name => motion_control, conf => [default]}[] (motion_control)
+14:42:07.737 (avalon) starting Orocos::RobyPlugin::SonarFeatureEstimator::Task:0x4de5a40{orocos_name => sonar_feature_estimator, conf => [default]}[] (sonar_feature_estimator)
+14:42:07.742 (avalon) starting Orocos::RobyPlugin::AuvRelPosController::Task:0x55812b8{orocos_name => auv_rel_pos_controller, conf => [default]}[] (auv_rel_pos_controller)
+14:42:07.745 (avalon) starting Orocos::RobyPlugin::OffshorePipelineDetector::Task:0x7a801e0{orocos_name => pipeline_follower, conf => [default]}[] (pipeline_follower)
+14:42:08.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=0.09)[0m heading=(86.26 deg, 1.51 rad)[0m
+14:42:09.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=0.04)[0m heading=(87.29 deg, 1.52 rad)[0m
+14:42:10.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-0.06)[0m heading=(88.29 deg, 1.54 rad)[0m
+14:42:11.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-0.13)[0m heading=(90.55 deg, 1.58 rad)[0m
+14:42:12.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-0.22)[0m heading=(91.04 deg, 1.59 rad)[0m
+14:42:13.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-0.29)[0m heading=(91.63 deg, 1.60 rad)[0m
+14:42:14.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-0.34)[0m heading=(90.54 deg, 1.58 rad)[0m
+14:42:15.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-0.32)[0m heading=(89.65 deg, 1.56 rad)[0m
+14:42:16.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-0.26)[0m heading=(90.25 deg, 1.58 rad)[0m
+14:42:17.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-0.24)[0m heading=(89.73 deg, 1.57 rad)[0m
+14:42:18.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-0.27)[0m heading=(89.21 deg, 1.56 rad)[0m
+14:42:19.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-0.34)[0m heading=(90.45 deg, 1.58 rad)[0m
+14:42:20.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-0.38)[0m heading=(90.13 deg, 1.57 rad)[0m
+14:42:21.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-0.42)[0m heading=(89.68 deg, 1.57 rad)[0m
+14:42:22.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-0.46)[0m heading=(90.02 deg, 1.57 rad)[0m
+14:42:23.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-0.52)[0m heading=(90.06 deg, 1.57 rad)[0m
+14:42:24.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-0.61)[0m heading=(90.23 deg, 1.57 rad)[0m
+14:42:25.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-0.69)[0m heading=(89.84 deg, 1.57 rad)[0m
+14:42:26.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-0.76)[0m heading=(90.38 deg, 1.58 rad)[0m
+14:42:27.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-0.83)[0m heading=(90.08 deg, 1.57 rad)[0m
+14:42:28.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-0.90)[0m heading=(90.01 deg, 1.57 rad)[0m
+14:42:29.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-0.99)[0m heading=(90.50 deg, 1.58 rad)[0m
+14:42:30.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-1.06)[0m heading=(90.01 deg, 1.57 rad)[0m
+14:42:31.581 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-1.15)[0m heading=(90.19 deg, 1.57 rad)[0m
+14:42:32.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-1.24)[0m heading=(90.48 deg, 1.58 rad)[0m
+14:42:33.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-1.31)[0m heading=(89.82 deg, 1.57 rad)[0m
+14:42:34.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-1.37)[0m heading=(90.31 deg, 1.58 rad)[0m
+14:42:35.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-1.44)[0m heading=(89.96 deg, 1.57 rad)[0m
+14:42:36.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-1.52)[0m heading=(90.13 deg, 1.57 rad)[0m
+14:42:37.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-1.59)[0m heading=(90.14 deg, 1.57 rad)[0m
+14:42:38.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-1.68)[0m heading=(90.06 deg, 1.57 rad)[0m
+14:42:39.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-1.75)[0m heading=(89.98 deg, 1.57 rad)[0m
+14:42:40.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-1.83)[0m heading=(90.32 deg, 1.58 rad)[0m
+14:42:41.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-1.90)[0m heading=(89.93 deg, 1.57 rad)[0m
+14:42:42.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-1.97)[0m heading=(90.00 deg, 1.57 rad)[0m
+14:42:43.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.06)[0m heading=(90.26 deg, 1.58 rad)[0m
+14:42:44.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.14)[0m heading=(89.97 deg, 1.57 rad)[0m
+14:42:45.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.22)[0m heading=(90.14 deg, 1.57 rad)[0m
+14:42:46.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.30)[0m heading=(90.10 deg, 1.57 rad)[0m
+14:42:47.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.37)[0m heading=(90.05 deg, 1.57 rad)[0m
+14:42:48.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.46)[0m heading=(89.93 deg, 1.57 rad)[0m
+14:42:49.642 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.54)[0m heading=(90.16 deg, 1.57 rad)[0m
+14:42:50.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.58)[0m heading=(89.83 deg, 1.57 rad)[0m
+14:42:51.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.66)[0m heading=(90.00 deg, 1.57 rad)[0m
+14:42:52.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.73)[0m heading=(90.08 deg, 1.57 rad)[0m
+14:42:53.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.78)[0m heading=(89.87 deg, 1.57 rad)[0m
+14:42:54.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.78)[0m heading=(89.75 deg, 1.57 rad)[0m
+14:42:55.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.77)[0m heading=(89.92 deg, 1.57 rad)[0m
+14:42:56.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.76)[0m heading=(89.89 deg, 1.57 rad)[0m
+14:42:57.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.78)[0m heading=(89.68 deg, 1.57 rad)[0m
+14:42:58.640 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.81)[0m heading=(89.91 deg, 1.57 rad)[0m
+14:42:59.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.83)[0m heading=(89.76 deg, 1.57 rad)[0m
+14:43:00.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.81)[0m heading=(90.09 deg, 1.57 rad)[0m
+14:43:01.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.78)[0m heading=(89.74 deg, 1.57 rad)[0m
+14:43:02.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.77)[0m heading=(89.95 deg, 1.57 rad)[0m
+14:43:03.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.78)[0m heading=(89.78 deg, 1.57 rad)[0m
+14:43:04.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.78)[0m heading=(89.70 deg, 1.57 rad)[0m
+14:43:05.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.79)[0m heading=(90.01 deg, 1.57 rad)[0m
+14:43:06.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.78)[0m heading=(89.78 deg, 1.57 rad)[0m
+14:43:07.627 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.79)[0m heading=(89.99 deg, 1.57 rad)[0m
+14:43:08.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.79)[0m heading=(89.96 deg, 1.57 rad)[0m
+14:43:09.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.78)[0m heading=(89.87 deg, 1.57 rad)[0m
+14:43:10.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.78)[0m heading=(89.98 deg, 1.57 rad)[0m
+14:43:11.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.78)[0m heading=(89.96 deg, 1.57 rad)[0m
+14:43:12.391 (MainPlanner) Pipeline detected and found
+14:43:12.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.79)[0m heading=(89.80 deg, 1.57 rad)[0m
+14:43:13.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.80)[0m heading=(95.82 deg, 1.67 rad)[0m
+14:43:14.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.82)[0m heading=(107.90 deg, 1.88 rad)[0m
+14:43:15.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.80)[0m heading=(114.77 deg, 2.00 rad)[0m
+14:43:16.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.80)[0m heading=(117.66 deg, 2.05 rad)[0m
+14:43:17.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.79)[0m heading=(126.69 deg, 2.21 rad)[0m
+14:43:18.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.82)[0m heading=(138.89 deg, 2.42 rad)[0m
+14:43:19.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.84)[0m heading=(150.92 deg, 2.63 rad)[0m
+14:43:20.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.84)[0m heading=(161.89 deg, 2.83 rad)[0m
+14:43:21.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.84)[0m heading=(167.73 deg, 2.93 rad)[0m
+14:43:22.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.84)[0m heading=(169.45 deg, 2.96 rad)[0m
+14:43:23.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.83)[0m heading=(167.97 deg, 2.93 rad)[0m
+14:43:24.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.83)[0m heading=(168.28 deg, 2.94 rad)[0m
+14:43:25.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.82)[0m heading=(171.36 deg, 2.99 rad)[0m
+14:43:26.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.83)[0m heading=(175.44 deg, 3.06 rad)[0m
+14:43:26.990 (MainPlanner) Following pipeline until END_OF_PIPE is occuring
+14:43:27.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.83)[0m heading=(179.62 deg, 3.14 rad)[0m
+14:43:28.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.84)[0m heading=(-176.37 deg, -3.08 rad)[0m
+14:43:29.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.83)[0m heading=(-172.84 deg, -3.02 rad)[0m
+14:43:30.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.82)[0m heading=(-170.40 deg, -2.97 rad)[0m
+14:43:31.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.81)[0m heading=(-169.93 deg, -2.97 rad)[0m
+14:43:32.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.82)[0m heading=(-170.44 deg, -2.97 rad)[0m
+14:43:33.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.83)[0m heading=(-171.56 deg, -2.99 rad)[0m
+14:43:34.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.85)[0m heading=(-172.90 deg, -3.02 rad)[0m
+14:43:35.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.85)[0m heading=(-174.61 deg, -3.05 rad)[0m
+14:43:36.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.84)[0m heading=(-176.20 deg, -3.08 rad)[0m
+14:43:37.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.84)[0m heading=(-178.57 deg, -3.12 rad)[0m
+14:43:38.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.84)[0m heading=(178.75 deg, 3.12 rad)[0m
+14:43:39.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.85)[0m heading=(175.44 deg, 3.06 rad)[0m
+14:43:40.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.85)[0m heading=(172.75 deg, 3.02 rad)[0m
+14:43:41.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.85)[0m heading=(172.41 deg, 3.01 rad)[0m
+14:43:42.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.83)[0m heading=(173.03 deg, 3.02 rad)[0m
+14:43:43.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.84)[0m heading=(173.98 deg, 3.04 rad)[0m
+14:43:44.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.85)[0m heading=(175.65 deg, 3.07 rad)[0m
+14:43:45.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.85)[0m heading=(177.95 deg, 3.11 rad)[0m
+14:43:46.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.86)[0m heading=(-179.10 deg, -3.13 rad)[0m
+14:43:47.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.83)[0m heading=(-176.96 deg, -3.09 rad)[0m
+14:43:48.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.83)[0m heading=(-175.87 deg, -3.07 rad)[0m
+14:43:49.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.81)[0m heading=(-175.12 deg, -3.06 rad)[0m
+14:43:50.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.81)[0m heading=(-176.13 deg, -3.07 rad)[0m
+14:43:51.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.81)[0m heading=(-178.13 deg, -3.11 rad)[0m
+14:43:52.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.81)[0m heading=(179.50 deg, 3.13 rad)[0m
+14:43:53.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.80)[0m heading=(177.49 deg, 3.10 rad)[0m
+14:43:54.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.79)[0m heading=(175.40 deg, 3.06 rad)[0m
+14:43:55.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.81)[0m heading=(173.47 deg, 3.03 rad)[0m
+14:43:56.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.82)[0m heading=(171.66 deg, 3.00 rad)[0m
+14:43:57.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.83)[0m heading=(171.30 deg, 2.99 rad)[0m
+14:43:58.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.84)[0m heading=(171.54 deg, 2.99 rad)[0m
+14:43:59.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.85)[0m heading=(171.99 deg, 3.00 rad)[0m
+14:44:00.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.87)[0m heading=(171.96 deg, 3.00 rad)[0m
+14:44:01.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.87)[0m heading=(172.82 deg, 3.02 rad)[0m
+14:44:02.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.87)[0m heading=(174.00 deg, 3.04 rad)[0m
+14:44:03.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.87)[0m heading=(175.65 deg, 3.07 rad)[0m
+14:44:04.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.86)[0m heading=(175.82 deg, 3.07 rad)[0m
+14:44:05.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.86)[0m heading=(175.12 deg, 3.06 rad)[0m
+14:44:06.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.87)[0m heading=(174.06 deg, 3.04 rad)[0m
+14:44:07.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(174.42 deg, 3.04 rad)[0m
+14:44:08.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(175.41 deg, 3.06 rad)[0m
+14:44:09.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(175.54 deg, 3.06 rad)[0m
+14:44:10.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.87)[0m heading=(174.87 deg, 3.05 rad)[0m
+14:44:11.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.87)[0m heading=(173.78 deg, 3.03 rad)[0m
+14:44:12.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(172.26 deg, 3.01 rad)[0m
+14:44:13.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.87)[0m heading=(170.62 deg, 2.98 rad)[0m
+14:44:14.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.87)[0m heading=(170.39 deg, 2.97 rad)[0m
+14:44:15.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.87)[0m heading=(171.16 deg, 2.99 rad)[0m
+14:44:16.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.87)[0m heading=(172.19 deg, 3.01 rad)[0m
+14:44:17.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(172.93 deg, 3.02 rad)[0m
+14:44:18.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(172.99 deg, 3.02 rad)[0m
+14:44:19.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(172.19 deg, 3.01 rad)[0m
+14:44:20.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(170.84 deg, 2.98 rad)[0m
+14:44:21.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.87)[0m heading=(168.59 deg, 2.94 rad)[0m
+14:44:22.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(165.85 deg, 2.89 rad)[0m
+14:44:23.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(163.23 deg, 2.85 rad)[0m
+14:44:24.588 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(161.24 deg, 2.81 rad)[0m
+14:44:25.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(160.76 deg, 2.81 rad)[0m
+14:44:26.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(160.47 deg, 2.80 rad)[0m
+14:44:27.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(159.53 deg, 2.78 rad)[0m
+14:44:28.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(157.64 deg, 2.75 rad)[0m
+14:44:29.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(155.32 deg, 2.71 rad)[0m
+14:44:30.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(153.56 deg, 2.68 rad)[0m
+14:44:31.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(153.33 deg, 2.68 rad)[0m
+14:44:32.642 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(153.59 deg, 2.68 rad)[0m
+14:44:33.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(152.75 deg, 2.67 rad)[0m
+14:44:34.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.87)[0m heading=(151.01 deg, 2.64 rad)[0m
+14:44:35.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(149.63 deg, 2.61 rad)[0m
+14:44:36.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(149.67 deg, 2.61 rad)[0m
+14:44:37.588 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(150.80 deg, 2.63 rad)[0m
+14:44:38.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(151.54 deg, 2.64 rad)[0m
+14:44:39.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(151.20 deg, 2.64 rad)[0m
+14:44:40.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(152.18 deg, 2.66 rad)[0m
+14:44:41.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(153.59 deg, 2.68 rad)[0m
+14:44:42.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(153.67 deg, 2.68 rad)[0m
+14:44:43.589 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(153.06 deg, 2.67 rad)[0m
+14:44:44.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(152.33 deg, 2.66 rad)[0m
+14:44:45.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(152.99 deg, 2.67 rad)[0m
+14:44:46.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(153.81 deg, 2.68 rad)[0m
+14:44:47.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.87)[0m heading=(154.54 deg, 2.70 rad)[0m
+14:44:48.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.87)[0m heading=(154.74 deg, 2.70 rad)[0m
+14:44:49.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(154.25 deg, 2.69 rad)[0m
+14:44:50.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(153.42 deg, 2.68 rad)[0m
+14:44:51.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(152.17 deg, 2.66 rad)[0m
+14:44:52.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(150.62 deg, 2.63 rad)[0m
+14:44:53.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.87)[0m heading=(148.90 deg, 2.60 rad)[0m
+14:44:54.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.87)[0m heading=(148.19 deg, 2.59 rad)[0m
+14:44:55.635 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(148.00 deg, 2.58 rad)[0m
+14:44:56.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(145.67 deg, 2.54 rad)[0m
+14:44:57.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.87)[0m heading=(142.08 deg, 2.48 rad)[0m
+14:44:58.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.87)[0m heading=(140.67 deg, 2.46 rad)[0m
+14:44:59.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(140.31 deg, 2.45 rad)[0m
+14:45:00.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(141.09 deg, 2.46 rad)[0m
+14:45:01.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(142.56 deg, 2.49 rad)[0m
+14:45:02.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(144.31 deg, 2.52 rad)[0m
+14:45:03.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(145.38 deg, 2.54 rad)[0m
+14:45:04.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(144.92 deg, 2.53 rad)[0m
+14:45:05.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.87)[0m heading=(145.07 deg, 2.53 rad)[0m
+14:45:06.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.87)[0m heading=(144.66 deg, 2.52 rad)[0m
+14:45:07.589 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(145.05 deg, 2.53 rad)[0m
+14:45:08.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(144.56 deg, 2.52 rad)[0m
+14:45:09.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(144.99 deg, 2.53 rad)[0m
+14:45:10.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(144.86 deg, 2.53 rad)[0m
+14:45:11.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(145.08 deg, 2.53 rad)[0m
+14:45:12.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(144.71 deg, 2.53 rad)[0m
+14:45:13.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(145.14 deg, 2.53 rad)[0m
+14:45:14.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.94)[0m heading=(144.88 deg, 2.53 rad)[0m
+14:45:15.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.92)[0m heading=(144.90 deg, 2.53 rad)[0m
+14:45:16.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(144.89 deg, 2.53 rad)[0m
+14:45:17.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(144.74 deg, 2.53 rad)[0m
+14:45:18.637 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(144.99 deg, 2.53 rad)[0m
+14:45:19.588 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(144.72 deg, 2.53 rad)[0m
+14:45:20.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(145.08 deg, 2.53 rad)[0m
+14:45:21.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(144.58 deg, 2.52 rad)[0m
+14:45:22.588 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.91)[0m heading=(145.06 deg, 2.53 rad)[0m
+14:45:23.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.91)[0m heading=(144.68 deg, 2.53 rad)[0m
+14:45:24.589 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(145.01 deg, 2.53 rad)[0m
+14:45:25.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(144.63 deg, 2.52 rad)[0m
+14:45:26.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(145.29 deg, 2.54 rad)[0m
+14:45:27.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(144.93 deg, 2.53 rad)[0m
+14:45:28.588 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(144.68 deg, 2.53 rad)[0m
+14:45:29.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(145.03 deg, 2.53 rad)[0m
+14:45:30.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(144.91 deg, 2.53 rad)[0m
+14:45:31.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(144.67 deg, 2.53 rad)[0m
+14:45:32.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(145.10 deg, 2.53 rad)[0m
+14:45:33.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(144.81 deg, 2.53 rad)[0m
+14:45:34.589 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(144.95 deg, 2.53 rad)[0m
+14:45:35.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(145.24 deg, 2.53 rad)[0m
+14:45:36.588 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(144.66 deg, 2.52 rad)[0m
+14:45:37.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(145.03 deg, 2.53 rad)[0m
+14:45:38.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(144.69 deg, 2.53 rad)[0m
+14:45:39.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(145.10 deg, 2.53 rad)[0m
+14:45:40.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.91)[0m heading=(144.77 deg, 2.53 rad)[0m
+14:45:41.680 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(145.04 deg, 2.53 rad)[0m
+14:45:42.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(144.65 deg, 2.52 rad)[0m
+14:45:43.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(144.90 deg, 2.53 rad)[0m
+14:45:44.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(144.68 deg, 2.53 rad)[0m
+14:45:45.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(145.05 deg, 2.53 rad)[0m
+14:45:46.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.91)[0m heading=(144.68 deg, 2.53 rad)[0m
+14:45:47.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(145.06 deg, 2.53 rad)[0m
+14:45:48.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(144.58 deg, 2.52 rad)[0m
+14:45:49.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(145.03 deg, 2.53 rad)[0m
+14:45:50.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(144.69 deg, 2.53 rad)[0m
+14:45:51.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(145.05 deg, 2.53 rad)[0m
+14:45:52.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.92)[0m heading=(144.65 deg, 2.52 rad)[0m
+14:45:53.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.93)[0m heading=(145.00 deg, 2.53 rad)[0m
+14:45:54.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.93)[0m heading=(144.66 deg, 2.52 rad)[0m
+14:45:55.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.91)[0m heading=(144.94 deg, 2.53 rad)[0m
+14:45:56.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(144.75 deg, 2.53 rad)[0m
+14:45:57.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.92)[0m heading=(145.13 deg, 2.53 rad)[0m
+14:45:58.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.91)[0m heading=(144.75 deg, 2.53 rad)[0m
+14:45:59.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(145.13 deg, 2.53 rad)[0m
+14:46:00.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(144.67 deg, 2.52 rad)[0m
+14:46:01.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(145.15 deg, 2.53 rad)[0m
+14:46:02.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(144.47 deg, 2.52 rad)[0m
+14:46:03.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(144.82 deg, 2.53 rad)[0m
+14:46:04.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(144.81 deg, 2.53 rad)[0m
+14:46:05.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(144.94 deg, 2.53 rad)[0m
+14:46:06.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(144.75 deg, 2.53 rad)[0m
+14:46:07.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(145.17 deg, 2.53 rad)[0m
+14:46:08.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.91)[0m heading=(144.59 deg, 2.52 rad)[0m
+14:46:09.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.92)[0m heading=(145.13 deg, 2.53 rad)[0m
+14:46:10.581 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.91)[0m heading=(145.18 deg, 2.53 rad)[0m
+14:46:11.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(144.64 deg, 2.52 rad)[0m
+14:46:12.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.91)[0m heading=(145.04 deg, 2.53 rad)[0m
+14:46:13.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.92)[0m heading=(144.69 deg, 2.53 rad)[0m
+14:46:14.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.93)[0m heading=(145.03 deg, 2.53 rad)[0m
+14:46:15.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.92)[0m heading=(144.77 deg, 2.53 rad)[0m
+14:46:16.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.92)[0m heading=(144.73 deg, 2.53 rad)[0m
+14:46:17.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.93)[0m heading=(145.06 deg, 2.53 rad)[0m
+14:46:18.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(144.72 deg, 2.53 rad)[0m
+14:46:19.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(144.68 deg, 2.53 rad)[0m
+14:46:20.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(145.03 deg, 2.53 rad)[0m
+14:46:21.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(144.82 deg, 2.53 rad)[0m
+14:46:22.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.91)[0m heading=(144.92 deg, 2.53 rad)[0m
+14:46:23.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.91)[0m heading=(144.68 deg, 2.53 rad)[0m
+14:46:24.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(145.04 deg, 2.53 rad)[0m
+14:46:25.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(144.39 deg, 2.52 rad)[0m
+14:46:26.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(144.93 deg, 2.53 rad)[0m
+14:46:27.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(144.96 deg, 2.53 rad)[0m
+14:46:28.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(144.79 deg, 2.53 rad)[0m
+14:46:29.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(145.06 deg, 2.53 rad)[0m
+14:46:30.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.91)[0m heading=(144.73 deg, 2.53 rad)[0m
+14:46:31.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.92)[0m heading=(145.06 deg, 2.53 rad)[0m
+14:46:32.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.92)[0m heading=(144.63 deg, 2.52 rad)[0m
+14:46:33.651 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(145.08 deg, 2.53 rad)[0m
+14:46:34.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(144.64 deg, 2.52 rad)[0m
+14:46:35.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(144.97 deg, 2.53 rad)[0m
+14:46:36.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.92)[0m heading=(144.86 deg, 2.53 rad)[0m
+14:46:37.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(144.91 deg, 2.53 rad)[0m
+14:46:38.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(144.93 deg, 2.53 rad)[0m
+14:46:39.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(144.69 deg, 2.53 rad)[0m
+14:46:40.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(144.85 deg, 2.53 rad)[0m
+14:46:41.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(144.68 deg, 2.53 rad)[0m
+14:46:42.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(144.96 deg, 2.53 rad)[0m
+14:46:43.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.91)[0m heading=(144.84 deg, 2.53 rad)[0m
+14:46:44.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.91)[0m heading=(144.82 deg, 2.53 rad)[0m
+14:46:45.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(144.72 deg, 2.53 rad)[0m
+14:46:46.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.91)[0m heading=(145.19 deg, 2.53 rad)[0m
+14:46:47.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(144.69 deg, 2.53 rad)[0m
+14:46:48.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.88)[0m heading=(144.99 deg, 2.53 rad)[0m
+14:46:49.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(144.64 deg, 2.52 rad)[0m
+14:46:50.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(145.10 deg, 2.53 rad)[0m
+14:46:51.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.91)[0m heading=(144.68 deg, 2.53 rad)[0m
+14:46:52.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.90)[0m heading=(144.93 deg, 2.53 rad)[0m
+14:46:53.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(144.70 deg, 2.53 rad)[0m
+14:46:54.587 (avalon) syslevel=5[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(145.05 deg, 2.53 rad)[0m
+[35mOrocos[WARN]: cannot compute input period for aligned port Orocos::RobyPlugin::UwParticleLocalization::Task:0x63a1c80:speed_samples, setting period to 0
+[0m[35mOrocos[WARN]: cannot compute input period for aligned port Orocos::RobyPlugin::UwParticleLocalization::Task:0x63a1c80:pipeline_samples, setting period to 0
+[0m[35mOrocos[WARN]: cannot compute input period for aligned port Orocos::RobyPlugin::UwParticleLocalization::Task:0x63a1c80:pose_update, setting period to 0
+[0m14:46:58.238 (avalon) not logging orientation_estimator::BaseEstimator:state
+14:46:58.240 (avalon) not logging xsens_imu::Task:state
+14:46:58.241 (avalon) not logging fog_kvh::Dsp3000Task:state
+14:46:58.242 (avalon) not logging sonar_tritech::Micron:state
+14:46:58.243 (avalon) not logging sonar_tritech::Micron:state
+14:46:58.244 (avalon) not logging sysmon::Task:state
+14:46:58.245 (avalon) not logging modem_can::Task:canOut
+14:46:58.245 (avalon) not logging modem_can::Task:state
+14:46:58.246 (avalon) not logging uw_particle_localization::Task:state
+14:46:58.248 (avalon) not logging gps::BaseTask:state
+14:46:58.253 (avalon) not logging camera_base::Task:state
+14:46:58.255 (avalon) not logging camera_base::Task:state
+14:46:58.257 (avalon) not logging sonar_feature_estimator::Task:state
+14:46:58.259 (avalon) not logging auv_rel_pos_controller::Task:state
+14:46:58.262 (avalon) not logging depth_reader::depth_and_orientation_fusion:state
+14:46:58.263 (avalon) not logging canbus::Task:state
+14:46:58.263 (avalon) not logging canbus::Task:modem
+14:46:58.263 (avalon) not logging canbus::Task:experiment_markers
+14:46:58.264 (avalon) not logging canbus::Task:system_status
+14:46:58.264 (avalon) not logging canbus::Task:remote_joystick
+14:46:58.264 (avalon) not logging canbus::Task:battery_management
+14:46:58.264 (avalon) not logging canbus::Task:depth_reader
+14:46:58.265 (avalon) not logging canbus::Task:hbridge_set
+14:46:58.266 (avalon) not logging depth_reader::Task:canOut
+14:46:58.266 (avalon) not logging depth_reader::Task:state
+14:46:58.267 (avalon) not logging avalon_control::MotionControlTask:estimated_ground_pos
+14:46:58.267 (avalon) not logging avalon_control::MotionControlTask:state
+14:46:58.268 (avalon) not logging hbridge::Task:state
+14:46:58.268 (avalon) not logging hbridge::Task:can_out
+14:46:58.274 (avalon) not logging offshore_pipeline_detector::Task:state
+14:46:59.665 (avalon) hb is of class #<specialized from Orocos::RobyPlugin::Hbridge::Task services: hbridge_set[Dev::HbridgeSet], hbridge_set.motors[Hbridge::Task<hbridge_set>.Dev::Hbridges<motors>]>
+14:46:59.671 (avalon) timout started
+14:46:59.678 (avalon) delaying read_only errors by 10 seconds
+14:46:59.732 (avalon) interrupting Orocos::RobyPlugin::OffshorePipelineDetector::Task:0x7a801e0
+[35mOrocos[WARN]: cannot compute input period for aligned port Orocos::RobyPlugin::UwParticleLocalization::Task:0x7f24b995b6d8:speed_samples, setting period to 0
+[0m[35mOrocos[WARN]: cannot compute input period for aligned port Orocos::RobyPlugin::UwParticleLocalization::Task:0x7f24b995b6d8:pipeline_samples, setting period to 0
+[0m[35mOrocos[WARN]: cannot compute input period for aligned port Orocos::RobyPlugin::UwParticleLocalization::Task:0x7f24b995b6d8:pose_update, setting period to 0
+[0m14:47:04.630 (avalon) not logging offshore_pipeline_detector::Task:state
+14:47:04.858 (avalon) not logging camera_base::Task:state
+14:47:04.860 (avalon) not logging gps::BaseTask:state
+14:47:04.862 (avalon) not logging uw_particle_localization::Task:state
+14:47:04.864 (avalon) not logging modem_can::Task:canOut
+14:47:04.864 (avalon) not logging modem_can::Task:state
+14:47:04.865 (avalon) not logging sysmon::Task:state
+14:47:04.867 (avalon) not logging sonar_tritech::Micron:state
+14:47:04.868 (avalon) not logging sonar_tritech::Micron:state
+14:47:04.869 (avalon) not logging fog_kvh::Dsp3000Task:state
+14:47:04.870 (avalon) not logging xsens_imu::Task:state
+14:47:04.871 (avalon) not logging orientation_estimator::BaseEstimator:state
+14:47:04.873 (avalon) not logging canbus::Task:state
+14:47:04.873 (avalon) not logging canbus::Task:hbridge_set
+14:47:04.873 (avalon) not logging canbus::Task:modem
+14:47:04.873 (avalon) not logging canbus::Task:experiment_markers
+14:47:04.873 (avalon) not logging canbus::Task:system_status
+14:47:04.873 (avalon) not logging canbus::Task:remote_joystick
+14:47:04.873 (avalon) not logging canbus::Task:battery_management
+14:47:04.874 (avalon) not logging canbus::Task:depth_reader
+14:47:04.874 (avalon) not logging depth_reader::Task:canOut
+14:47:04.874 (avalon) not logging depth_reader::Task:state
+14:47:04.874 (avalon) not logging hbridge::Task:state
+14:47:04.874 (avalon) not logging hbridge::Task:can_out
+14:47:04.875 (avalon) not logging depth_reader::depth_and_orientation_fusion:state
+14:47:04.875 (avalon) not logging avalon_control::MotionControlTask:estimated_ground_pos
+14:47:04.875 (avalon) not logging avalon_control::MotionControlTask:state
+14:47:04.877 (avalon) not logging auv_rel_pos_controller::Task:state
+14:47:04.878 (avalon) not logging sonar_feature_estimator::Task:state
+14:47:04.880 (avalon) not logging camera_base::Task:state
+14:47:05.232 (avalon) hb is of class #<specialized from Orocos::RobyPlugin::Hbridge::Task services: hbridge_set[Dev::HbridgeSet], hbridge_set.motors[Hbridge::Task<hbridge_set>.Dev::Hbridges<motors>]>
+14:47:05.237 (avalon) timout started
+14:47:05.247 (MainPlanner) Align AUV to z -1.55 and yaw 0.6108652381980153
+14:47:05.250 (avalon) delaying read_only errors by 10 seconds
+14:47:05.326 (avalon) syslevel=6[0m pos=(x=0.00 y=0.00 z=-2.89)[0m heading=(145.00 deg, 2.53 rad)[0m
+[35mOrocos[WARN]: got 200 state updates for Orocos::RobyPlugin::DepthReader::DepthAndOrientationFusion:0x6561ac0{orocos_name => depth_orientation_fusion, conf => [default]}[], we might have lost some state updates in the process
+[0m[35mOrocos[WARN]: got 200 state updates for Orocos::RobyPlugin::ModemCan::Task:0x671c310{orocos_name => modem, modem_name => modem, modem_com_bus => can0, conf => [default]}[], we might have lost some state updates in the process
+[0m[35mOrocos[WARN]: got 200 state updates for Orocos::RobyPlugin::AvalonControl::MotionControlTask:0x83e53c0{orocos_name => motion_control, conf => [default]}[], we might have lost some state updates in the process
+[0m14:47:06.835 (avalon) stopped Orocos::RobyPlugin::OffshorePipelineDetector::Task:0x7a801e0{orocos_name => pipeline_follower, conf => [default]}[]
+14:47:06.869 (MainPlanner) Autonomous run finished. Emergency Surfacing Command.
+14:47:06.938 (avalon) interrupting Orocos::RobyPlugin::AuvRelPosController::Task:0x55812b8
+14:47:06.949 (avalon) interrupting Orocos::RobyPlugin::AvalonControl::MotionControlTask:0x83e53c0
+14:47:06.952 (avalon) syslevel=6[0m pos=(x=0.00 y=0.00 z=-0.02)[0m heading=(145.83 deg, 2.55 rad)[0m
+14:47:06.969 (avalon) stopped Orocos::RobyPlugin::AuvRelPosController::Task:0x55812b8{orocos_name => auv_rel_pos_controller, conf => [default]}[]
+14:47:06.971 (avalon) stopped Orocos::RobyPlugin::AvalonControl::MotionControlTask:0x83e53c0{orocos_name => motion_control, conf => [default]}[]
+[35mOrocos[WARN]: while disconnecting #<TaskContext: Orocos::TaskContext/motion_control>:hbridge_commands => #<TaskContext: Orocos::TaskContext/hbridge>:cmd_motors returned false
+[0m[35mOrocos[WARN]: I assume that the ports are disconnected, but this should not have happened
+[0m14:47:07.887 (avalon) syslevel=6[0m pos=(x=0.00 y=0.00 z=0.06)[0m heading=(149.85 deg, 2.62 rad)[0m
+14:47:08.888 (avalon) syslevel=6[0m pos=(x=0.00 y=0.00 z=0.12)[0m heading=(151.46 deg, 2.64 rad)[0m
+14:47:09.698 (avalon) timed out on read_only to read_write switch, resuming handling of hbridge errors
+14:47:09.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.14)[0m heading=(151.71 deg, 2.65 rad)[0m
+14:47:10.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.13)[0m heading=(151.97 deg, 2.65 rad)[0m
+14:47:11.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.14)[0m heading=(151.95 deg, 2.65 rad)[0m
+14:47:12.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.15)[0m heading=(151.46 deg, 2.64 rad)[0m
+14:47:13.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.14)[0m heading=(146.12 deg, 2.55 rad)[0m
+14:47:14.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.14)[0m heading=(137.52 deg, 2.40 rad)[0m
+14:47:15.293 (avalon) timed out on read_only to read_write switch, resuming handling of hbridge errors
+14:47:15.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.14)[0m heading=(136.22 deg, 2.38 rad)[0m
+14:47:16.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.14)[0m heading=(138.78 deg, 2.42 rad)[0m
+14:47:17.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.16)[0m heading=(135.45 deg, 2.36 rad)[0m
+14:47:18.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.14)[0m heading=(135.29 deg, 2.36 rad)[0m
+14:47:19.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.14)[0m heading=(134.50 deg, 2.35 rad)[0m
+14:47:20.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.14)[0m heading=(135.06 deg, 2.36 rad)[0m
+14:47:21.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.15)[0m heading=(134.63 deg, 2.35 rad)[0m
+14:47:22.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.14)[0m heading=(135.52 deg, 2.37 rad)[0m
+14:47:23.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.13)[0m heading=(136.28 deg, 2.38 rad)[0m
+14:47:24.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.14)[0m heading=(136.05 deg, 2.37 rad)[0m
+14:47:25.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.15)[0m heading=(136.81 deg, 2.39 rad)[0m
+14:47:26.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.15)[0m heading=(135.42 deg, 2.36 rad)[0m
+14:47:27.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.15)[0m heading=(134.65 deg, 2.35 rad)[0m
+14:47:28.888 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.14)[0m heading=(134.00 deg, 2.34 rad)[0m
+14:47:29.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.14)[0m heading=(133.41 deg, 2.33 rad)[0m
+14:47:30.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.15)[0m heading=(135.29 deg, 2.36 rad)[0m
+14:47:31.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.14)[0m heading=(132.60 deg, 2.31 rad)[0m
+14:47:32.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.15)[0m heading=(133.24 deg, 2.33 rad)[0m
+14:47:33.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.15)[0m heading=(130.98 deg, 2.29 rad)[0m
+14:47:34.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.15)[0m heading=(132.20 deg, 2.31 rad)[0m
+14:47:35.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.15)[0m heading=(131.73 deg, 2.30 rad)[0m
+14:47:36.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.15)[0m heading=(130.65 deg, 2.28 rad)[0m
+14:47:37.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.15)[0m heading=(131.53 deg, 2.30 rad)[0m
+14:47:38.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.15)[0m heading=(131.15 deg, 2.29 rad)[0m
+14:47:39.927 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.15)[0m heading=(129.54 deg, 2.26 rad)[0m
+14:47:40.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.15)[0m heading=(129.23 deg, 2.26 rad)[0m
+14:47:41.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.15)[0m heading=(128.30 deg, 2.24 rad)[0m
+14:47:42.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.14)[0m heading=(127.29 deg, 2.22 rad)[0m
+14:47:43.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.15)[0m heading=(126.48 deg, 2.21 rad)[0m
+14:47:44.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.15)[0m heading=(127.37 deg, 2.22 rad)[0m
+14:47:45.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.17)[0m heading=(127.56 deg, 2.23 rad)[0m
+14:47:46.888 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.15)[0m heading=(130.93 deg, 2.29 rad)[0m
+14:47:47.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.15)[0m heading=(132.41 deg, 2.31 rad)[0m
+14:47:48.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.16)[0m heading=(133.04 deg, 2.32 rad)[0m
+14:47:49.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.15)[0m heading=(135.96 deg, 2.37 rad)[0m
+14:47:50.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.16)[0m heading=(136.48 deg, 2.38 rad)[0m
+14:47:51.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.15)[0m heading=(136.96 deg, 2.39 rad)[0m
+14:47:52.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.17)[0m heading=(135.09 deg, 2.36 rad)[0m
+14:47:53.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.16)[0m heading=(134.17 deg, 2.34 rad)[0m
+14:47:54.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.15)[0m heading=(131.01 deg, 2.29 rad)[0m
+14:47:55.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.15)[0m heading=(129.83 deg, 2.27 rad)[0m
+14:47:56.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.13)[0m heading=(127.70 deg, 2.23 rad)[0m
+14:47:57.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.14)[0m heading=(127.92 deg, 2.23 rad)[0m
+14:47:58.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.14)[0m heading=(129.93 deg, 2.27 rad)[0m
+14:47:59.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.14)[0m heading=(129.37 deg, 2.26 rad)[0m
+14:48:00.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.14)[0m heading=(131.97 deg, 2.30 rad)[0m
+14:48:01.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.15)[0m heading=(129.49 deg, 2.26 rad)[0m
+14:48:02.888 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.15)[0m heading=(129.68 deg, 2.26 rad)[0m
+14:48:03.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.13)[0m heading=(129.06 deg, 2.25 rad)[0m
+14:48:04.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.14)[0m heading=(123.24 deg, 2.15 rad)[0m
+14:48:05.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.14)[0m heading=(120.36 deg, 2.10 rad)[0m
+14:48:06.888 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.13)[0m heading=(112.69 deg, 1.97 rad)[0m
+14:48:07.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.14)[0m heading=(109.24 deg, 1.91 rad)[0m
+14:48:08.889 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.14)[0m heading=(102.60 deg, 1.79 rad)[0m
+14:48:09.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.16)[0m heading=(96.51 deg, 1.68 rad)[0m
+14:48:10.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.15)[0m heading=(82.38 deg, 1.44 rad)[0m
+14:48:11.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.14)[0m heading=(63.90 deg, 1.12 rad)[0m
+14:48:12.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.13)[0m heading=(42.09 deg, 0.73 rad)[0m
+14:48:13.887 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.11)[0m heading=(22.44 deg, 0.39 rad)[0m
+14:48:15.046 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.13)[0m heading=(11.54 deg, 0.20 rad)[0m
+14:48:15.987 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.15)[0m heading=(-0.50 deg, -0.01 rad)[0m
+14:48:16.987 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.12)[0m heading=(-19.66 deg, -0.34 rad)[0m
+14:48:17.987 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.12)[0m heading=(-27.20 deg, -0.47 rad)[0m
+14:48:18.987 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.16)[0m heading=(-35.29 deg, -0.62 rad)[0m
+14:48:19.987 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.18)[0m heading=(-40.44 deg, -0.71 rad)[0m
+14:48:20.989 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.18)[0m heading=(-45.01 deg, -0.79 rad)[0m
+14:48:21.987 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.18)[0m heading=(-48.41 deg, -0.84 rad)[0m
+14:48:22.987 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.18)[0m heading=(-48.41 deg, -0.84 rad)[0m
+14:48:23.988 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.18)[0m heading=(-48.41 deg, -0.84 rad)[0m
+14:48:24.987 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.18)[0m heading=(-48.41 deg, -0.84 rad)[0m
+14:48:25.987 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.18)[0m heading=(-48.41 deg, -0.84 rad)[0m
+14:48:26.987 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.18)[0m heading=(-48.41 deg, -0.84 rad)[0m
+14:48:27.987 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.18)[0m heading=(-48.41 deg, -0.84 rad)[0m
+14:48:28.987 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.18)[0m heading=(-48.41 deg, -0.84 rad)[0m
+14:48:29.987 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.18)[0m heading=(-48.41 deg, -0.84 rad)[0m
+14:48:30.987 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.18)[0m heading=(-48.41 deg, -0.84 rad)[0m
+14:48:31.987 (avalon) syslevel=2[0m pos=(x=0.00 y=0.00 z=0.18)[0m heading=(-48.41 deg, -0.84 rad)[0m
