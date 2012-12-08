@@ -1,5 +1,8 @@
 log
+scripts/controllers/logs
 results
 *.sw?
 *.svg
 orocos.log
+*.log
+logs

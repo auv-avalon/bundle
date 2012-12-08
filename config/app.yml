@@ -6,9 +6,7 @@ engine:
 # Logging configuration
 log:
   # Where log files go
-  #dir: /mnt/logs/ # <<<<<<<<<<< Use this on AVALON!!!
-  #dir: log # <<<<<<<<<<< Use this on other computers!!!
-  #filter_backtraces: false
+  # dir: log/
   
   # Log system events. It can be either true, false or stats. If true, all
   # plan-level events are logged, allowing to use the roby-log GUI to replay
@@ -22,7 +20,7 @@ log:
   #
   # The default is stats
   #
-  events: true
+   events: true
   
   # Set to false to disables the log server and true to enable it (it is enabled by
   # default). The log server allows to display the controller state remotely by using the
@@ -43,19 +41,14 @@ log:
   # Logging in Roby is controlled per-module in a hierarchical way. It means that to get
   # debugging output for the whole framework, set
   #
-  levels:
-        roby: ERROR
-  #      roby/planning: DEBUG
-  #levels:
-  #      roby: WARN
-  #        orocos/roby_plugin: INFO:avalon_dataflow.txt
-  #     roby/execution_engine: DEBUG
+   levels:
+       roby: DEBUG 
   #
   # now, if you want to have it do debug for everything but the classes in
   # Roby::Distributed, do
   #
   # levels:
-  #     orocos/roby_plugin: DEBUG
+  #     roby: DEBUG
   #     roby/distributed: INFO
   #
   # The available logging levels are DEBUG, INFO, WARN and FATAL. The output can be

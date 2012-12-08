@@ -1,9 +1,0 @@
-#! /usr/bin/env ruby
-
-require 'orocos'
-
-Orocos::CORBA.name_service = 'avalon.local'
-Orocos.initialize
-
-fusion = Orocos::TaskContext.get 'depth_orientation_fusion'
-fusion.resetInitialHeading

@@ -28,6 +28,9 @@
 # Set the scheduler object to be used during execution (can also be done
 # per-robot by setting it in config/#{ROBOT}.rb)
 
+#require 'roby/schedulers/basic'
+#Roby.scheduler = Roby::Schedulers::Basic.new
+
 Roby.app.using 'orocos'
 require 'roby/schedulers/temporal'
 Roby.scheduler = Roby::Schedulers::Temporal.new
