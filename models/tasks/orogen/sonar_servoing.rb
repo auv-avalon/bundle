@@ -1,2 +1,0 @@
-class SonarServoing::Task
-end
