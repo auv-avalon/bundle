@@ -14,7 +14,7 @@ Roby.app.use_deployments_from "avalon_front"
 
 
 
-State.orocos.exclude_from_log '/canbus/Message'
+Conf.orocos.exclude_from_log '/canbus/Message'
 
 # Does not work in multihost
 # Roby.app.orocos_start_all_deployments = true
