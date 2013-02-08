@@ -1,7 +1,7 @@
 # This is the robot controller. This file is required last, after Roby has been
 # fully set up. If you have to initialize some services at startup, to it here
 
-require 'controllers/common_controller'
+require 'scripts/controllers/common_controller'
 Roby.app.apply_orocos_deployment 'avalon' # load config/deployments/avalon.rb
 
 

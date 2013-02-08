@@ -8,6 +8,12 @@ composition 'AUVJoystickCommand' do
     autoconnect
 
     export rawCommandConverter.motion_command
+    export rawCommandConverter.world_command, :as => "WorldCommand"
+    export rawCommandConverter.aligned_velocity_command, :as =>"VeloCommand"
+    
     provides Srv::AUVMotionCommand
+    provides Srv::Raw6DWorldCommand#, "world_command" => "WorldCommand"
+    provides Srv::Raw6DVeloCommand
+    
 end
 

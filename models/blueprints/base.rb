@@ -1,5 +1,5 @@
 import_types_from 'base'
-
+import_types_from 'auv_control'
 # -----------------------------------------------------------------------------
 # pose estimation
 # -----------------------------------------------------------------------------
@@ -127,4 +127,12 @@ data_service_type 'ModemConnection' do
     input_port 'white_light', 'bool'
     input_port 'position', '/base/samples/RigidBodyState'
     output_port 'motion_command', '/base/AUVMotionCommand'
+end
+
+data_service_type 'Raw6DWorldCommand' do
+    output_port 'WorldCommand', '/base/LinearAngular6DCommand'
+end
+
+data_service_type 'Raw6DVeloCommand' do
+    output_port 'VeloCommand', '/base/LinearAngular6DCommand'
 end

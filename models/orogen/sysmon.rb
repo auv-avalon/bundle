@@ -7,9 +7,11 @@ class Sysmon::Task
     end
 
     poll do
-        if sample = @system_status.read
-            ::State.lowlevel_state = sample.systemState
-	    ::State.lowlevel_substate = sample.systemSubstate
+        if !@system_status.nil?
+            if sample = @system_status.read
+                ::State.lowlevel_state = sample.systemState
+	        ::State.lowlevel_substate = sample.systemSubstate
+            end
         end
     end
 end
