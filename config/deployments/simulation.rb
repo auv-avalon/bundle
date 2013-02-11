@@ -29,17 +29,17 @@ end
 
 # Configure tasks for use in simulation
 use AvalonControl::MotionControlTask => AvalonControl::MotionControlTask.
-  use_conf("default", "simulation")
+  with_conf("default", "simulation")
 use SonarFeatureEstimator::Task => SonarFeatureEstimator::Task.
-  use_conf('default','simulation')
+  with_conf('default','simulation')
 use Buoy::Detector => Buoy::Detector.
-    use_conf('default','simulation')
+    with_conf('default','simulation')
 use Buoy::Survey => Buoy::Survey.
-    use_conf('default','simulation')
+    with_conf('default','simulation')
 use SonarWallHough::Task => SonarWallHough::Task.
-    use_conf('default', 'simulation')
+    with_conf('default', 'simulation')
 use OffshorePipelineDetector::Task => OffshorePipelineDetector::Task.
-    use_conf('default', 'simulation')
+    with_conf('default', 'simulation')
 
 add_mission('bottom_camera')
 add_mission('front_camera')

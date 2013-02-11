@@ -148,6 +148,15 @@ composition 'PipelineDetector' do
 end
 
 
+composition 'Sensors' do
+    add Srv::ImageProvider, :as => 'front'
+    add Srv::ImageProvider, :as => 'bottom'
+    add Srv::SonarScanProvider, :as => 'sonar'
+    add Gps::GPSDTask
+    add SonarTritech::Echosounder
+end
+
+
 #class Orocos::RobyPlugin::PiplineTracker::Task
 #    on :start do |event|
 #        Robot.info "overloading configuration of #{self}"

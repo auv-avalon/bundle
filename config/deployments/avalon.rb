@@ -21,9 +21,9 @@ use device("sonar") => device("sonar").use_deployments(/sonar/)
 # !!! Configure tasks for specific location !!!
 detector_conf = ["default"]
 use OffshorePipelineDetector::Task => OffshorePipelineDetector::Task.
-    use_conf(*detector_conf)
+    with_conf(*detector_conf)
 use OrientationEstimator::BaseEstimator => OrientationEstimator::BaseEstimator.
-    use_conf('default','sauce12')
+    with_conf('default','sauce12')
 
 DepthReader::DepthAndOrientationFusion.on :start do |event|
    @pose_reader = data_reader 'pose_samples'
@@ -44,22 +44,30 @@ add_mission(Hbridge::Task)
 # Add system monitoring
 add_mission(Sysmon::Task)
 # Add modem-can, to get a com channel to the base station
-add_mission(ModemCan::Task)
+#add_mission(ModemCan::Task)
 #add_mission(BatteryManagement::Task)
+
 
 # add_mission(Taskmon::Task).on_server('localhost')
 # add_mission(Taskmon::Task).on_server('front')
 
-add_mission('bottom_camera')
-add_mission('front_camera')
-add_mission('particle_localization')
-add_mission(Cmp::ModemPositionOutput)
+#add_mission('particle_localization')
+#add_mission(Cmp::ModemPositionOutput)
 #add_mission('left_unicap_camera')
 #add_mission('right_unicap_camera')
 
-add_mission('gps')
-add_mission('sonar')
-add_mission('echosounder')
+#Should be activated on real missions, maybe an MC-20 switch-state?, but modes to the"sensors" composition
+#add_mission('bottom_camera')
+#add_mission('front_camera')
+#add_mission('gps')
+#add_mission('sonar')
+#add_mission('echosounder')
+
+#comment this in to actiate sensors, or use the sensors define from shell
+#add_mission(Cmp::Sensors.
+#        use('front' => device("front_camera")).
+#        use('bottom' => device("bottom_camera")))
+
 #add_mission('sonar_rear')
 
 add_mission(Cmp::OrientationWithZ)

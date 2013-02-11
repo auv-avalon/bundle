@@ -38,6 +38,8 @@ using_task_library 'auv_rel_pos_controller'
 using_task_library 'auv_waypoint_navigator'
 using_task_library 'avalon_control'
 
+
+
 composition 'VisualServoing' do
     add Srv::RelativePositionDetector, :as => 'detector'
     add(Cmp::ControlLoop, :as => 'control').

@@ -37,7 +37,8 @@ Roby.scheduler = Roby::Schedulers::Temporal.new
 
 if Roby.app.robot_name == "avalon"
 #  Orocos::CORBA.name_service = "avalon-rear.local"
-   Orocos::CORBA.name_service = "127.0.0.1"
+#   Orocos::CORBA.name_service = "127.0.0.1"
+   Orocos::CORBA.name_service.ip = "127.0.0.1"
 end
 
 if Orocos::MQueue.available?

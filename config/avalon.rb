@@ -77,11 +77,11 @@ Robot.devices do
 
   #device(Dev::Micron, :as => "sonar_profiling_micron").
   #  period(0.01).
-  #  use_conf('sonar_profiling_micron')
+  #  with_conf('sonar_profiling_micron')
 
 #  device(Dev::Micron, :as => "sonar_rear").
 #    period(0.01).
-#    use_conf('default_rear','sonar_rear_right')
+#    with_conf('default_rear','sonar_rear_right')
   device(Dev::Echosounder, :as => "echosounder").
     period(0.01)
 
@@ -89,19 +89,19 @@ Robot.devices do
 
   device(Dev::CameraProsilica, :as => "front_camera").
     period(0.1).
-    use_conf("default", "front_camera")
+    with_conf("default", "front_camera")
 
   device(Dev::CameraProsilica, :as => "bottom_camera").
     period(0.1).
-    use_conf("default", "bottom_camera")
+    with_conf("default", "bottom_camera")
 
   device(Dev::CameraUnicap, :as => "left_unicap_camera").
       period(0.1).
-      use_conf("default", "left_unicap_camera")
+      with_conf("default", "left_unicap_camera")
 
   device(Dev::CameraUnicap, :as => "right_unicap_camera").
       period(0.1).
-      use_conf("default", "right_unicap_camera")
+      with_conf("default", "right_unicap_camera")
 
   com_bus(Dev::Canbus, :as => 'can0').
     device_id('can0')

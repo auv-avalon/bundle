@@ -60,8 +60,8 @@ Compositions::ControlLoop.specialize 'actuators' => Hbridge::Task do
         :failure => [:read_only.not_followed_by(:read_write), :stop]
 
     on :start do |ev|
-        hbridge = child_from_role 'actuators'
-
+#        hbridge = child_from_role 'actuators'
+        hbridge = find_child_from_role 'actuators'
         # When we start the control composition, disable error handling for the
         # hbridge for 10 seconds in order to wait for it to do its calibration
         # and/or simply the read_only to read_write switch
