@@ -29,15 +29,15 @@ DepthReader::DepthAndOrientationFusion.on :start do |event|
    @pose_reader = data_reader 'pose_samples'
 end
 DepthReader::DepthAndOrientationFusion.poll do
-    if !@pose_reader.nil?
-        if rbs = @pose_reader.read
-            State.pose.orientation = rbs.orientation
-            if !State.pose.respond_to?(:position)
-       	        State.pose.position = Eigen::Vector3.new(0, 0, 0)
-            end
-            State.pose.position.z = rbs.position.z
-        end
-    end
+   if !@pose_reader.nil?
+       if rbs = @pose_reader.read
+           State.pose.orientation = rbs.orientation
+           if !State.pose.respond_to?(:position)
+       	       State.pose.position = Eigen::Vector3.new(0, 0, 0)
+           end
+           State.pose.position.z = rbs.position.z
+       end
+   end
 end
 
 # Predeploy a few things to keep them always running

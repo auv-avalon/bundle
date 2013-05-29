@@ -34,7 +34,7 @@ servoing = {
 
     'pingersearch' => Cmp::Pingersearch,
 
-    'asv' => Cmp::SonarAsvDetector.use(device('sonar').with_conf('default','asv_search')),
+    #'asv' => Cmp::SonarAsvDetector.use(device('sonar').with_conf('default','asv_search')),
     #'asv' => Cmp::SonarAsvDetector.use('sonar').with_conf('default','asv_search'),
 
     'wall' => Cmp::WallDetector.

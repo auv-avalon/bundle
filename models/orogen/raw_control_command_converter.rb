@@ -12,8 +12,10 @@ composition 'AUVJoystickCommand' do
     export rawCommandConverter.aligned_velocity_command, :as =>"VeloCommand"
     
     provides Srv::AUVMotionCommand
-    provides Srv::Raw6DWorldCommand#, "world_command" => "WorldCommand"
-    provides Srv::Raw6DVeloCommand
+    #provides Srv::Raw6DWorldCommand#, "world_command" => "WorldCommand"
+    #provides Srv::Raw6DVeloCommand
     
+    provides Srv::LinearAngular6DCommand
+    provides Srv::LinearAngular6DCommand
 end
 
