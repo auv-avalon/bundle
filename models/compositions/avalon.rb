@@ -44,9 +44,24 @@ composition 'StructuredLightInput' do
     autoconnect
 end
 
+composition "DagonOrientationEstimator" do
+    add OrientationEstimator::BaseEstimator, :as => 'estimator'
+
+    add XsensImu::Task, :as => 'imu'
+    add FogKvh::Dsp3000Task, :as => 'fog'
+
+    connect imu => estimator.imu_orientation
+    connect fog => estimator.fog_samples
+
+    export estimator.attitude_b_g, :as => 'orientation_samples'
+    provides Srv::Orientation
+end
+
 composition 'OrientationWithZ' do
     add DepthReader::DepthAndOrientationFusion, :as => 'fusion'
-    add Srv::Orientation
+    
+    #add Srv::Orientation
+    add Cmp::DagonOrientationEstimator, :as => 'orientation'
     add Srv::ZProvider
 
     connect orientation => fusion.orientation_samples
@@ -74,18 +89,6 @@ composition "OrientationEstimator" do
     provides Srv::Speed
 end
 
-composition "DagonOrientationEstimator" do
-    add OrientationEstimator::BaseEstimator, :as => 'estimator'
-
-    add XsensImu::Task, :as => 'imu'
-    add FogKvh::Dsp3000Task, :as => 'fog'
-
-    connect imu => estimator.imu_orientation
-    connect fog => estimator.fog_samples
-
-    export estimator.attitude_b_g, :as => 'orientation_samples'
-    provides Srv::Orientation
-end
 
 
 composition 'StructuredLight' do
@@ -108,6 +111,14 @@ end
 #    autoconnect
 #    export detector.position_command
 #    provides Srv::RelativePositionDetector
+#end
+
+
+#composition 'BaseControl' do
+##	add Cmp::ControlLoop.use('controlled_system' => AvalonControl::MotionControlTask), :as => 'c1'
+#	add Cmd::ControlLoop.use('hbridge_set'), :as => 'c2'
+#
+#	autoconnect
 #end
 
 composition 'PipelineDetector' do
@@ -362,15 +373,15 @@ composition 'ModemPositionOutput' do
 #    autoconnect
 end
 
-composition 'ModemListener' do
-   add(Cmp::ControlLoop, :as => 'control').
-      use('command' => AuvRelPosController::Task).
-      use('controller' => AvalonControl::MotionControlTask)
-
-   add Srv::ModemConnection, :as => 'modem'
-
-   add Srv::OrientationWithZ
-end
+#composition 'ModemListener' do
+#   add(Cmp::ControlLoop, :as => 'control').
+#      use('command' => AuvRelPosController::Task).
+#      use('controller' => AvalonControl::MotionControlTask)
+#
+#   add Srv::ModemConnection, :as => 'modem'
+#
+#   add Srv::OrientationWithZ
+#end
 
 
 composition 'Localization' do
@@ -379,7 +390,8 @@ composition 'Localization' do
     add SonarFeatureEstimator::Task, :as => 'feature_estimator'
     add Srv::OrientationWithZ, :as => 'orientation_with_z'
     #add Srv::Speed, :as => 'model'
-    add Srv::Actuators, :as => 'actuators'
+    add Srv::ActuatorControlledSystem, :as => 'actuators'
+#    add Srv::Actuators, :as => 'actuators'
     connect sonar => feature_estimator
     connect feature_estimator => localization
     connect orientation_with_z => feature_estimator
@@ -392,21 +404,21 @@ composition 'Localization' do
     provides Srv::Pose
 end
 
-composition 'Navigation' do
-    event :wait_for_waypoints
-    event :keep_waypoint
-    event :dynamic_navigation
-    event :static_navigation
-
-    add Srv::Pose, :as => 'pose'
-    add_main AuvWaypointNavigator::Task, :as => 'navigator'
-    add(Cmp::ControlLoop, :as => 'control').
-        use('command' => AuvRelPosController::Task).
-        use('controller' => AvalonControl::MotionControlTask)
-
-    connect pose => navigator
-    connect navigator => control
-end
+#composition 'Navigation' do
+#    event :wait_for_waypoints
+#    event :keep_waypoint
+#    event :dynamic_navigation
+#    event :static_navigation
+#
+#    add Srv::Pose, :as => 'pose'
+#    add_main AuvWaypointNavigator::Task, :as => 'navigator'
+#    add(Cmp::ControlLoop, :as => 'control').
+#        use('command' => AuvRelPosController::Task).
+#        use('controller' => AvalonControl::MotionControlTask)
+#
+#    connect pose => navigator
+#    connect navigator => control
+#end
 
 composition 'DualLocalization' do
     add UwParticleLocalization::Task, :as => 'localization'
@@ -414,7 +426,8 @@ composition 'DualLocalization' do
     add Srv::SonarScanProvider, :as => 'sonar'
     add SonarFeatureEstimator::Task, :as => 'feature_estimator'
     add Srv::OrientationWithZ, :as => 'orientation_with_z'
-    add Srv::Actuators, :as => 'actuators'
+    add Srv::ActuatorControlledSystem, :as => 'actuators'
+    #add Srv::Actuators, :as => 'actuators'
     #add Cmp::UwvModel, :as => 'model'
     #add AvalonSimulation::StateEstimator, :as => 'model'
     #add Srv::Speed, :as => 'model'
@@ -465,56 +478,56 @@ Cmp::Pingersearch.specialize 'angle_estimation' => Pingersearch::AngleEstimation
     autoconnect
 end
 
-composition 'TestBuoyAndPingersearch' do
-
-    event :buoy_search
-    event :buoy_detected
-    event :buoy_lost
-    event :buoy_arrived
-    event :strafing
-    event :strafe_finished
-    event :strafe_error
-    event :moving_to_cutting_distance
-    event :cutting
-    event :cutting_success
-    event :cutting_error
-
-    add Cmp::Pingersearch, :as => 'pingersearch'
-    add_main Cmp::BuoyDetector, :as => 'buoy_detector'
-
-    add(Cmp::ControlLoop, :as => 'control').
-      use('command' => AuvRelPosController::Task).
-      use('controller' => AvalonControl::MotionControlTask)
-
-    connect buoy_detector => control
-
-    on :start do |event|
-        buoy_servoing = event.task.buoy_detector_child.servoing_child
-        buoy_servoing.on :buoy_lost do |event|
-            # Give control to pinger search and take it away from buoy detector."
-            Robot.info "Buoy lost. Give control to pinger search and take it away from buoy detector."
-            buoy_detector_child.relative_position_command_port.disconnect_from control_child.command_child.position_command_port
-            pingersearch_child.relative_position_command_port.connect_to control_child.command_child.position_command_port
-        end
-        buoy_servoing.on :buoy_detected do |event|
-            Robot.info "******************* Buoy detected! But catched event deeply at task level."
-        end
-    end
-#    debugger
-    poll do
-        on :buoy_detected do |event|
-            Robot.info "**************************************** Buoy detected! First level event!"
-        end
-    end
-    
-    Cmp::BuoyDetector.on :buoy_lost do |event|
-        #puts "Lost buoy. Give control to pingersearch!"
-        #Robot.info "Lost buoy. Give control to pingersearch!"
-
-        # Give control to asv detector and take it away from pinger search
-        #buoy_detector_child.relative_position_command.disconnect_from control_child.command_child.position_command
-        #pingersearch_child.relative_position_command.connect_to control_child.command_child.position_command
-        Robot.info "In original buoy lost handler!!! Doing nothing."
-    end
-   
-end
+#composition 'TestBuoyAndPingersearch' do
+#
+#    event :buoy_search
+#    event :buoy_detected
+#    event :buoy_lost
+#    event :buoy_arrived
+#    event :strafing
+#    event :strafe_finished
+#    event :strafe_error
+#    event :moving_to_cutting_distance
+#    event :cutting
+#    event :cutting_success
+#    event :cutting_error
+#
+#    add Cmp::Pingersearch, :as => 'pingersearch'
+#    add_main Cmp::BuoyDetector, :as => 'buoy_detector'
+#
+#    add(Cmp::ControlLoop, :as => 'control').
+#      use('command' => AuvRelPosController::Task).
+#      use('controller' => AvalonControl::MotionControlTask)
+#
+#    connect buoy_detector => control
+#
+#    on :start do |event|
+#        buoy_servoing = event.task.buoy_detector_child.servoing_child
+#        buoy_servoing.on :buoy_lost do |event|
+#            # Give control to pinger search and take it away from buoy detector."
+#            Robot.info "Buoy lost. Give control to pinger search and take it away from buoy detector."
+#            buoy_detector_child.relative_position_command_port.disconnect_from control_child.command_child.position_command_port
+#            pingersearch_child.relative_position_command_port.connect_to control_child.command_child.position_command_port
+#        end
+#        buoy_servoing.on :buoy_detected do |event|
+#            Robot.info "******************* Buoy detected! But catched event deeply at task level."
+#        end
+#    end
+##    debugger
+#    poll do
+#        on :buoy_detected do |event|
+#            Robot.info "**************************************** Buoy detected! First level event!"
+#        end
+#    end
+#    
+#    Cmp::BuoyDetector.on :buoy_lost do |event|
+#        #puts "Lost buoy. Give control to pingersearch!"
+#        #Robot.info "Lost buoy. Give control to pingersearch!"
+#
+#        # Give control to asv detector and take it away from pinger search
+#        #buoy_detector_child.relative_position_command.disconnect_from control_child.command_child.position_command
+#        #pingersearch_child.relative_position_command.connect_to control_child.command_child.position_command
+#        Robot.info "In original buoy lost handler!!! Doing nothing."
+#    end
+#   
+#end

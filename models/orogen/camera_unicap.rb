@@ -3,6 +3,6 @@ device_type 'CameraUnicap', :config_type => CameraUnicap::CameraTask.config_type
 end
 
 class CameraUnicap::CameraTask
-    provides Dev::CameraUnicap, 'images' => 'frame'
+    provides Dev::CameraUnicap, 'frame' => 'frame'
 end
 

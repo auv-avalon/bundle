@@ -1,3 +1,7 @@
+load_system_model 'blueprints/avalon_base'
+
+
+
 composition 'AUVJoystickCommand' do
     add Srv::RawCommand, :as => 'rawCommand'
     add Srv::OrientationWithZ, :as => 'orientation_with_z'
@@ -11,11 +15,11 @@ composition 'AUVJoystickCommand' do
     export rawCommandConverter.world_command, :as => "WorldCommand"
     export rawCommandConverter.aligned_velocity_command, :as =>"VeloCommand"
     
-    provides Srv::AUVMotionCommand
+    provides Srv::AUVMotionController
     #provides Srv::Raw6DWorldCommand#, "world_command" => "WorldCommand"
     #provides Srv::Raw6DVeloCommand
     
-    provides Srv::LinearAngular6DCommand
-    provides Srv::LinearAngular6DCommand
+#    provides Srv::LinearAngular6DCommand
+#    provides Srv::LinearAngular6DCommand
 end
 

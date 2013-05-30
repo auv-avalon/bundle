@@ -12,6 +12,7 @@ Roby.app.orocos_process_server 'back','192.168.128.51' #, :log_dir => '/mnt/logs
 Roby.app.use_deployments_from "avalon_back", :on => 'back'
 Roby.app.use_deployments_from "avalon_front"
 
+#Roby.orocos_engine.transformer_enabled = true
 
 
 Conf.orocos.exclude_from_log '/canbus/Message'
@@ -45,8 +46,8 @@ Conf.orocos.disable_log_group "raw_camera"
 Orocos::RobyPlugin::StateEstimator::Task.worstcase_processing_time 1
 Orocos::RobyPlugin::ModemCan::Task.worstcase_processing_time 1
 
-#nav_modes = ['drive_simple', 'pipeline', 'wall', 'buoy']
-nav_modes = ['sauce12_complete', 'sauce12_pipeline', 'sauce12_buoy', 'sauce12_wall', 'drive_simple', 'wall_front_right', 'dual_wall', 'wall_left']
+nav_modes = ['drive_simple', 'pipeline', 'wall', 'buoy']
+#nav_modes = ['sauce12_complete', 'sauce12_pipeline', 'sauce12_buoy', 'sauce12_wall', 'drive_simple', 'wall_front_right', 'dual_wall', 'wall_left']
 
 State.navigation_mode = nav_modes
 
@@ -132,7 +133,7 @@ Robot.devices do
 	can_id(0x101,0x7FF).
   	period(0.01)
 
-    device(Dev::RemoteJoystick).
+    device(Dev::RemoteJoystick, :as => "joystick").
         period(0.01).
 	can_id(0x100,0x7FF)
 

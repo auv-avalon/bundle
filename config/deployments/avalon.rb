@@ -13,6 +13,26 @@ use Srv::SoundSourceDirection => Pingersearch::AngleEstimation
 
 use DataServices::AUVMotionController => AvalonControl::MotionControlTask
 
+
+define("base_control",Cmp::ControlLoop).use("hbridge_set")
+
+use Cmp::ControlLoop.use(
+	'controlled_system' => AvalonControl::MotionControlTask#,
+#	'controller' => "base_control"
+)
+
+
+
+
+define('drive_simple', Cmp::ControlLoop).
+#    #use(Cmp::AUVJoystickCommand.use(Srv::RawCommand => device('joystick')), 'controlled_system' => AvalonControl::MotionControlTask)
+    use(Cmp::AUVJoystickCommand.use(Srv::RawCommand => device('joystick')))#, 'controlled_system' => AvalonControl::MotionControlTask)
+
+
+
+#define('drive_simple', Cmp::BaseControl).
+#	use(Cmp::AUVJoystickCommand.use(Srv::RawCommand => device('joystick')))
+
 #use Cmp::OrientationEstimator => Cmp::OrientationEstimator.use('depth_reader') ##Depth Sensor as reference
 #use Cmp::OrientationEstimator => Cmp::OrientationEstimator.use('sonar_rear') ##Ground distance as 0 reference !
 
@@ -41,7 +61,7 @@ DepthReader::DepthAndOrientationFusion.poll do
 end
 
 # Predeploy a few things to keep them always running
-add_mission(Hbridge::Task)
+#add_mission(Hbridge::Task)
 
 # Add system monitoring
 add_mission(Sysmon::Task)

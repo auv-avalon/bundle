@@ -1,0 +1,4 @@
+<package>
+ <depend package="bundles/rock" />
+ <depend package="bundles/rock.dfki" />
+</package>

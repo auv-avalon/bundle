@@ -5,6 +5,6 @@ device_type 'CameraProsilica', :config_type => CameraProsilica::Task.config_type
 end
 
 class CameraProsilica::Task
-    provides Dev::CameraProsilica, 'images' => 'frame'
+    provides Dev::CameraProsilica, 'frame' => 'frame'
 end
 

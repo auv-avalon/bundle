@@ -46,3 +46,4 @@ if Orocos::MQueue.available?
     Orocos::MQueue.auto = true
 end
 
+

@@ -3,6 +3,11 @@ engine:
   # The length of a cycle (in seconds). It defaults to 100ms.
   # cycle: 0.1
 
+bundle:
+  dependencies:
+     - rock
+     - rock.dfki
+
 # Logging configuration
 log:
   # Where log files go

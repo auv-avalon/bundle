@@ -1,0 +1,6 @@
+
+
+bundle:
+  dependencies:
+    - rock
+    - rock.dfki
