@@ -11,6 +11,7 @@ Cmp::ControlLoop.specialize 'controlled_system' => AvalonControl::MotionControlT
     connect pose.orientation_z_samples => controlled_system.pose_samples
     connect dist.distance => controlled_system.ground_distance
     connect controlled_system => sub_controller 
+   autoconnect 
 end
 
 #Cmp::ControlLoop.specialize 'controller' => AvalonControl::PositionControlTask do

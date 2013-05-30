@@ -11,22 +11,20 @@ use Srv::Pose             => Cmp::Localization.use('sonar')
 use Srv::GroundDistance   => device('echosounder') 
 use Srv::SoundSourceDirection => Pingersearch::AngleEstimation
 
-use DataServices::AUVMotionController => AvalonControl::MotionControlTask
+#use DataServices::AUVMotionController => AvalonControl::MotionControlTask
 
 
-define("base_control",Cmp::ControlLoop).use("hbridge_set")
-
-use Cmp::ControlLoop.use(
-	'controlled_system' => AvalonControl::MotionControlTask#,
-#	'controller' => "base_control"
-)
+#define("base_control",Cmp::ControlLoop).use("hbridge_set")
 
 
+#Workaround to get the models loaded
+#use Cmp::ControlLoop.use('controlled_system' => AvalonControl::MotionControlTask)
+#use Cmp::ControlLoop.use('controlled_system' => AuvRelPosController::Task)
 
 
-define('drive_simple', Cmp::ControlLoop).
-#    #use(Cmp::AUVJoystickCommand.use(Srv::RawCommand => device('joystick')), 'controlled_system' => AvalonControl::MotionControlTask)
-    use(Cmp::AUVJoystickCommand.use(Srv::RawCommand => device('joystick')))#, 'controlled_system' => AvalonControl::MotionControlTask)
+
+#define('drive_simple', Cmp::ControlLoop).
+#    use(Cmp::AUVJoystickCommand.use(Srv::RawCommand => device('joystick')), 'controlled_system' => AvalonControl::MotionControlTask)
 
 
 

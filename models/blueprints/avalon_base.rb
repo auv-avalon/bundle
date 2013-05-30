@@ -1,6 +1,7 @@
 load_system_model 'blueprints/control'
 
 Cmp::ControlLoop.declare 'AUVMotion', '/base/AUVMotionCommand'
+Cmp::ControlLoop.declare 'AUVRelativeMotion', '/base/AUVPositionCommand'
 
 
 data_service_type 'ZProvider' do

@@ -12,20 +12,21 @@ using_task_library 'avalon_control'
 
 
 
-composition 'VisualServoing' do
-    add Srv::RelativePositionDetector, :as => 'detector'
+#composition 'VisualServoing' do
+    #add Srv::RelativePositionDetector, :as => 'detector'
     #add(Cmp::ControlLoop, :as => 'control').
-    add(Srv::AUVMotionControlledSystem, :as => 'control')
-    add(AuvRelPosController::Task, :as => 'rel-controller')
+    #add(Srv::AUVMotionControlledSystem, :as => 'control')
+    #add(AuvRelPosController::Task, :as => 'rel-controller')
+#    add Srv::AUVRelativeMotionControlledSystem
 
 
-    export control.command_in
+#    export control.command_in
 
     
 #      use('command_in' => AuvRelPosController::Task).
 #      use('controller' => AvalonControl::MotionControlTask) 
 
-    autoconnect
-end
+#    autoconnect
+#end
 
 

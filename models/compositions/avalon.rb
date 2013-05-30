@@ -110,7 +110,7 @@ end
 #   # add PiplineTracker::Task, :as => "detector"
 #    autoconnect
 #    export detector.position_command
-#    provides Srv::RelativePositionDetector
+#    provides Srv::AUVRelativeMotionController
 #end
 
 
@@ -138,7 +138,7 @@ composition 'PipelineDetector' do
     autoconnect
 
     export offshorePipelineDetector.position_command
-    provides Srv::RelativePositionDetector
+    provides Srv::AUVRelativeMotionController
 
     attr_reader :pipeline_heading
 
@@ -217,11 +217,11 @@ class Orocos::RobyPlugin::OffshorePipelineDetector::Task
     end
 end
 
-Cmp::VisualServoing.specialize 'detector' => Cmp::PipelineDetector do
-    overload 'detector', Cmp::PipelineDetector,
-        :success => :end_of_pipe,
-        :remove_when_done => false
-end
+#Cmp::VisualServoing.specialize 'detector' => Cmp::PipelineDetector do
+#    overload 'detector', Cmp::PipelineDetector,
+#        :success => :end_of_pipe,
+#        :remove_when_done => false
+#end
 
 composition 'BuoyDetector' do
     event :buoy_search
@@ -254,7 +254,7 @@ composition 'BuoyDetector' do
     connect detector.buoy => servoing.input_buoy
    
     export servoing.relative_position, :as => 'relative_position_command'
-    provides Srv::RelativePositionDetector
+    provides Srv::AUVRelativeMotionController
 end
 
 #composition 'BuoyDetector' do
@@ -276,25 +276,25 @@ end
 #    autoconnect
 #
 #    export servoing.relative_position
-#    provides Srv::RelativePositionDetector
+#    provides Srv::AUVRelativeMotionController
 #end
 
 
-Cmp::VisualServoing.specialize 'detector' => Cmp::BuoyDetector do
-    event :failed_to_find_buoy
-    forward :failed_to_find_buoy => :failed
-    event :behaviour_failure
-    forward :behaviour_failure => :failed
-
-    event :failed_to_approach
-    forward :failed_to_approach => :behaviour_failure
-    event :failed_to_strafe
-    forward :failed_to_strafe => :behaviour_failure
-    event :failed_to_cut
-    forward :failed_to_cut => :behaviour_failure
-    event :buoy_lost
-    forward :buoy_lost => :behaviour_failure
-end
+#Cmp::VisualServoing.specialize 'detector' => Cmp::BuoyDetector do
+#    event :failed_to_find_buoy
+#    forward :failed_to_find_buoy => :failed
+#    event :behaviour_failure
+#    forward :behaviour_failure => :failed
+#
+#    event :failed_to_approach
+#    forward :failed_to_approach => :behaviour_failure
+#    event :failed_to_strafe
+#    forward :failed_to_strafe => :behaviour_failure
+#    event :failed_to_cut
+#    forward :failed_to_cut => :behaviour_failure
+#    event :buoy_lost
+#    forward :buoy_lost => :behaviour_failure
+#end
 
 composition 'WallDetector' do
     event :wall_servoing
@@ -313,7 +313,7 @@ composition 'WallDetector' do
     autoconnect
 
     export servoing.position_command, :as => 'relative_position_command'
-    provides Srv::RelativePositionDetector
+    provides Srv::AUVRelativeMotionController
 end
 
 composition 'DualSonarWallDetector' do
@@ -339,7 +339,7 @@ composition 'DualSonarWallDetector' do
     autoconnect
 
     export servoing.position_command, :as => 'relative_position_command'
-    provides Srv::RelativePositionDetector
+    provides Srv::AUVRelativeMotionController
 end
 
 #composition 'UwvModel' do
@@ -458,7 +458,7 @@ composition 'SonarAsvDetector' do
     connect sonar => detector
 
     export detector.position_command, :as => 'relative_position_command' 
-    provides Srv::RelativePositionDetector
+    provides Srv::AUVRelativeMotionController
 end
 
 composition 'Pingersearch' do
@@ -469,7 +469,7 @@ composition 'Pingersearch' do
     autoconnect
 
     export pingersearch.position_command, :as => 'relative_position_command'
-    provides Srv::RelativePositionDetector
+    provides Srv::AUVRelativeMotionController
 end
 
 Cmp::Pingersearch.specialize 'angle_estimation' => Pingersearch::AngleEstimation do
