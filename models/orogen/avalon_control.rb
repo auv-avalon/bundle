@@ -1,17 +1,25 @@
-load_system_model 'blueprints/avalon_base'
+require 'models/blueprints/avalon_base'
 
-class AvalonControl::MotionControlTask 
-    provides Srv::AUVMotionControlledSystem
-end
+module Avalon
+    
+    class AvalonControl::FakeWriter
+        provides Base::AUVMotionControllerSrv, :as => "controller"
+    end
 
-Cmp::ControlLoop.specialize 'controlled_system' => AvalonControl::MotionControlTask do
-    add Srv::OrientationWithZ, :as => 'pose'
-    add Srv::GroundDistance, :as => 'dist'
-    add Srv::ActuatorControlledSystem, :as => "sub_controller"
-    connect pose.orientation_z_samples => controlled_system.pose_samples
-    connect dist.distance => controlled_system.ground_distance
-    connect controlled_system => sub_controller 
-   autoconnect 
+    class AvalonControl::MotionControlTask 
+        provides Base::AUVMotionControlledSystemSrv, :as => "controlled"
+    end
+
+    Base::ControlLoop.specialize 'controlled_system' => AvalonControl::MotionControlTask do
+        add OrientationWithZSrv, :as => 'pose'
+        add GroundDistanceSrv, :as => 'dist'
+        add Base::ActuatorControlledSystemSrv, :as => "sub_controller"
+        connect pose_child.orientation_z_samples_port => controlled_system_child.pose_samples_port
+        connect dist_child.distance_port => controlled_system_child.ground_distance_port
+        connect controlled_system_child => sub_controller_child
+        #TODO check connection
+    end
+
 end
 
 #Cmp::ControlLoop.specialize 'controller' => AvalonControl::PositionControlTask do

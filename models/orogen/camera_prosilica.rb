@@ -1,10 +1,8 @@
+require "models/blueprints/devices"
 using_task_library "camera_prosilica"
 
-device_type 'CameraProsilica', :config_type => CameraProsilica::Task.config_type_from_properties do
-    provides Srv::ImageProvider
-end
 
 class CameraProsilica::Task
-    provides Dev::CameraProsilica, 'frame' => 'frame'
+    driver_for Dev::Sensors::Cameras::Network, :as => 'driver'
 end
 

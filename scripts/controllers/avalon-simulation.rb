@@ -58,9 +58,7 @@ module Robot
 
         sim_set_pose(position[:x], position[:y], position[:z], position[:theta])
     end
-end
-
-module Robot
+    
     def self.emergency_surfacing
         task = Orocos::TaskContext.get('actuators')
 	task.command.disconnect_all

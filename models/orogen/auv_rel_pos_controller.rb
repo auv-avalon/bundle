@@ -1,21 +1,23 @@
+require 'models/blueprints/avalon_base'
+
 class AuvRelPosController::Task
-	provides Srv::AUVRelativeMotionControlledSystem
-	provides Srv::AUVMotionController
+	provides Base::AUVRelativeMotionControlledSystemSrv, :as => "controlled_system"
+	provides Base::AUVMotionControllerSrv, :as => "controller"
 end
 
-# NOTE: the 'controller' => Bla part of the specialization should not be needed,
-# but is as of today (29.05.2011)
-Cmp::ControlLoop.specialize 'controlled_system' => AuvRelPosController::Task do
-    add Srv::OrientationWithZ
+Base::ControlLoop.specialize 'controlled_system' => AuvRelPosController::Task do
+    add Avalon::OrientationWithZSrv, :as => "orientation_with_z"
 #    add AvalonControl::MotionControlTask, :as => "auvmotion"
     
-    
     #workaround
-    add Srv::OrientationWithZ, :as => 'pose'
-    add Srv::GroundDistance, :as => 'dist'
-    add Srv::ActuatorControlledSystem, :as => "sub_controller"
-    add AvalonControl::MotionControlTask, :as => "motion"
-    autoconnect
+#    add OrientationWithZSrv, :as => 'pose'
+#    add GroundDistanceSrv, :as => 'dist'
+    add Base::AUVMotionControlledSystemSrv, :as => "sub_controller"
+    #add ActuatorControlledSystemSrv, :as => "sub_controller"
+    #add ActuatorControlledSystemSrv, :as => "sub_controller"
+    #add AvalonControl::MotionControlTask, :as => "motion"
+    #autoconnect
+    #TODO DO CONNECTION
 
 #    connect pose.orientation_z_samples => controlled_system.pose_samples
 #    connect dist.distance => controlled_system.ground_distance
@@ -32,8 +34,8 @@ Cmp::ControlLoop.specialize 'controlled_system' => AuvRelPosController::Task do
 
 #    overload 'controller', Srv::AUVMotionController
 #    export controlles_system.position_command
-    connect orientation_with_z => controlled_system
-#    connect command => controlles_system 
+    connect orientation_with_z_child => controlled_system_child
+#    connect command => controlles_system_child
 #    connect controlled_system => auvmotion
 #    connect act_controller => sub_controller
  #  autoconnect 

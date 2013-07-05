@@ -1,6 +1,8 @@
-load_system_model 'blueprints/control'
+require "#{File.dirname(__FILE__)}/../../../rock/models/blueprints/control"
 
-data_service_type 'RelativePositionDetector' do
-    provides Srv::RelativePositionCommand
+module Avalon
+    data_service_type 'RelativePositionDetectorSrv' do
+        provides RelativePositionCommandSrv
+    end
 end
 

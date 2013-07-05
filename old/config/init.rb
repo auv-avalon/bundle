@@ -1,30 +1,9 @@
-# This file will only be used if you convert this bundle into a full-fledged
-# Roby application. This is done by calling
-#
-#   roby init
-#
-# From within the bundle root.
-
-
-
 # This file is called to do application-global configuration. For configuration
 # specific to a robot, edit config/NAME.rb, where NAME is the robot name.
 #
 # Enable some of the standard plugins
 # Roby.app.using 'fault_injection'
 # Roby.app.using 'subsystems'
-Roby.app.using 'syskit'
-
-
-require 'roby/schedulers/temporal'
-Roby.scheduler = Roby::Schedulers::Temporal.new
-
-#Roby::Application.reject_ambiguous_processor_deployments = false
-
-
-
-## Uncomment to enable automatic transformer configuration support
-# Syskit.conf.transformer_enabled = true
 
 ##############################
 # Sets some configuration options
@@ -48,4 +27,23 @@ Roby.scheduler = Roby::Schedulers::Temporal.new
 ##############################
 # Set the scheduler object to be used during execution (can also be done
 # per-robot by setting it in config/#{ROBOT}.rb)
+
+#require 'roby/schedulers/basic'
+#Roby.scheduler = Roby::Schedulers::Basic.new
+
+Roby.app.using 'orocos'
+require 'roby/schedulers/temporal'
+Roby.scheduler = Roby::Schedulers::Temporal.new
+
+if Roby.app.robot_name == "avalon"
+#  Orocos::CORBA.name_service = "avalon-rear.local"
+#   Orocos::CORBA.name_service = "127.0.0.1"
+   Orocos::CORBA.name_service.ip = "127.0.0.1"
+end
+
+if Orocos::MQueue.available?
+    Robot.warn "turning ON MQueue usage"
+    Orocos::MQueue.auto = true
+end
+
 

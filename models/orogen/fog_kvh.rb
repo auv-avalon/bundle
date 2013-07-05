@@ -1,13 +1,17 @@
 using_task_library "fog_kvh"
 
+module Dev
+    module Sensors
+        device_type 'FOG' do
+            provides Base::RotationSrv#, :as => 'rotation'
+        end
+    end
+end
 
 class FogKvh::Dsp3000Task
-  driver_for "Dsp3000"
+  driver_for Dev::Sensors::FOG, :as => 'driver'
   def configure
     super
-    robot_def = robot_device
-#    orogen_task.port = robot_device.device_id
     period = (robot_def.period * 1000).round
-    #orogen_task.device_period = period
   end
 end

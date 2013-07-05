@@ -1,17 +1,22 @@
-class SonarTritech::Micron
-    driver_for "Dev::Micron" do
-        provides Srv::SonarScanProvider
-        provides Srv::GroundDistance
+module Dev
+    device_type "Micron" do
+        provides Avalon::SonarScanProviderSrv
+        provides Avalon::GroundDistanceSrv  
     end
+
+    device_type "Echosounder" do
+        provides Avalon::GroundDistanceSrv
+    end
+
+    device_type "Profiling"
+end
+
+class SonarTritech::Micron
+    driver_for Dev::Micron , :as => 'driver' 
 end
 
 class SonarTritech::Echosounder
-    driver_for "Dev::Echosounder" do
-        provides Srv::GroundDistance
-    end
-    def configure
-       super
-    end
+    driver_for Dev::Echosounder , :as => 'driver'
 end
 
 #class SonarTritech::Profiling

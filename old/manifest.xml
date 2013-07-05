@@ -1,5 +1,4 @@
 <package>
  <depend package="bundles/rock" />
  <depend package="bundles/rock.dfki" />
- <!--depend package="bundles/rock_ugv_nav" /-->
 </package>
