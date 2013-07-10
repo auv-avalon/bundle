@@ -26,13 +26,13 @@ module Avalon
         
         #add Srv::Orientation
         add DagonOrientationEstimator, :as => 'orientation'
-        add ZProviderSrv, :as => 'z_provider'
+        add Base::ZProviderSrv, :as => 'z_provider'
 
         orientation_child.connect_to fusion_child.orientation_samples_port
         z_provider_child.connect_to  fusion_child.depth_samples_port
 
         export fusion_child.pose_samples_port
-        provides OrientationWithZSrv, :as => "orientation_with_z"
-        provides SpeedSrv, :as => "speed"
+        provides Base::OrientationWithZSrv, :as => "orientation_with_z"
+        provides Base::VelocitySrv, :as => "speed"
     end
 end

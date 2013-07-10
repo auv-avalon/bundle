@@ -1,0 +1,65 @@
+--- name:default
+# no documentation available for this property
+amount_of_actuators: 6
+# no documentation available for this property
+maximum_thruster_force:
+- 10.0
+- 10.0
+- 10.0
+- 10.0
+- 10.0
+- 10.0
+# no documentation available for this property
+node_name: avalon
+# no documentation available for this property
+thruster_direction:
+- data:
+  - 0.0
+  - 0.0
+  - 1.0
+- data:
+  - 0.0
+  - 0.0
+  - 1.0
+- data:
+  - -1.0
+  - 0.0
+  - 0.0
+- data:
+  - -1.0
+  - 0.0
+  - 0.0
+- data:
+  - 0.0
+  - 1.0
+  - 0.0
+- data:
+  - 0.0
+  - -1.0
+  - 0.0
+# no documentation available for this property
+thruster_position:
+- data:
+  - -0.5955
+  - 0.0
+  - 0.0
+- data:
+  - 0.0
+  - 0.0
+  - 0.0
+- data:
+  - 0.0
+  - -0.157
+  - 0.0
+- data:
+  - 0.0
+  - 0.157
+  - 0.0
+- data:
+  - -0.688
+  - 0.082
+  - 0.0
+- data:
+  - 0.0
+  - 0.0
+  - 0.0

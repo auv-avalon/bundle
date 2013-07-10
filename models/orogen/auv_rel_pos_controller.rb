@@ -6,7 +6,7 @@ class AuvRelPosController::Task
 end
 
 Base::ControlLoop.specialize 'controlled_system' => AuvRelPosController::Task do
-    add Avalon::OrientationWithZSrv, :as => "orientation_with_z"
+    add Base::OrientationWithZSrv, :as => "orientation_with_z"
 #    add AvalonControl::MotionControlTask, :as => "auvmotion"
     
     #workaround

@@ -4,9 +4,9 @@ require 'models/blueprints/avalon_base'
 module Avalon
     class AUVJoystickCommand < Syskit::Composition 
         add Base::RawCommandControllerSrv, :as => 'rawCommand'
-        add OrientationWithZSrv, :as => 'orientation_with_z'
+        add Base::OrientationWithZSrv, :as => 'orientation_with_z'
         add RawControlCommandConverter::Movement, :as => 'rawCommandConverter'
-        add GroundDistanceSrv, :as => 'dist'
+        add Base::GroundDistanceSrv, :as => 'dist'
         connect dist_child.distance_port => rawCommandConverter_child.ground_distance_port
         connect orientation_with_z_child.orientation_z_samples_port => rawCommandConverter_child.orientation_readings_port
         #TODO Check autoconnect

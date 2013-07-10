@@ -16,7 +16,7 @@ log:
         #syskit/instance_requirements: DEBUG
         #syskit/network_generation: DEBUG
         #syskit/network_generation/merge_solver: DEBUG
-        #syskit/network_generation/engine: DEBUG
+        syskit/network_generation/engine: DEBUG
         #syskit/component: DEBUG:ng.txt
         #syskit/network_generation: DEBUG:ng.txt
         #syskit/network_generation/merge_solver: DEBUG:ng.txt

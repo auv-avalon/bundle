@@ -1,4 +1,5 @@
 #Syskit.conf.use_deployment 'avalon_simulation'
+Syskit.conf.use_deployment 'AvalonSimulation'
 Syskit.conf.use_deployment 'avalon_control_simulation'
 Syskit.conf.use_deployment 'pipeline_follower'
 Syskit.conf.use_deployment 'wall_servoing'

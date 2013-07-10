@@ -1,5 +1,5 @@
 require "models/profiles/avalon"
 
 class Main < Roby::Actions::Interface
-    use_profile Avalon::Profiles::AvalonSimulation
+    use_profile Avalon::Profiles::Simulation
 end

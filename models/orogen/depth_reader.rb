@@ -3,7 +3,7 @@ require "models/blueprints/avalon_base"
 module Dev
     module Sensors
         device_type "DepthReader" do
-            provides Avalon::ZProviderSrv
+            provides Base::ZProviderSrv
             provides Dev::Bus::CAN::ClientInSrv
         end
     end
