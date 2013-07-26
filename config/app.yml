@@ -11,12 +11,12 @@ log:
 
     # logging Roby into file: logs/<date>/<file>.txt
     levels:
-        syskit: DEBUG
+        #syskit: DEBUG
         #syskit/models: DEBUG
         #syskit/instance_requirements: DEBUG
         #syskit/network_generation: DEBUG
         #syskit/network_generation/merge_solver: DEBUG
-        syskit/network_generation/engine: DEBUG
+        #syskit/network_generation/engine: DEBUG
         #syskit/component: DEBUG:ng.txt
         #syskit/network_generation: DEBUG:ng.txt
         #syskit/network_generation/merge_solver: DEBUG:ng.txt

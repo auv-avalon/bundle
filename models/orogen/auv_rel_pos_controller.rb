@@ -1,18 +1,40 @@
 require 'models/blueprints/avalon_base'
 
 class AuvRelPosController::Task
-	provides Base::AUVRelativeMotionControlledSystemSrv, :as => "controlled_system"
-	provides Base::AUVMotionControllerSrv, :as => "controller"
+    provides Base::AUVRelativeMotionControlledSystemSrv, :as => "controlled_system"
+    provides Base::AUVMotionControllerSrv, :as => "controller"
 end
 
-Base::ControlLoop.specialize 'controlled_system' => AuvRelPosController::Task do
+Base::ControlLoop.specialize Base::ControlLoop::controller_child => AuvRelPosController::Task do
     add Base::OrientationWithZSrv, :as => "orientation_with_z"
-#    add AvalonControl::MotionControlTask, :as => "auvmotion"
-    
+    orientation_with_z_child.connect_to controller_child
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     #workaround
 #    add OrientationWithZSrv, :as => 'pose'
 #    add GroundDistanceSrv, :as => 'dist'
-    add Base::AUVMotionControlledSystemSrv, :as => "sub_controller"
+
     #add ActuatorControlledSystemSrv, :as => "sub_controller"
     #add ActuatorControlledSystemSrv, :as => "sub_controller"
     #add AvalonControl::MotionControlTask, :as => "motion"
@@ -34,10 +56,10 @@ Base::ControlLoop.specialize 'controlled_system' => AuvRelPosController::Task do
 
 #    overload 'controller', Srv::AUVMotionController
 #    export controlles_system.position_command
-    connect orientation_with_z_child => controlled_system_child
+ #   connect orientation_with_z_child => controlled_system_child
 #    connect command => controlles_system_child
 #    connect controlled_system => auvmotion
 #    connect act_controller => sub_controller
  #  autoconnect 
 
-end
+#end
