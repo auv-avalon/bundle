@@ -18,15 +18,9 @@ class PipelineDetector < Syskit::Composition
     add_main OffshorePipelineDetector::Task, :as => 'offshorePipelineDetector'
     add Base::OrientationWithZSrv, :as => "orienation_with_z"
     orienation_with_z_child.connect_to offshorePipelineDetector_child.orientation_sample_port
-    camera_child.connect_to offshorePipelineDetector_child
-    #TODO CONNECT
-
-    #offshorePipelineDetector.altitude_samples.ignore
-#    autoconnect
+    camera_child.frame_port.connect_to offshorePipelineDetector_child
 
     export offshorePipelineDetector_child.position_command_port
-    #provides Srv::AUVRelativeMotionController
-    #provides Base::AUVRelativeMotionControlledSystemSrv, :as => 'controller'
     provides Base::AUVRelativeMotionControllerSrv, :as => 'controller'
 
     attr_reader :pipeline_heading

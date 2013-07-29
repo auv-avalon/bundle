@@ -11,9 +11,9 @@ module Avalon
     end
 
     class AvalonControl::MotionControlTask 
-#        orogen_model.input_port 'command_in', '/base/actuators/Status'
         provides Base::AUVMotionControlledSystemSrv, :as => "auv_motion_controlled"
         provides Base::ActuatorControllerSrv, :as => "actuator_controller"
+         
     end
 
     Base::ControlLoop.specialize Base::ControlLoop.controller_child => AvalonControl::MotionControlTask do
