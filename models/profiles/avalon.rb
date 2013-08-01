@@ -1,8 +1,5 @@
 require "models/blueprints/avalon_base"
 require "models/blueprints/pose_avalon.rb"
-#require "models/orogen/hbridge/devices"
-        
-#STDOUT.puts "AvalonC: #{AvalonControl::FakeWriter.ancestors}"
 
 using_task_library 'controldev'
 using_task_library 'canbus'
@@ -13,6 +10,7 @@ using_task_library 'raw_control_command_converter'
 using_task_library 'avalon_control'
 using_task_library 'offshore_pipeline_detector'
 using_task_library 'auv_rel_pos_controller'
+using_task_library 'buoy'
 
 #Why i need to use them here, i only need them for my machine not for the system itself
 using_task_library 'simulation'
@@ -25,16 +23,28 @@ module Avalon
     module Profiles
         profile "AvalonBase" do
             
+            define 'base_loop_test', ::Base::ControlLoop.use(AvalonControl::FakeWriter,Base::AUVMotionControlledSystemSrv) 
+            define 'base_rel_loop_test', ::Base::ControlLoop.use(AvalonControl::RelFakeWriter, Base::AUVRelativeMotionControlledSystemSrv)
+            
+            #You need an joystick for this....
+            define('drive_simple', ::Base::ControlLoop).use(AUVJoystickCommand, Base::AUVMotionControlledSystemSrv)
+            
+            
         end
 
         profile "Simulation" do
             use_profile AvalonBase
 
-           # define_simulated_device("bottom_cam",Dev::Simulation::Camera, :use_deployments => "\"bottom_camera\"", :with_conf  => "\"bottom_cam\"")  #.use_conf('bottom_cam')
-            define_simulated_device("front_cam",Dev::Simulation::Camera, :use_deployments => "\"front_camera\"", :with_conf => "\"front_cam\"")#.use_conf('front_cam')
-            define_simulated_device("imu",Dev::Simulation::IMU)
-            define_simulated_device("thrusters",Dev::Simulation::Actuator, :use_deployments => "\"avalon_actuators\"")
-
+            define_simulated_device("bottom_cam", Dev::Simulation::Camera) do |dev|
+                dev.use_deployments(/bottom_camera/).with_conf("bottom_cam")
+            end
+            define_simulated_device("front_cam", Dev::Simulation::Camera) do |dev|
+                dev.use_deployments(/front_camera/).with_conf("front_cam")
+            end
+            define_simulated_device("imu", Dev::Simulation::IMU)
+            define_simulated_device("thrusters",Dev::Simulation::Actuator) do |dev|
+                dev.use_deployments(/avalon_actuators/)
+            end
             
             robot do
                 device(Dev::Simulation::Echosounder, :as => 'altimeter')
@@ -45,20 +55,20 @@ module Avalon
             use ::Base::GroundDistanceSrv => altimeter_dev
             use ::Base::OrientationWithZSrv => imu_def 
            
-            define 'base_loop', Base::ControlLoop.use('controller' => AvalonControl::MotionControlTask, 'controlled_system' => thrusters_def)
+            define 'base_loop', Base::ControlLoop.use('controller' => AvalonControl::MotionControlTask.with_conf('simulation'), 'controlled_system' => thrusters_def)
             define 'relative_control_loop', ::Base::ControlLoop.use(AuvRelPosController::Task, base_loop_def)
-            
-            define 'base_loop_test', ::Base::ControlLoop.use(AvalonControl::FakeWriter,base_loop_def) 
-            define 'base_rel_loop_test', ::Base::ControlLoop.use(AvalonControl::RelFakeWriter,relative_control_loop_def)
-            
-            #You need an joystick for this....
-            define('drive_simple', ::Base::ControlLoop).use(AUVJoystickCommand.use(joystick_dev), base_loop_def)
 
-            define('pipeline_simple', ::Base::ControlLoop).use(PipelineDetector.use(bottom_cam_def), relative_control_loop_def.controller_child.with_conf("pipeline"))
+            use Base::AUVMotionControlledSystemSrv => base_loop_def
+            use Base::AUVRelativeMotionControlledSystemSrv => relative_control_loop_def
+            use AUVJoystickCommand => AUVJoystickCommand.use(joystick_dev)
 
+            use BuoyDetector => BuoyDetector.use(front_cam_def) 
+            use PipelineDetector => PipelineDetector.use(bottom_cam_def) 
+
+            define 'pipeline', ::Base::ControlLoop.use(PipelineDetector.use(bottom_cam_def), 'controlled_system' => Base::ControlLoop.use(Base::AUVMotionControlledSystemSrv, AuvRelPosController::Task.with_conf('pipeline')))
+            define 'buoy', ::Base::ControlLoop.use(BuoyDetector.use(front_cam_def), Base::AUVRelativeMotionControlledSystemSrv) 
             
-            
-            self  
+
         end
 
         profile "Avalon" do
@@ -94,13 +104,17 @@ module Avalon
             
             use Base::GroundDistanceSrv => altimeter_dev
             use Base::ZProviderSrv => depth_reader_dev 
-            use Base::ActuatorControlledSystemSrv => thrusters_def
-
-
-
-            define('drive_simple', ::Base::ControlLoop).use(AUVJoystickCommand, AvalonControl::MotionControlTask)
             
-            define('base_loop_test', ::Base::ControlLoop).use(AvalonControl::FakeWriter, AvalonControl::MotionControlTask)
+            define 'base_loop', Base::ControlLoop.use('controller' => AvalonControl::MotionControlTask, 'controlled_system' => thrusters_def)
+            define 'relative_control_loop', ::Base::ControlLoop.use(AuvRelPosController::Task, base_loop_def)
+            
+            use Base::AUVMotionControlledSystemSrv => base_loop_def
+            use Base::AUVRelativeMotionControlledSystemSrv => relative_control_loop_def
+            use AUVJoystickCommand => AUVJoystickCommand.use(joystick_dev)
+
+
+           # define('drive_simple', ::Base::ControlLoop).use(AUVJoystickCommand, AvalonControl::MotionControlTask)
+          #  define('base_loop_test', ::Base::ControlLoop).use(AvalonControl::FakeWriter, AvalonControl::MotionControlTask)
             
         end
     end

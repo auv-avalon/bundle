@@ -5,7 +5,7 @@ class AuvRelPosController::Task
     provides Base::AUVMotionControllerSrv, :as => "controller"
 end
 
-Base::ControlLoop.specialize Base::ControlLoop::controller_child => AuvRelPosController::Task do
+Base::ControlLoop.specialize Base::ControlLoop.controller_child => AuvRelPosController::Task do
     add Base::OrientationWithZSrv, :as => "orientation_with_z"
     orientation_with_z_child.connect_to controller_child
 end

@@ -34,4 +34,4 @@ valid_timespan: 2.0
 rel_heading: 0
 --- name:pipeline
 rel_heading: 1
-timeout: 2
+timeout: 0 

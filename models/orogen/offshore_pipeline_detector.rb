@@ -23,21 +23,35 @@ class PipelineDetector < Syskit::Composition
     export offshorePipelineDetector_child.position_command_port
     provides Base::AUVRelativeMotionControllerSrv, :as => 'controller'
 
-    attr_reader :pipeline_heading
+#    attr_accessor :orientation_reader
+    attr_accessor :pipeline_heading
+    attr_accessor :last_valid_heading
+
+    script do
+        orientation_reader = nil
+
+        execute do
+#            binding.pry
+            #orientation_reader = orienation_with_z_child.orientation_z_samples_port.reader
+            orientation_reader = orienation_with_z_child.orientation_samples_port.reader
+        end
+
+        poll do
+            if o = orientation_reader.read
+                pipeline_heading = o.orientation.yaw
+            end
+            transition!
+        end
+    end
 
     on :start do |event|
-        @orientation_reader = data_reader 'orientation_with_z', 'orientation_z_samples'
     end
 
     on :weak_signal do |event|
-        if o = @orientation_reader.read
-            @pipeline_heading = o.orientation.yaw
-        end
+        self.last_valid_heading = pipeline_heading
     end
 
     on :end_of_pipe do |event|
-        if !@pipeline_heading && (o = @orientation_reader.read)
-            @pipeline_heading = o.orientation.yaw
-        end
+        self.last_valid_heading = pipeline_heading
     end
 end
