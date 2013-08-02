@@ -40,7 +40,7 @@ class PipelineDetector < Syskit::Composition
             if o = orientation_reader.read
                 pipeline_heading = o.orientation.yaw
             end
-            transition!
+#            transition!
         end
     end
 
