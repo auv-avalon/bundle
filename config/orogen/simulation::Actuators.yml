@@ -16,10 +16,10 @@ thruster_direction:
 #Rear Vertical
 - data: [0, 0, 1]    #Rear Vertical
 - data: [0, 0, -1]     #Middle Vertical
-- data: [1, 0, 0]    #Right
-- data: [1, 0, 0]    #Left
-- data: [0, -1, 0]     #Rear Horizotal
-- data: [0, 1, 0]    #Middle Horizontal
+- data: [-1, 0, 0]    #Right
+- data: [-1, 0, 0]    #Left
+- data: [0, 1, 0]     #Rear Horizotal
+- data: [0, -1, 0]    #Middle Horizontal
 thruster_position:
 - data: [-0.5955, 0, 0]       #Rear Vertical
 - data: [0, 0, 0]             #Middle Vertical
