@@ -63,9 +63,10 @@ module Avalon
             use AUVJoystickCommand => AUVJoystickCommand.use(joystick_dev)
 
             use BuoyDetector => BuoyDetector.use(front_cam_def) 
-            use PipelineDetector => PipelineDetector.use(bottom_cam_def) 
+            use PipelineDetector => PipelineDetector.use(bottom_cam_def)
 
-            define 'pipeline', ::Base::ControlLoop.use(PipelineDetector.use(bottom_cam_def), 'controlled_system' => Base::ControlLoop.use(Base::AUVMotionControlledSystemSrv, AuvRelPosController::Task.with_conf('default','pipeline')))
+            #define 'pipeline', PipelineDetector.use(::Base::ControlLoop.use('controlled_system' => Base::ControlLoop.use(Base::AUVMotionControlledSystemSrv, AuvRelPosController::Task.with_conf('default','pipeline'))))
+            define 'pipeline', ::Base::ControlLoop.use(PipelineDetector.use(bottom_cam_def).with_arguments(:speed_x => 1), 'controlled_system' => Base::ControlLoop.use(Base::AUVMotionControlledSystemSrv, AuvRelPosController::Task.with_conf('default','pipeline')))
             define 'buoy', ::Base::ControlLoop.use(BuoyDetector.use(front_cam_def), Base::AUVRelativeMotionControlledSystemSrv) 
             
 
@@ -89,6 +90,12 @@ module Avalon
                     with_conf('default','can0')
 
                 through 'can0' do
+                    THRUSTER = ::Hbridge::Task.dispatch('thsuters2',[6,3,2,-1,4,5])
+                    
+                    device(Dev::Hbridge, :as => 'thrusters') do |t|
+                        with_arguments(THRUSTER.arguments)
+                    end
+
                     device(Dev::Controldev::CANJoystick, :as => 'joystick').
                         period(0.1).
                         can_id(0100,0x7ff)
@@ -96,18 +103,21 @@ module Avalon
                     device(Dev::Sensors::DepthReader, :as => 'depth_reader').
                         can_id(0x130,0x7F0).
                         period(0.1)
+                   
                 end
 
             end
-            
-            Hbridge.system self, 'can0', 'hb_group0', 'thrusters', 0, 1, 2, 3, 4, 5
+           
+            #New HBridge interface not ported yet
+            #Hbridge.system self, 'can0', 'hb_group0', 'thrusters', 0, 1, 2, 3, 4, 5
             
             use Base::GroundDistanceSrv => altimeter_dev
             use Base::ZProviderSrv => depth_reader_dev 
             
-            define 'base_loop', Base::ControlLoop.use('controller' => AvalonControl::MotionControlTask, 'controlled_system' => thrusters_def)
+            define 'base_loop', Base::ControlLoop.use('controller' => AvalonControl::MotionControlTask, 'controlled_system' => THRUSTER)
             define 'relative_control_loop', ::Base::ControlLoop.use(AuvRelPosController::Task, base_loop_def)
-            
+           
+            use Base::OrientationWithZSrv => DephFusion
             use Base::AUVMotionControlledSystemSrv => base_loop_def
             use Base::AUVRelativeMotionControlledSystemSrv => relative_control_loop_def
             use AUVJoystickCommand => AUVJoystickCommand.use(joystick_dev)
