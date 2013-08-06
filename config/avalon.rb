@@ -1,14 +1,15 @@
 #Front Machine
-Syskit.conf.use_deployment 'dynamixel'
-Syskit.conf.use_deployment 'front_camera'
-Syskit.conf.use_deployment 'bottom_camera'
-Syskit.conf.use_deployment 'left_unicap_camera'
-Syskit.conf.use_deployment 'right_unicap_camera'
-Syskit.conf.use_deployment 'buoy_detector'
-Syskit.conf.use_deployment 'pipeline_follower'
-Syskit.conf.use_deployment 'taskmon_front'
-Syskit.conf.use_deployment 'sonar_wall_hough'
-Syskit.conf.use_deployment 'avalon_gps'
+Syskit.conf.use_deployment 'dynamixel', :on => "192.168.128.50"
+Syskit.conf.use_deployment 'front_camera', :on => "192.168.128.50"
+Syskit.conf.use_deployment 'bottom_camera', :on => "192.168.128.50"
+Syskit.conf.use_deployment 'left_unicap_camera', :on => "192.168.128.50"
+Syskit.conf.use_deployment 'right_unicap_camera', :on => "192.168.128.50"
+Syskit.conf.use_deployment 'buoy_detector', :on => "192.168.128.50"
+Syskit.conf.use_deployment 'pipeline_follower', :on => "192.168.128.50"
+Syskit.conf.use_deployment 'taskmon_front', :on => "192.168.128.50"
+Syskit.conf.use_deployment 'sonar_wall_hough', :on => "192.168.128.50"
+Syskit.conf.use_deployment 'avalon_gps', :on => "192.168.128.50"
+
 #Rear machine
 Syskit.conf.use_deployment 'avalon_back_base_control'
 Syskit.conf.use_deployment 'sonar_distance_estimator'

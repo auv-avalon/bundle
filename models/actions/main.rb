@@ -1,4 +1,4 @@
-require 'models/profiles/avalon'
+require 'models/profiles/main'
 
 class Main < Roby::Actions::Interface
 
