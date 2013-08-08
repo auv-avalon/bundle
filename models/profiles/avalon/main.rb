@@ -33,13 +33,14 @@ module Avalon
 
                 com_bus(Dev::Bus::CAN, :as => 'can0').
                     with_conf('default','can0')
+                
+                com_bus(Dev::Bus::CAN, :as => 'can1').
+                    with_conf('default')
 
                 through 'can0' do
-                    THRUSTER = ::Hbridge::Task.dispatch('thsuters2',[6,3,2,-1,4,5])
-                    
-                    device(Dev::Hbridge, :as => 'thrusters') do |t|
-                        with_arguments(THRUSTER.arguments)
-                    end
+                    device(Dev::Hbridge, :as => 'thrusters').
+                        can_id(0, 0x700).
+                        with_conf("default")
 
                     device(Dev::Controldev::CANJoystick, :as => 'joystick').
                         period(0.1).
@@ -47,18 +48,23 @@ module Avalon
                     
                     device(Dev::Sensors::DepthReader, :as => 'depth_reader').
                         can_id(0x130,0x7F0).
-                        period(0.1)
+                        period(0.1).
+                        with_conf('default')
                    
                 end
 
             end
+
+            define 'thrusters', Hbridge::Task.dispatch('thrusters',[6, 3, 2, -1, 4, 5]).
+                with_arguments('driver_dev' => thrusters_dev)
+                    
            
             #New HBridge interface not ported yet
             #Hbridge.system self, 'can0', 'hb_group0', 'thrusters', 0, 1, 2, 3, 4, 5
             use Base::GroundDistanceSrv => altimeter_dev
             use Base::ZProviderSrv => depth_reader_dev 
             
-            define 'base_loop', Base::ControlLoop.use('controller' => AvalonControl::MotionControlTask, 'controlled_system' => THRUSTER)
+            define 'base_loop', Base::ControlLoop.use('controller' => AvalonControl::MotionControlTask, 'controlled_system' => thrusters_def)
             define 'relative_control_loop', ::Base::ControlLoop.use(AuvRelPosController::Task, base_loop_def)
            
             use Base::OrientationWithZSrv => DephFusion

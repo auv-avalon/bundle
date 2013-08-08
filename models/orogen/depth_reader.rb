@@ -5,6 +5,7 @@ module Dev
         device_type "DepthReader" do
             provides Base::ZProviderSrv
             provides Dev::Bus::CAN::ClientInSrv
+            provides Dev::Bus::CAN::ClientOutSrv
         end
     end
 end

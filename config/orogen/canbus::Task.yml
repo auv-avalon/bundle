@@ -1,7 +1,15 @@
 --- name:default
-# check after how many calls of the update hook the CAN bus will be checked, if it is still ok
-#checkBusOkCount: 100
+# baud_rate for CAN2WEB type
+baudRate: :br125
+# this property defines the interval in which the can bus is checked for correct function. The unit is in ms
+checkBusOkInterval: 100
 # the device file used to connect to the CAN bus
-device: can0
+device: ''
 # the device type, this determines which driver will be used to open the device
 deviceType: :SOCKET
+# the interval in which the stats message is send. The unit is in ms
+statsInterval: 1000
+--- name:can0
+device: 'can0'
+--- name:can1
+device: 'can1'

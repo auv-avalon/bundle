@@ -1,5 +1,5 @@
 --- name:default
-# pwm used during the encoder calibration process
+# pwm used during the encoder calibration process, timeout was 0
 calibration_pwm: 80
 # number of complete states the calibration should wait, where the motor does not move, until the calibration in one direction is taken as done
 calibration_wait_time: 300
