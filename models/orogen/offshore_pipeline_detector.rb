@@ -14,6 +14,15 @@ class OffshorePipelineDetector::Task
     end
 end
 
+#class PipelineFollower < Base::ControlLoop
+#    overload 'controller', PipelineDetector 
+#
+#    add_main PipelineDetector
+##    pass_arguments_to_child my_child, :heading
+##    forward_from_child my_child, :check_candidate
+#       
+#end
+
 class PipelineDetector < Syskit::Composition 
     argument :heading, :default => nil
     argument :depth, :default => nil
@@ -42,13 +51,7 @@ class PipelineDetector < Syskit::Composition
     attr_accessor :last_valid_heading
 
     script do
-        orientation_reader = nil
-
-        execute do
-            #orientation_reader = orienation_with_z_child.orientation_z_samples_port.reader
-            orientation_reader = orienation_with_z_child.orientation_samples_port.reader
-        end
-
+        orientation_reader = orienation_with_z_child.orientation_z_samples_port.reader
         poll do
             if o = orientation_reader.read
                 pipeline_heading = o.orientation.yaw
