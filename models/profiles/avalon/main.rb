@@ -1,6 +1,6 @@
-require "models/profiles/main.rb"
-require "models/blueprints/avalon_base"
-require "models/blueprints/pose_avalon.rb"
+require "models/profiles/main"
+require "models/blueprints/avalon"
+require "models/blueprints/pose_avalon"
 
 using_task_library 'controldev'
 using_task_library 'canbus'
@@ -12,6 +12,7 @@ using_task_library 'avalon_control'
 using_task_library 'offshore_pipeline_detector'
 using_task_library 'auv_rel_pos_controller'
 using_task_library 'buoy'
+using_task_library 'camera_prosilica'
 
 
 module Avalon
@@ -21,10 +22,18 @@ module Avalon
             use_profile AvalonBase
 
             robot do
+                device(Dev::Sensors::Cameras::Network, :as => 'front_camera').
+                    with_conf('default',"'front_camera").
+                    use_deployments(/front_camera/).
+                    period(0.2)
+                
+                device(Dev::Sensors::Cameras::Network, :as => 'bottom_camera').
+                    with_conf('default',"'bottom_camera").
+                    use_deployments(/bottom_camera/).
+                    period(0.2)
                 
                 device(Dev::Echosounder, :as => 'altimeter').
                     period(0.1)
-                #TODO add subspecs
 
                 device(Dev::Sensors::XsensAHRS, :as => 'imu').
                     period(0.01)
@@ -69,15 +78,18 @@ module Avalon
             define 'base_loop', Base::ControlLoop.use('controller' => AvalonControl::MotionControlTask, 'controlled_system' => thrusters_def)
             define 'relative_control_loop', ::Base::ControlLoop.use(AuvRelPosController::Task, base_loop_def)
            
-            use Base::OrientationWithZSrv => DephFusion
+            #Use Dagons Filter, comment out for XSens as Orientation Provider
+            use AvalonControl::DephFusionCmp => AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator)
+            
+            use Base::OrientationWithZSrv => AvalonControl::DephFusionCmp
+
             use Base::AUVMotionControlledSystemSrv => base_loop_def
             use Base::AUVRelativeMotionControlledSystemSrv => relative_control_loop_def
-            use AUVJoystickCommand => AUVJoystickCommand.use(joystick_dev)
-
-
-           # define('drive_simple', ::Base::ControlLoop).use(AUVJoystickCommand, AvalonControl::MotionControlTask)
-          #  define('base_loop_test', ::Base::ControlLoop).use(AvalonControl::FakeWriter, AvalonControl::MotionControlTask)
+            use AvalonControl::JoystickCommandCmp => AvalonControl::JoystickCommandCmp.use(joystick_dev)
             
+            use Buoy::DetectorCmp => Buoy::DetectorCmp.use(front_camera_dev) 
+            use Pipeline::Detector => Pipeline::Detector.use(bottom_camera_dev)
+
         end
     end
 end

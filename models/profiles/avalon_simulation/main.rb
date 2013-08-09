@@ -1,6 +1,6 @@
 require "models/profiles/main.rb"
-require "models/blueprints/avalon_base"
-require "models/blueprints/pose_avalon.rb"
+require "models/blueprints/avalon"
+require "models/blueprints/pose_avalon"
 
 using_task_library 'simulation'
 using_task_library 'avalon_simulation'
@@ -37,17 +37,10 @@ module Avalon
 
             use Base::AUVMotionControlledSystemSrv => base_loop_def
             use Base::AUVRelativeMotionControlledSystemSrv => relative_control_loop_def
-            use AUVJoystickCommand => AUVJoystickCommand.use(joystick_dev)
+            use AvalonControl::JoystickCommandCmp => AvalonControl::JoystickCommandCmp.use(joystick_dev)
 
-            use BuoyDetector => BuoyDetector.use(front_cam_def) 
-            use PipelineDetector => PipelineDetector.use(bottom_cam_def)
-
-            #define 'pipeline', PipelineDetector.use(::Base::ControlLoop.use('controlled_system' => Base::ControlLoop.use(Base::AUVMotionControlledSystemSrv, AuvRelPosController::Task.with_conf('default','pipeline'))))
-            #define 'pipeline', ::Base::ControlLoop.use(PipelineDetector.use(bottom_cam_def).with_arguments(:speed_x => 1), 'controlled_system' => Base::ControlLoop.use(Base::AUVMotionControlledSystemSrv, AuvRelPosController::Task.with_conf('default','pipeline')))
-            define 'pipeline', PipelineFollower.use(bottom_cam_def, 'controlled_system' => Base::ControlLoop.use(Base::AUVMotionControlledSystemSrv, AuvRelPosController::Task.with_conf('default','pipeline')))
-            #define 'pipeline', PipelineFollower.use(bottom_cam_def)
-            define 'buoy', ::Base::ControlLoop.use(BuoyDetector.use(front_cam_def), Base::AUVRelativeMotionControlledSystemSrv) 
-            
+            use Buoy::DetectorCmp => Buoy::DetectorCmp.use(front_cam_def) 
+            use Pipeline::Detector => Pipeline::Detector.use(bottom_cam_def)
 
         end
     end

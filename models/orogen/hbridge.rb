@@ -1,6 +1,5 @@
 module Dev
     device_type "Hbridge" do
-        #provides Base::ZProviderSrv
         provides Dev::Bus::CAN::ClientInSrv
         provides Dev::Bus::CAN::ClientOutSrv
     end
@@ -11,10 +10,6 @@ class Hbridge::Task
         driver_for Dev::Hbridge, :as => "driver"
         worstcase_processing_time 0.2
 
-        def hui
-            "hfisdh"
-        end
-    
         def self.dispatch(name, mappings)
             model = self.specialize
             model.require_dynamic_service('dispatch', :as => name, :mappings => mappings)
@@ -22,7 +17,6 @@ class Hbridge::Task
         end
         
         dynamic_service  Base::ActuatorControlledSystemSrv, :as => 'dispatch' do
-            #provides Dev::Bus::CAN::ClientInSrv
             component_model.argument "#{name}_mappings", :default => options[:mappings]
             provides  Base::ActuatorControlledSystemSrv, "status_out" => "status_#{name}", "command_in" => "cmd_#{name}"
         end
@@ -38,10 +32,6 @@ class Hbridge::Task
         #
 #        forward :timeout => :failed
 #        forward :dual_hb_control => :failed
-#        on :timeout do
-#            orocos_task.stop
-#            orocos_task.start
-#        end
 
         def configure
             each_data_service do |srv|

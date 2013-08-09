@@ -1,12 +1,15 @@
-require "models/blueprints/avalon_base"
-require "models/blueprints/pose_avalon.rb"
+require "models/blueprints/avalon"
+require "models/blueprints/pose_avalon"
+require "models/blueprints/buoy"
+require "models/blueprints/pipeline"
+require "models/blueprints/avalon_control"
 
 using_task_library 'controldev'
 using_task_library 'raw_control_command_converter'
 using_task_library 'avalon_control'
-using_task_library 'offshore_pipeline_detector'
+#using_task_library 'offshore_pipeline_detector'
 using_task_library 'auv_rel_pos_controller'
-using_task_library 'buoy'
+#using_task_library 'buoy'
 
 module Avalon
     module Profiles
@@ -16,7 +19,12 @@ module Avalon
             define 'base_rel_loop_test', ::Base::ControlLoop.use(AvalonControl::RelFakeWriter, Base::AUVRelativeMotionControlledSystemSrv)
             
             #You need an joystick for this....
-            define('drive_simple', ::Base::ControlLoop).use(AUVJoystickCommand, Base::AUVMotionControlledSystemSrv)
+            define('drive_simple', ::Base::ControlLoop).use(AvalonControl::JoystickCommandCmp, Base::AUVMotionControlledSystemSrv)
+            
+            
+            define 'pipeline', Pipeline::Follower.use('controlled_system' => Base::ControlLoop.use(Base::AUVMotionControlledSystemSrv, AuvRelPosController::Task.with_conf('default','pipeline')))
+            define 'buoy', Buoy::FollowerCmp.use(Base::AUVRelativeMotionControlledSystemSrv) 
+            
             
             
         end
