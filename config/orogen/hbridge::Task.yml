@@ -6,7 +6,7 @@ calibration_wait_time: 300
 # Configuration for all hbridges (initial values)
 configuration: 
   config: 
-  - mode: DM_UNINITIALIZED
+  - mode: DM_PWM
     encoder_config_extern: 
       zeroPosition: 0
       ticksPerTurnDivided: 4096
@@ -41,7 +41,7 @@ configuration:
       kd: 0.0
       kp: 0.0
       ki: 0.0
-  - mode: DM_UNINITIALIZED
+  - mode: DM_PWM
     encoder_config_extern: 
       zeroPosition: 0
       ticksPerTurnDivided: 4096
@@ -76,7 +76,7 @@ configuration:
       kd: 0.0
       kp: 0.0
       ki: 0.0
-  - mode: DM_UNINITIALIZED
+  - mode: DM_PWM
     encoder_config_extern: 
       zeroPosition: 0
       ticksPerTurnDivided: 4096
@@ -111,7 +111,7 @@ configuration:
       kd: 0.0
       kp: 0.0
       ki: 0.0
-  - mode: DM_UNINITIALIZED
+  - mode: DM_PWM
     encoder_config_extern: 
       zeroPosition: 0
       ticksPerTurnDivided: 4096
@@ -146,7 +146,7 @@ configuration:
       kd: 0.0
       kp: 0.0
       ki: 0.0
-  - mode: DM_UNINITIALIZED
+  - mode: DM_PWM
     encoder_config_extern: 
       zeroPosition: 0
       ticksPerTurnDivided: 4096
@@ -181,7 +181,7 @@ configuration:
       kd: 0.0
       kp: 0.0
       ki: 0.0
-  - mode: DM_UNINITIALIZED
+  - mode: DM_PWM
     encoder_config_extern: 
       zeroPosition: 0
       ticksPerTurnDivided: 4096
@@ -216,7 +216,7 @@ configuration:
       kd: 0.0
       kp: 0.0
       ki: 0.0
-  - mode: DM_UNINITIALIZED
+  - mode: DM_PWM
     encoder_config_extern: 
       zeroPosition: 0
       ticksPerTurnDivided: 4096
@@ -251,7 +251,7 @@ configuration:
       kd: 0.0
       kp: 0.0
       ki: 0.0
-  - mode: DM_UNINITIALIZED
+  - mode: DM_PWM
     encoder_config_extern: 
       zeroPosition: 0
       ticksPerTurnDivided: 4096

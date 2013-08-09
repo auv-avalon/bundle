@@ -9,7 +9,8 @@ end
 
 class Hbridge::Task
         driver_for Dev::Hbridge, :as => "driver"
-        
+        worstcase_processing_time 0.2
+
         def hui
             "hfisdh"
         end
@@ -26,7 +27,17 @@ class Hbridge::Task
             provides  Base::ActuatorControlledSystemSrv, "status_out" => "status_#{name}", "command_in" => "cmd_#{name}"
         end
 
+        on :timeout do |ev|
+            Robot.error "############################# Hbridges went into timeout ##############################"
+            emit :failed
+        end
+        on :dual_hb_control do |ev|
+            Robot.error "########################## Hbridges get an DUAL HB Control ############################"
+            emit :failed
+        end
+        #
 #        forward :timeout => :failed
+#        forward :dual_hb_control => :failed
 #        on :timeout do
 #            orocos_task.stop
 #            orocos_task.start

@@ -40,11 +40,13 @@ module Avalon
                 through 'can0' do
                     device(Dev::Hbridge, :as => 'thrusters').
                         can_id(0, 0x700).
-                        with_conf("default")
+                        with_conf("default").
+                        period(0.001).
+	                sample_size(4)
 
                     device(Dev::Controldev::CANJoystick, :as => 'joystick').
                         period(0.1).
-                        can_id(0100,0x7ff)
+                        can_id(0x100,0x7FF)
                     
                     device(Dev::Sensors::DepthReader, :as => 'depth_reader').
                         can_id(0x130,0x7F0).
