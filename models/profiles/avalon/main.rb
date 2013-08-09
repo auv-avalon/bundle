@@ -23,12 +23,12 @@ module Avalon
 
             robot do
                 device(Dev::Sensors::Cameras::Network, :as => 'front_camera').
-                    with_conf('default',"'front_camera").
+                    with_conf('default',"front_camera").
                     use_deployments(/front_camera/).
                     period(0.2)
                 
                 device(Dev::Sensors::Cameras::Network, :as => 'bottom_camera').
-                    with_conf('default',"'bottom_camera").
+                    with_conf('default',"bottom_camera").
                     use_deployments(/bottom_camera/).
                     period(0.2)
                 

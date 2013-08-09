@@ -1,5 +1,6 @@
 using_task_library "auv_rel_pos_controller"
 using_task_library "buoy"
+require "models/blueprints/sensors"
 
 module Buoy
     class DetectorCmp < ::Syskit::Composition
