@@ -43,7 +43,9 @@ module Avalon
             use PipelineDetector => PipelineDetector.use(bottom_cam_def)
 
             #define 'pipeline', PipelineDetector.use(::Base::ControlLoop.use('controlled_system' => Base::ControlLoop.use(Base::AUVMotionControlledSystemSrv, AuvRelPosController::Task.with_conf('default','pipeline'))))
-            define 'pipeline', ::Base::ControlLoop.use(PipelineDetector.use(bottom_cam_def).with_arguments(:speed_x => 1), 'controlled_system' => Base::ControlLoop.use(Base::AUVMotionControlledSystemSrv, AuvRelPosController::Task.with_conf('default','pipeline')))
+            #define 'pipeline', ::Base::ControlLoop.use(PipelineDetector.use(bottom_cam_def).with_arguments(:speed_x => 1), 'controlled_system' => Base::ControlLoop.use(Base::AUVMotionControlledSystemSrv, AuvRelPosController::Task.with_conf('default','pipeline')))
+            define 'pipeline', PipelineFollower.use(bottom_cam_def, 'controlled_system' => Base::ControlLoop.use(Base::AUVMotionControlledSystemSrv, AuvRelPosController::Task.with_conf('default','pipeline')))
+            #define 'pipeline', PipelineFollower.use(bottom_cam_def)
             define 'buoy', ::Base::ControlLoop.use(BuoyDetector.use(front_cam_def), Base::AUVRelativeMotionControlledSystemSrv) 
             
 
