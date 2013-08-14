@@ -55,6 +55,39 @@ module AvalonControl
     
         export task_child.pose_samples_port
         provides ::Base::OrientationWithZSrv, :as => "orientation_with_z"
-end
+    end
+    
+    class SimpleMove < ::Base::ControlLoop
+
+        #add_main Detector, :as => "controller_local"
+        #implement something like this:
+    #    pass_arguments_to_child my_child, :heading
+    #    forward_from_child my_child, :check_candidate
+
+        overload 'controller', AvalonControl::FakeWriter 
+        
+        argument :heading, :default => nil
+        argument :depth, :default => nil
+        argument :speed_x, :default => nil
+        argument :speed_y, :default => nil
+        argument :timeout, :default => nil
+    
+        attr_reader :start_time
+
+        on :start do |ev|
+                @start_time = Time.now
+                Robot.info "Starting Drive simple #{self}"
+                controller_child.update_config(:speed_x => speed_x, :heading => heading, :depth=> depth, :speed_y => speed_y)
+        end
+    
+        poll do
+                if(self.timeout)
+                        if(@start_time + self.timeout < Time.now)
+                                #STDOUT.puts "Finished becaue time is over! #{@start_time} #{@start_time + self.timeout}"
+                                emit :success
+                        end
+                end
+        end
+    end
 
 end

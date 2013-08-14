@@ -25,6 +25,7 @@ module Avalon
             define 'pipeline', Pipeline::Follower.use('controlled_system' => Base::ControlLoop.use(Base::AUVMotionControlledSystemSrv, AuvRelPosController::Task.with_conf('default','pipeline')))
             define 'buoy', Buoy::FollowerCmp.use(Base::AUVRelativeMotionControlledSystemSrv) 
             
+            define 'simple_move', ::AvalonControl::SimpleMove.use(Base::AUVRelativeMotionControlledSystemSrv)
             
             
         end
