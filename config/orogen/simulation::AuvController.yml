@@ -1,0 +1,13 @@
+--- name:default
+buoyancy_force: 4.0
+node_name: 'avalon'
+cob:
+  data:
+  - 0 
+  - 0 
+  - 0.08
+#position:
+#  data:
+#  - 1.9242695e-316
+#  - 6.9098026579771e-310
+#  - 6.95315237763575e-310
