@@ -6,6 +6,10 @@ using_task_library 'simulation'
 using_task_library 'avalon_simulation'
 
 
+#class Dev::Simulation::Mars::SimulatedDevice
+#    add Simulation::AuvController.with_conf('default'), :as => "avalon"
+#end
+
 module Avalon
 
     module Profiles
@@ -18,20 +22,23 @@ module Avalon
             define_simulated_device("front_cam", Dev::Simulation::Mars::Camera) do |dev|
                 dev.use_deployments(/front_camera/).with_conf("default","front_cam")
             end
+            define_simulated_device("buoyancy", Dev::Simulation::Mars::AuvController) do |dev|
+                dev.with_conf("default")
+            end
             define_simulated_device("imu", Dev::Simulation::Mars::IMU)
+            define_simulated_device("altimeter", Dev::Simulation::Mars::Altimeter)
             define_simulated_device("thrusters",Dev::Simulation::Mars::Actuators) do |dev|
                 dev.use_deployments(/avalon_actuators/)
             end
             
             robot do
-                device(Dev::Simulation::Echosounder, :as => 'altimeter')
                 device(Dev::Controldev::Joystick, :as => 'joystick')
             end
             
             use ::Simulation::Mars => ::AvalonSimulation::Task
-            use ::Base::GroundDistanceSrv => altimeter_dev
+            use ::Base::GroundDistanceSrv => altimeter_def
             use ::Base::OrientationWithZSrv => imu_def 
-           
+     
             define 'base_loop', Base::ControlLoop.use('controller' => AvalonControl::MotionControlTask.with_conf('default','simulation'), 'controlled_system' => thrusters_def)
             define 'relative_control_loop', ::Base::ControlLoop.use(AuvRelPosController::Task, base_loop_def)
 
@@ -41,7 +48,7 @@ module Avalon
 
             use Buoy::DetectorCmp => Buoy::DetectorCmp.use(front_cam_def) 
             use Pipeline::Detector => Pipeline::Detector.use(bottom_cam_def)
-
+            
         end
     end
 end

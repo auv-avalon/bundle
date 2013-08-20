@@ -1,3 +1,4 @@
+require 'models/blueprints/avalon'
 using_task_library 'auv_rel_pos_controller'
 using_task_library 'offshore_pipeline_detector'
 
