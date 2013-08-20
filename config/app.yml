@@ -6,7 +6,7 @@ bundle:
           #        - rock_ugv_nav
 
 log:
-    filter_backtraces: false
+    filter_backtraces: true 
     events: true
 
     # logging Roby into file: logs/<date>/<file>.txt

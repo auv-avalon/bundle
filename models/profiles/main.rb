@@ -21,8 +21,9 @@ module Avalon
             #You need an joystick for this....
             define('drive_simple', ::Base::ControlLoop).use(AvalonControl::JoystickCommandCmp, Base::AUVMotionControlledSystemSrv)
             
-            
-            define 'pipeline', Pipeline::Follower.use('controlled_system' => Base::ControlLoop.use(Base::AUVMotionControlledSystemSrv, AuvRelPosController::Task.with_conf('default','pipeline')))
+            define 'pipeline', Pipeline::Follower.use('controlled_system' => Base::ControlLoop.use('controlled_system' => Base::AUVMotionControlledSystemSrv, 'controller' => AuvRelPosController::Task.with_conf('default','pipeline')))
+            req = Pipeline::Follower.use('controlled_system' => Base::ControlLoop.use('controlled_system' => Base::AUVMotionControlledSystemSrv, 'controller' => AuvRelPosController::Task.with_conf('default','pipeline')))
+            req.instanciate(Roby::Plan.new)
             define 'buoy', Buoy::FollowerCmp.use(Base::AUVRelativeMotionControlledSystemSrv) 
             
             define 'simple_move', ::AvalonControl::SimpleMove.use(Base::AUVRelativeMotionControlledSystemSrv)

@@ -1,6 +1,53 @@
 require 'models/profiles/main'
 
 class Main < Roby::Actions::Interface
+     PIPE_SPEED=0.2
+    
+#    describe("Executes the given task and wait for he given signal, is the signal occurs wait for an period and emif success afterwards").
+#        required_arg("task", "the task to be executed").
+#        required_arg("signal", "the signal to wait for").
+#        optional_arg("duration", "duration to wait after the event")#.
+#        #returns(task)
+#    method(:delayed_success) do
+#
+#       t = self.task
+#       script do
+#         wait_any t.start_event
+#         wait t.call(self.signal)
+#         timeout_start(self.duration)
+#         emit :success
+#       end
+#  
+#       
+#    end
+#    
+#    describe("Ping and Pong (once) on an pipeline")
+#    state_machine "testi" do
+#        pipeline = state delayed_success(:task => pipeline_def(:heading => 0), :signal=>"end_of_pipe_event", :duration => 5)
+#        #pipeline = state pipeline_def(:heading => 0).use(PipelineDetector(:heading
+#        start(pipeline)
+#        forward pipeline.end_of_pipe_event, success_event
+#    end
+#    
+    describe("testbed demo")
+    state_machine "testbed" do
+        pipeline = state pipeline_def(:heading => 0, :speed_x => PIPE_SPEED) #Pipe left
+        pipeline2 = state pipeline_def(:heading => 0, :speed_x => PIPE_SPEED, :timeout => 3) #Hover on pipe-end
+        pipeline3 = state pipeline_def(:heading => 0, :speed_x => -PIPE_SPEED, :timeout => 2) #reverse
+        pipeline4 = state pipeline_def(:heading => 3.13, :speed_x => 0.2) #turn and until end
+        pipeline5 = state pipeline_def(:heading => 3.13, :speed_x => PIPE_SPEED, :timeout => 3) #hover on other end
+        pipeline6 = state pipeline_def(:heading => 3.13, :speed_x => -PIPE_SPEED, :timeout => 2) #short reverse
+
+        start(pipeline)
+        transition(pipeline.end_of_pipe_event,pipeline2)
+        transition(pipeline2.success_event,pipeline3)
+        transition(pipeline3.success_event,pipeline4)
+        transition(pipeline4.end_of_pipe_event,pipeline5)
+        transition(pipeline5.success_event,pipeline6)
+        #transition(pipeline6.success_event,pipeline)
+        forward pipeline6.end_of_pipe_event, success_event
+    end
+    
     
     
     describe("Ping and Pong (once) on an pipeline")

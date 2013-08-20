@@ -63,14 +63,15 @@ module Pipeline
         overload 'controller', Detector 
         
         #begin workaround TODO @sylvain
-        add AuvRelPosController::Task, :as => "workaround"
-        controller_child.position_command_port.connect_to workaround_child 
+        #add AuvRelPosController::Task, :as => "workaround"
+        #controller_child.position_command_port.connect_to workaround_child 
         #end workaround
 
 
         argument :heading, :default => nil
         argument :depth, :default => nil
         argument :speed_x, :default => nil
+        argument :timeout, :default => nil
 
         event :check_candidate
         event :follow_pipe
@@ -81,12 +82,22 @@ module Pipeline
         event :end_of_pipe
         event :weak_signal
 
+        attr_reader :start_time
 
         on :start do |event|
             Robot.info "Starting Pipeline Follower with config: speed_x: #{speed_x}, heading: #{heading}, depth: #{depth}"
             controller_child.update_config(:speed_x => speed_x, :heading => heading, :depth=> depth)
+            @start_time = Time.now
         end
 
+        poll do
+                if(self.timeout)
+                        if(@start_time + self.timeout < Time.now)
+                                STDOUT.puts "Finished #{self} becaue time is over! #{@start_time} #{@start_time + self.timeout}"
+                                emit :success
+                        end
+                end
+        end
            
     end
 end
