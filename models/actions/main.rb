@@ -1,7 +1,7 @@
 require 'models/profiles/main'
 
 class Main < Roby::Actions::Interface
-     PIPE_SPEED=0.2
+     PIPE_SPEED=0.4
     
 #    describe("Executes the given task and wait for he given signal, is the signal occurs wait for an period and emif success afterwards").
 #        required_arg("task", "the task to be executed").
@@ -33,12 +33,12 @@ class Main < Roby::Actions::Interface
     state_machine "testbed" do
         last = nil
         (0..50).each do |i|
-            pipeline = state pipeline_def(:heading => 0, :speed_x => PIPE_SPEED) #Pipe left
+            pipeline = state pipeline_def(:heading => 0, :speed_x => PIPE_SPEED, :turn_dir=> 1) #Pipe left
             pipeline2 = state pipeline_def(:heading => 0, :speed_x => PIPE_SPEED, :timeout => 3) #Hover on pipe-end
-            pipeline3 = state pipeline_def(:heading => 0, :speed_x => -PIPE_SPEED, :timeout => 2) #reverse
-            pipeline4 = state pipeline_def(:heading => 3.13, :speed_x => 0.2) #turn and until end
+            pipeline3 = state pipeline_def(:heading => 0, :speed_x => -PIPE_SPEED, :timeout => 5) #reverse
+            pipeline4 = state pipeline_def(:heading => 3.13, :speed_x => PIPE_SPEED, :turn_dir=>1) #turn and until end
             pipeline5 = state pipeline_def(:heading => 3.13, :speed_x => PIPE_SPEED, :timeout => 3) #hover on other end
-            pipeline6 = state pipeline_def(:heading => 3.13, :speed_x => -PIPE_SPEED, :timeout => 2) #short reverse
+            pipeline6 = state pipeline_def(:heading => 3.13, :speed_x => -PIPE_SPEED, :timeout => 5) #short reverse
             
             if(i==0)
                 start(pipeline) 

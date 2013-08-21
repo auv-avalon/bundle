@@ -7,6 +7,7 @@ module Pipeline
         argument :heading, :default => nil
         argument :depth, :default => nil
         argument :speed_x, :default => nil
+        argument :turn_dir, :default => nil
 
         event :check_candidate
         event :follow_pipe
@@ -70,6 +71,7 @@ module Pipeline
         #end workaround
 
 
+        argument :turn_dir, :default => nil
         argument :heading, :default => nil
         argument :depth, :default => nil
         argument :speed_x, :default => nil
@@ -88,7 +90,7 @@ module Pipeline
 
         on :start do |event|
             Robot.info "Starting Pipeline Follower with config: speed_x: #{speed_x}, heading: #{heading}, depth: #{depth}"
-            controller_child.update_config(:speed_x => speed_x, :heading => heading, :depth=> depth)
+            controller_child.update_config(:speed_x => speed_x, :heading => heading, :depth=> depth, :turn_dir => turn_dir)
             @start_time = Time.now
         end
 
