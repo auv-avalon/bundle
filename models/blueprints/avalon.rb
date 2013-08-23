@@ -18,6 +18,15 @@ module Avalon
     data_service_type 'StructuredLightPairSrv' do
         output_port 'images', ro_ptr('/base/samples/frame/FramePair')
     end
+    
+#    data_service_type 'SystemStatus' do
+#        output_port 'system_status', 'sysmon/SystemStatus' 
+#    end
+#    
+#    data_service_type 'ExperimentMarker' do
+#        output_port 'annotations', 'logger/Annotations' 
+#        output_port 'marker', 'sysmon/Marker' 
+#    end
 
 end
 

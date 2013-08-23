@@ -13,6 +13,7 @@ using_task_library 'offshore_pipeline_detector'
 using_task_library 'auv_rel_pos_controller'
 using_task_library 'buoy'
 using_task_library 'camera_prosilica'
+using_task_library 'sysmon'
 
 
 module Avalon
@@ -62,6 +63,14 @@ module Avalon
                         period(0.1).
                         with_conf('default')
                    
+                    device(Dev::ExperimentMarkers, :as => 'marker').
+                        can_id(0x1C0,0x7FF).
+                        period(0.1)
+                    
+                    device(Dev::SystemStatus, :as => 'sysmon').
+                        can_id(0x101,0x7FF).
+                        period(0.1)
+                   
                 end
 
             end
@@ -89,6 +98,11 @@ module Avalon
             
             use Buoy::DetectorCmp => Buoy::DetectorCmp.use(front_camera_dev) 
             use Pipeline::Detector => Pipeline::Detector.use(bottom_camera_dev)
+            
+            #TODO not works in main profile
+            define 'pipeline_detector', Pipeline::Detector.use(bottom_cam_def)
+            
+            
 
         end
     end

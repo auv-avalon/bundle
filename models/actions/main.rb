@@ -31,32 +31,20 @@ class Main < Roby::Actions::Interface
 #    
     describe("testbed demo")
     state_machine "testbed" do
-        last = nil
-        (0..50).each do |i|
             pipeline = state pipeline_def(:heading => 0, :speed_x => PIPE_SPEED, :turn_dir=> 1) #Pipe left
             pipeline2 = state pipeline_def(:heading => 0, :speed_x => PIPE_SPEED, :timeout => 3) #Hover on pipe-end
             pipeline3 = state pipeline_def(:heading => 0, :speed_x => -PIPE_SPEED, :timeout => 5) #reverse
-            pipeline4 = state pipeline_def(:heading => 3.13, :speed_x => PIPE_SPEED, :turn_dir=>1) #turn and until end
+            pipeline4 = state pipeline_def(:heading => 3.13, :speed_x => PIPE_SPEED, :turn_dir=>2) #turn and until end
             pipeline5 = state pipeline_def(:heading => 3.13, :speed_x => PIPE_SPEED, :timeout => 3) #hover on other end
             pipeline6 = state pipeline_def(:heading => 3.13, :speed_x => -PIPE_SPEED, :timeout => 5) #short reverse
-            
-            if(i==0)
-                start(pipeline) 
-            else
-                transition(last.success_event,pipeline)
-            end
-            last = pipeline6
-            
+                
+            start(pipeline) 
             transition(pipeline.end_of_pipe_event,pipeline2)
             transition(pipeline2.success_event,pipeline3)
             transition(pipeline3.success_event,pipeline4)
             transition(pipeline4.end_of_pipe_event,pipeline5)
             transition(pipeline5.success_event,pipeline6)
-            #transition(pipeline6.success_event,pipeline)
-            if(i==49)
-                forward pipeline6.success_event, success_event
-            end
-        end
+            transition(pipeline6.success_event,pipeline)
     end
     
     

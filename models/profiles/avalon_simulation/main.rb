@@ -48,6 +48,9 @@ module Avalon
 
             use Buoy::DetectorCmp => Buoy::DetectorCmp.use(front_cam_def) 
             use Pipeline::Detector => Pipeline::Detector.use(bottom_cam_def)
+           
+            #TODO not works in main profile
+            define 'pipeline_detector', Pipeline::Detector.use(bottom_cam_def)
             
         end
     end
