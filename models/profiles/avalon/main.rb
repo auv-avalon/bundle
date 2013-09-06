@@ -85,7 +85,7 @@ module Avalon
             use Base::ZProviderSrv => depth_reader_dev 
             
             define 'base_loop', Base::ControlLoop.use('controller' => AvalonControl::MotionControlTask, 'controlled_system' => thrusters_def)
-            define 'relative_control_loop', ::Base::ControlLoop.use(AuvRelPosController::Task, base_loop_def)
+            define 'relative_control_loop', ::Base::ControlLoop.use('controller' => AuvRelPosController::Task, 'controlled_system' => base_loop_def)
            
             #Use Dagons Filter, comment out for XSens as Orientation Provider
             use AvalonControl::DephFusionCmp => AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator)
@@ -100,7 +100,7 @@ module Avalon
             use Pipeline::Detector => Pipeline::Detector.use(bottom_camera_dev)
             
             #TODO not works in main profile
-            define 'pipeline_detector', Pipeline::Detector.use(bottom_cam_def)
+            #.use(bottom_cam_def)
             
             
 

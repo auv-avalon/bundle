@@ -40,7 +40,7 @@ module Avalon
             use ::Base::OrientationWithZSrv => imu_def 
      
             define 'base_loop', Base::ControlLoop.use('controller' => AvalonControl::MotionControlTask.with_conf('default','simulation'), 'controlled_system' => thrusters_def)
-            define 'relative_control_loop', ::Base::ControlLoop.use(AuvRelPosController::Task, base_loop_def)
+            define 'relative_control_loop', ::Base::ControlLoop.use('controller' => AuvRelPosController::Task, 'controlled_system' => base_loop_def)
 
             use Base::AUVMotionControlledSystemSrv => base_loop_def
             use Base::AUVRelativeMotionControlledSystemSrv => relative_control_loop_def
@@ -49,8 +49,6 @@ module Avalon
             use Buoy::DetectorCmp => Buoy::DetectorCmp.use(front_cam_def) 
             use Pipeline::Detector => Pipeline::Detector.use(bottom_cam_def)
            
-            #TODO not works in main profile
-            define 'pipeline_detector', Pipeline::Detector.use(bottom_cam_def)
             
         end
     end

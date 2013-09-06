@@ -27,6 +27,8 @@ module Avalon
             
             define 'simple_move', ::AvalonControl::SimpleMove.use(Base::AUVRelativeMotionControlledSystemSrv)
             
+            define 'pipeline_detector', Pipeline::Detector
+            
             
         end
     end
