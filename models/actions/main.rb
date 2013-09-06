@@ -1,6 +1,8 @@
 require 'models/profiles/main'
 
 class Main < Roby::Actions::Interface
+
+    action_library
      PIPE_SPEED=0.4
     
 #    describe("Executes the given task and wait for he given signal, is the signal occurs wait for an period and emif success afterwards").
@@ -21,14 +23,48 @@ class Main < Roby::Actions::Interface
 #       
 #    end
 #    
-#    describe("Ping and Pong (once) on an pipeline")
-#    state_machine "testi" do
-#        pipeline = state delayed_success(:task => pipeline_def(:heading => 0), :signal=>"end_of_pipe_event", :duration => 5)
-#        #pipeline = state pipeline_def(:heading => 0).use(PipelineDetector(:heading
-#        start(pipeline)
-#        forward pipeline.end_of_pipe_event, success_event
+
+
+    #TODO noch nciht möglich da remove_dependency nicht implementiert ist
+#    describe("Test action")
+#    action_script 'test_method' do
+#        detector = task pipeline_detector_def(Hash.new)
+#        drive    = task drive_simple_def
+#        pipe     = task pipeline_def(:heading => 3.13, :speed_x => PIPE_SPEED, :turn_dir=>2)
+#
+#        start detector
+#        start drive
+#        wait detector.end_of_pipe_event
+#        remove_dependency pipeline
+#        start pipe
+#
 #    end
+
+
+#    #todo z.Z. nicht möglich da zugriff auf children nicht möglich ist
+#    describe("Test action").
+#        returns(::Pipeline::Detector)
+#    def test_method(*arguments)
+#        pd = pipeline_detector_def(Hash.new)
+#        ds = pd.depends_on(drive_simple_def, :role => 'ds') 
+#        
+#        pipe = pd.depends_on(pipeline_def(:heading => 3.13, :speed_x => PIPE_SPEED, :turn_dir=>2), :role => 'follower')
 #    
+#        pipe.should_start_after ds.stop_event
+#
+#        pd.script do
+#           wait_any end_of_pipe_event
+#
+#           execute do
+#               remove_dependency(ds_child)
+#               #depends_on(pipeline_def(:heading => 3.13, :speed_x => PIPE_SPEED, :turn_dir=>2), :role => 'follower')
+#           end
+#           wait_any follower_child.end_of_pipe_event
+#           success_event.emit
+#        end
+#        pd 
+#    end
+
     describe("testbed demo")
     state_machine "testbed" do
             pipeline = state pipeline_def(:heading => 0, :speed_x => PIPE_SPEED, :turn_dir=> 1) #Pipe left
@@ -47,6 +83,17 @@ class Main < Roby::Actions::Interface
             transition(pipeline6.success_event,pipeline)
     end
     
+    describe("Matthias-testing")
+    state_machine "test" do
+            pipeline = state pipeline_def(:heading => 0, :speed_x => PIPE_SPEED, :turn_dir=> 1) #Pipe left
+            move1 = state simple_move_def(:heading=>3.13, :speed_x=>0.0 ,:depth=>-5, :timeout=> 50000)
+            pipeline1 = state pipeline_def(:heading => 3.13, :speed_x => PIPE_SPEED, :turn_dir=>2) #turn and until end
+                
+            start(pipeline) 
+            transition(pipeline.end_of_pipe_event,move1)
+            transition(move1.success_event,pipeline1)
+            transition(pipeline1.success_event,pipeline)
+    end
     
     
     describe("Ping and Pong (once) on an pipeline")
