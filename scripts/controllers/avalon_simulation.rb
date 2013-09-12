@@ -10,7 +10,6 @@ class Simulation::MarsIMU
         if rbs = @pose_reader.read
            State.pose.orientation = rbs.orientation
            if !State.pose.respond_to?(:position)
-               binding.pry
                State.pose.position = Eigen::Vector3.new(0, 0, 0)
            end
            State.pose.position = rbs.position

@@ -17,10 +17,10 @@ module Avalon
             use_profile AvalonBase
 
             define_simulated_device("bottom_cam", Dev::Simulation::Mars::Camera) do |dev|
-                dev.use_deployments(/bottom_camera/).with_conf("default","bottom_cam")
+                dev.prefer_deployed_tasks(/bottom_camera/).with_conf("default","bottom_cam")
             end
             define_simulated_device("front_cam", Dev::Simulation::Mars::Camera) do |dev|
-                dev.use_deployments(/front_camera/).with_conf("default","front_cam")
+                dev.prefer_deployed_tasks(/front_camera/).with_conf("default","front_cam")
             end
             define_simulated_device("buoyancy", Dev::Simulation::Mars::AuvController) do |dev|
                 dev.with_conf("default")
@@ -28,7 +28,7 @@ module Avalon
             define_simulated_device("imu", Dev::Simulation::Mars::IMU)
             define_simulated_device("altimeter", Dev::Simulation::Mars::Altimeter)
             define_simulated_device("thrusters",Dev::Simulation::Mars::Actuators) do |dev|
-                dev.use_deployments(/avalon_actuators/)
+                dev.prefer_deployed_tasks(/avalon_actuators/)
             end
             
             robot do
