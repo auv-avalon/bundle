@@ -40,10 +40,10 @@ end
 begin
     Roby.app.setup
     passes = []
-    passes << [Main.drive_simple_def.to_instance_requirements]
-    passes << [Main.pipeline_def.to_instance_requirements]
-    passes << [Main.drive_simple_def.to_instance_requirements]
-    passes << [Main.bottom_cam_def.to_instance_requirements]
+    passes << [Main.drive_simple_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
+    passes << [Main.pipeline_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
+    passes << [Main.drive_simple_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
+    passes << [Main.bottom_cam_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
 
     passes.each_with_index do |requirements, idx|
         update(rendering.plan, requirements)
