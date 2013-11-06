@@ -34,7 +34,7 @@ module Avalon
             robot do
                 device(Dev::Controldev::Joystick, :as => 'joystick')
             end
-            
+           
             use ::Simulation::Mars => ::AvalonSimulation::Task
             use ::Base::GroundDistanceSrv => altimeter_def
             use ::Base::OrientationWithZSrv => imu_def 
@@ -48,6 +48,8 @@ module Avalon
 
             use Buoy::DetectorCmp => Buoy::DetectorCmp.use(front_cam_def) 
             use Pipeline::Detector => Pipeline::Detector.use(bottom_cam_def)
+            
+            define 'sim', ::AvalonSimulation::Task
            
             
         end

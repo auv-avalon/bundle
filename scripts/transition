@@ -37,6 +37,16 @@ def update(plan, requirements)
     end
 end
 
+def precompute(plan,requirements)
+    tasks = requirements.map do |req|
+        plan.add_mission(task = req.as_plan)
+        task.planning_task
+    end
+    engine = Syskit::NetworkGeneration::Engine.new(plan)
+    engine.precompute(:requirement_tasks => tasks)
+
+end
+
 begin
     Roby.app.setup
     passes = []
@@ -46,6 +56,7 @@ begin
     passes << [Main.bottom_cam_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
 
     passes.each_with_index do |requirements, idx|
+        precompute(rendering.plan, requirements)
         update(rendering.plan, requirements)
         rendering.render_plan(:id => idx.to_s)
     end

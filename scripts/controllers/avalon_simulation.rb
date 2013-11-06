@@ -19,8 +19,19 @@ class Simulation::MarsIMU
 end
 
 
-buoy = Robot.buoyancy_def!
+sim = Robot.sim_def!
 
+State.start_time = Time.new
+State.buoyancy = nil
+
+Roby.every(1.0, :on_error => :disable) do
+    if State.start_time + 7 < Time.new
+        if !State.buoyancy
+            STDOUT.puts "Starting buoyancy"
+            State.buoyancy = Robot.buoyancy_def!
+        end
+    end
+end
 
 module Robot
     def set_state(state, substate)

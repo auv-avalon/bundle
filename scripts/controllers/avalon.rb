@@ -24,7 +24,7 @@ class AvalonControl::DephFusionCmp
 end
 
 bl = Robot.base_loop_def!
-buoy = Robot.buoyancy_def!
+#buoy = Robot.buoyancy_def!
 
 #module Robot
 #    def self.emergency_surfacing
