@@ -13,6 +13,7 @@ using_task_library 'offshore_pipeline_detector'
 using_task_library 'auv_rel_pos_controller'
 using_task_library 'buoy'
 using_task_library 'camera_prosilica'
+using_task_library 'sysmon'
 
 
 module Avalon
@@ -24,12 +25,12 @@ module Avalon
             robot do
                 device(Dev::Sensors::Cameras::Network, :as => 'front_camera').
                     with_conf('default',"front_camera").
-                    use_deployments(/front_camera/).
+                    prefer_deployed_tasks(/front_camera/).
                     period(0.2)
                 
                 device(Dev::Sensors::Cameras::Network, :as => 'bottom_camera').
                     with_conf('default',"bottom_camera").
-                    use_deployments(/bottom_camera/).
+                    prefer_deployed_tasks(/bottom_camera/).
                     period(0.2)
                 
                 device(Dev::Echosounder, :as => 'altimeter').
@@ -69,6 +70,14 @@ module Avalon
                         period(0.1).
                         with_conf('default')
                    
+                    device(Dev::ExperimentMarkers, :as => 'marker').
+                        can_id(0x1C0,0x7FF).
+                        period(0.1)
+                    
+                    device(Dev::SystemStatus, :as => 'sysmon').
+                        can_id(0x101,0x7FF).
+                        period(0.1)
+                   
                 end
 
             end
@@ -84,7 +93,7 @@ module Avalon
             use Base::ZProviderSrv => depth_reader_dev 
             
             define 'base_loop', Base::ControlLoop.use('controller' => AvalonControl::MotionControlTask, 'controlled_system' => thrusters_def)
-            define 'relative_control_loop', ::Base::ControlLoop.use(AuvRelPosController::Task, base_loop_def)
+            define 'relative_control_loop', ::Base::ControlLoop.use('controller' => AuvRelPosController::Task, 'controlled_system' => base_loop_def)
            
             #Use Dagons Filter, comment out for XSens as Orientation Provider
             use AvalonControl::DephFusionCmp => AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator)
@@ -97,6 +106,11 @@ module Avalon
             
             use Buoy::DetectorCmp => Buoy::DetectorCmp.use(front_camera_dev) 
             use Pipeline::Detector => Pipeline::Detector.use(bottom_camera_dev)
+            
+            #TODO not works in main profile
+            #.use(bottom_cam_def)
+            
+            
 
         end
     end
