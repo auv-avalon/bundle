@@ -33,11 +33,18 @@ module Avalon
                     period(0.2)
                 
                 device(Dev::Echosounder, :as => 'altimeter').
+                    with_conf('default').
                     period(0.1)
 
                 device(Dev::Sensors::XsensAHRS, :as => 'imu').
                     period(0.01)
+
                 device(Dev::Sensors::FOG, :as => 'fog').
+                    period(0.01)
+                
+                device(Dev::Micron, :as => 'sonar').
+                    use_deployments("sonar").
+                    with_conf('default','testbed').
                     period(0.01)
 
                 com_bus(Dev::Bus::CAN, :as => 'can0').
@@ -65,6 +72,7 @@ module Avalon
                 end
 
             end
+
 
             define 'thrusters', Hbridge::Task.dispatch('thrusters',[6, 3, 2, -1, 4, 5]).
                 with_arguments('driver_dev' => thrusters_dev)
