@@ -22,29 +22,14 @@ if GUI
     rendering = Syskit::GUI::ComponentNetworkView.new(page)
 end
 
-def update(plan, requirements)
-    tasks = requirements.map do |req|
-        plan.add_mission(task = req.as_plan)
-        task.planning_task
-    end
+def update(plan, requirement_tasks)
     engine = Syskit::NetworkGeneration::Engine.new(plan)
-    engine.resolve(:requirement_tasks => tasks)
-    plan.static_garbage_collect do |task|
-        plan.remove_object(task)
-    end
-    tasks.each do |t|
-        plan.unmark_mission t.planned_task
-    end
+    engine.resolve(:requirement_tasks => requirement_tasks)
 end
 
-def precompute(plan,requirements)
-    tasks = requirements.map do |req|
-        plan.add_mission(task = req.as_plan)
-        task.planning_task
-    end
+def precompute(plan,requirement_tasks)
     engine = Syskit::NetworkGeneration::Engine.new(plan)
-    engine.precompute(:requirement_tasks => tasks)
-
+    engine.precompute(:requirement_tasks => requirement_tasks)
 end
 
 begin
@@ -55,10 +40,26 @@ begin
     passes << [Main.drive_simple_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
     passes << [Main.bottom_cam_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
 
+    plan = rendering.plan
     passes.each_with_index do |requirements, idx|
-        precompute(rendering.plan, requirements)
-        update(rendering.plan, requirements)
+        requirement_tasks = requirements.map do |req|
+            plan.add_mission(task = req.as_plan)
+            task.planning_task
+        end
+
+        precompute(plan, requirement_tasks)
+        update(plan, requirement_tasks)
+        plan.static_garbage_collect do |task|
+            plan.remove_object(task)
+        end
+
         rendering.render_plan(:id => idx.to_s)
+        requirement_tasks.each do |t|
+            plan.unmark_mission t.planned_task
+        end
+        plan.static_garbage_collect do |task|
+            plan.remove_object(task)
+        end
     end
 ensure Roby.app.cleanup
 end

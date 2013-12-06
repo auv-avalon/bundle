@@ -9,7 +9,7 @@ end
 
 class Sysmon::Task
     driver_for Dev::ExperimentMarkers, :as => "marker", "from_bus" => "can_in_experiment_markers"
-    driver_for Dev::SystemStatus, :as => "system_status", "from_bus" => "can_in_system_status" 
+    driver_for Dev::SystemStatus, :as => "system_status", "from_bus" => "can_in_system_status"
 
     on :start do |event|
         @system_status = data_reader :system_status

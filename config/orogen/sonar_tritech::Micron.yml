@@ -25,6 +25,12 @@ write_timeout: 0.1
 configure_timeout: 10.0
 # timeout for the dst micron dst echo sounder. Set it to 0 if none is connected
 echo_sounder_timeout: 0.0
+--- name:maritime_hall
+config:
+  continous: 1
+  gain: 0.5
+  max_distance: 30.0
+  resolution: 0.1
 --- name:studiobad
 config:
   continous: 1

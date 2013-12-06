@@ -27,6 +27,10 @@ module Avalon
             end
             define_simulated_device("imu", Dev::Simulation::Mars::IMU)
             define_simulated_device("altimeter", Dev::Simulation::Mars::Altimeter)
+            define_simulated_device("sonar", Dev::Simulation::Mars::Altimeter) do |dev|
+                dev.prefer_deployed_tasks(/sonar/)
+            end
+
             define_simulated_device("thrusters",Dev::Simulation::Mars::Actuators) do |dev|
                 dev.prefer_deployed_tasks(/avalon_actuators/)
             end

@@ -3,6 +3,7 @@ require "models/blueprints/pose_avalon"
 require "models/blueprints/buoy"
 require "models/blueprints/pipeline"
 require "models/blueprints/avalon_control"
+require "models/blueprints/localization"
 
 using_task_library 'controldev'
 using_task_library 'raw_control_command_converter'
@@ -28,6 +29,7 @@ module Avalon
             define 'simple_move', ::AvalonControl::SimpleMove.use(Base::AUVRelativeMotionControlledSystemSrv)
             
             define 'pipeline_detector', Pipeline::Detector
+            
             
             
         end
