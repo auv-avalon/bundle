@@ -53,6 +53,9 @@ module Avalon
 
             use Buoy::DetectorCmp => Buoy::DetectorCmp.use(front_cam_def)
             use Pipeline::Detector => Pipeline::Detector.use(bottom_cam_def)
+            #Warning setting of with_conf does not work on the def (composition)
+            #use Wall::Detector => Wall::Detector.use("sonar" => sonar_def, sonar_dev.with_conf('wall_servoing_right'))
+            use Wall::Detector => Wall::Detector.use("sonar" => sonar_def)
 
             define 'sim', ::AvalonSimulation::Task
 

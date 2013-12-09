@@ -103,9 +103,8 @@ module Avalon
 
             use Buoy::DetectorCmp => Buoy::DetectorCmp.use(front_camera_dev)
             use Pipeline::Detector => Pipeline::Detector.use(bottom_camera_dev)
+            use Wall::Detector => Wall::Detector.use(sonar_dev.with_conf('wall_servoing_right'))
 
-            #TODO not works in main profile
-            #.use(bottom_cam_def)
 
             #TODO move to main profile
             use Localization::ParticleDetector => Localization::ParticleDetector.use(Base::ActuatorControlledSystemSrv => thrusters_def, 'sonar' => sonar_dev)

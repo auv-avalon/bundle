@@ -1,5 +1,6 @@
 require "models/blueprints/avalon"
 require "models/blueprints/pose_avalon"
+require "models/blueprints/wall"
 require "models/blueprints/buoy"
 require "models/blueprints/pipeline"
 require "models/blueprints/avalon_control"
@@ -16,21 +17,24 @@ module Avalon
     module Profiles
         profile "AvalonBase" do
 
+
             define 'base_loop_test', ::Base::ControlLoop.use(AvalonControl::FakeWriter,Base::AUVMotionControlledSystemSrv)
             define 'base_rel_loop_test', ::Base::ControlLoop.use(AvalonControl::RelFakeWriter, Base::AUVRelativeMotionControlledSystemSrv)
 
             #You need an joystick for this....
             define('drive_simple', ::Base::ControlLoop).use(AvalonControl::JoystickCommandCmp, Base::AUVMotionControlledSystemSrv)
 
-            define 'pipeline', Pipeline::Follower.use('controlled_system' => Base::ControlLoop.use('controlled_system' => Base::AUVMotionControlledSystemSrv, 'controller' => AuvRelPosController::Task.with_conf('default','pipeline')))
-
+            define 'pipeline', Pipeline::Follower.use('controlled_system' => Base::ControlLoop.use('controlled_system' => Base::AUVMotionControlledSystemSrv, 'controller' => AuvRelPosController::Task.with_conf('default','absolute_heading')))
+            #TODO @Sylvain make depended configurations?! for sonar settings (currently hardcoded in avalon/avalon_simulation)
+            define 'wall_right', Wall::Follower.use(WallServoing::SingleSonarServoing.with_conf('default','wall_right'), 'controlled_system' => Base::ControlLoop.use('controlled_system' => Base::AUVMotionControlledSystemSrv, 'controller' => AuvRelPosController::Task.with_conf('default','relative_heading')))
             define 'buoy', Buoy::FollowerCmp.use(Base::AUVRelativeMotionControlledSystemSrv)
-
             define 'simple_move', ::AvalonControl::SimpleMove.use(Base::AUVRelativeMotionControlledSystemSrv)
-
-            define 'pipeline_detector', Pipeline::Detector
-
             define 'target_move', Localization::Controller.use('controlled_system' => Base::ControlLoop.use('controlled_system' => Base::AUVMotionControlledSystemSrv, 'controller' => AuvRelPosController::Task.with_conf('default')))
+
+            define 'buoy_detector', Buoy::DetectorCmp
+            define 'pipeline_detector', Pipeline::Detector
+            define 'wall_detector_right', Wall::Detector
+
 
         end
     end
