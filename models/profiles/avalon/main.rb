@@ -110,9 +110,8 @@ module Avalon
             #TODO move to main profile
             use Localization::ParticleDetector => Localization::ParticleDetector.use(Base::ActuatorControlledSystemSrv => thrusters_def, 'sonar' => sonar_dev)
             define 'localization', Localization::ParticleDetector
-            
 
-            define 'target_move', Localization::Controller.use('controlled_system' => Base::ControlLoop.use('controlled_system' => Base::AUVMotionControlledSystemSrv, 'controller' => AuvRelPosController::Task.with_conf('default')))
+
 
 
 

@@ -27,22 +27,23 @@ module Avalon
             end
             define_simulated_device("imu", Dev::Simulation::Mars::IMU)
             define_simulated_device("altimeter", Dev::Simulation::Mars::Altimeter)
-            define_simulated_device("sonar", Dev::Simulation::Mars::Altimeter) do |dev|
-                dev.prefer_deployed_tasks(/sonar/)
+            define_simulated_device("sonar", Dev::Simulation::Mars::Sonar) do |dev|
+                dev.prefer_deployed_tasks("sonar")
             end
 
             define_simulated_device("thrusters",Dev::Simulation::Mars::Actuators) do |dev|
                 dev.prefer_deployed_tasks(/avalon_actuators/)
             end
-            
+
             robot do
                 device(Dev::Controldev::Joystick, :as => 'joystick')
             end
-           
+
             use ::Simulation::Mars => ::AvalonSimulation::Task
             use ::Base::GroundDistanceSrv => altimeter_def
-            use ::Base::OrientationWithZSrv => imu_def 
-     
+            use ::Base::OrientationWithZSrv => imu_def
+            use ::Base::OrientationSrv => imu_def
+
             define 'base_loop', Base::ControlLoop.use('controller' => AvalonControl::MotionControlTask.with_conf('default','simulation'), 'controlled_system' => thrusters_def)
             define 'relative_control_loop', ::Base::ControlLoop.use('controller' => AuvRelPosController::Task, 'controlled_system' => base_loop_def)
 
@@ -50,13 +51,16 @@ module Avalon
             use Base::AUVRelativeMotionControlledSystemSrv => relative_control_loop_def
             use AvalonControl::JoystickCommandCmp => AvalonControl::JoystickCommandCmp.use(joystick_dev)
 
-            use Buoy::DetectorCmp => Buoy::DetectorCmp.use(front_cam_def) 
+            use Buoy::DetectorCmp => Buoy::DetectorCmp.use(front_cam_def)
             use Pipeline::Detector => Pipeline::Detector.use(bottom_cam_def)
-            
+
             define 'sim', ::AvalonSimulation::Task
-           
-            
+
+            use Localization::ParticleDetector => Localization::ParticleDetector.use(Base::ActuatorControlledSystemSrv => thrusters_def, 'sonar' => sonar_def)
+            define 'localization', Localization::ParticleDetector
+
+
         end
     end
 end
-    
+
