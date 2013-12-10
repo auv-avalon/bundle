@@ -29,6 +29,9 @@ Roby.every(1.0, :on_error => :disable) do
         if !State.buoyancy
             STDOUT.puts "Starting buoyancy"
             State.buoyancy = Robot.buoyancy_def!
+            Robot.sonar_def!
+            Robot.bottom_cam_def!
+            Robot.front_cam_def!
         end
     end
 end

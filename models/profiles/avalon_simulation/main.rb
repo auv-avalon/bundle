@@ -59,11 +59,9 @@ module Avalon
 
             define 'sim', ::AvalonSimulation::Task
 
-            use Localization::ParticleDetector => Localization::ParticleDetector.use(Base::ActuatorControlledSystemSrv => thrusters_def, 'sonar' => sonar_def)
+            use  Localization::ParticleDetector => Localization::ParticleDetector.use(imu_def, sonar_def,thrusters_def)
             define 'localization_detector', Localization::ParticleDetector
-
-#            define 'target_move', Localization::Controller.use('controlled_system' => Base::ControlLoop.use('controlled_system' => Base::AUVMotionControlledSystemSrv, 'controller' => AuvRelPosController::Task.with_conf('default')))
-
+            define 'target_move', ::AvalonControl::SimplePosMove.use(relative_control_loop_def,localization_detector_def)
 
         end
     end

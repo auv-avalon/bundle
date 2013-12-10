@@ -3,8 +3,8 @@ require "models/blueprints/pose_avalon"
 require "models/blueprints/wall"
 require "models/blueprints/buoy"
 require "models/blueprints/pipeline"
-require "models/blueprints/avalon_control"
 require "models/blueprints/localization"
+require "models/blueprints/avalon_control"
 
 using_task_library 'controldev'
 using_task_library 'raw_control_command_converter'
@@ -28,11 +28,12 @@ module Avalon
             define 'wall_right', Wall::Follower.use(WallServoing::SingleSonarServoing.with_conf('default','wall_right'), 'controlled_system' => Base::ControlLoop.use('controlled_system' => Base::AUVMotionControlledSystemSrv, 'controller' => AuvRelPosController::Task.with_conf('default','relative_heading')))
             define 'buoy', Buoy::FollowerCmp.use(Base::AUVRelativeMotionControlledSystemSrv)
             define 'simple_move', ::AvalonControl::SimpleMove.use(Base::AUVRelativeMotionControlledSystemSrv)
-            define 'target_move', Localization::Follower.use('controlled_system' => Base::ControlLoop.use('controlled_system' => Base::AUVMotionControlledSystemSrv, 'controller' => AuvRelPosController::Task.with_conf('default')))
+
 
             define 'buoy_detector', Buoy::DetectorCmp
             define 'pipeline_detector', Pipeline::Detector
             define 'wall_detector_right', Wall::Detector
+            
 
 
         end

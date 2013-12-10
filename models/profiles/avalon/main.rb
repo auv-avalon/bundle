@@ -103,15 +103,12 @@ module Avalon
 
             use Buoy::DetectorCmp => Buoy::DetectorCmp.use(front_camera_dev)
             use Pipeline::Detector => Pipeline::Detector.use(bottom_camera_dev)
+            
             use Wall::Detector => Wall::Detector.use(sonar_dev.with_conf('wall_servoing_right'))
-
-
-            #TODO move to main profile
-            use Localization::ParticleDetector => Localization::ParticleDetector.use(Base::ActuatorControlledSystemSrv => thrusters_def, 'sonar' => sonar_dev)
-            define 'localization', Localization::ParticleDetector
-
-
-
+            
+            use  Localization::ParticleDetector => Localization::ParticleDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev), sonar_dev,thrusters_def)
+            define 'localization_detector', Localization::ParticleDetector
+            define 'target_move', ::AvalonControl::SimplePosMove.use(relative_control_loop_def,localization_detector_def)
 
 
         end

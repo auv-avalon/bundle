@@ -17,70 +17,77 @@ module Localization
         connect sonar_estimator_child => main_child
         connect hb_child => main_child
 
+
+        export main_child.pose_samples_port
+        provides Base::PoseSrv, :as => 'pose'
     end
 
-    class Follower < ::Base::ControlLoop
-        add_main ParticleDetector, :as => "controller_local"
-        overload 'controller', ParticleDetector
-
-#        argument :timeout, :default => nil
-#        argument :heading, :default => 0
-#        argument :pos_x, :default => 0
-#        argument :pos_y, :default => 0
-#        argument :pos_z, :default => 0
-
-        attr_reader :start_time
-
-        on :start do |event|
-            Robot.info "Starting Position Mover"
-            @start_time = Time.now
-        end
-
-#        script do
-#            binding.pry
-#            port = controlled_system_child.find_port("command_in")
-#            position_writer = controlled_system_child.command_in_port.writer
-#            sample = position_writer.sample.new
-#            sample.x = pos_x
-#            sample.y = pos_y
-#            sample.z = pos_z
-#            sample.heading = pos_heading
-#            poll do
-#                position_writer.write sample
-#            end
-#        end
-
-        poll do
-            if(self.timeout)
-                if(@start_time + self.timeout < Time.now)
-                    STDOUT.puts "Finished #{self} becaue time is over! #{@start_time} #{@start_time + self.timeout}"
-                    emit :success
-                end
-            end
-
-        end
-    end
-
-#        argument :turn_dir, :default => nil
-#        argument :heading, :default => nil
-#        argument :depth, :default => nil
-#        argument :speed_x, :default => nil
-#        argument :timeout, :default => nil
-
-#        event :check_candidate
-#        event :follow_pipe
-#        event :found_pipe
-#        event :align_auv
-#        event :lost_pipe
-#        event :search_pipe
-#        event :end_of_pipe
-#        event :weak_signal
-#        attr_reader :start_time
+#    class Follower < ::Base::ControlLoop
+#        add_main AvalonControl::RelFakeWriter, :as => "controller_local" 
+##        add_main ParticleDetector, :as => "controller_local"
+#        overload 'controller', AvalonControl::RelFakeWriter
 #
-#        on :start do |event|
-#            Robot.info "Starting Pipeline Follower with config: speed_x: #{speed_x}, heading: #{heading}, depth: #{depth}"
-#            controller_child.update_config(:speed_x => speed_x, :heading => heading, :depth=> depth, :turn_dir => turn_dir)
-#            @start_time = Time.now
-#        end
+#        
+##        overload 'controlled_system', 
+#
+##        argument :timeout, :default => nil
+##        argument :heading, :default => 0
+##        argument :pos_x, :default => 0
+##        argument :pos_y, :default => 0
+##        argument :pos_z, :default => 0
+#
+##        attr_reader :start_time
+##
+##        on :start do |event|
+##            Robot.info "Starting Position Mover"
+##            @start_time = Time.now
+##        end
+#
+##        script do
+##            binding.pry
+##            port = controlled_system_child.find_port("command_in")
+##            position_writer = controlled_system_child.command_in_port.writer
+##            sample = position_writer.sample.new
+##            sample.x = pos_x
+##            sample.y = pos_y
+##            sample.z = pos_z
+##            sample.heading = pos_heading
+##            poll do
+##                position_writer.write sample
+##            end
+##        end
+#
+##        poll do
+##            if(self.timeout)
+##                if(@start_time + self.timeout < Time.now)
+##                    STDOUT.puts "Finished #{self} becaue time is over! #{@start_time} #{@start_time + self.timeout}"
+##                    emit :success
+##                end
+##            end
+##
+##        end
+#    end
+#
+##        argument :turn_dir, :default => nil
+##        argument :heading, :default => nil
+##        argument :depth, :default => nil
+##        argument :speed_x, :default => nil
+##        argument :timeout, :default => nil
+#
+##        event :check_candidate
+##        event :follow_pipe
+##        event :found_pipe
+##        event :align_auv
+##        event :lost_pipe
+##        event :search_pipe
+##        event :end_of_pipe
+##        event :weak_signal
+##        attr_reader :start_time
+##
+##        on :start do |event|
+##            Robot.info "Starting Pipeline Follower with config: speed_x: #{speed_x}, heading: #{heading}, depth: #{depth}"
+##            controller_child.update_config(:speed_x => speed_x, :heading => heading, :depth=> depth, :turn_dir => turn_dir)
+##            @start_time = Time.now
+##        end
 end
 
