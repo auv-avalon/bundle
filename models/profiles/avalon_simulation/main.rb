@@ -54,13 +54,15 @@ module Avalon
             use Buoy::DetectorCmp => Buoy::DetectorCmp.use(front_cam_def)
             use Pipeline::Detector => Pipeline::Detector.use(bottom_cam_def)
             #Warning setting of with_conf does not work on the def (composition)
-            #use Wall::Detector => Wall::Detector.use("sonar" => sonar_def, sonar_dev.with_conf('wall_servoing_right'))
-            use Wall::Detector => Wall::Detector.use("sonar" => sonar_def)
+            #use Wall::Detector => Wall::Detector.use(sonar_dev.with_conf('wall_servoing_right'), "sonar" => sonar_def)
+            use Wall::Detector => Wall::Detector.use(sonar_def)
 
             define 'sim', ::AvalonSimulation::Task
 
             use Localization::ParticleDetector => Localization::ParticleDetector.use(Base::ActuatorControlledSystemSrv => thrusters_def, 'sonar' => sonar_def)
-            define 'localization', Localization::ParticleDetector
+            define 'localization_detector', Localization::ParticleDetector
+
+#            define 'target_move', Localization::Controller.use('controlled_system' => Base::ControlLoop.use('controlled_system' => Base::AUVMotionControlledSystemSrv, 'controller' => AuvRelPosController::Task.with_conf('default')))
 
 
         end

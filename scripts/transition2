@@ -13,6 +13,10 @@ Syskit.conf.only_load_models = true
 Syskit.conf.disables_local_process_server = true
 app = Qt::Application.new(ARGV)
 
+#Loggers are broken here
+Syskit.conf.disable_logging
+Syskit.conf.disable_conf_logging
+
 GUI = true
 
 if GUI
@@ -22,44 +26,43 @@ if GUI
     rendering = Syskit::GUI::ComponentNetworkView.new(page)
 end
 
-def update(plan, requirement_tasks)
+def update(plan, requirements)
+    tasks = requirements.map do |req|
+        plan.add_mission(task = req.as_plan)
+        task.planning_task
+    end
     engine = Syskit::NetworkGeneration::Engine.new(plan)
-    engine.resolve(:requirement_tasks => requirement_tasks)
+    engine.resolve(:requirement_tasks => tasks)
+    plan.static_garbage_collect do |task|
+        plan.remove_object(task)
+    end
+    tasks.each do |t|
+        plan.unmark_mission t.planned_task
+    end
 end
 
-def precompute(plan,requirement_tasks)
+def precompute(plan,requirements)
+    tasks = requirements.map do |req|
+        plan.add_mission(task = req.as_plan)
+        task.planning_task
+    end
     engine = Syskit::NetworkGeneration::Engine.new(plan)
-    engine.precompute(:requirement_tasks => requirement_tasks)
+    engine.precompute(:requirement_tasks => tasks)
+
 end
 
 begin
     Roby.app.setup
     passes = []
-    passes << [Main.localization_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
     passes << [Main.pipeline_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
     passes << [Main.buoy_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
+    passes << [Main.localization_detector_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
     passes << [Main.bottom_cam_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
 
-    plan = rendering.plan
     passes.each_with_index do |requirements, idx|
-        requirement_tasks = requirements.map do |req|
-            plan.add_mission(task = req.as_plan)
-            task.planning_task
-        end
-
-        #precompute(plan, requirement_tasks)
-        update(plan, requirement_tasks)
-        plan.static_garbage_collect do |task|
-            plan.remove_object(task)
-        end
-
+        #precompute(rendering.plan, requirements)
+        update(rendering.plan, requirements)
         rendering.render_plan(:id => idx.to_s)
-        requirement_tasks.each do |t|
-            plan.unmark_mission t.planned_task
-        end
-        plan.static_garbage_collect do |task|
-            plan.remove_object(task)
-        end
     end
 ensure Roby.app.cleanup
 end

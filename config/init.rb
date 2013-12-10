@@ -21,8 +21,8 @@ Roby.scheduler = Roby::Schedulers::Temporal.new
 #########################################################
 #Diable logging at all!!
 #Syskit.conf.orocos.conf_log_enabled=false
-Syskit.conf.disable_logging
-Syskit.conf.disable_conf_logging
+#Syskit.conf.disable_logging
+#Syskit.conf.disable_conf_logging
 
 #########################################################
 

@@ -60,7 +60,6 @@ module Wall
 
         on :start do |event|
             Robot.info "Starting Wall Servoing"
-            controller_child.update_config(:speed_x => speed_x, :heading => heading, :depth=> depth, :turn_dir => turn_dir)
             @start_time = Time.now
         end
 

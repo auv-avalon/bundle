@@ -19,15 +19,15 @@ module Localization
 
     end
 
-    class Controller < ::Base::ControlLoop
+    class Follower < ::Base::ControlLoop
         add_main ParticleDetector, :as => "controller_local"
         overload 'controller', ParticleDetector
 
-        argument :timeout, :default => nil
-        argument :heading, :default => 0
-        argument :pos_x, :default => 0
-        argument :pos_y, :default => 0
-        argument :pos_z, :default => 0
+#        argument :timeout, :default => nil
+#        argument :heading, :default => 0
+#        argument :pos_x, :default => 0
+#        argument :pos_y, :default => 0
+#        argument :pos_z, :default => 0
 
         attr_reader :start_time
 
@@ -38,6 +38,7 @@ module Localization
 
 #        script do
 #            binding.pry
+#            port = controlled_system_child.find_port("command_in")
 #            position_writer = controlled_system_child.command_in_port.writer
 #            sample = position_writer.sample.new
 #            sample.x = pos_x

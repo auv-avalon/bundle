@@ -5,7 +5,7 @@ use_osg_ocean: 0
 debug_sonar: 1
 # scenefile of the robot module, which should be loaded
 with_manipulator_gui: 1
-
+reaction_to_physics_error: "warn"
 # Initial position - complete mission
 initial_x: 0.0
 initial_y: -2.5
