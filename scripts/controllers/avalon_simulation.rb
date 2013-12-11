@@ -32,6 +32,7 @@ Roby.every(1.0, :on_error => :disable) do
             Robot.sonar_def!
             Robot.bottom_cam_def!
             Robot.front_cam_def!
+            Robot.imu_def!
         end
     end
 end
