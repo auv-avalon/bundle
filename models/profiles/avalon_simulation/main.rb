@@ -10,6 +10,9 @@ using_task_library 'avalon_simulation'
 #    add Simulation::AuvController.with_conf('default'), :as => "avalon"
 #end
 
+Syskit.conf.disable_logging
+Syskit.conf.disable_conf_logging
+
 module Avalon
 
     module Profiles
