@@ -37,7 +37,7 @@ class AvalonControl::RelFakeWriter
         STDOUT.puts "Starting real Poisitioning task with options: #{@options}"
         orocos_task.x = @options[:x] if @options[:x]
         orocos_task.y = @options[:y] if @options[:y]
-        orocos_task.Z = @options[:depth] if @options[:depth]
+        orocos_task.z = @options[:depth] if @options[:depth]
         orocos_task.heading = @options[:heading] if @options[:heading]
     end
     provides Base::AUVRelativeMotionControllerSrv, :as => "controller"
