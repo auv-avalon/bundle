@@ -47,5 +47,14 @@ thruster_samples_period: 0.01
 pipeline_samples_period: 0.1
 speed_samples_period: 0.01
 pose_update_period: 0.1
+param_TCM: [ 0.0, 0.0, -1.0, -1.0, 0.0, 0.0,
+	     0.0, 0.0, 0.0, 0.0, 1.0, -1.0,
+	     1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 
+	     0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+	    -0.92, 0.205, 0.0, 0.0, 0.0, 0.0,
+	     0.0, 0.0, -0.17, 0.17, -0.81, 0.04]
+param_thrusterCoefficient: [0.005, 0.005,0.005,0.005,0.005,0.005,
+			    0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+			    0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 --- name:simulation
 yaml_map: '/home/matthias/dev/avalon/orogen/uw_particle_localization/maps/nurc.yml'
