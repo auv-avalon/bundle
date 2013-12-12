@@ -25,13 +25,14 @@ class Main < Roby::Actions::Interface
 #    
 
 
-    #TODO noch nciht möglich da remove_dependency nicht implementiert ist
+#    #TODO noch nciht möglich da remove_dependency nicht implementiert ist
 #    describe("Test action")
 #    action_script 'test_method' do
 #        detector = task pipeline_detector_def(Hash.new)
 #        drive    = task drive_simple_def
 #        pipe     = task pipeline_def(:heading => 3.13, :speed_x => PIPE_SPEED, :turn_dir=>2)
 #
+#        binding.pry
 #        start detector
 #        start drive
 #        wait detector.end_of_pipe_event

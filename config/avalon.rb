@@ -1,5 +1,6 @@
 #Front Machine
-Syskit.conf.process_server 'front','192.168.128.50' #, :log_dir => '/mnt/logs/log', :result_dir => '/mnt/logs/results'
+#Syskit.conf.process_server 'front','192.168.128.50' #, :log_dir => '/mnt/logs/log', :result_dir => '/mnt/logs/results'
+Syskit.conf.process_server 'front','localhost' #, :log_dir => '/mnt/logs/log', :result_dir => '/mnt/logs/results'
 
 Syskit.conf.use_deployment 'dynamixel', :on => "front"
 Syskit.conf.use_deployment 'front_camera', :on => "front"
@@ -31,14 +32,13 @@ Syskit.conf.use_deployment 'controlconverter_position'
 Syskit.conf.use_deployment 'asv_detector'
 Syskit.conf.use_deployment 'auv_rel_pos_controller'
 Syskit.conf.use_deployment 'wall_servoing'
-Syskit.conf.use_deployment 'dual_wall_servoing'
+#Syskit.conf.use_deployment 'dual_wall_servoing'
 Syskit.conf.use_deployment 'pingersearch'
 Syskit.conf.use_deployment 'audio_reader'
 Syskit.conf.use_deployment 'sonar_feature_estimator'
 Syskit.conf.use_deployment 'taskmon_back'
 Syskit.conf.use_deployment 'uw_particle_localization'
 Syskit.conf.use_deployment 'auv_waypoint_navigator'
-Syskit.conf.use_deployment 'battery_management'
-Syskit.conf.use_deployment 'sonar_feature_estimator'
+#Syskit.conf.use_deployment 'battery_management'
 Syskit.conf.use_deployment 'sonar_feature_estimator'
 

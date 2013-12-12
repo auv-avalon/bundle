@@ -1,4 +1,5 @@
 --- name:default
+node_name: "sonar_top_sensor" 
 left_limit: 3.141592654
 right_limit: -3.141592654
 resolution: 0.2

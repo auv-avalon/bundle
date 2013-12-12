@@ -36,7 +36,7 @@ perception_history_number: 20
 # waiting time for starting filtering
 init_sample_rejection: 100
 # start map for localization algorithm
-yaml_map: ''
+yaml_map: "<%= ENV['AUTOPROJ_PROJECT_BASE'] %>/avalon/orogen/uw_particle_localization/maps/nurc.yml"
 # interspersal ratio for hough position samples
 hough_interspersal_ratio: 0.1
 # streamaligner attributes
@@ -47,5 +47,14 @@ thruster_samples_period: 0.01
 pipeline_samples_period: 0.1
 speed_samples_period: 0.01
 pose_update_period: 0.1
+param_TCM: [ 0.0, 0.0, -1.0, -1.0, 0.0, 0.0,
+	     0.0, 0.0, 0.0, 0.0, 1.0, -1.0,
+	     1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 
+	     0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+	    -0.92, 0.205, 0.0, 0.0, 0.0, 0.0,
+	     0.0, 0.0, -0.17, 0.17, -0.81, 0.04]
+param_thrusterCoefficient: [0.005, 0.005,0.005,0.005,0.005,0.005,
+			    0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+			    0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 --- name:simulation
-
+yaml_map: '/home/matthias/dev/avalon/orogen/uw_particle_localization/maps/nurc.yml'
