@@ -7,7 +7,7 @@ require 'metaruby/gui/html/page'
 require 'syskit/gui/page'
 require 'syskit/gui/component_network_view'
 
-Roby.app.robot 'avalon'
+Roby.app.robot 'avalon_simulation'
 Roby.app.using_plugins 'syskit'
 Syskit.conf.only_load_models = true
 Syskit.conf.disables_local_process_server = true
@@ -37,13 +37,12 @@ end
 
 begin
     Roby.app.setup
-    passes = []
-    passes << [Main.can0_dev.to_instance_requirements]
-    passes << [Main.joystick_dev.to_instance_requirements, Main.can0_dev.to_instance_requirements]
-    passes << [Main.drive_simple_def.to_instance_requirements,Main.can0_dev.to_instance_requirements]
-#    passes << [Main.target_move_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
-#    passes << [Main.wall_right_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
-#    passes << [Main.bottom_cam_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
+    passes = Array.new
+    passes << [Main.joystick_dev.to_instance_requirements]
+    passes << [Main.target_move_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
+    passes << [Main.wall_right_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
+    #passes << [Main.bottom_cam_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
+    #passes << [Main.target_move_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
 
     plan = rendering.plan
     passes.each_with_index do |requirements, idx|
@@ -52,7 +51,7 @@ begin
             task.planning_task
         end
 
-#        precompute(plan, requirement_tasks)
+        precompute(plan, requirement_tasks)
 #        plan.static_garbage_collect do |task|
 #            plan.remove_object(task)
 #        end

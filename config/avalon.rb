@@ -42,3 +42,4 @@ Syskit.conf.use_deployment 'auv_waypoint_navigator'
 #Syskit.conf.use_deployment 'battery_management'
 Syskit.conf.use_deployment 'sonar_feature_estimator'
 
+#Syskit.conf.disable_logging

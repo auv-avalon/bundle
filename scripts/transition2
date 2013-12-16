@@ -55,10 +55,11 @@ begin
     Roby.app.setup
     passes = []
     passes << [Main.pipeline_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
-    passes << [Main.buoy_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
-    passes << [Main.target_move_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
-    passes << [Main.wall_right_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
-    passes << [Main.bottom_cam_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
+    passes << [Main.pipeline_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
+    #passes << [Main.buoy_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
+    #passes << [Main.target_move_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
+    #passes << [Main.wall_right_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
+    #passes << [Main.bottom_cam_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
 
     passes.each_with_index do |requirements, idx|
         #precompute(rendering.plan, requirements)

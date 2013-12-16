@@ -5,13 +5,9 @@ require "models/blueprints/pose_avalon"
 using_task_library 'simulation'
 using_task_library 'avalon_simulation'
 
-
 #class Dev::Simulation::Mars::SimulatedDevice
 #    add Simulation::AuvController.with_conf('default'), :as => "avalon"
 #end
-
-Syskit.conf.disable_logging
-Syskit.conf.disable_conf_logging
 
 module Avalon
 

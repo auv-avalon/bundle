@@ -11,4 +11,7 @@ Syskit.conf.use_deployment 'asv_detector'
 Syskit.conf.use_deployment 'buoy_detector'
 Syskit.conf.use_deployment 'pingersearch'
 
+Syskit.conf.disable_logging
+Syskit.conf.disable_conf_logging
+
 
