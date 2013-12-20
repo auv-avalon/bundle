@@ -11,6 +11,7 @@ Roby.app.robot 'avalon'
 Roby.app.using_plugins 'syskit'
 Syskit.conf.only_load_models = true
 Syskit.conf.disables_local_process_server = true
+Roby.app.single = true
 app = Qt::Application.new(ARGV)
 
 Syskit.conf.disable_logging
@@ -30,32 +31,45 @@ def update(plan, requirement_tasks)
     engine.resolve(:requirement_tasks => requirement_tasks)
 end
 
-def precompute(plan,requirement_tasks)
-    engine = Syskit::NetworkGeneration::Engine.new(plan)
-    engine.precompute(:requirement_tasks => requirement_tasks)
+def precompute(plan,possible_actions)
+    possible_actions.each_with_index do |requirements, idx|
+        #adding everything to the plan for now
+        requirement_tasks = requirements.map do |req|
+            plan.add_mission(task = req.as_plan)
+            puts "root task is #{task} with ID #{task.object_id}"
+            task.planning_task
+        end
+        #letting do the engine the caluclation
+        engine = Syskit::NetworkGeneration::Engine.new(plan)
+        engine.precompute(:requirement_tasks => requirement_tasks)
+        #releaseing it to make sure it does not incluenve the real-plan
+        requirement_tasks.each do |t|
+            plan.unmark_mission t.planned_task
+        end
+    end
 end
 
 begin
     Roby.app.setup
     passes = []
-    passes << [Main.can0_dev.to_instance_requirements]
-    passes << [Main.joystick_dev.to_instance_requirements, Main.can0_dev.to_instance_requirements]
-    passes << [Main.drive_simple_def.to_instance_requirements,Main.can0_dev.to_instance_requirements]
-#    passes << [Main.target_move_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
-#    passes << [Main.wall_right_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
-#    passes << [Main.bottom_cam_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
+    passes << [Main.joystick_dev.to_instance_requirements]
+    passes << [Main.pipeline_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
+    passes << [Main.buoy_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
+    passes << [Main.target_move_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
+
 
     plan = rendering.plan
     passes.each_with_index do |requirements, idx|
+        #Precalculae everything every cycle
+        STDOUT.puts "!!!!!!!!!!!!!! startin precalculation"
+#        precompute(plan, passes)
+        STDOUT.puts "PRECALC Finished, now we allowed to have a match!!!!!!!!!!!!!!!!!"
+        
         requirement_tasks = requirements.map do |req|
             plan.add_mission(task = req.as_plan)
+            puts "instanciated root task #{task} with ID #{task.object_id}"
             task.planning_task
         end
-
-#        precompute(plan, requirement_tasks)
-#        plan.static_garbage_collect do |task|
-#            plan.remove_object(task)
-#        end
 
         update(plan, requirement_tasks)
         plan.static_garbage_collect do |task|
@@ -65,7 +79,7 @@ begin
         requirement_tasks.each do |t|
             plan.unmark_mission t.planned_task
         end
-        rendering.render_plan(:id => idx.to_s)
+        rendering.render_plan(:id => idx.to_s, :mode => 'dataflow')
     end
 ensure Roby.app.cleanup
 end

@@ -7,10 +7,11 @@ require 'metaruby/gui/html/page'
 require 'syskit/gui/page'
 require 'syskit/gui/component_network_view'
 
-Roby.app.robot 'avalon_simulation'
+Roby.app.robot 'avalon'
 Roby.app.using_plugins 'syskit'
 Syskit.conf.only_load_models = true
 Syskit.conf.disables_local_process_server = true
+Roby.app.single = true
 app = Qt::Application.new(ARGV)
 
 #Loggers are broken here
@@ -53,11 +54,11 @@ end
 
 begin
     Roby.app.setup
-    passes = []
+    passes = Array.new 
+    passes << [Main.joystick_dev.to_instance_requirements]
     passes << [Main.pipeline_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
-    passes << [Main.pipeline_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
-    #passes << [Main.buoy_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
-    #passes << [Main.target_move_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
+    passes << [Main.buoy_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
+#    passes << [Main.target_move_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
     #passes << [Main.wall_right_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
     #passes << [Main.bottom_cam_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
 
