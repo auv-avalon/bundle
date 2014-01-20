@@ -1,6 +1,7 @@
 require 'models/blueprints/avalon'
 using_task_library 'auv_rel_pos_controller'
 using_task_library 'wall_servoing'
+using_task_library 'sonar_feature_estimator'
 
 module Wall
     class Detector < Syskit::Composition

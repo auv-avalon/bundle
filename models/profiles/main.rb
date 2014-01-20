@@ -32,8 +32,6 @@ module Avalon
             define 'simple_move', ::AvalonControl::SimpleMove.use(Base::AUVMotionControlledSystemSrv)
 
 
-            define 'buoy_detector', Buoy::DetectorCmp
-            define 'pipeline_detector', Pipeline::Detector
             define 'wall_detector_right', Wall::Detector
 
 
