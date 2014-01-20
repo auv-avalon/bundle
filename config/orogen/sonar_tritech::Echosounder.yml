@@ -1,3 +1,10 @@
 ### front sonar config
 --- name:default
-port: /dev/ttyS5
+# no documentation available for this property
+baudrate: 115200
+# timeout for the dst micron dst echo sounder.
+echo_sounder_timeout: 4.0
+# no documentation available for this property
+ground_frame: echosounder_frame
+# the device port
+port: '/dev/ttyS5'
