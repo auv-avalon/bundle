@@ -7,6 +7,8 @@ current_mode = nil
 current_submode = nil
 run_start = nil
 last_navigation_task = nil
+State.lowlevel_substate  = -1
+State.lowlevel_state = -1
 
 
 #Define the possible modes that can be set
@@ -14,9 +16,6 @@ State.navigation_mode = ["drive_simple_def","buoy_def", "pipeline_def", "wall_ri
 
 #Reading the Joystick task to react on changes if an statechage should be done...
 Roby.every(0.1, :on_error => :disable) do
-    next if !State.lowlevel_state?
-
-
     #Check wether we should stop an current operation mode
     if (State.lowlevel_state != 5 and  State.lowlevel_state != 3) or ((State.lowlevel_substate != current_submode) and current_submode)
         if current_mode
