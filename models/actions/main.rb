@@ -87,13 +87,21 @@ class Main < Roby::Actions::Interface
     describe("Matthias-testing")
     state_machine "test" do
             pipeline = state pipeline_def(:heading => 0, :speed_x => PIPE_SPEED, :turn_dir=> 1) #Pipe left
-            move1 = state simple_move_def(:heading=>3.13, :speed_x=>0.0 ,:depth=>-5, :timeout=> 50000)
+            move1 = state simple_move_def(:heading=>3.13, :speed_x=>0.0 ,:depth=>-5, :timeout=> 20)
             pipeline1 = state pipeline_def(:heading => 3.13, :speed_x => PIPE_SPEED, :turn_dir=>2) #turn and until end
+            wall = state wall_right_def(:max_corners => 2) 
+            wall = state wall_right_def(:max_corners => 2)
+            move2 = state simple_move_def(:heading=>270/Math::PI*180, :speed_x=>2.0 ,:depth=>-5, :timeout=> 30)
+
                 
             start(pipeline) 
             transition(pipeline.end_of_pipe_event,move1)
             transition(move1.success_event,pipeline1)
-            transition(pipeline1.success_event,pipeline)
+#            transition(pipeline1.success_event,pipeline)
+            transition(pipeline1.end_of_pipe_event,wall)
+            transition(wall.success_event,move2)
+            transition(move2.success_event,pipeline)
+
     end
     
     

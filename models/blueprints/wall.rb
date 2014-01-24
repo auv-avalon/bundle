@@ -35,8 +35,13 @@ module Wall
             self.num_corners = 0
         end
 
+        def corner_passed!
+            @num_corners = @num_corners + 1 
+        end
+
         on :detected_corner do |e|
-            self.num_corners = self.num_corners +1
+            self.corner_passed!
+            Robot.info "Passed one corner, have passed #{self.num_corners}"
         end
     end
 

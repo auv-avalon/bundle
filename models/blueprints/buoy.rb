@@ -48,8 +48,8 @@ module Buoy
         overload 'controller', DetectorCmp
         
         #begin workaround TODO @sylvain
-        add AuvRelPosController::Task, :as => "workaround"
-        controller_child.relative_position_command_port.connect_to workaround_child 
+        #add AuvRelPosController::Task, :as => "workaround"
+        #controller_child.relative_position_command_port.connect_to workaround_child 
         #end workaround
 
 

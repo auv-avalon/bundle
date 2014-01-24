@@ -35,6 +35,10 @@ module Avalon
             task = Orocos::TaskContext.get 'avalon'
             task.position = [x, y, z]
         end
+        command :sim_set_position, "Set the Positon of avalon",
+            :x => "x value",
+            :y => "y value",
+            :z => "depth"
 
         def sim_set_pose(x, y, z, yaw)
             task = Orocos::TaskContext.get 'avalon'
@@ -42,6 +46,12 @@ module Avalon
             o = Eigen::Quaternion::from_yaw(yaw)
             task.orientation = o 
         end
+        command :sim_set_pose, "Set the pose of avalon",
+            :x => "x value",
+            :y => "y value",
+            :z => "depth",
+            :yaw => "heading in rad"
+
 #
 #    # supply waypoints in this format: [[x1,y1],[x2,y2],...,[xn,yn]]
 #    def self.sim_set_asv_waypoints(waypoints)
@@ -67,7 +77,7 @@ module Avalon
         def sim_set_avalon(object)
             buoy = { :x => 43.58, :y => 0.56, :z => -2.21, :theta => 1.3 } #rad
             pipe = { :x => 31.6, :y => 1.52, :z => -2.2, :theta => -0.10 } # rad
-            wall = { :x => 45.0, :y => 2.5, :z => -4.5, :theta => 0.0 }
+            wall = { :x => 55.0, :y => 10.0, :z => -4.5, :theta => 1.5 }
             zero = { :x => 0, :y => 0, :z => 0, :theta => 0.0 }
             sauce_start = { :x => 31.0, :y => -8.0, :z => -2.5, :theta => Math::PI / 2.0 }
 
