@@ -51,7 +51,11 @@ module Avalon
             use AvalonControl::JoystickCommandCmp => AvalonControl::JoystickCommandCmp.use(joystick_dev)
 
             use Buoy::DetectorCmp => Buoy::DetectorCmp.use(front_cam_def)
+
             use Pipeline::Detector => Pipeline::Detector.use(bottom_cam_def)
+            #TODO Workaround move to the base profile
+            define 'pipeline_detector', Pipeline::Detector
+
             #Warning setting of with_conf does not work on the def (composition)
             #use Wall::Detector => Wall::Detector.use(sonar_dev.with_conf('wall_servoing_right'), "sonar" => sonar_def)
             use Wall::Detector => Wall::Detector.use(sonar_def)
@@ -60,7 +64,8 @@ module Avalon
 
             use  Localization::ParticleDetector => Localization::ParticleDetector.use(imu_def, sonar_def,thrusters_def)
             define 'localization_detector', Localization::ParticleDetector
-            define 'target_move', ::AvalonControl::SimplePosMove.use(relative_control_loop_def,localization_detector_def)
+            
+            use ::AvalonControl::SimplePosMove => ::AvalonControl::SimplePosMove.use(relative_control_loop_def,localization_detector_def)
 
         end
     end

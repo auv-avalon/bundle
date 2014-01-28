@@ -11,11 +11,12 @@ class AvalonControl::FakeWriter
 
     def update_config(options)
         @options = options
-        STDOUT.puts "Starting real task with options: #{@options}"
+        Robot.info "Starting real task with options: #{@options}"
         orocos_task.speed_x = @options[:speed_x] if @options[:speed_x]
         orocos_task.speed_y = @options[:speed_y] if @options[:speed_y]
         orocos_task.Z = @options[:depth] if @options[:depth]
         orocos_task.heading = @options[:heading] if @options[:heading]
+        return true
     end
 
 

@@ -71,13 +71,14 @@ module AvalonControl
         on :start do |ev|
                 @start_time = Time.now
                 Robot.info "Starting Drive simple #{self}"
-                controller_child.update_config(:speed_x => speed_x, :heading => heading, :depth=> depth, :speed_y => speed_y)
+                erg = controller_child.update_config(:speed_x => speed_x, :heading => heading, :depth=> depth, :speed_y => speed_y)
+                Robot.info "Updated config returned #{erg}"
         end
     
         poll do
                 if(self.timeout)
                         if(@start_time + self.timeout < Time.now)
-                                #STDOUT.puts "Finished becaue time is over! #{@start_time} #{@start_time + self.timeout}"
+                                Robot.info "Finished Simple Move becaue time is over! #{@start_time} #{@start_time + self.timeout}"
                                 emit :success
                         end
                 end
@@ -110,7 +111,7 @@ module AvalonControl
         poll do
                 if(self.timeout)
                         if(@start_time + self.timeout < Time.now)
-                                #STDOUT.puts "Finished becaue time is over! #{@start_time} #{@start_time + self.timeout}"
+                                Robot.info  "Finished Pos Mover becaue time is over! #{@start_time} #{@start_time + self.timeout}"
                                 emit :success
                         end
                 end

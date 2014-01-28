@@ -35,6 +35,7 @@ module Avalon
             define 'wall_detector_right', Wall::Detector
 
 
+            define 'target_move', ::AvalonControl::SimplePosMove
 
         end
     end
