@@ -7,24 +7,12 @@ require 'metaruby/gui/html/page'
 require 'syskit/gui/page'
 require 'syskit/gui/component_network_view'
 
-Roby.app.robot 'avalon'
-Roby.app.using_plugins 'syskit'
-Syskit.conf.only_load_models = true
-Syskit.conf.disables_local_process_server = true
-Roby.app.single = true
-app = Qt::Application.new(ARGV)
-
-Syskit.conf.disable_logging
-Syskit.conf.disable_conf_logging
-
+#GUI = false 
 GUI = true
 
-if GUI
-    display = Qt::WebView.new
-    display.show
-    page = MetaRuby::GUI::HTML::Page.new(display.page)
-    rendering = Syskit::GUI::ComponentNetworkView.new(page)
-end
+GC.stress = true 
+
+
 
 def update(plan, requirement_tasks)
     engine = Syskit::NetworkGeneration::Engine.new(plan)
@@ -50,19 +38,54 @@ def precompute(plan,possible_actions)
 end
 
 begin
+    
+#    passes << [Main.pipeline_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
+#    passes << [Main.buoy_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
+#    passes << [Main.target_move_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
+#    passes << [Main.pipeline_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
+#    passes << [Main.buoy_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
+#    passes << [Main.target_move_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
+
+
+#loop do #stresstest
+Roby.app.robot 'avalon'
+Roby.app.using_plugins 'syskit'
+Syskit.conf.only_load_models = true
+Syskit.conf.disables_local_process_server = true
+Roby.app.single = true
+app = Qt::Application.new(ARGV) if GUI
+
+if GUI
+    display = Qt::WebView.new
+    display.show
+    page = MetaRuby::GUI::HTML::Page.new(display.page)
+    rendering = Syskit::GUI::ComponentNetworkView.new(page)
+    if false 
+        plan = Roby::Plan.new 
+        rendering.plan = plan
+    else
+        plan = rendering.plan
+    end
+else
+    plan = Roby::Plan.new 
+end
+
+Syskit.conf.disable_logging
+Syskit.conf.disable_conf_logging
+
     Roby.app.setup
     passes = []
     passes << [Main.joystick_dev.to_instance_requirements]
     passes << [Main.pipeline_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
-    passes << [Main.buoy_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
-    passes << [Main.target_move_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
-
-
-    plan = rendering.plan
+#    passes << [Main.buoy_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
+#    passes << [Main.target_move_def.to_instance_requirements,Main.joystick_dev.to_instance_requirements]
+#    passes << [Main.target_move_def.to_instance_requirements]
+#    passes << [Main.pipeline_def.to_instance_requirements]
+#    passes << [Main.buoy_def.to_instance_requirements]
     passes.each_with_index do |requirements, idx|
         #Precalculae everything every cycle
         STDOUT.puts "!!!!!!!!!!!!!! startin precalculation"
-#        precompute(plan, passes)
+        precompute(plan, passes)
         STDOUT.puts "PRECALC Finished, now we allowed to have a match!!!!!!!!!!!!!!!!!"
         
         requirement_tasks = requirements.map do |req|
@@ -79,10 +102,14 @@ begin
         requirement_tasks.each do |t|
             plan.unmark_mission t.planned_task
         end
-        rendering.render_plan(:id => idx.to_s, :mode => 'dataflow')
+        if GUI
+            rendering.render_plan(:id => idx.to_s, :mode => 'dataflow')
+        end
     end
-ensure Roby.app.cleanup
+    ensure Roby.app.cleanup
 end
+#end
 
-app.exec
+STDOUT.puts "------------------- FINISHED --------------------------"
+app.exec if GUI
 

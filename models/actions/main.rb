@@ -90,17 +90,20 @@ class Main < Roby::Actions::Interface
         away_from_pipe = state simple_move_def(:heading => Math::PI*0.5, :speed_x => 3 ,:depth=>-5, :timeout=> 15)
         align_to_pipe = state simple_move_def(:heading => Math::PI*-0.5, :speed_x => 0 ,:depth=>-5, :timeout=> 5)
         pipe_detector = state pipeline_detector_def
+        pure_pipe_detector = state pipeline_detector_def
         find_pipe_mover = state simple_move_def(:heading => Math::PI*-0.5, :speed_x => 3 ,:depth=>-5, :timeout=> 30)
-        pipe_detector.depends_on(find_pipe_mover)
+        pipe_detector.depends_on find_pipe_mover, :role => "detector"
         follow_pipe = state pipeline_def(:heading => 0, :speed_x => 2)
 
         start(pipeline)
         transition(pipeline.success_event,away_from_pipe)
         transition(away_from_pipe.success_event,align_to_pipe)
         transition(align_to_pipe.success_event,pipe_detector)
-        forward pipe_detector.success_event, failed_event
         transition(pipe_detector.align_auv_event,follow_pipe)
-        forward follow_pipe.end_of_pipe_event, success_event
+        
+        #forward pipe_detector.success_event, failed_event
+        #transition(pipe_detector.align_auv_event,follow_pipe)
+        #forward follow_pipe.end_of_pipe_event, success_event
     end
 
 
@@ -112,7 +115,7 @@ class Main < Roby::Actions::Interface
             away_from_pipe = state simple_move_def(:heading => Math::PI*0.5, :speed_x => 3 ,:depth=>-5, :timeout=> 15)
             find_pipe_back = state simple_move_def(:heading => Math::PI*-0.5, :speed_x => 3 ,:depth=>-5, :timeout=> 80)
             pipe_detector = state pipeline_detector_def
-            pipe_detector.depends_on(find_pipe_back)
+            pipe_detector.depends_on find_pipe_back, :role => "detector"
             pipe_follower = state pipeline_def
 
 

@@ -11,6 +11,7 @@ log:
 
     # logging Roby into file: logs/<date>/<file>.txt
     levels:
+        roby/execution_engine: INFO
         #        syskit: DEBUG:debug.txt
         #syskit/models: DEBUG
         #syskit/instance_requirements: DEBUG
