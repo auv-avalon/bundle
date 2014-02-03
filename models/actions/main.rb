@@ -107,39 +107,39 @@ class Main < Roby::Actions::Interface
     end
 
 
+
     describe("Matthias-testing")
-    state_machine "test" do
+    state_machine "pipe_and_wall" do
             pipeline = state pipeline_def(:heading => 0, :speed_x => PIPE_SPEED, :turn_dir=> 1) #Pipe left
             move1 = state simple_move_def(:heading=>3.13, :speed_x=>0.0 ,:depth=>-5, :timeout=> 20)
-            #pipeline1 = state pipeline_def(:heading => 3.13, :speed_x => PIPE_SPEED, :turn_dir=>2) #turn and until end
-            away_from_pipe = state simple_move_def(:heading => Math::PI*0.5, :speed_x => 3 ,:depth=>-5, :timeout=> 15)
-            find_pipe_back = state simple_move_def(:heading => Math::PI*-0.5, :speed_x => 3 ,:depth=>-5, :timeout=> 80)
+            pipeline1 = state pipeline_def(:heading => 3.13, :speed_x => PIPE_SPEED, :turn_dir=>2) #turn and until end
+            away_from_pipe = state simple_move_def(:heading => Math::PI*0.5, :speed_x => 3 ,:depth=>-5, :timeout=> 25)
+            align_to_wall = state simple_move_def(:heading => 3.13, :speed_x => 0 ,:depth=>-5, :timeout=> 5)
+            find_pipe_back = state simple_move_def(:heading => Math::PI*-0.2, :speed_x => 3 ,:depth=>-5, :timeout=> 80)
             pipe_detector = state pipeline_detector_def
             pipe_detector.depends_on find_pipe_back, :role => "detector"
             pipe_follower = state pipeline_def
-
-
-            wall = state wall_right_def(:max_corners => 2) 
-            move2 = state simple_move_def(:heading=>270/Math::PI*180, :speed_x=>2.0 ,:depth=>-5, :timeout=> 30)
-
+            wall = state wall_right_def(:max_corners => 1) 
 
                 
             start(pipeline) 
             transition(pipeline.end_of_pipe_event,move1)
-            transition(move1.success_event, away_from_pipe)
-            transition(away_from_pipe.success_event,pipe_detector)
-            transition(pipe_detector.follow_pipe_event, pipe_follower)
-            forward pipe_detector.success_event, failed_event
-            transition(pipe_detector.end_of_pipe_event, wall)
-            forward wall.success_event, success_event
-
-
-            #transition(move1.success_event,pipeline1)
-#            transition(pipeline1.success_event,pipeline)
-            #transition(pipeline1.end_of_pipe_event,wall)
-            #transition(wall.success_event,move2)
-            #transition(move2.success_event,pipeline)
-
+            transition(move1.success_event,pipeline1)
+            transition(pipeline1.end_of_pipe_event,away_from_pipe)
+            transition(away_from_pipe.success_event,align_to_wall)
+            transition(align_to_wall.success_event,wall)
+            transition(wall.success_event,pipe_detector)
+            forward pipe_detector.failed_event, failed_event
+            forward pipe_detector.check_candidate_event, success_event
+    end
+    
+    describe("looping-pipe-wall")
+    state_machine "loop_pipe_wall" do
+        state1 = state pipe_and_wall
+        state2 = state pipe_and_wall
+        start(state1)
+        transition(state1.success_event, state2)
+        transition(state2.success_event,state1)
     end
     
     
