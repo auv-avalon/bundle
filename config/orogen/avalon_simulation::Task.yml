@@ -1,5 +1,6 @@
 --- name:default
 # start the simulation graphical interface with this module
+scenefile:  "<%= ENV['AUTOPROJ_PROJECT_BASE'] %>/simulation/orogen/avalon_simulation/configuration/testhalle.scn"
 enable_gui: 1
 use_osg_ocean: 0
 debug_sonar: 1

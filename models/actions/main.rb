@@ -4,6 +4,10 @@ class Main < Roby::Actions::Interface
 
     action_library
      PIPE_SPEED=0.4
+
+     def name
+         "Avalon's Action library"
+     end
     
 #    describe("Executes the given task and wait for he given signal, is the signal occurs wait for an period and emif success afterwards").
 #        required_arg("task", "the task to be executed").
