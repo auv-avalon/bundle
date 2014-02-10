@@ -58,4 +58,4 @@ weak_signal: 0.25
 align_during_check: 1
 change_search_direction_to_last_known_position: 1
 --- name:simulation
-use_channel: 0
+use_channel: 3

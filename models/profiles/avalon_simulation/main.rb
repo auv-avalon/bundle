@@ -52,7 +52,7 @@ module Avalon
 
             use Buoy::DetectorCmp => Buoy::DetectorCmp.use(front_cam_def)
 
-            use Pipeline::Detector => Pipeline::Detector.use(bottom_cam_def)
+            use Pipeline::Detector => Pipeline::Detector.use(bottom_cam_def,OffshorePipelineDetector::Task.with_conf('default','simulation'))
             #TODO Workaround move to the base profile
             define 'pipeline_detector', Pipeline::Detector
 
