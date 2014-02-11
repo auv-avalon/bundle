@@ -21,16 +21,16 @@ module Avalon
             define_simulated_device("front_cam", Dev::Simulation::Mars::Camera) do |dev|
                 dev.prefer_deployed_tasks(/front_camera/).with_conf("default","front_cam")
             end
-            define_simulated_device("buoyancy", Dev::Simulation::Mars::AuvController) do |dev|
-                dev.with_conf("default")
-            end
+#            define_simulated_device("buoyancy", Dev::Simulation::Mars::AuvController) do |dev|
+#                dev.with_conf("default")
+#            end
             define_simulated_device("imu", Dev::Simulation::Mars::IMU)
             define_simulated_device("altimeter", Dev::Simulation::Mars::Altimeter)
             define_simulated_device("sonar", Dev::Simulation::Mars::Sonar) do |dev|
                 dev.prefer_deployed_tasks("sonar")
             end
 
-            define_simulated_device("thrusters",Dev::Simulation::Mars::Actuators) do |dev|
+            define_simulated_device("thrusters",Dev::Simulation::Mars::AuvMotion) do |dev|
                 dev.prefer_deployed_tasks(/avalon_actuators/)
             end
 
