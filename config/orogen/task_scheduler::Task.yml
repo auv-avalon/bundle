@@ -1,0 +1,75 @@
+--- name:default
+infinite_loop: true
+debug_time: false
+execution_order:
+- 'avalon_simulation'
+- 'trigger'
+- 'imu'
+- 'mic'
+- "sonar"
+- "sonar_rear"
+- "pingersearch_simulation"
+- "asv_navigation"
+- "avalon_actuators"
+- "asv_actuators"
+- "test_vehicle_actuators"
+- "ground_distance"
+- "white_light"
+- "bottom_camera"
+- "front_camera"
+- "top_camera"
+- "joystick"
+- "fake_writer"
+- "rel_fake_writer"
+- "rel_controller"
+- "motion_control"
+- "controlconverter_movement"
+- "controlconverter_position"
+- "pipeline_follower"
+- "wall_servoing"
+- "sonar_feature_estimator"
+- "sonar_wall_hough"
+- "uw_particle_localization"
+- "auv_waypoint_navigator"
+- "asv_detector"
+- 'buoy_detector'
+- 'buoy_servoing'
+- "angle_estimation"
+- "pinger_search"
+
+prescalers:
+- 1 # 'avalon_simulation'
+- 1 # 'trigger'
+- 1 # 'imu'
+- 1 # 'mic'
+- 1 # "sonar"
+- 1 # "sonar_rear"
+- 1 # "pingersearch_simulation"
+- 1 # "asv_navigation"
+- 1 # "avalon_actuators"
+- 1 # "asv_actuators"
+- 1 # "test_vehicle_actuators"
+- 1 # "ground_distance"
+- 1 # "white_light"
+- 1 # "bottom_camera"
+- 1 # "front_camera"
+- 1 # "top_camera"
+- 1 # "joystick"
+- 1 # "fake_writer"
+- 1 # "rel_fake_writer"
+- 1 # "rel_controller"
+- 1 # "motion_control"
+- 1 # "controlconverter_movement"
+- 1 # "controlconverter_position"
+- 30 # "pipeline_follower"
+- 1 # "wall_servoing"
+- 1 # "sonar_feature_estimator"
+- 1 # "sonar_wall_hough"
+- 1 # "uw_particle_localization"
+- 1 # "auv_waypoint_navigator"
+- 1 # "asv_detector"
+- 1 # 'buoy_detector'
+- 1 # 'buoy_servoing'
+- 1 # "angle_estimation"
+- 1 # "pinger_search"
+
