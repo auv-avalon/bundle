@@ -21,7 +21,8 @@ class Simulation::MarsIMU
 end
 
 
-sim = Robot.sim_def!
+Robot.sim_def!
+Robot.sched_def!
 
 State.start_time = Time.new
 State.buoyancy = nil
@@ -34,6 +35,7 @@ Roby.every(1.0, :on_error => :disable) do
 #            Robot.bottom_cam_def!
 #            Robot.front_cam_def!
             Robot.imu_def!
+            Robot.trigger_def!
         end
     end
 end

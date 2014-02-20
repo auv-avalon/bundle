@@ -37,6 +37,98 @@ def add_status(status, name, format, obj, field, *colors)
     end
 end
 
+@i = 0
+
+
+def find_parent_task_for_task(current_task,task)
+#    STDOUT.puts "Called with #{task}"
+    current_task.children.to_a.each do |child|
+        if child == task
+            return current_task
+        else
+            return find_parent_task_for_task(child,task)
+        end
+    end
+    return nil
+end
+
+@mission_cache = []
+
+#def create_modified_missions(missions,new_state,machine)
+#
+#    missions.each do |m|
+##        STDOUT.puts "Current: #{machine.current_task}, child: #{m.children.to_a[0]}"
+##        binding.pry
+#        #if machine.current_task == m.children.to_a[0]
+#        parent = find_parent_task_for_task(m,machine.current_task.task) 
+#        if parent
+##            parent.remove_dependency(machine.current_task.task)
+##            binding.pry
+##            machine.update_root_task parent
+##            machine.instanciate_state(new_state)
+##            STDOUT.puts "---------------------- new missions\n#{missions.size}\n-----------------"
+#            Roby.plan.prepare_switch(missions,[])
+##            binding.pry
+#            #STDOUT.puts "######################################### JEEEEEEEEEHAAAAAAAAAAAAAAAAAAAAAAAAAA #################################################### \n#{parent}"
+#        end
+#    end
+#end
+    
+
+def process_child_tasks(task)
+    task.children.each do |child|
+        process_child_tasks child
+    end
+    state_machines = Roby::Coordination.instances.select{|t| t.kind_of?(Roby::Coordination::ActionStateMachine)}
+    state_machines.each do |m|
+        if m.root_task == task
+            STDOUT.puts "Found state-machine #{m} in state #{m.current_task}"
+            STDOUT.puts "Possible followers: #{m.possible_following_states}"
+            m.possible_following_states.each do |s|
+
+                req_tasks_org = Roby.plan.find_local_tasks(Syskit::InstanceRequirementsTask).
+                    find_all do |req_task|
+                        !req_task.failed? && !req_task.pending? &&
+                            req_task.planned_task && !req_task.planned_task.finished?
+                    end
+                not_needed = Roby.plan.unneeded_tasks
+                req_tasks = req_tasks_org.dup
+                req_tasks.delete_if do |t|
+                    #Removing the current object if t is the parent of the running task
+                    not_needed.include?(t) or t.parent_object?(m.current_task.task) 
+                end
+
+                #Caching the FROM-> to transition for this state
+                next if @mission_cache.include?([req_tasks_org,s])
+                @mission_cache << [req_tasks_org,s]
+                
+                #@Sylvain is here anything else needed?
+                #I have a problem here, if i do the following line, the state is imidiatly executed.
+                #Avalon should pass the pipeline once and then turn to the other direction
+                #i i have the following line, then avalon directly follows the pipeline to the 
+                #second's state-direction
+                req_tasks << s.action.to_instance_requirements 
+                Roby.plan.prepare_switch(req_tasks)
+            end
+        end
+    end
+end
+
+
+Roby.every(1, :on_error => :disable) do
+    #return
+    #Waiting until we start our search algorithm
+    #This is the 'core' basis of the realtime-adaptation
+    #this and the following functions are triing to calculate all 
+    #following states, and the needed transactions to transistion to them.
+    @i = @i+1
+    if @i > 10
+        STDOUT.puts "Searching for state_machines"
+        Roby.plan.missions.to_a.each do |t|
+            process_child_tasks(t)
+        end
+    end
+end
 
 Roby.every(1, :on_error => :disable) do
     status = []

@@ -3,7 +3,7 @@ require 'models/profiles/main'
 class Main < Roby::Actions::Interface
 
     action_library
-     PIPE_SPEED=0.4
+     PIPE_SPEED=0.6
 
      def name
          "Avalon's Action library"
@@ -115,11 +115,11 @@ class Main < Roby::Actions::Interface
     describe("Matthias-testing")
     state_machine "pipe_and_wall" do
             pipeline = state pipeline_def(:heading => 0, :speed_x => PIPE_SPEED, :turn_dir=> 1) #Pipe left
-            move1 = state simple_move_def(:heading=>3.13, :speed_x=>0.0 ,:depth=>-5, :timeout=> 20)
+            #move1 = state simple_move_def(:heading=>3.13, :speed_x=>0.0 ,:depth=>-5, :timeout=> 20)
             pipeline1 = state pipeline_def(:heading => 3.13, :speed_x => PIPE_SPEED, :turn_dir=>2) #turn and until end
-            away_from_pipe = state simple_move_def(:heading => Math::PI*0.5, :speed_x => 3 ,:depth=>-5, :timeout=> 25)
-            align_to_wall = state simple_move_def(:heading => 3.13, :speed_x => 0 ,:depth=>-5, :timeout=> 5)
-            find_pipe_back = state simple_move_def(:heading => Math::PI*-0.2, :speed_x => 3 ,:depth=>-5, :timeout=> 80)
+            away_from_pipe = state simple_move_def(:heading => 0, :speed_x => 1 ,:depth=>-5, :timeout=> 25)
+            align_to_wall = state simple_move_def(:heading => 0.5 * Math::PI, :speed_x => 0 ,:depth=>-5, :timeout=> 5)
+            find_pipe_back = state simple_move_def(:heading => Math::PI*-0.2, :speed_x => 2 ,:depth=>-5, :timeout=> 80)
             pipe_detector = state pipeline_detector_def
             pipe_detector.depends_on find_pipe_back, :role => "detector"
             pipe_follower = state pipeline_def
@@ -127,14 +127,18 @@ class Main < Roby::Actions::Interface
 
                 
             start(pipeline) 
-            transition(pipeline.end_of_pipe_event,move1)
-            transition(move1.success_event,pipeline1)
+
+            transition(pipeline.end_of_pipe_event,pipeline1)
+            #transition(pipeline.end_of_pipe_event,move1)
+            #transition(move1.success_event,pipeline1)
+            
             transition(pipeline1.end_of_pipe_event,away_from_pipe)
             transition(away_from_pipe.success_event,align_to_wall)
             transition(align_to_wall.success_event,wall)
             transition(wall.success_event,pipe_detector)
             forward pipe_detector.failed_event, failed_event
             forward pipe_detector.check_candidate_event, success_event
+
     end
     
     describe("looping-pipe-wall")

@@ -82,18 +82,20 @@ module Avalon
                 end
                 
                 through 'can0' do
-                    device(Dev::Hbridge, :as => 'thrusters').
-                        can_id(0, 0x700).
-                        with_conf("default").
-                        period(0.001).
-	                sample_size(4)
+                    #device(HbridgeSet).
+                    #    dispatch('thrusters',[6, 3, 2, -1, 4, 5])
+#                    device(Dev::Hbridge, :as => 'thrusters').
+#                        can_id(0, 0x700).
+#                        with_conf("default").
+#                        period(0.001).
+#	                sample_size(4)
                 end
 
             end
 
-
-            define 'thrusters', Hbridge::Task.dispatch('thrusters',[6, 3, 2, -1, 4, 5]).
-                with_arguments('driver_dev' => thrusters_dev)
+            Hbridge.system(self,'can0','actuatorss','thrusterss',6, 3, 2, -1, 4, 5)
+#            define 'thrusters', Hbridge::Task.dispatch('thrusters',[6, 3, 2, -1, 4, 5]).
+#                with_arguments('driver_dev' => thrusters_dev)
 
 
             #New HBridge interface not ported yet
@@ -101,8 +103,10 @@ module Avalon
             use Base::GroundDistanceSrv => altimeter_dev
             use Base::ZProviderSrv => depth_reader_dev
 
-            define 'base_loop', Base::ControlLoop.use('controller' => AvalonControl::MotionControlTask, 'controlled_system' => thrusters_def)
+            define 'base_loop', Base::ControlLoop.use('controller' => AvalonControl::MotionControlTask, 'controlled_system' => thrusterss_def)
             define 'relative_control_loop', ::Base::ControlLoop.use('controller' => AuvRelPosController::Task, 'controlled_system' => base_loop_def)
+            #define 'base_loop', Base::ControlLoop.use('controller' => AvalonControl::MotionControlTask, 'controlled_system' => thrusters_def)
+            #define 'relative_control_loop', ::Base::ControlLoop.use('controller' => AuvRelPosController::Task, 'controlled_system' => base_loop_def)
 
             #Use Dagons Filter, comment out for XSens as Orientation Provider
             use AvalonControl::DephFusionCmp => AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator)
@@ -117,8 +121,10 @@ module Avalon
             use Pipeline::Detector => Pipeline::Detector.use(bottom_camera_dev)
             
             use Wall::Detector => Wall::Detector.use(sonar_dev.with_conf('wall_servoing_right'))
-            
-            use  Localization::ParticleDetector => Localization::ParticleDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev), sonar_dev,thrusters_def)
+
+#            actuators = actuators_dev = robot.find_device("#{actuatorss}_actuators.#{thrusterss}")
+            use  Localization::ParticleDetector => Localization::ParticleDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev), sonar_dev)
+#            use  Localization::ParticleDetector => Localization::ParticleDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev), sonar_dev,thrusters_def)
             define 'localization_detector', Localization::ParticleDetector
             define 'target_move', ::AvalonControl::SimplePosMove.use(relative_control_loop_def,localization_detector_def)
 
