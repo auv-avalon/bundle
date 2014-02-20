@@ -44,7 +44,7 @@ z_coupling_factor: -0.19
 z_pid: 
   max: 1.0
   d: 0.0 #0.1
-  p: -1.0
+  p: 1.0
   min: -1.0
   i: -0.02
 use_min_ground_distance: true 
@@ -60,7 +60,7 @@ pitch_pid:
   d: 0.0
 heading_pid:
   i: 0.0
-  p: -0.05
+  p: -0.5
 z_pid:
   i: -0.1
 use_min_ground_distance: false
