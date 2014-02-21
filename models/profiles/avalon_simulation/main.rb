@@ -38,7 +38,7 @@ module Avalon
                 device(Dev::Controldev::Joystick, :as => 'joystick')
             end
 
-            use ::Simulation::Mars => ::AvalonSimulation::Task
+            #use ::Simulation::Mars => ::AvalonSimulation::Task
             use ::Base::GroundDistanceSrv => altimeter_def
             use ::Base::OrientationWithZSrv => imu_def
             use ::Base::OrientationSrv => imu_def
@@ -60,7 +60,7 @@ module Avalon
             #use Wall::Detector => Wall::Detector.use(sonar_dev.with_conf('wall_servoing_right'), "sonar" => sonar_def)
             use Wall::Detector => Wall::Detector.use(sonar_def)
 
-            define 'sim', ::AvalonSimulation::Task
+            define 'sim', ::Simulation::Mars
 
             use  Localization::ParticleDetector => Localization::ParticleDetector.use(imu_def, sonar_def,thrusters_def)
             define 'localization_detector', Localization::ParticleDetector

@@ -93,8 +93,10 @@ def process_child_tasks(task)
                     end
                 not_needed = Roby.plan.unneeded_tasks
                 req_tasks = req_tasks_org.dup
+                removed = "Removed\n "
                 req_tasks.delete_if do |t|
                     #Removing the current object if t is the parent of the running task
+                    removed <<  "#{t}\n" if not_needed.include?(t) or t.parent_object?(m.current_task.task)
                     not_needed.include?(t) or t.parent_object?(m.current_task.task) 
                 end
 
@@ -107,13 +109,16 @@ def process_child_tasks(task)
                 #Avalon should pass the pipeline once and then turn to the other direction
                 #i i have the following line, then avalon directly follows the pipeline to the 
                 #second's state-direction
-                req_tasks << s.action.to_instance_requirements 
+                new = s.action.to_instance_requirements
+                STDOUT.puts "#{removed} Added: \n#{new}"
+                req_tasks << new
                 Roby.plan.prepare_switch(req_tasks)
             end
         end
     end
 end
 
+@first=false
 
 Roby.every(1, :on_error => :disable) do
     #return
@@ -122,10 +127,21 @@ Roby.every(1, :on_error => :disable) do
     #this and the following functions are triing to calculate all 
     #following states, and the needed transactions to transistion to them.
     @i = @i+1
-    if @i > 10
+    if @i > 20
+        if @first
+            STDOUT.puts "*******************************************************************************************"
+            STDOUT.puts "*********************************Starging precalculaion************************************"
+            STDOUT.puts "*******************************************************************************************"
+        end
         STDOUT.puts "Searching for state_machines"
         Roby.plan.missions.to_a.each do |t|
             process_child_tasks(t)
+        end
+        if @first
+            STDOUT.puts "*******************************************************************************************"
+            STDOUT.puts "*********************************Finished precalculaion************************************"
+            STDOUT.puts "*******************************************************************************************"
+            @first = false
         end
     end
 end
