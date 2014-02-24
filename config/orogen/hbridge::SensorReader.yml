@@ -1,0 +1,143 @@
+--- name:default
+# Timeout for io operations
+comTimeout:
+  microseconds: 500 
+# Configuration for all hbridges (initial values)
+configuration:
+  config:
+  - externalTempSensor: 0
+    statusFrequency: 10
+    encoder_config_intern:
+      ticksPerTurn: 0
+      leapTickValue: 0
+      tickDivider: 1
+      ticksPerTurnDivided: 0
+      zeroPosition: 0.0
+      type: :ENCODER_NONE
+    encoder_config_extern:
+      ticksPerTurn: 0
+      leapTickValue: 0
+      tickDivider: 1
+      ticksPerTurnDivided: 0
+      zeroPosition: 0.0
+      type: :ENCODER_NONE
+  - externalTempSensor: 0
+    statusFrequency: 10
+    encoder_config_intern:
+      ticksPerTurn: 0
+      leapTickValue: 0
+      tickDivider: 1
+      ticksPerTurnDivided: 0
+      zeroPosition: 0.0
+      type: :ENCODER_NONE
+    encoder_config_extern:
+      ticksPerTurn: 0
+      leapTickValue: 0
+      tickDivider: 1
+      ticksPerTurnDivided: 0
+      zeroPosition: 0.0
+      type: :ENCODER_NONE
+  - externalTempSensor: 0
+    statusFrequency: 10
+    encoder_config_intern:
+      ticksPerTurn: 0
+      leapTickValue: 0
+      tickDivider: 1
+      ticksPerTurnDivided: 0
+      zeroPosition: 0.0
+      type: :ENCODER_NONE
+    encoder_config_extern:
+      ticksPerTurn: 0
+      leapTickValue: 0
+      tickDivider: 1
+      ticksPerTurnDivided: 0
+      zeroPosition: 0.0
+      type: :ENCODER_NONE
+  - externalTempSensor: 0
+    statusFrequency: 10
+    encoder_config_intern:
+      ticksPerTurn: 0
+      leapTickValue: 0
+      tickDivider: 1
+      ticksPerTurnDivided: 0
+      zeroPosition: 0.0
+      type: :ENCODER_NONE
+    encoder_config_extern:
+      ticksPerTurn: 0
+      leapTickValue: 0
+      tickDivider: 1
+      ticksPerTurnDivided: 0
+      zeroPosition: 0.0
+      type: :ENCODER_NONE
+  - externalTempSensor: 0
+    statusFrequency: 10
+    encoder_config_intern:
+      ticksPerTurn: 0
+      leapTickValue: 0
+      tickDivider: 1
+      ticksPerTurnDivided: 0
+      zeroPosition: 0.0
+      type: :ENCODER_NONE
+    encoder_config_extern:
+      ticksPerTurn: 0
+      leapTickValue: 0
+      tickDivider: 1
+      ticksPerTurnDivided: 0
+      zeroPosition: 0.0
+      type: :ENCODER_NONE
+  - externalTempSensor: 0
+    statusFrequency: 10
+    encoder_config_intern:
+      ticksPerTurn: 0
+      leapTickValue: 0
+      tickDivider: 1
+      ticksPerTurnDivided: 0
+      zeroPosition: 0.0
+      type: :ENCODER_NONE
+    encoder_config_extern:
+      ticksPerTurn: 0
+      leapTickValue: 0
+      tickDivider: 1
+      ticksPerTurnDivided: 0
+      zeroPosition: 0.0
+      type: :ENCODER_NONE
+  - externalTempSensor: 0
+    statusFrequency: 10
+    encoder_config_intern:
+      ticksPerTurn: 0
+      leapTickValue: 0
+      tickDivider: 1
+      ticksPerTurnDivided: 0
+      zeroPosition: 0.0
+      type: :ENCODER_NONE
+    encoder_config_extern:
+      ticksPerTurn: 0
+      leapTickValue: 0
+      tickDivider: 1
+      ticksPerTurnDivided: 0
+      zeroPosition: 0.0
+      type: :ENCODER_NONE
+  - externalTempSensor: 0
+    statusFrequency: 10
+    encoder_config_intern:
+      ticksPerTurn: 0
+      leapTickValue: 0
+      tickDivider: 1
+      ticksPerTurnDivided: 0
+      zeroPosition: 0.0
+      type: :ENCODER_NONE
+    encoder_config_extern:
+      ticksPerTurn: 0
+      leapTickValue: 0
+      tickDivider: 1
+      ticksPerTurnDivided: 0
+      zeroPosition: 0.0
+      type: :ENCODER_NONE
+# This parameter defines if the reader task should act as bus master.WARNING, only set this to !0 if there is no mainboard present in your system
+isBusMaster: 0 
+# no documentation available for this property
+#metadata:
+#  metadata: []
+#  properties: []
+#  input_ports: []
+#  output_ports: []

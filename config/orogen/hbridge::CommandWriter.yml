@@ -1,0 +1,79 @@
+--- name:default
+# Timeout for io operations
+comTimeout:
+  microseconds: 500 
+# Configuration for all hbridges (initial values)
+configuration:
+  config:
+  - maxPWM: 5
+    openCircuit: 0
+    maxMotorTemp: 0
+    maxMotorTempCount: 0
+    maxBoardTemp: 0
+    maxBoardTempCount: 0
+    maxCurrent: 200
+    maxCurrent: 3000
+    maxCurrent: 220
+    pwmStepPerMs: 20
+    controllerInputEncoder: :INTERNAL
+  - maxPWM: 5
+    openCircuit: 0
+    maxMotorTemp: 0
+    maxMotorTempCount: 0
+    maxBoardTemp: 0
+    maxBoardTempCount: 0
+    maxCurrent: 200
+    maxCurrent: 3000
+    maxCurrent: 220
+    pwmStepPerMs: 20
+    controllerInputEncoder: :INTERNAL
+  - maxPWM: 5
+    openCircuit: 0
+    maxMotorTemp: 0
+    maxMotorTempCount: 0
+    maxBoardTemp: 0
+    maxBoardTempCount: 0
+    maxCurrent: 200
+    maxCurrent: 3000
+    maxCurrent: 220
+    pwmStepPerMs: 20
+    controllerInputEncoder: :INTERNAL
+  - maxPWM: 5
+    openCircuit: 0
+    maxMotorTemp: 0
+    maxMotorTempCount: 0
+    maxBoardTemp: 0
+    maxBoardTempCount: 0
+    maxCurrent: 200
+    maxCurrent: 3000
+    maxCurrent: 220
+    pwmStepPerMs: 20
+    controllerInputEncoder: :INTERNAL
+  - maxPWM: 5
+    openCircuit: 0
+    maxMotorTemp: 0
+    maxMotorTempCount: 0
+    maxBoardTemp: 0
+    maxBoardTempCount: 0
+    maxCurrent: 200
+    maxCurrent: 3000
+    maxCurrent: 220
+    pwmStepPerMs: 20
+    controllerInputEncoder: :INTERNAL
+  - maxPWM: 5
+    openCircuit: 0
+    maxMotorTemp: 0
+    maxMotorTempCount: 0
+    maxBoardTemp: 0
+    maxBoardTempCount: 0
+    maxCurrent: 200
+    maxCurrent: 3000
+    maxCurrent: 220
+    pwmStepPerMs: 20
+    controllerInputEncoder: :INTERNAL
+# no documentation available for this property
+#metadata:
+#  metadata: []
+#  properties: []
+#  input_ports: []
+#  output_ports: []
