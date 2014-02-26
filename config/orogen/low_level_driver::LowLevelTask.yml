@@ -8,6 +8,6 @@ securityOverride: 1
 # no documentation available for this property
 shortExposure: 5000
 # no documentation available for this property
-zIIR: 0.5
+#zIIR: 0.5
 # no documentation available for this property
-zVelocityIIR: 1.0
+##zVelocityIIR: 1.0

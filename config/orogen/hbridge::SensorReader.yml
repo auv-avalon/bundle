@@ -1,7 +1,7 @@
 --- name:default
 # Timeout for io operations
 comTimeout:
-  microseconds: 500 
+  microseconds: 500000 
 # Configuration for all hbridges (initial values)
 configuration:
   config:

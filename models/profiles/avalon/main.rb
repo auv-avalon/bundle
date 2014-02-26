@@ -57,18 +57,18 @@ module Avalon
                     prefer_deployed_tasks("can").
                     with_conf('default','can0')
 
-                com_bus(Dev::Bus::CAN, :as => 'can1').
-                    prefer_deployed_tasks("can1").
-                    with_conf('default', 'can0')
+#                com_bus(Dev::Bus::CAN, :as => 'can1').
+#                    prefer_deployed_tasks("can1").
+#                    with_conf('default', 'can0')
 
-                through 'can1' do
+                through 'can0' do
                     device(Dev::Controldev::CANJoystick, :as => 'joystick').
                         period(0.1).
                         can_id(0x100,0x7FF)
 
                     device(Dev::Sensors::DepthReader, :as => 'depth_reader').
                         prefer_deployed_tasks('depth').
-                        can_id(0x130,0x7F0).
+                        can_id(0x440,0x7F0).
                         period(0.1).
                         with_conf('default')
 
@@ -81,15 +81,6 @@ module Avalon
                         period(0.1)
                 end
                 
-                through 'can0' do
-                    #device(HbridgeSet).
-                    #    dispatch('thrusters',[6, 3, 2, -1, 4, 5])
-#                    device(Dev::Hbridge, :as => 'thrusters').
-#                        can_id(0, 0x700).
-#                        with_conf("default").
-#                        period(0.001).
-#	                sample_size(4)
-                end
 
             end
 
