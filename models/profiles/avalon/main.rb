@@ -64,7 +64,7 @@ module Avalon
                 through 'can0' do
                     device(Dev::Controldev::CANJoystick, :as => 'joystick').
                         period(0.1).
-                        can_id(0x100,0x7FF)
+                        can_id(0x502,0x7FF)
 
                     device(Dev::Sensors::DepthReader, :as => 'depth_reader').
                         prefer_deployed_tasks('depth').
@@ -77,7 +77,7 @@ module Avalon
 #                        period(0.1)
 
                     device(Dev::SystemStatus, :as => 'sysmon').
-                        can_id(0x101,0x7FF).
+                        can_id(0x541,0x7FF).
                         period(0.1)
                 end
                 
