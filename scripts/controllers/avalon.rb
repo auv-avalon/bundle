@@ -27,6 +27,7 @@ Robot.depth_fusion_def!
 Robot.joystick_dev!
 Robot.buoy_detector_def!
 Robot.pipeline_detector_def!
+Robot.joystick.def!
 #bl = Robot.base_loop_def!
 #buoy = Robot.buoyancy_def!
 
