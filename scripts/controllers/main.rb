@@ -119,7 +119,7 @@ def process_child_tasks(task)
 end
 
 @first=false
-
+=begin
 Roby.every(1, :on_error => :disable) do
     #return
     #Waiting until we start our search algorithm
@@ -145,7 +145,7 @@ Roby.every(1, :on_error => :disable) do
         end
     end
 end
-
+=end
 Roby.every(1, :on_error => :disable) do
     status = []
 
