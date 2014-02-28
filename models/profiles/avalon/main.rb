@@ -130,6 +130,7 @@ module Avalon
 
             define 'depth_fusion', AvalonControl::DephFusionCmp
             
+            define 'joystick_control', AvalonControl::JoystickCommandCmp
             
             define 'buoy_detector', Buoy::DetectorCmp
             define 'pipeline_detector', Pipeline::Detector
