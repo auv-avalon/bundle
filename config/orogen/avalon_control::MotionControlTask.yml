@@ -49,6 +49,7 @@ z_pid:
   i: -0.02
 use_min_ground_distance: true 
 min_ground_distance: 0.6
+joint_names: ["right","left","dive","pitch","strave","yaw"]
 --- name:simulation
 z_coupling_factor: 0.0
 y_coupling_factor: 0.0
@@ -75,3 +76,4 @@ cutoff:
   - 1.0 
 use_min_ground_distance: false 
 min_ground_distance: 0.2
+joint_names: ["right","left","dive","pitch","strave","yaw"]
