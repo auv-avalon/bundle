@@ -1,11 +1,11 @@
 --- name:default
 # Timeout for io operations
 comTimeout:
-  microseconds: 500000 
+  microseconds: 1000000 
 # Configuration for all hbridges (initial values)
 configuration:
-  config:
-  - maxPWM: 10000
+  - name: 'right'
+    maxPWM: 10000
     openCircuit: 0
     maxMotorTemp: 0
     maxMotorTempCount: 0
@@ -13,10 +13,11 @@ configuration:
     maxBoardTempCount: 100
     maxCurrent: 3000
     maxCurrentCount: 220
-    timeout: 200
+    timeout: 2000
     pwmStepPerMs: 20
     controllerInputEncoder: :INTERNAL
-  - maxPWM: 10000
+  - name: 'left'
+    maxPWM: 10000
     openCircuit: 0
     maxMotorTemp: 0
     maxMotorTempCount: 0
@@ -24,10 +25,11 @@ configuration:
     maxBoardTempCount: 0
     maxCurrent: 3000
     maxCurrentCount: 220
-    timeout: 200
+    timeout: 2000
     pwmStepPerMs: 20
     controllerInputEncoder: :INTERNAL
-  - maxPWM: 10000
+  - name: 'dive'
+    maxPWM: 10000
     openCircuit: 0
     maxMotorTemp: 0
     maxMotorTempCount: 0
@@ -35,10 +37,11 @@ configuration:
     maxBoardTempCount: 100
     maxCurrent: 3000
     maxCurrentCount: 220
-    timeout: 200
+    timeout: 2000
     pwmStepPerMs: 20
     controllerInputEncoder: :INTERNAL
-  - maxPWM: 10000
+  - name: 'pitch'
+    maxPWM: 10000
     openCircuit: 0
     maxMotorTemp: 0
     maxMotorTempCount: 0
@@ -46,10 +49,11 @@ configuration:
     maxBoardTempCount: 100
     maxCurrent: 3000
     maxCurrentCount: 220
-    timeout: 200
+    timeout: 2000
     pwmStepPerMs: 20
     controllerInputEncoder: :INTERNAL
-  - maxPWM: 10000
+  - name: 'strave'
+    maxPWM: 10000
     openCircuit: 0
     maxMotorTemp: 0
     maxMotorTempCount: 0
@@ -57,10 +61,11 @@ configuration:
     maxBoardTempCount: 100
     maxCurrent: 3000
     maxCurrentCount: 220
-    timeout: 200
+    timeout: 2000
     pwmStepPerMs: 20
     controllerInputEncoder: :INTERNAL
-  - maxPWM: 10000
+  - name: 'yaw'
+    maxPWM: 10000
     openCircuit: 0
     maxMotorTemp: 0
     maxMotorTempCount: 0
@@ -68,30 +73,8 @@ configuration:
     maxBoardTempCount: 100
     maxCurrent: 3000
     maxCurrentCount: 220
-    timeout: 200
+    timeout: 2000
     pwmStepPerMs: 20
-    controllerInputEncoder: :INTERNAL
-  - maxPWM: 0 
-    openCircuit: 0
-    maxMotorTemp: 0
-    maxMotorTempCount: 0
-    maxBoardTemp: 80
-    maxBoardTempCount: 100
-    maxCurrent: 0
-    maxCurrentCount: 0
-    timeout: 0
-    pwmStepPerMs: 0
-    controllerInputEncoder: :INTERNAL
-  - maxPWM: 0
-    openCircuit: 0
-    maxMotorTemp: 0
-    maxMotorTempCount: 0
-    maxBoardTemp: 80
-    maxBoardTempCount: 100
-    maxCurrent: 0
-    maxCurrentCount: 0
-    timeout: 0
-    pwmStepPerMs: 0
     controllerInputEncoder: :INTERNAL
 # no documentation available for this property
 #metadata:
