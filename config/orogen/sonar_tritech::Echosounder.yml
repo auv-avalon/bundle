@@ -3,7 +3,7 @@
 # no documentation available for this property
 baudrate: 115200
 # timeout for the dst micron dst echo sounder.
-echo_sounder_timeout: 4.0
+echo_sounder_timeout: 1000 
 # no documentation available for this property
 ground_frame: echosounder_frame
 # the device port

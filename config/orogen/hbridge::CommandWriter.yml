@@ -10,7 +10,7 @@ configuration:
     maxMotorTemp: 0
     maxMotorTempCount: 0
     maxBoardTemp: 80
-    maxBoardTempCount: 0
+    maxBoardTempCount: 100
     maxCurrent: 3000
     maxCurrentCount: 220
     timeout: 200
@@ -32,7 +32,7 @@ configuration:
     maxMotorTemp: 0
     maxMotorTempCount: 0
     maxBoardTemp: 80
-    maxBoardTempCount: 0
+    maxBoardTempCount: 100
     maxCurrent: 3000
     maxCurrentCount: 220
     timeout: 200
@@ -43,7 +43,7 @@ configuration:
     maxMotorTemp: 0
     maxMotorTempCount: 0
     maxBoardTemp: 80
-    maxBoardTempCount: 0
+    maxBoardTempCount: 100
     maxCurrent: 3000
     maxCurrentCount: 220
     timeout: 200
@@ -54,7 +54,7 @@ configuration:
     maxMotorTemp: 0
     maxMotorTempCount: 0
     maxBoardTemp: 80
-    maxBoardTempCount: 0
+    maxBoardTempCount: 100
     maxCurrent: 3000
     maxCurrentCount: 220
     timeout: 200
@@ -65,7 +65,7 @@ configuration:
     maxMotorTemp: 0
     maxMotorTempCount: 0
     maxBoardTemp: 80
-    maxBoardTempCount: 0
+    maxBoardTempCount: 100
     maxCurrent: 3000
     maxCurrentCount: 220
     timeout: 200
@@ -76,7 +76,7 @@ configuration:
     maxMotorTemp: 0
     maxMotorTempCount: 0
     maxBoardTemp: 80
-    maxBoardTempCount: 0
+    maxBoardTempCount: 100
     maxCurrent: 0
     maxCurrentCount: 0
     timeout: 0
@@ -87,7 +87,7 @@ configuration:
     maxMotorTemp: 0
     maxMotorTempCount: 0
     maxBoardTemp: 80
-    maxBoardTempCount: 0
+    maxBoardTempCount: 100
     maxCurrent: 0
     maxCurrentCount: 0
     timeout: 0

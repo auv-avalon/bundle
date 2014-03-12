@@ -6,7 +6,7 @@ comTimeout:
 configuration:
   config:
   - externalTempSensor: 0
-    statusFrequency: 10
+    statusFrequency: 100
     encoder_config_intern:
       ticksPerTurn: 0
       leapTickValue: 0
@@ -22,7 +22,7 @@ configuration:
       zeroPosition: 0.0
       type: :ENCODER_NONE
   - externalTempSensor: 0
-    statusFrequency: 10
+    statusFrequency: 100
     encoder_config_intern:
       ticksPerTurn: 0
       leapTickValue: 0
@@ -38,7 +38,7 @@ configuration:
       zeroPosition: 0.0
       type: :ENCODER_NONE
   - externalTempSensor: 0
-    statusFrequency: 10
+    statusFrequency: 100
     encoder_config_intern:
       ticksPerTurn: 0
       leapTickValue: 0
@@ -54,7 +54,7 @@ configuration:
       zeroPosition: 0.0
       type: :ENCODER_NONE
   - externalTempSensor: 0
-    statusFrequency: 10
+    statusFrequency: 100
     encoder_config_intern:
       ticksPerTurn: 0
       leapTickValue: 0
@@ -70,7 +70,7 @@ configuration:
       zeroPosition: 0.0
       type: :ENCODER_NONE
   - externalTempSensor: 0
-    statusFrequency: 10
+    statusFrequency: 100
     encoder_config_intern:
       ticksPerTurn: 0
       leapTickValue: 0
@@ -86,7 +86,7 @@ configuration:
       zeroPosition: 0.0
       type: :ENCODER_NONE
   - externalTempSensor: 0
-    statusFrequency: 10
+    statusFrequency: 100
     encoder_config_intern:
       ticksPerTurn: 0
       leapTickValue: 0
@@ -102,7 +102,7 @@ configuration:
       zeroPosition: 0.0
       type: :ENCODER_NONE
   - externalTempSensor: 0
-    statusFrequency: 10
+    statusFrequency: 100
     encoder_config_intern:
       ticksPerTurn: 0
       leapTickValue: 0
@@ -118,7 +118,7 @@ configuration:
       zeroPosition: 0.0
       type: :ENCODER_NONE
   - externalTempSensor: 0
-    statusFrequency: 10
+    statusFrequency: 100
     encoder_config_intern:
       ticksPerTurn: 0
       leapTickValue: 0
