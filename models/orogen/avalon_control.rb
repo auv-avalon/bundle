@@ -51,3 +51,7 @@ class AvalonControl::MotionControlTask
      
 end
 
+class AvalonControl::PositionControlTask
+    provides Base::AUVRelativeMotionControlledSystemSrv, :as => "controlled_system"
+    provides Base::AUVMotionControllerSrv, :as => "controller"
+end

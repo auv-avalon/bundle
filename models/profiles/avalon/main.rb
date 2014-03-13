@@ -96,6 +96,7 @@ module Avalon
 
             define 'base_loop', Base::ControlLoop.use('controller' => AvalonControl::MotionControlTask, 'controlled_system' => thrusterss_def)
             define 'relative_control_loop', ::Base::ControlLoop.use('controller' => AuvRelPosController::Task, 'controlled_system' => base_loop_def)
+            define 'position_control_loop', ::Base::ControlLoop.use('controller' =>  AvalonControl::PositionControlTask, 'controlled_system' => base_loop_def)
             #define 'base_loop', Base::ControlLoop.use('controller' => AvalonControl::MotionControlTask, 'controlled_system' => thrusters_def)
             #define 'relative_control_loop', ::Base::ControlLoop.use('controller' => AuvRelPosController::Task, 'controlled_system' => base_loop_def)
 
@@ -114,7 +115,7 @@ module Avalon
             use Wall::Detector => Wall::Detector.use(sonar_dev.with_conf('wall_servoing_right'))
 
 #            actuators = actuators_dev = robot.find_device("#{actuatorss}_actuators.#{thrusterss}")
-            use  Localization::ParticleDetector => Localization::ParticleDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev), sonar_dev)
+            use Base::PoseSrv => Localization::ParticleDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev), sonar_dev)
 #            use  Localization::ParticleDetector => Localization::ParticleDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev), sonar_dev,thrusters_def)
             define 'localization_detector', Localization::ParticleDetector
             define 'target_move', ::AvalonControl::SimplePosMove.use(relative_control_loop_def,localization_detector_def)
@@ -125,6 +126,9 @@ module Avalon
             
             define 'buoy_detector', Buoy::DetectorCmp
             define 'pipeline_detector', Pipeline::Detector
+            
+            use ::AvalonControl::SimplePosMove => ::AvalonControl::SimplePosMove.use(position_control_loop_def, localization_detector_def, AvalonControl::DephFusionCmp)
+            define 'target_move', ::AvalonControl::SimplePosMove
 
         end
     end

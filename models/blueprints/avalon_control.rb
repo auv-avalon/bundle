@@ -10,6 +10,11 @@ using_task_library "raw_control_command_converter"
 
 module AvalonControl
 
+    Base::ControlLoop.specialize Base::ControlLoop.controller_child => AvalonControl::PositionControlTask do
+        add Base::PoseSrv, :as => "pose"
+        pose_child.connect_to controller_child
+    end
+    
     Base::ControlLoop.specialize Base::ControlLoop.controller_child => AuvRelPosController::Task do
         add Base::OrientationWithZSrv, :as => "orientation_with_z"
         orientation_with_z_child.connect_to controller_child
@@ -86,8 +91,7 @@ module AvalonControl
     end
     
     class SimplePosMove < ::Base::ControlLoop
-        overload 'controller', AvalonControl::RelFakeWriter 
-#        overload 'controlled_system', AuvRelPosController::Task
+        overload 'controller', AvalonControl::RelFakeWriter
  
         argument :heading, :default => nil
         argument :depth, :default => nil

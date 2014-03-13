@@ -45,6 +45,7 @@ module Avalon
 
             define 'base_loop', Base::ControlLoop.use('controller' => AvalonControl::MotionControlTask.with_conf('default','simulation'), 'controlled_system' => thrusters_def)
             define 'relative_control_loop', ::Base::ControlLoop.use('controller' => AuvRelPosController::Task, 'controlled_system' => base_loop_def)
+            define 'position_control_loop', ::Base::ControlLoop.use('controller' =>  AvalonControl::PositionControlTask, 'controlled_system' => base_loop_def)
 
             use Base::AUVMotionControlledSystemSrv => base_loop_def
             use Base::AUVRelativeMotionControlledSystemSrv => relative_control_loop_def
@@ -62,10 +63,11 @@ module Avalon
 
             define 'sim', ::Simulation::Mars
 
-            use  Localization::ParticleDetector => Localization::ParticleDetector.use(imu_def, sonar_def,thrusters_def)
+            use ::Base::PoseSrv => Localization::ParticleDetector.use(imu_def, sonar_def,thrusters_def)
             define 'localization_detector', Localization::ParticleDetector
             
-            use ::AvalonControl::SimplePosMove => ::AvalonControl::SimplePosMove.use(relative_control_loop_def,localization_detector_def)
+            use ::AvalonControl::SimplePosMove => ::AvalonControl::SimplePosMove.use(position_control_loop_def, localization_detector_def, imu_def)
+            define 'target_move', ::AvalonControl::SimplePosMove
 
         end
     end
