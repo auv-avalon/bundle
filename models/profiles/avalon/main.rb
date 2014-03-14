@@ -115,8 +115,12 @@ module Avalon
 
 #            actuators = actuators_dev = robot.find_device("#{actuatorss}_actuators.#{thrusterss}")
             use  Localization::ParticleDetector => Localization::ParticleDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev).use(AvalonControl::MotionControlTask), sonar_dev)
+            use  Localization::HoughDetector => Localization::HoughDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev).use(AvalonControl::MotionControlTask), sonar_dev)
+            use  Localization::HoughParticleDetector => Localization::HoughParticleDetector
 #            use  Localization::ParticleDetector => Localization::ParticleDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev), sonar_dev,thrusters_def)
+            define 'hough_detector', Localization::HoughDetector
             define 'localization_detector', Localization::ParticleDetector
+            define 'hough_localization_detector', Localization::HoughParticleDetector
             define 'target_move', ::AvalonControl::SimplePosMove.use(relative_control_loop_def,localization_detector_def)
 
             define 'depth_fusion', AvalonControl::DephFusionCmp
