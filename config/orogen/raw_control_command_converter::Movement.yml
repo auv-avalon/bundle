@@ -1,3 +1,4 @@
 --- name:default
 diveScale: 9.0 
 turnScale: 1.0
+delta_depth_control: true

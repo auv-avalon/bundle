@@ -1,19 +1,19 @@
 --- name:default
 # Maximum allowed Value between 0 and 1 that is an cutoff for maximum pwm value 0.8 means 80% PWM
-#cutoff: 
-#  - 0
-#  - 0
-#  - 0
-#  - 0
-#  - 0
-#  - 0
 cutoff: 
-  - 0.65
-  - 0.65
-  - 0.65
-  - 0.65
-  - 0.65
-  - 0.6
+    #      - 0
+    # - 0
+    # - 0
+    # - 0
+    # - 0
+    #- 0
+#cutoff: 
+  - 0.9
+  - 0.9
+  - 0.9
+  - 0.9
+  - 0.9
+  - 0.9
 # no documentation available for this property
 heading_pid: 
   max: 0.6
@@ -24,10 +24,10 @@ heading_pid:
 # no documentation available for this property
 pitch_pid: 
   max: 1.0
-  d: 1.0
-  p: 2.0 #2.0
+  d: 0
+  p: -2.0 #2.0
   min: -1.0
-  i: 0.2
+  i: -0.2
 # no documentation available for this property
 pitch_target: 0.0  #0.122173047639603
 # no documentation available for this property
@@ -46,9 +46,10 @@ z_pid:
   d: 0.0 #0.1
   p: 1.0
   min: -1.0
-  i: -0.02
+  i: 0.02
 use_min_ground_distance: true 
 min_ground_distance: 0.6
+joint_names: ["yaw","dive","right","left","pitch","strave"]
 --- name:simulation
 z_coupling_factor: 0.0
 y_coupling_factor: 0.0
@@ -75,3 +76,4 @@ cutoff:
   - 1.0 
 use_min_ground_distance: false 
 min_ground_distance: 0.2
+joint_names: ["right","left","dive","pitch","strave","yaw"]

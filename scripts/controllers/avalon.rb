@@ -24,10 +24,16 @@ class AvalonControl::DephFusionCmp
 end
 Robot.sysmon_dev!
 Robot.depth_fusion_def!
-Robot.joystick_dev!
-Robot.buoy_detector_def!
-Robot.pipeline_detector_def!
-Robot.joystick.def!
+Robot.joystick_control_def!
+
+Robot.actuatorss_sensors_dev!
+Robot.front_camera_dev!
+#Robot.sonar_dev!
+#Robot.buoy_detector_def!
+#Robot.pipeline_detector_def!
+#Robot.localization_detector_def!
+
+
 #bl = Robot.base_loop_def!
 #buoy = Robot.buoyancy_def!
 

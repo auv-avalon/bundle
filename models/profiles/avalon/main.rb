@@ -62,9 +62,9 @@ module Avalon
 #                    with_conf('default', 'can0')
 
                 through 'can0' do
-                    device(Dev::Controldev::CANJoystick, :as => 'joystick').
+                    device(Dev::Controldev::Raw, :as => 'joystick').
                         period(0.1).
-                        can_id(0x100,0x7FF)
+                        can_id(0x502,0x7FF)
 
                     device(Dev::Sensors::DepthReader, :as => 'depth_reader').
                         prefer_deployed_tasks('depth').
@@ -77,7 +77,7 @@ module Avalon
 #                        period(0.1)
 
                     device(Dev::SystemStatus, :as => 'sysmon').
-                        can_id(0x101,0x7FF).
+                        can_id(0x541,0x7FF).
                         period(0.1)
                 end
                 
@@ -115,7 +115,8 @@ module Avalon
             use Wall::Detector => Wall::Detector.use(sonar_dev.with_conf('wall_servoing_right'))
 
 #            actuators = actuators_dev = robot.find_device("#{actuatorss}_actuators.#{thrusterss}")
-            use Base::PoseSrv => Localization::ParticleDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev), sonar_dev)
+            use  Base::PoseSrv => Localization::ParticleDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev).use(AvalonControl::MotionControlTask), sonar_dev)
+
 #            use  Localization::ParticleDetector => Localization::ParticleDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev), sonar_dev,thrusters_def)
             define 'localization_detector', Localization::ParticleDetector
             define 'target_move', ::AvalonControl::SimplePosMove.use(relative_control_loop_def,localization_detector_def)

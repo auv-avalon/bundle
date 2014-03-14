@@ -4,9 +4,9 @@ comTimeout:
   microseconds: 500000 
 # Configuration for all hbridges (initial values)
 configuration:
-  config:
-  - externalTempSensor: 0
-    statusFrequency: 10
+  - name: 'right'
+    externalTempSensor: 0
+    statusFrequency: 1
     encoder_config_intern:
       ticksPerTurn: 0
       leapTickValue: 0
@@ -21,8 +21,9 @@ configuration:
       ticksPerTurnDivided: 0
       zeroPosition: 0.0
       type: :ENCODER_NONE
-  - externalTempSensor: 0
-    statusFrequency: 10
+  - name: 'left'
+    externalTempSensor: 0
+    statusFrequency: 1
     encoder_config_intern:
       ticksPerTurn: 0
       leapTickValue: 0
@@ -37,8 +38,9 @@ configuration:
       ticksPerTurnDivided: 0
       zeroPosition: 0.0
       type: :ENCODER_NONE
-  - externalTempSensor: 0
-    statusFrequency: 10
+  - name: 'dive'
+    externalTempSensor: 0
+    statusFrequency: 1
     encoder_config_intern:
       ticksPerTurn: 0
       leapTickValue: 0
@@ -53,8 +55,9 @@ configuration:
       ticksPerTurnDivided: 0
       zeroPosition: 0.0
       type: :ENCODER_NONE
-  - externalTempSensor: 0
-    statusFrequency: 10
+  - name: 'pitch'
+    externalTempSensor: 0
+    statusFrequency: 1
     encoder_config_intern:
       ticksPerTurn: 0
       leapTickValue: 0
@@ -69,8 +72,9 @@ configuration:
       ticksPerTurnDivided: 0
       zeroPosition: 0.0
       type: :ENCODER_NONE
-  - externalTempSensor: 0
-    statusFrequency: 10
+  - name: 'strave'
+    externalTempSensor: 0
+    statusFrequency: 1
     encoder_config_intern:
       ticksPerTurn: 0
       leapTickValue: 0
@@ -85,40 +89,9 @@ configuration:
       ticksPerTurnDivided: 0
       zeroPosition: 0.0
       type: :ENCODER_NONE
-  - externalTempSensor: 0
-    statusFrequency: 10
-    encoder_config_intern:
-      ticksPerTurn: 0
-      leapTickValue: 0
-      tickDivider: 1
-      ticksPerTurnDivided: 0
-      zeroPosition: 0.0
-      type: :ENCODER_NONE
-    encoder_config_extern:
-      ticksPerTurn: 0
-      leapTickValue: 0
-      tickDivider: 1
-      ticksPerTurnDivided: 0
-      zeroPosition: 0.0
-      type: :ENCODER_NONE
-  - externalTempSensor: 0
-    statusFrequency: 10
-    encoder_config_intern:
-      ticksPerTurn: 0
-      leapTickValue: 0
-      tickDivider: 1
-      ticksPerTurnDivided: 0
-      zeroPosition: 0.0
-      type: :ENCODER_NONE
-    encoder_config_extern:
-      ticksPerTurn: 0
-      leapTickValue: 0
-      tickDivider: 1
-      ticksPerTurnDivided: 0
-      zeroPosition: 0.0
-      type: :ENCODER_NONE
-  - externalTempSensor: 0
-    statusFrequency: 10
+  - name: 'yaw'
+    externalTempSensor: 0
+    statusFrequency: 1
     encoder_config_intern:
       ticksPerTurn: 0
       leapTickValue: 0
