@@ -32,9 +32,9 @@ module AvalonControl
         add Base::RawCommandControllerSrv, :as => 'rawCommand'
         add Base::OrientationWithZSrv, :as => 'orientation_with_z'
         add RawControlCommandConverter::Movement, :as => 'rawCommandConverter'
-        add Base::GroundDistanceSrv, :as => 'dist'
+        #add Base::GroundDistanceSrv, :as => 'dist'
         connect rawCommand_child => rawCommandConverter_child
-        connect dist_child.distance_port => rawCommandConverter_child.ground_distance_port
+        #connect dist_child.distance_port => rawCommandConverter_child.ground_distance_port
         connect orientation_with_z_child.orientation_z_samples_port => rawCommandConverter_child.orientation_readings_port
 
         export rawCommandConverter_child.motion_command_port

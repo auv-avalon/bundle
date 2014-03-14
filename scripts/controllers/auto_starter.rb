@@ -10,6 +10,7 @@ State.last_navigation_task = nil
 State.lowlevel_substate  = -1
 State.lowlevel_state = -1
 
+STATE_OVERRIDE = 0 
 
 #Define the possible modes that can be set
 #State.navigation_mode = ["drive_simple_def","buoy_def", "pipeline_def", "wall_right_def"]
@@ -20,6 +21,7 @@ def check_for_switch
         #Make sure nothing is running so far to prevent double-starting
         if State.current_mode.nil?
             #Check if the submode is a valid one
+            State.lowlevel_substate = STATE_OVERRIDE 
             if(State.navigation_mode[State.lowlevel_substate])
                 Robot.info "starting navigation mode #{State.navigation_mode[State.lowlevel_substate]}, we are currently at #{State.current_mode}"
                 State.current_submode = State.lowlevel_substate
@@ -52,6 +54,7 @@ end
 
 #Reading the Joystick task to react on changes if an statechage should be done...
 Roby.every(0.1, :on_error => :disable) do
+    State.lowlevel_substate = STATE_OVERRIDE 
 
     #Check wether we should stop an current operation mode
     if (State.lowlevel_state != 5 and  State.lowlevel_state != 3) or ((State.lowlevel_substate != State.current_submode) and State.current_submode)

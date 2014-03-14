@@ -6,7 +6,7 @@ comTimeout:
 configuration:
   - name: 'right'
     externalTempSensor: 0
-    statusFrequency: 100
+    statusFrequency: 1
     encoder_config_intern:
       ticksPerTurn: 0
       leapTickValue: 0
@@ -23,7 +23,7 @@ configuration:
       type: :ENCODER_NONE
   - name: 'left'
     externalTempSensor: 0
-    statusFrequency: 100
+    statusFrequency: 1
     encoder_config_intern:
       ticksPerTurn: 0
       leapTickValue: 0
@@ -40,7 +40,7 @@ configuration:
       type: :ENCODER_NONE
   - name: 'dive'
     externalTempSensor: 0
-    statusFrequency: 100
+    statusFrequency: 1
     encoder_config_intern:
       ticksPerTurn: 0
       leapTickValue: 0
@@ -57,7 +57,7 @@ configuration:
       type: :ENCODER_NONE
   - name: 'pitch'
     externalTempSensor: 0
-    statusFrequency: 100
+    statusFrequency: 1
     encoder_config_intern:
       ticksPerTurn: 0
       leapTickValue: 0
@@ -74,7 +74,7 @@ configuration:
       type: :ENCODER_NONE
   - name: 'strave'
     externalTempSensor: 0
-    statusFrequency: 100
+    statusFrequency: 1
     encoder_config_intern:
       ticksPerTurn: 0
       leapTickValue: 0
@@ -91,7 +91,7 @@ configuration:
       type: :ENCODER_NONE
   - name: 'yaw'
     externalTempSensor: 0
-    statusFrequency: 100
+    statusFrequency: 1
     encoder_config_intern:
       ticksPerTurn: 0
       leapTickValue: 0

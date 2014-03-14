@@ -4,7 +4,7 @@
 
 require 'scripts/controllers/main'
 require 'models/profiles/avalon/main'
-#require 'scripts/controllers/auto_starter'
+require 'scripts/controllers/auto_starter'
     
 
 class AvalonControl::DephFusionCmp
@@ -27,9 +27,11 @@ Robot.depth_fusion_def!
 Robot.joystick_control_def!
 
 Robot.actuatorss_sensors_dev!
-Robot.buoy_detector_def!
-Robot.pipeline_detector_def!
-Robot.localization_detector_def!
+Robot.front_camera_dev!
+#Robot.sonar_dev!
+#Robot.buoy_detector_def!
+#Robot.pipeline_detector_def!
+#Robot.localization_detector_def!
 
 
 #bl = Robot.base_loop_def!

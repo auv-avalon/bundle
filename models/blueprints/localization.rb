@@ -11,7 +11,7 @@ module Localization
         add Base::SonarScanProviderSrv, :as => 'sonar'
         add SonarFeatureEstimator::Task, :as => 'sonar_estimator'
         add ::Base::OrientationSrv, :as => 'ori'
-        add Base::JointsControlledSystemSrv, :as => 'hb'
+        add Base::JointsControllerSrv, :as => 'hb'
         connect sonar_child => sonar_estimator_child
         connect ori_child => sonar_estimator_child
         connect sonar_estimator_child => main_child

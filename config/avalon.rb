@@ -1,6 +1,6 @@
 #Front Machine
-#Syskit.conf.process_server 'front','192.168.128.50' #, :log_dir => '/mnt/logs/log', :result_dir => '/mnt/logs/results'
-Syskit.conf.process_server 'front','localhost' #, :log_dir => '/mnt/logs/log', :result_dir => '/mnt/logs/results'
+Syskit.conf.process_server 'front','192.168.128.50' #, :log_dir => '/mnt/logs/log', :result_dir => '/mnt/logs/results'
+#Syskit.conf.process_server 'front','localhost' #, :log_dir => '/mnt/logs/log', :result_dir => '/mnt/logs/results'
 
 Syskit.conf.use_deployment 'dynamixel', :on => "front"
 Syskit.conf.use_deployment 'front_camera', :on => "front"
@@ -42,4 +42,4 @@ Syskit.conf.use_deployment 'auv_waypoint_navigator'
 #Syskit.conf.use_deployment 'battery_management'
 Syskit.conf.use_deployment 'sonar_feature_estimator'
 
-Syskit.conf.disable_logging
+#Syskit.conf.disable_logging
