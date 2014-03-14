@@ -3,24 +3,62 @@ using_task_library 'auv_rel_pos_controller'
 using_task_library 'uw_particle_localization'
 using_task_library 'sonar_feature_estimator'
 #using_task_library 'hbridge'
+using_task_library 'sonar_wall_hough'
 
 
 module Localization
+
+    data_service_type 'HoughSrv' do
+        output_port "position", "/base/samples/RigidBodyState"
+        output_port "orientation_drift", "double"
+    end
+
     class ParticleDetector < Syskit::Composition
         add UwParticleLocalization::Task, :as => 'main'
         add Base::SonarScanProviderSrv, :as => 'sonar'
         add SonarFeatureEstimator::Task, :as => 'sonar_estimator'
         add ::Base::OrientationSrv, :as => 'ori'
         add Base::JointsControllerSrv, :as => 'hb'
+        add_optional ::Localization::HoughSrv, as: 'hough'
+
         connect sonar_child => sonar_estimator_child
         connect ori_child => sonar_estimator_child
+        connect ori_child => main_child
         connect sonar_estimator_child => main_child
         connect hb_child => main_child
-
+        connect hough_child => main_child.pose_update_port
 
         export main_child.pose_samples_port
+        export main_child.dead_reckoning_samples_port
         provides Base::PoseSrv, :as => 'pose'
     end
+
+    
+    class HoughDetector < Syskit::Composition
+        add SonarWallHough::Task, as: 'main'
+        add Base::SonarScanProviderSrv, as: 'sonar'
+        add Base::OrientationSrv, as: 'ori'
+        #add_optional Localization::ParticleDetector, as: 'pose'
+
+        connect sonar_child => main_child
+        connect ori_child => main_child
+        #connect pose_child => main_child
+
+        export main_child.position_port, as: 'position'
+        export main_child.orientation_drift_port, as: 'ori_drift'
+        provides HoughSrv, as: 'hough'
+    end
+               
+    class HoughParticleDetector < Syskit::Composition
+        add ParticleDetector.use(Localization::HoughDetector), :as => 'main'
+        #add Localization::HoughDetector.use(Localization::ParticleDetector), as: 'hough'
+        add Localization::HoughDetector, as: 'hough'
+        
+        export main_child.pose_samples_port
+        provides Base::PoseSrv, as: 'pose'
+
+    end
+
 
 #    class Follower < ::Base::ControlLoop
 #        add_main AvalonControl::RelFakeWriter, :as => "controller_local" 
