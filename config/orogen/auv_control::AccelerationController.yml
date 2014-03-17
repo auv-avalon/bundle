@@ -171,62 +171,62 @@ limits:
       position: .nan
       speed: .nan
       effort: .nan
-      raw: -0.68
+      raw: -1.0
     max: 
       position: .nan
       speed: .nan
       effort: .nan
-      raw: 0.68
+      raw: 1.0
   - min: 
       position: .nan
       speed: .nan
       effort: .nan
-      raw: -0.68
+      raw: -1.0
     max: 
       position: .nan
       speed: .nan
       effort: .nan
-      raw: 0.68
+      raw: 1.0
   - min: 
       position: .nan
       speed: .nan
       effort: .nan
-      raw: -0.68
+      raw: -1.0
     max: 
       position: .nan
       speed: .nan
       effort: .nan
-      raw: 0.68
+      raw: 1.0
   - min: 
       position: .nan
       speed: .nan
       effort: .nan
-      raw: -0.68
+      raw: -1.0
     max: 
       position: .nan
       speed: .nan
       effort: .nan
-      raw: 0.68
+      raw: 1.0
   - min: 
       position: .nan
       speed: .nan
       effort: .nan
-      raw: -0.68
+      raw: -1.0
     max: 
       position: .nan
       speed: .nan
       effort: .nan
-      raw: 0.68
+      raw: 1.0
   - min: 
       position: .nan
       speed: .nan
       effort: .nan
-      raw: -0.68
+      raw: -1.0
     max: 
       position: .nan
       speed: .nan
       effort: .nan
-      raw: 0.68
+      raw: 1.0
 # Matrix with size of 6 * n. n means the count of thrusters that are used.
 # The rows 0 to 2 of the matrix are the linear axis. The lines 3 to 5 of the
 # matrix are the angular axis.
@@ -259,17 +259,17 @@ matrix:
   - 0.0
   - 0.0
   - 0.0
-  - 0.0001
+  - 0.0
   - 0.0
   - 0.0
   - 0.0
   - -1.0
   - 0.0
-  - -0.8
+  - -1.0
   - 0.0
   - 0.0
   - 0.0
-  - -0.2
+  - -1.0
 # no documentation available for this property
 metadata:
   metadata: []
