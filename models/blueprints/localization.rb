@@ -1,8 +1,9 @@
 require 'models/blueprints/avalon'
+require 'models/blueprints/avalon_control'
 using_task_library 'auv_rel_pos_controller'
 using_task_library 'uw_particle_localization'
 using_task_library 'sonar_feature_estimator'
-#using_task_library 'hbridge'
+using_task_library 'hbridge'
 using_task_library 'sonar_wall_hough'
 
 
@@ -18,7 +19,8 @@ module Localization
         add Base::SonarScanProviderSrv, :as => 'sonar'
         add SonarFeatureEstimator::Task, :as => 'sonar_estimator'
         add ::Base::OrientationSrv, :as => 'ori'
-        add Base::JointsControllerSrv, :as => 'hb'
+        add Dev::Sensors::Hbridge, :as => 'hb'
+#        add Base::JointsControlledSystemSrv, :as => 'hb'
         add_optional ::Localization::HoughSrv, as: 'hough'
 
         connect sonar_child => sonar_estimator_child
