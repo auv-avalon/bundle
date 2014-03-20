@@ -42,4 +42,33 @@ Syskit.conf.use_deployment 'auv_waypoint_navigator'
 #Syskit.conf.use_deployment 'battery_management'
 Syskit.conf.use_deployment 'sonar_feature_estimator'
 
-Syskit.conf.disable_logging
+#Syskit.conf.disable_logging
+#
+Syskit.conf.exclude_from_log '/canbus/Message'
+Syskit.conf.exclude_from_log '/canbus/Statistics' 
+
+
+module Avalon 
+    class ShellInterface < Roby::Interface::CommandLibrary
+        def substate(substate)
+            State.lowlevel_substate = substate
+        end
+        command :substate, "set the current runstate for Avalon as substate pair",
+            :substate => "The given substate"
+
+        def setPosition(x,y,z,heading)
+            task = Orocos::TaskContext.get 'fake_rel_writer'
+            task.x = x
+            task.y = y
+            task.z = z
+            task.heading = heading/180.0*Math::PI
+        end
+        command :setPosition, "Set the position for the fake-writer this is a workaournd method",
+            :x => "x-pos",
+            :y => "y-pos",
+            :z => "z-pos",
+            :heading => "heading in degree!"
+    end
+end
+
+Roby::Interface::Interface.subcommand 'avalon', Avalon::ShellInterface, 'Commands specific to Avalon'
