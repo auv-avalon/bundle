@@ -12,6 +12,10 @@ module Localization
         output_port "position", "/base/samples/RigidBodyState"
         output_port "orientation_drift", "double"
     end
+    
+    data_service_type 'DeadReckoningSrv' do
+	  output_port "position", "/base/samples/RigidBodyState"
+    end
 
     class ParticleDetector < Syskit::Composition
         add UwParticleLocalization::Task, :as => 'main'
@@ -29,20 +33,30 @@ module Localization
         connect hough_child => main_child.pose_update_port
 
         export main_child.pose_samples_port
-        export main_child.dead_reckoning_samples_port
         provides Base::PoseSrv, :as => 'pose'
     end
 
+    class DeadReckoning < Syskit::Composition
+	add UwParticleLocalization::MotionModel, :as => 'main'
+	add ::Base::OrientationSrv, :as => 'ori'
+	add Base::JointsControllerSrv, :as => 'hb'
+	
+	connect ori_child => main_child
+	connect hb_child => main_child
+	
+	export main_child.pose_samples_port
+	provides DeadReckoningSrv, :as => 'pose'
+    end
     
     class HoughDetector < Syskit::Composition
         add SonarWallHough::Task, as: 'main'
         add Base::SonarScanProviderSrv, as: 'sonar'
         add Base::OrientationSrv, as: 'ori'
-        #add_optional Localization::ParticleDetector, as: 'pose'
+        add_optional Localization::DeadReckoning, as: 'dead'
 
         connect sonar_child => main_child
         connect ori_child => main_child
-        #connect pose_child => main_child
+        connect dead_child => main_child
 
         export main_child.position_port, as: 'position'
         export main_child.orientation_drift_port, as: 'ori_drift'
