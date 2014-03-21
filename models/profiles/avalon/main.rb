@@ -34,7 +34,7 @@ module Avalon
                     period(0.2)
 
                 device(Dev::Micron, :as => 'sonar').
-                    with_conf('default','maritime_hall').
+                    with_conf('default').
                     prefer_deployed_tasks("sonar").
                     period(0.1)
 
@@ -104,6 +104,7 @@ module Avalon
             use AvalonControl::DephFusionCmp => AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator)
 
             use Base::OrientationWithZSrv => AvalonControl::DephFusionCmp
+#            use Base::OrientationSrv => AvalonControl::DephFusionCmp
 
             use Base::AUVMotionControlledSystemSrv => base_loop_def
             use Base::AUVRelativeMotionControlledSystemSrv => relative_control_loop_def
@@ -112,7 +113,7 @@ module Avalon
             use Buoy::DetectorCmp => Buoy::DetectorCmp.use(front_camera_dev)
             use Pipeline::Detector => Pipeline::Detector.use(bottom_camera_dev)
             
-            use Wall::Detector => Wall::Detector.use(sonar_dev.with_conf('wall_servoing_right'))
+            #use Wall::Detector => Wall::Detector.use(sonar_dev.with_conf('wall_servoing_right'))
 
 #            actuators = actuators_dev = robot.find_device("#{actuatorss}_actuators.#{thrusterss}")
             use  Base::PoseSrv => Localization::ParticleDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev).use(AvalonControl::MotionControlTask), sonar_dev)
@@ -121,10 +122,11 @@ module Avalon
             use  Localization::HoughDetector => Localization::HoughDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev).use(AvalonControl::MotionControlTask), sonar_dev)
             use  Localization::HoughParticleDetector => Localization::HoughParticleDetector
 #            use  Localization::ParticleDetector => Localization::ParticleDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev), sonar_dev,thrusters_def)
-            define 'hough_detector', Localization::HoughDetector
-            define 'localization_detector', Localization::ParticleDetector
+            define 'hough_detector', Localization::HoughDetector.use(Base::OrientationSrv => PoseAvalon::DagonOrientationEstimator)
+            define 'localization_detector', Localization::ParticleDetector.use(sonar_dev.with_conf('default','maritime_hall'), Base::OrientationSrv => PoseAvalon::DagonOrientationEstimator)
+
             define 'hough_localization_detector', Localization::HoughParticleDetector
-            define 'target_move', ::AvalonControl::SimplePosMove.use(relative_control_loop_def,localization_detector_def)
+#            define 'target_move', ::AvalonControl::SimplePosMove.use(relative_control_loop_def,localization_detector_def)
 
             define 'depth_fusion', AvalonControl::DephFusionCmp
             
