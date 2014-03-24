@@ -7,4 +7,4 @@ echo_sounder_timeout: 1000
 # no documentation available for this property
 ground_frame: echosounder_frame
 # the device port
-port: '/dev/ttyS5'
+port: '/dev/ttyS0'

@@ -15,7 +15,7 @@ State.lowlevel_state = -1
 #Define the possible modes that can be set
 #State.navigation_mode = ["drive_simple_def","buoy_def", "pipeline_def", "wall_right_def"]
 
-State.navigation_mode = ["drive_simple_def","buoy_def", "pipeline_def", "wall_right_def", "target_move_def"]
+State.navigation_mode = ["drive_simple_def","buoy_def", "pipeline_def", "wall_right_def", "target_move_def", "pipe_ping_pong"]
 def check_for_switch
     if State.lowlevel_state == 5 or State.lowlevel_state == 3
         #Make sure nothing is running so far to prevent double-starting

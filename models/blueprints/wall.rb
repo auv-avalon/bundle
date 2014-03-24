@@ -1,4 +1,6 @@
 require 'models/blueprints/avalon'
+require 'models/blueprints/localization'
+
 using_task_library 'auv_rel_pos_controller'
 using_task_library 'wall_servoing'
 using_task_library 'sonar_feature_estimator'
@@ -12,7 +14,7 @@ module Wall
         add SonarFeatureEstimator::Task, :as => 'sonar_estimator'
         connect sonar_child => sonar_estimator_child
         add Base::OrientationWithZSrv, :as => "orienation_with_z"
-	add_optional Localization::DeadReckoningSrv, :as => "dead_reckoning"
+	add_optional ::Localization::DeadReckoningSrv, :as => "dead_reckoning"
         connect orienation_with_z_child => detector_child.orientation_sample_port
         connect sonar_estimator_child => detector_child
 	connect dead_reckoning_child => detector_child.position_sample_port

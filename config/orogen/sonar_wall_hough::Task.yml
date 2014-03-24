@@ -67,9 +67,9 @@ minLineVotesRatio: 0.05
 # Angular resolution of sonar (in degree)
 sensorAngularResolution: 1.8
 # Angular tolerance of linedetection
-sensorAngularTolerance: 18.0
+#sensorAngularTolerance: 18.0
 # Shows sonar peaks, houghspace and lines as debug
-show_debug: false
+show_debug: true 
 # enable sensor-correction by position_samples
 usePositionSamples: false
 # If the incoming beams should be filtered with a minimum filter first

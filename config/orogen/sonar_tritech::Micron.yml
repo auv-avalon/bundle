@@ -16,7 +16,7 @@ config:
   low_resolution: 0
   continous: 1
 # the device port
-port: /dev/ttyS7
+port: /dev/ttyS1
 # read_timeout
 read_timeout: 0.5
 # timeout for writing to the serial port in seconds

@@ -14,6 +14,7 @@ using_task_library 'auv_rel_pos_controller'
 using_task_library 'buoy'
 using_task_library 'camera_prosilica'
 using_task_library 'sysmon'
+using_task_library 'lights'
 
 
 module Avalon
@@ -71,6 +72,9 @@ module Avalon
                         can_id(0x440,0x7F0).
                         period(0.1).
                         with_conf('default')
+
+                    device(Dev::Actuators::Lights, :as => 'lights').
+                        can_id(0x503,0x7FF)
 
 #                    device(Dev::ExperimentMarkers, :as => 'marker').
 #                        can_id(0x1C0,0x7FF).
@@ -137,6 +141,7 @@ module Avalon
             
             use ::AvalonControl::SimplePosMove => ::AvalonControl::SimplePosMove.use(position_control_loop_def, localization_detector_def, AvalonControl::DephFusionCmp)
             define 'target_move', ::AvalonControl::SimplePosMove
+            define 'lights', Lights::Lights
 
         end
     end

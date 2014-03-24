@@ -1,4 +1,4 @@
---- name:default
+--- name:default_alt
 # effective sample size threshold controls the resampling timing and uses values between 0.0 and 1.0 particles
 effective_sample_size_threshold: 0.4
 # initial centre position for all particles
@@ -58,7 +58,7 @@ param_thrusterCoefficient: [0.005, 0.005,0.005,0.005,0.005,0.005,
 			    0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 --- name:simulation
 yaml_map: '/home/matthias/dev/avalon/orogen/uw_particle_localization/maps/nurc.yml'
---- name:maritime_hall
+--- name:default
 # uses the advanced motion model implemented in modul dagon/uwv_dynamic_model
 advanced_motion_model: false
 # maximum latency, in seconds, of the stream aligner. The aligner will start dropping samples if the difference between the last output and last input is greater than this
