@@ -42,11 +42,11 @@ y_factor: 0.6
 z_coupling_factor: -0.19
 # no documentation available for this property
 z_pid: 
-  max: 1.0
+  max: 0.3
   d: 0.0 #0.1
   p: 1.0
-  min: -1.0
-  i: 0.02
+  min: -0.3
+  i: 0.002
 use_min_ground_distance: true 
 min_ground_distance: 0.6
 joint_names: ["yaw","dive","right","left","pitch","strave"]

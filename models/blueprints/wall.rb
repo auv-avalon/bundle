@@ -47,6 +47,8 @@ module Wall
             self.corner_passed!
             Robot.info "Passed one corner, have passed #{self.num_corners}"
         end
+
+
     end
 
     class Follower < ::Base::ControlLoop
@@ -71,6 +73,18 @@ module Wall
         on :start do |event|
             Robot.info "Starting Wall Servoing"
             @start_time = Time.now
+            
+            
+            Robot.info "Starting wall detector reconfiguring sonar to wall_right"
+            @sonar_workaround = true 
+            @old_sonar_conf = sonar_child.conf
+        end
+        
+        on :stop do |e|
+            if not @sonar_workaround
+                Robot.info "Stopping Wall Servoing, reconfigure it in prev_state"
+                sonar_child.orocos_task.apply_conf(@old_sonar_conf,true)
+            end
         end
 
         poll do
@@ -86,7 +100,20 @@ module Wall
                     emit :success
                 end
             end
+
+            #Workaround sonar configs
+            if sonar_child.orocos_task.state == :RUNNING and @sonar_workaround
+                if sonar_child.orocos_task.config.continous == 1 
+                    STDOUT.puts "Overriding sonar config to wall right"
+                    sonar_child.orocos_task.apply_conf(['default','wall_servoing_right'],true)
+                    @sonar_workaround = false
+                else
+                    STDOUT.puts "Sonar config is fine did you solved the config issues? #{sonar_child.orocos_task.config.continous}"
+                end
+            end
         end
+        
+        
     end
 end
 

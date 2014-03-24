@@ -57,5 +57,6 @@ do_dynamic_aligning: 1
 weak_signal: 0.25
 align_during_check: 1
 change_search_direction_to_last_known_position: 1
+max_align_turn_speed_per_s: 0.314 #roughly 180deg in 10 sec
 --- name:simulation
 use_channel: 3

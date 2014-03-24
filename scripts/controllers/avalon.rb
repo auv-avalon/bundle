@@ -28,8 +28,8 @@ Robot.joystick_control_def!
 Robot.lights_def!
 
 #Robot.actuatorss_sensors_dev!
-Robot.front_camera_dev!
-#Robot.sonar_dev!
+#Robot.front_camera_dev!
+Robot.sonar_dev!
 #Robot.buoy_detector_def!
 #Robot.pipeline_detector_def!
 #Robot.localization_detector_def!

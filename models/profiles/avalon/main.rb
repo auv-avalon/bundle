@@ -35,7 +35,7 @@ module Avalon
                     period(0.2)
 
                 device(Dev::Micron, :as => 'sonar').
-                    with_conf('default').
+                    with_conf('default','maritime_hall').
                     prefer_deployed_tasks("sonar").
                     period(0.1)
 
@@ -127,7 +127,10 @@ module Avalon
             use  Localization::HoughParticleDetector => Localization::HoughParticleDetector
 #            use  Localization::ParticleDetector => Localization::ParticleDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev), sonar_dev,thrusters_def)
             define 'hough_detector', Localization::HoughDetector.use(Base::OrientationSrv => PoseAvalon::DagonOrientationEstimator)
-            define 'localization_detector', Localization::ParticleDetector.use(sonar_dev.with_conf('default','maritime_hall'), Base::OrientationSrv => PoseAvalon::DagonOrientationEstimator)
+            
+            define 'localization_detector', Localization::ParticleDetector.use(Base::OrientationSrv => PoseAvalon::DagonOrientationEstimator)
+
+
 
             define 'hough_localization_detector', Localization::HoughParticleDetector
 #            define 'target_move', ::AvalonControl::SimplePosMove.use(relative_control_loop_def,localization_detector_def)
@@ -142,6 +145,11 @@ module Avalon
             use ::AvalonControl::SimplePosMove => ::AvalonControl::SimplePosMove.use(position_control_loop_def, localization_detector_def, AvalonControl::DephFusionCmp)
             define 'target_move', ::AvalonControl::SimplePosMove
             define 'lights', Lights::Lights
+            
+            
+            define 'wall_right', Wall::Follower.use(WallServoing::SingleSonarServoing.with_conf('default','wall_right'), 'controlled_system' => Base::ControlLoop.use('controlled_system' => Base::AUVMotionControlledSystemSrv, 'controller' => AuvRelPosController::Task.with_conf('default','relative_heading')))
+
+            define 'wall_detector_right', Wall::Detector
 
         end
     end
