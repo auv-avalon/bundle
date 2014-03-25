@@ -1,4 +1,4 @@
---- name:default
+--- name:default_old
 # the angle between orientation-zero and basin zero (in degree)
 angleDelta: 0.0
 # Number of Angle steps collected in 1 bin in houghspace
@@ -31,9 +31,9 @@ basinWidth: 120.0
 maxDistance: 400
 minDistance: 2.5
 withMinimumFilter: 0
---- name:maritime_hall
+--- name:default
 # the angle between orientation-zero and basin zero (in degree)
-angleDelta: 27.47
+angleDelta: 0.0
 # Number of Angle steps collected in 1 bin in houghspace
 anglesPerBin: 2
 # Position of the sonar at Avalon, given as the relative x-Position to the origin of Avalon

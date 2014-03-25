@@ -38,7 +38,7 @@ init_sample_rejection: 100
 # start map for localization algorithm
 yaml_map: "<%= ENV['AUTOPROJ_PROJECT_BASE'] %>/avalon/orogen/uw_particle_localization/maps/nurc.yml"
 # interspersal ratio for hough position samples
-hough_interspersal_ratio: 0.1
+hough_interspersal_ratio: 0.3
 # streamaligner attributes
 aggregator_max_latency: 2.0
 laser_samples_period: 0.1
@@ -128,7 +128,7 @@ minimum_depth: 0.0
 # minimum number of perceptions before starting resampling
 minimum_perceptions: 5
 # no documentation available for this property
-orientation_offset: 0.47951
+orientation_offset: 0.0
 # minimum time, in s, between two sequential samples arrive on orientation_samples
 orientation_samples_period: 0.01
 # Thruster Coefficient Matrix, which sets the direction of the thruster force
@@ -376,7 +376,7 @@ param_thrusterCoefficient:
 # Thruster Volatage
 param_thrusterVoltage: 22.225
 # number of used particles
-particle_number: 100
+particle_number: 500
 # set history size for determing uncertainty_degree of best measurement samples
 perception_history_number: 8
 # sets pipeline covariance for defining measurement uncertainty

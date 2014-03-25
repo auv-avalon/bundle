@@ -1,0 +1,4 @@
+--- name:default
+north_offset: 1.57
+buffer_size: 10
+min_buffer_size: 3

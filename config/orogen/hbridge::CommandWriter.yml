@@ -9,9 +9,9 @@ configuration:
         maxPWM: 10000
         openCircuit: 0
         maxMotorTemp: 0
-        maxMotorTempCount: 0
+        #maxMotorTempCount: 0
         maxBoardTemp: 80
-        maxBoardTempCount: 100
+        #maxBoardTempCount: 100
         maxCurrent: 3000
         maxCurrentCount: 220
         timeout: 2000
@@ -22,9 +22,9 @@ configuration:
         maxPWM: 10000
         openCircuit: 0
         maxMotorTemp: 0
-        maxMotorTempCount: 0
+        #maxMotorTempCount: 0
         maxBoardTemp: 80
-        maxBoardTempCount: 0
+        #maxBoardTempCount: 0
         maxCurrent: 3000
         maxCurrentCount: 220
         timeout: 2000
@@ -35,9 +35,9 @@ configuration:
         maxPWM: 10000
         openCircuit: 0
         maxMotorTemp: 0
-        maxMotorTempCount: 0
+        #maxMotorTempCount: 0
         maxBoardTemp: 80
-        maxBoardTempCount: 100
+        #maxBoardTempCount: 100
         maxCurrent: 3000
         maxCurrentCount: 220
         timeout: 2000
@@ -48,9 +48,9 @@ configuration:
         maxPWM: 10000
         openCircuit: 0
         maxMotorTemp: 0
-        maxMotorTempCount: 0
+        #maxMotorTempCount: 0
         maxBoardTemp: 80
-        maxBoardTempCount: 100
+        #maxBoardTempCount: 100
         maxCurrent: 3000
         maxCurrentCount: 220
         timeout: 2000
@@ -61,9 +61,9 @@ configuration:
         maxPWM: 10000
         openCircuit: 0
         maxMotorTemp: 0
-        maxMotorTempCount: 0
+        #maxMotorTempCount: 0
         maxBoardTemp: 80
-        maxBoardTempCount: 100
+        #maxBoardTempCount: 100
         maxCurrent: 3000
         maxCurrentCount: 220
         timeout: 2000
@@ -74,9 +74,9 @@ configuration:
         maxPWM: 10000
         openCircuit: 0
         maxMotorTemp: 0
-        maxMotorTempCount: 0
+        #maxMotorTempCount: 0
         maxBoardTemp: 80
-        maxBoardTempCount: 100
+        #maxBoardTempCount: 100
         maxCurrent: 3000
         maxCurrentCount: 220
         timeout: 2000
