@@ -156,8 +156,8 @@ class Main < Roby::Actions::Interface
         pipeline = state pipeline_def(:heading => 0)
         pipeline2 = state pipeline_def(:heading => 3.13)
         start(pipeline)
-        transition(pipeline.end_of_pipe_event,pipeline2)
-        forward pipeline2.end_of_pipe_event, success_event
+        transition(pipeline.weak_signal_event,pipeline2)
+        forward pipeline2.weak_signal_event, success_event
     end
     
     describe("simple_move_tests")
