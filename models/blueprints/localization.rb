@@ -22,14 +22,14 @@ module Localization
         add UwParticleLocalization::Task, :as => 'main'
         add Base::SonarScanProviderSrv, :as => 'sonar'
         add SonarFeatureEstimator::Task, :as => 'sonar_estimator'
-        add ::Base::OrientationSrv, :as => 'ori'
+        add ::Base::OrientationWithZSrv, :as => 'ori'
         add Dev::Sensors::Hbridge, :as => 'hb'
 #        add Base::JointsControlledSystemSrv, :as => 'hb'
         add_optional ::Localization::HoughSrv, as: 'hough'
 
         connect sonar_child => sonar_estimator_child
-        connect ori_child => sonar_estimator_child
-        connect ori_child => main_child
+        connect ori_child => sonar_estimator_child.orientation_sample_port
+        connect ori_child => main_child.orientation_samples_port
         connect sonar_estimator_child => main_child
         connect hb_child => main_child
         connect hough_child => main_child.pose_update_port

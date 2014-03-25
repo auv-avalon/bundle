@@ -157,6 +157,6 @@ Roby.every(1, :on_error => :disable) do
     add_status(status, "heading", "(%.2f deg, %.2f rad)", State, [:pose, :orientation]) do |q|
         [q.yaw * 180.0 / Math::PI, q.yaw]
     end
-
+    add_status(status, "target z", "(%.2f m)", State, :target_depth) 
     Robot.info status.join(' ') if !status.empty?
 end
