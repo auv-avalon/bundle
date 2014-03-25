@@ -48,7 +48,9 @@ class AvalonControl::MotionControlTask
     provides Base::AUVMotionControlledSystemSrv, :as => "auv_motion_controlled"
     #provides Base::ActuatorControllerSrv, :as => "actuator_controller"
     provides Base::JointsControllerSrv, :as => "actuator_controller"
-     
+    on :timeout do
+        emit :failed
+    end
 end
 
 class AvalonControl::PositionControlTask
