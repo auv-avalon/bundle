@@ -11,17 +11,17 @@ class Main < Roby::Actions::Interface
     
 
 
-    describe("follow-pipe-and-turn-at-end-of-pipe").
-	oprional_arg('turn_dir', 'the turn direction').
-	required_arg('initial-heading', 'the heading for the pipe to follow').
-	required_arg('post-heading', 'the heading for the pipe to follow')
-    state_machine "follow-pipe-and-turn-at-end-of-pipe" do
-       follow = state pipeline_def(:heading => initial-heading, 	:speed_x => -PIPE_SPEED, :turn_dir=> turn_dir)
-       break = state pipeline_def(:heading => initial-heading, 	:speed_x => -PIPE_SPEED, :turn_dir=> turn_dir, :timeout => 10)
-       turn= state pipeline_def(:heading => post-heading, 	:speed_x => 0, 		 :turn_dir=> turn_dir)
+    describe("follow-pipe-a-turn-at-e-of-pipe").
+	optional_arg('turn_dir', 'the turn direction').
+	required_arg('initial_heading', 'the heading for the pipe to follow').
+	required_arg('post_heading', 'the heading for the pipe to follow')
+    state_machine "follow_pipe_a_turn_at_e_of_pipe" do
+       follow = state pipeline_def(:heading => initial_heading, 	:speed_x => PIPE_SPEED, :turn_dir=> turn_dir)
+       stop = state pipeline_def(:heading => initial_heading, 	:speed_x => -PIPE_SPEED, :turn_dir=> turn_dir, :timeout => 22)
+       turn= state pipeline_def(:heading => post_heading, 	:speed_x => 0, 		 :turn_dir=> turn_dir)
        start(follow)
-       transition(follow.weak_signal_event,break)
-       transition(break.success_event,turn)
+       transition(follow.weak_signal_event,stop)
+       transition(stop.success_event,turn)
        forward turn.follow_pipe_event, success_event
     end
 
@@ -30,15 +30,15 @@ class Main < Roby::Actions::Interface
     
     describe("Ping and Pong (once) on an pipeline")
     state_machine "pipe_ping_pong" do
-        pipeline = state follow-pipe-and-turn-at-end-of-pipe(:initial_heading => 0,:post_heading => 3.13)
-        pipeline2 = state follow-pipe-and-turn-at-end-of-pipe(:initial_heading => 3.13, :post_heading =>0)
+        pipeline = state follow_pipe_a_turn_at_e_of_pipe(:initial_heading => 0,:post_heading => 3.13)
+        pipeline2 = state follow_pipe_a_turn_at_e_of_pipe(:initial_heading => 3.13, :post_heading =>3.13)
         start(pipeline)
         transition(pipeline.success_event,pipeline2)
         forward pipeline2.success_event, success_event
     end
 
     describe("ping-pong-pipe-wall-back-to-pipe")
-    state_machine "ping-pong-pipe-wall-back-to-pipe" do
+    state_machine "ping_pong_pipe_wall_back_to_pipe" do
         ping_pong = state pipe_ping_pong
         wall = state wall_right_def(:max_corners => 2) 
 

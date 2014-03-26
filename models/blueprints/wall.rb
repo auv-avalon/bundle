@@ -70,6 +70,9 @@ module Wall
             controller_child.num_corners
         end
 
+        #workaround to access the sonar
+        add Base::SonarScanProviderSrv, :as => 'sonar'
+
         on :start do |event|
             Robot.info "Starting Wall Servoing"
             @start_time = Time.now
@@ -77,13 +80,23 @@ module Wall
             
             Robot.info "Starting wall detector reconfiguring sonar to wall_right"
             @sonar_workaround = true 
-            @old_sonar_conf = sonar_child.conf
+            if controller_local_child.sonar_child.respond_to?(:orocos_task)
+                @old_sonar_conf = controller_local_child.sonar_child.conf
+            else
+                #Simulation special case
+#                @old_sonar_conf = controller_local_child.sonar_child.children.to_a[1].conf
+            end
         end
         
         on :stop do |e|
             if not @sonar_workaround
                 Robot.info "Stopping Wall Servoing, reconfigure it in prev_state"
-                sonar_child.orocos_task.apply_conf(@old_sonar_conf,true)
+                if controller_local_child.sonar_child.respond_to?(:orocos_task)
+                    controller_local_child.sonar_child.orocos_task.apply_conf(@old_sonar_conf,true)
+                else
+                    #Simulation special case
+#                    controller_local_child.sonar_child.children.to_a[1].orocos_task.apply_conf(@old_sonar_conf,true)
+                end
             end
         end
 
@@ -102,13 +115,30 @@ module Wall
             end
 
             #Workaround sonar configs
-            if sonar_child.orocos_task.state == :RUNNING and @sonar_workaround
-                if sonar_child.orocos_task.config.continous == 1 
+            orocos_t = nil
+            if controller_local_child.sonar_child.respond_to?(:orocos_task)
+                orocos_t = controller_local_child.sonar_child.orocos_task
+            else
+                #Simulation special case
+                orocos_t = controller_local_child.sonar_child.children.to_a[1].orocos_task
+            end
+
+            if orocos_t.state == :RUNNING and @sonar_workaround
+                condition = true
+                if controller_local_child.sonar_child.respond_to?(:orocos_task)
+                    condition = orocos_t.config.continous == 1
+                else
+                    condition = false
+                    #Nothing for sim, workarounding always
+                end
+
+                if condition 
                     STDOUT.puts "Overriding sonar config to wall right"
-                    sonar_child.orocos_task.apply_conf(['default','wall_servoing_right'],true)
+                    orocos_t.apply_conf(['default','wall_servoing_right'],true)
                     @sonar_workaround = false
                 else
-                    STDOUT.puts "Sonar config is fine did you solved the config issues? #{sonar_child.orocos_task.config.continous}"
+                    @sonar_workaround = false
+                    #STDOUT.puts "Sonar config is fine did you solved the config issues? #{orocos_t.config.continous}"
                 end
             end
         end

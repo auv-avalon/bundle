@@ -75,7 +75,7 @@ thruster_direction:
   - 0.0
 - data:
   - 0.0
-  - -1.0
+  - 1.0
   - 0.0
 # no documentation available for this property
 joint_names: ["pitch","dive","right","left","yaw","strave"]
