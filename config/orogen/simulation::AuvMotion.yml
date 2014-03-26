@@ -45,12 +45,12 @@ square_damp:
   - 0.0
 # The square coefficients of the thrusters, the size of the list must be the amount of actuators
 thruster_coefficients:
-- 0.005
-- 0.005
-- 0.005
-- 0.005
-- 0.005
-- 0.005
+- 0.01
+- 0.01
+- 0.01
+- 0.01
+- 0.01
+- 0.01
 # no documentation available for this property
 thruster_direction:
 - data:
@@ -60,24 +60,25 @@ thruster_direction:
 - data:
   - 0.0
   - 0.0
+  - -1.0
+- data:
   - 1.0
+  - 0.0
+  - 0.0
 - data:
   - -1.0
   - 0.0
   - 0.0
 - data:
+  - 0.0
   - -1.0
-  - 0.0
-  - 0.0
-- data:
-  - 0.0
-  - 1.0
   - 0.0
 - data:
   - 0.0
   - -1.0
   - 0.0
 # no documentation available for this property
+joint_names: ["pitch","dive","right","left","yaw","strave"]
 thruster_position:
 - data:
   - -0.5955

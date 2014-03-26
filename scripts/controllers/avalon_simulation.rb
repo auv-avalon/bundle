@@ -31,6 +31,7 @@ Roby.every(1.0, :on_error => :disable) do
         if !State.buoyancy
             State.buoyancy = true 
             Robot.sonar_def!
+            Robot.thrusters_def! #For buoyancy
 #            Robot.bottom_cam_def!
 #            Robot.front_cam_def!
             Robot.imu_def!

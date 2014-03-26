@@ -76,4 +76,3 @@ cutoff:
   - 1.0 
 use_min_ground_distance: false 
 min_ground_distance: 0.2
-joint_names: ["right","left","dive","pitch","strave","yaw"]

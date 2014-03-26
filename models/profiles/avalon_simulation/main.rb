@@ -16,10 +16,10 @@ module Avalon
             use_profile AvalonBase
 
             define_simulated_device("bottom_cam", Dev::Simulation::Mars::Camera) do |dev|
-                dev.prefer_deployed_tasks(/bottom_camera/).with_conf("default","bottom_cam")
+                dev.prefer_deployed_tasks("bottom_camera").with_conf("default","bottom_cam")
             end
             define_simulated_device("front_cam", Dev::Simulation::Mars::Camera) do |dev|
-                dev.prefer_deployed_tasks(/front_camera/).with_conf("default","front_cam")
+                dev.prefer_deployed_tasks("front_camera").with_conf("default","front_cam")
             end
 #            define_simulated_device("buoyancy", Dev::Simulation::Mars::AuvController) do |dev|
 #                dev.with_conf("default")
@@ -68,6 +68,9 @@ module Avalon
             
             use ::AvalonControl::SimplePosMove => ::AvalonControl::SimplePosMove.use(position_control_loop_def, localization_detector_def, imu_def)
             define 'target_move', ::AvalonControl::SimplePosMove
+            
+            define 'wall_right', Wall::Follower.use(WallServoing::SingleSonarServoing.with_conf('default','wall_right'), 'controlled_system' => Base::ControlLoop.use('controlled_system' => Base::AUVMotionControlledSystemSrv, 'controller' => AuvRelPosController::Task.with_conf('default','relative_heading')))
+
 
         end
     end
