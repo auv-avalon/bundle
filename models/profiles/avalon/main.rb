@@ -1,6 +1,7 @@
 require "models/profiles/main"
 require "models/blueprints/avalon"
 require "models/blueprints/pose_avalon"
+require "models/blueprints/low_level"
 
 using_task_library 'controldev'
 using_task_library 'canbus'
@@ -143,7 +144,7 @@ module Avalon
             
             define 'localization_detector', Localization::ParticleDetector.use('hb' => actuatorss_sensors_dev, Base::OrientationSrv => PoseAvalon::DagonOrientationEstimator)
 
-
+            define 'low_level', LowLevel::Cmp
 
             define 'hough_localization_detector', Localization::HoughParticleDetector
 #            define 'target_move', ::AvalonControl::SimplePosMove.use(relative_control_loop_def,localization_detector_def)
