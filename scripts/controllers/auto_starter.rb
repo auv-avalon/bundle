@@ -7,6 +7,7 @@ State.current_mode = nil
 State.current_submode = nil
 State.run_start = nil
 State.last_navigation_task = nil
+State.localization_task = nil
 State.lowlevel_substate  = -1
 State.lowlevel_state = -1
 
@@ -17,6 +18,21 @@ State.lowlevel_state = -1
 
 State.navigation_mode = ["drive_simple_def","buoy_def", "pipeline_def", "wall_right_def", "target_move_def", "pipe_ping_pong"]
 def check_for_switch
+
+    #####  Checking wether we can start localication or not ############
+    if State.lowlevel_state == 5 or State.lowlevel_state == 3 or Sate.lowlevel_state == 2
+        if State.localization_task.nil?
+            nm, _ = Robot.send("#{State.navigation_mode[State.lowlevel_substate]}!")
+            State.localization_task = nm.as_service
+        end
+    else
+        if State.localization_task.nil?
+            Roby.plan.unmark_mission(State.localization_task.task)
+            State.localization_task = nil
+    end
+
+
+    #######################  Checking wether we can start some behaviour  ######################
     if State.lowlevel_state == 5 or State.lowlevel_state == 3
         #Make sure nothing is running so far to prevent double-starting
         if State.current_mode.nil?
