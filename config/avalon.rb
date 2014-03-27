@@ -54,6 +54,11 @@ module Avalon
         end
         command :substate, "set the current runstate for Avalon as substate pair",
             :substate => "The given substate"
+        
+	def reset_heading
+            Orocos::TaskContext.get('depth_orientation_fusion').resetInitialHeading
+	end
+	command :reset_heading, "Reset the orientation to zero -here-"
 
         def setPosition(x,y,z,heading)
             task = Orocos::TaskContext.get 'fake_rel_writer'
