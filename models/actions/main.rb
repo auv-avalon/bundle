@@ -45,13 +45,15 @@ class Main < Roby::Actions::Interface
         #now we are on the lower-left-corner (opposide from window)
          
         #parralel blindly drive and waiting for detection of pipe
-        find_pipe_back = state simple_move_def(:heading => Math::PI*-0.2, :speed_x => 2 ,:depth=>-5, :timeout=> 80)
+        align_to_pipe = state simple_move_def(:heading => Math::PI/3, :speed_x => 0 ,:depth=>-4, :timeout=> 20)
+        find_pipe_back = state simple_move_def(:heading => Math::PI/3, :speed_x => 0.3 ,:depth=>-3, :timeout=> 80)
         pipe_detector = state pipeline_detector_def
         pipe_detector.depends_on find_pipe_back, :role => "detector"
 
         start(ping_pong)
         transition(ping_pong.success_event, wall)
-        transition(wall.success_event,pipe_detector)
+        transition(wall.success_event,align_to_pipe)
+        transition(align_to_pipe.success_event,pipe_detector)
 
 	#timeout occured
         forward pipe_detector.failed_event, failed_event
