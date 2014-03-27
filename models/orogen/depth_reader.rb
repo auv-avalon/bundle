@@ -13,5 +13,10 @@ end
 
 class DepthReader::Task
     driver_for Dev::Sensors::DepthReader, :as => "depth_reader"
+    
+    on :water_ingress do |event|
+        ::State.water_ingress = true
+    end
+
 end
     

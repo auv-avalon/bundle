@@ -149,6 +149,8 @@ end
 Roby.every(1, :on_error => :disable) do
     status = []
 
+    Robot.warn "WATER INGRESS" if ::State.water_ingress
+
     add_status(status, "state", "%i", State, :lowlevel_state)
     add_status(status, "sub-state", "%i", State, :lowlevel_substate)
     add_status(status, "pos", "(x=%.2f y=%.2f z=%.2f)", State, [:pose, :position]) do |p|
