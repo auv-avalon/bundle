@@ -15,6 +15,7 @@ using_task_library 'buoy'
 using_task_library 'camera_prosilica'
 using_task_library 'sysmon'
 using_task_library 'lights'
+using_task_library 'modem_can'
 
 
 module Avalon
@@ -58,12 +59,12 @@ module Avalon
                     prefer_deployed_tasks("can").
                     with_conf('default','can0')
 
-#                com_bus(Dev::Bus::CAN, :as => 'can1').
-#                    prefer_deployed_tasks("can1").
-#                    with_conf('default', 'can0')
+                com_bus(Dev::Bus::CAN, :as => 'can1').
+                    prefer_deployed_tasks("can1").
+                    with_conf('default', 'can1')
 
                 through 'can0' do
-                    device(Dev::Controldev::Raw, :as => 'joystick').
+                    device(Dev::Controldev::Raw, :as => 'joystick', :using => Controldev::Remote).
                         period(0.1).
                         can_id(0x502,0x7FF)
 
@@ -83,12 +84,24 @@ module Avalon
                     device(Dev::SystemStatus, :as => 'sysmon').
                         can_id(0x541,0x7FF).
                         period(0.1)
+                    
+                    device(Dev::Sensors::Modem , :as => 'modem').
+                        can_id(0x541,0x7FF).
+                        period(0.1)
+                end
+
+                through 'can1' do
+                    device(Dev::Sensors::DepthReader, :as => 'depth_reader_rear').
+                        prefer_deployed_tasks('depth_rear').
+                        can_id(0x440,0x7F0).
+                        period(0.1).
+                        with_conf('default')
                 end
                 
 
             end
 
-            Hbridge.system(self,'can0','actuatorss','thrusterss',6, 3, 2, -1, 4, 5)
+            Hbridge.system(self,'can0','actuatorss','thrusters',6, 3, 2, -1, 4, 5)
 #            define 'thrusters', Hbridge::Task.dispatch('thrusters',[6, 3, 2, -1, 4, 5]).
 #                with_arguments('driver_dev' => thrusters_dev)
 
@@ -98,7 +111,7 @@ module Avalon
             use Base::GroundDistanceSrv => altimeter_dev
             use Base::ZProviderSrv => depth_reader_dev
 
-            define 'base_loop', Base::ControlLoop.use('controller' => AvalonControl::MotionControlTask, 'controlled_system' => thrusterss_def)
+            define 'base_loop', Base::ControlLoop.use('controller' => AvalonControl::MotionControlTask, 'controlled_system' => thrusters_def)
             define 'relative_control_loop', ::Base::ControlLoop.use('controller' => AuvRelPosController::Task, 'controlled_system' => base_loop_def)
             define 'position_control_loop', ::Base::ControlLoop.use('controller' =>  AvalonControl::PositionControlTask, 'controlled_system' => base_loop_def)
             #define 'base_loop', Base::ControlLoop.use('controller' => AvalonControl::MotionControlTask, 'controlled_system' => thrusters_def)
@@ -119,7 +132,7 @@ module Avalon
             
             #use Wall::Detector => Wall::Detector.use(sonar_dev.with_conf('wall_servoing_right'))
 
-#            actuators = actuators_dev = robot.find_device("#{actuatorss}_actuators.#{thrusterss}")
+#            actuators = actuators_dev = robot.find_device("#{actuatorss}_actuators.#{thrusters}")
             use  Base::PoseSrv => Localization::ParticleDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev).use(AvalonControl::MotionControlTask), sonar_dev)
 
             use  Localization::ParticleDetector => Localization::ParticleDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev).use(AvalonControl::MotionControlTask), sonar_dev)
@@ -128,7 +141,7 @@ module Avalon
 #            use  Localization::ParticleDetector => Localization::ParticleDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev), sonar_dev,thrusters_def)
             define 'hough_detector', Localization::HoughDetector.use(Base::OrientationSrv => PoseAvalon::DagonOrientationEstimator)
             
-            define 'localization_detector', Localization::ParticleDetector.use(Base::OrientationSrv => PoseAvalon::DagonOrientationEstimator)
+            define 'localization_detector', Localization::ParticleDetector.use('hb' => actuatorss_sensors_dev, Base::OrientationSrv => PoseAvalon::DagonOrientationEstimator)
 
 
 
