@@ -23,8 +23,8 @@ module Localization
         add Base::SonarScanProviderSrv, :as => 'sonar'
         add SonarFeatureEstimator::Task, :as => 'sonar_estimator'
         add ::Base::OrientationWithZSrv, :as => 'ori'
-        add Dev::Sensors::Hbridge, :as => 'hb'
-#        add Base::JointsControlledSystemSrv, :as => 'hb'
+        #add Dev::Sensors::Hbridge, :as => 'hb'
+        add Base::JointsStatusSrv, :as => 'hb'
         add_optional ::Localization::HoughSrv, as: 'hough'
 
         connect sonar_child => sonar_estimator_child
@@ -74,7 +74,6 @@ module Localization
         provides Base::PoseSrv, as: 'pose'
 
     end
-
 
 #    class Follower < ::Base::ControlLoop
 #        add_main AvalonControl::RelFakeWriter, :as => "controller_local" 

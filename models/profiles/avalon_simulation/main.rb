@@ -64,10 +64,10 @@ module Avalon
             define 'sim', ::Simulation::Mars
 
             use ::Base::PoseSrv => Localization::ParticleDetector.use(imu_def, sonar_def,thrusters_def)
-            define 'localization_detector', Localization::ParticleDetector
+            define 'localization_detector', Localization::ParticleDetector.use(imu_def, sonar_def,thrusters_def)
             
             use ::AvalonControl::SimplePosMove => ::AvalonControl::SimplePosMove.use(position_control_loop_def, localization_detector_def, imu_def)
-            define 'target_move', ::AvalonControl::SimplePosMove
+            define 'target_move', ::AvalonControl::SimplePosMove.use(position_control_loop_def, localization_detector_def, imu_def)
             
             define 'wall_right', Wall::Follower.use(sonar_def, WallServoing::SingleSonarServoing.with_conf('default','wall_right'), 'controlled_system' => Base::ControlLoop.use('controlled_system' => Base::AUVMotionControlledSystemSrv, 'controller' => AuvRelPosController::Task.with_conf('default','relative_heading')))
 
