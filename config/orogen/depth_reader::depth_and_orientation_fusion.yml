@@ -10,4 +10,4 @@ orientation_samples_period: 0.01
 # minimum system time in s between two status readings
 stream_aligner_status_period: 1.0
 # no documentation available for this property
-use_initial_heading: true
+use_initial_heading: false
