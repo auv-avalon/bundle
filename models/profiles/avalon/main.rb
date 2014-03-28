@@ -87,7 +87,7 @@ module Avalon
                         period(0.1)
                     
                     device(Dev::Sensors::Modem , :as => 'modem').
-                        can_id(0x541,0x7FF).
+                        can_id(0x504,0x7FF).
                         period(0.1)
                 end
 
