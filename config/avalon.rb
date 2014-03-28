@@ -61,15 +61,20 @@ module Avalon
             Orocos::TaskContext.get('depth_orientation_fusion').resetInitialHeading
 	end
 	command :reset_heading, "Reset the orientation to zero -here-"
+	
+        def reset_depth
+            Orocos::TaskContext.get('depth').resetPressure
+	end
+	command :reset_depth, "Reset the depth to zero -here-"
 
-        def setPosition(x,y,z,heading)
+        def set_position(x,y,z,heading)
             task = Orocos::TaskContext.get 'fake_rel_writer'
             task.x = x
             task.y = y
             task.z = z
             task.heading = heading/180.0*Math::PI
         end
-        command :setPosition, "Set the position for the fake-writer this is a workaournd method",
+        command :set_position, "Set the position for the fake-writer this is a workaournd method",
             :x => "x-pos",
             :y => "y-pos",
             :z => "z-pos",
