@@ -3,7 +3,7 @@ require 'models/profiles/main'
 class Main < Roby::Actions::Interface
 
     action_library
-     PIPE_SPEED=0.6
+     PIPE_SPEED=0.5
 
      def name
          "Avalon's Action library"
@@ -17,7 +17,7 @@ class Main < Roby::Actions::Interface
 	required_arg('post_heading', 'the heading for the pipe to follow')
     state_machine "follow_pipe_a_turn_at_e_of_pipe" do
        follow = state pipeline_def(:heading => initial_heading, 	:speed_x => PIPE_SPEED, :turn_dir=> turn_dir)
-       stop = state pipeline_def(:heading => initial_heading, 	:speed_x => -PIPE_SPEED, :turn_dir=> turn_dir, :timeout => 22)
+       stop = state pipeline_def(:heading => initial_heading, 	:speed_x => -PIPE_SPEED, :turn_dir=> turn_dir, :timeout => 8)
        turn= state pipeline_def(:heading => post_heading, 	:speed_x => 0, 		 :turn_dir=> turn_dir)
        start(follow)
        transition(follow.weak_signal_event,stop)

@@ -4,7 +4,7 @@ debugging: 1
 # default value of x
 default_x: 0.35
 # default depth of operation [meter]
-depth: -5.5
+depth: -6.3
 # distance to pipe [meter], 0 = disabled
 distance_to_pipe: 0.0
 # minimum confidence for finding a pipeline
