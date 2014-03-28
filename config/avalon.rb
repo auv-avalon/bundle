@@ -1,6 +1,7 @@
 #Front Machine
-#Syskit.conf.process_server 'front','192.168.128.50' #, :log_dir => '/mnt/logs/log', :result_dir => '/mnt/logs/results'
-Syskit.conf.process_server 'front','localhost' #, :log_dir => '/mnt/logs/log', :result_dir => '/mnt/logs/results'
+Syskit.conf.process_server 'front','192.168.128.50' #, :log_dir => '/mnt/logs/log', :result_dir => '/mnt/logs/results'
+#Syskit.conf.process_server 'front','localhost' #, :log_dir => '/mnt/logs/log', :result_dir => '/mnt/logs/results'
+
 
 Syskit.conf.use_deployment 'dynamixel', :on => "front"
 Syskit.conf.use_deployment 'front_camera', :on => "front"
