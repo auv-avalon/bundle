@@ -1,12 +1,12 @@
 --- name:default
 # no documentation available for this property
-longExposure: 15000
+#longExposure: 15000
 # the device port
 port: /dev/ttyS0
 # Sercutiry Overrite to make the laser working also until avalon not reaches the safe-depth
-securityOverride: 1
+#securityOverride: 1
 # no documentation available for this property
-shortExposure: 5000
+#shortExposure: 5000
 # no documentation available for this property
 #zIIR: 0.5
 # no documentation available for this property

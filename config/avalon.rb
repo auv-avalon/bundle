@@ -13,6 +13,7 @@ Syskit.conf.use_deployment 'pipeline_follower', :on => "front"
 Syskit.conf.use_deployment 'taskmon_front', :on => "front"
 Syskit.conf.use_deployment 'sonar_wall_hough', :on => "front"
 Syskit.conf.use_deployment 'lights', :on => "front"
+Syskit.conf.use_deployment 'low_level', :on => "front"
 
 #Rear machine
 Syskit.conf.use_deployment 'avalon_back_base_control'
