@@ -16,7 +16,7 @@ module PoseAvalon
         add XsensImu::Task, :as => 'imu'
         add FogKvh::Dsp3000Task, :as => 'fog'
 
-        imu_child.connect_to correction_child.absolute_orientation_port
+        #imu_child.connect_to correction_child.absolute_orientation_port
         estimator_child.connect_to correction_child.orientation_input_port
 
         imu_child.connect_to  estimator_child.imu_orientation_port
