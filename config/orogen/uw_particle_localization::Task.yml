@@ -41,7 +41,7 @@ yaml_map: "<%= ENV['AUTOPROJ_PROJECT_BASE'] %>/avalon/orogen/uw_particle_localiz
 hough_interspersal_ratio: 0.3
 # streamaligner attributes
 aggregator_max_latency: 2.0
-laser_samples_period: 0.1
+laser_samples_period: 0.01
 orientation_samples_period: 0.01
 thruster_samples_period: 0.01
 pipeline_samples_period: 0.1
@@ -116,7 +116,7 @@ init_variance:
 # no documentation available for this property
 joint_names: []
 # minimum time, in s, between two sequential samples arrive on laser_samples
-laser_samples_period: 0.1
+laser_samples_period: 0.01
 # no documentation available for this property
 metadata:
   metadata: []
@@ -268,9 +268,9 @@ param_linDampNeg:
   - 0.0
   - 0.0
 # mass of avalon
-param_mass: 65.0
+param_mass: 30.0
 # radius of avalon
-param_radius: 0.15
+param_radius: 0.8
 # no documentation available for this property
 param_sqDamp:
   rows: 6

@@ -11,21 +11,22 @@ class Main < Roby::Actions::Interface
     
 
 
+
     describe("follow-pipe-a-turn-at-e-of-pipe").
 	optional_arg('turn_dir', 'the turn direction').
 	required_arg('initial_heading', 'the heading for the pipe to follow').
 	required_arg('post_heading', 'the heading for the pipe to follow')
     state_machine "follow_pipe_a_turn_at_e_of_pipe" do
        follow = state pipeline_def(:heading => initial_heading, 	:speed_x => PIPE_SPEED, :turn_dir=> turn_dir)
-       stop = state pipeline_def(:heading => initial_heading, 	:speed_x => -PIPE_SPEED, :turn_dir=> turn_dir, :timeout => 8)
-       turn= state pipeline_def(:heading => post_heading, 	:speed_x => 0, 		 :turn_dir=> turn_dir)
+       stop = state pipeline_def(:heading => initial_heading, 	:speed_x => -PIPE_SPEED/2.0, :turn_dir=> turn_dir, :timeout => 5)
+       turn= state pipeline_def(:heading => post_heading, 	:speed_x => 0, 		 :turn_dir=> turn_dir, :timeout => 20)
        start(follow)
        transition(follow.weak_signal_event,stop)
        transition(stop.success_event,turn)
        forward turn.follow_pipe_event, success_event
+       forward turn.success_event, success_event
     end
 
-    
     
     
     describe("Ping and Pong (once) on an pipeline")
@@ -45,8 +46,8 @@ class Main < Roby::Actions::Interface
         #now we are on the lower-left-corner (opposide from window)
          
         #parralel blindly drive and waiting for detection of pipe
-        align_to_pipe = state simple_move_def(:heading => Math::PI/3, :speed_x => 0 ,:depth=>-4, :timeout=> 20)
-        find_pipe_back = state simple_move_def(:heading => Math::PI/3, :speed_x => 0.3 ,:depth=>-3, :timeout=> 80)
+        align_to_pipe = state simple_move_def(:heading => 0.65, :speed_x => 0 ,:depth=>-4, :timeout=> 20)
+        find_pipe_back = state simple_move_def(:heading => 0.65, :speed_x => 0.3 ,:depth=>-4, :timeout=> 80)
         pipe_detector = state pipeline_detector_def
         pipe_detector.depends_on find_pipe_back, :role => "detector"
 
@@ -61,6 +62,15 @@ class Main < Roby::Actions::Interface
         forward pipe_detector.check_candidate_event, success_event ##todo maybe use align_auv insted?
 
      end
+
+    describe("Ping and Pong (once) on an pipeline")
+    state_machine "rocking" do
+        s1 = state ping_pong_pipe_wall_back_to_pipe
+        s2 = state ping_pong_pipe_wall_back_to_pipe
+        start(s1)
+        transition(s1.success_event,s2)
+        transition(s2.success_event,s1)
+    end
 
 
     describe("simple_move_tests")

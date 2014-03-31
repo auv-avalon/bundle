@@ -16,7 +16,7 @@ State.lowlevel_state = -1
 #Define the possible modes that can be set
 #State.navigation_mode = ["drive_simple_def","buoy_def", "pipeline_def", "wall_right_def"]
 
-State.navigation_mode = ["drive_simple_def","buoy_def", "pipeline_def", "wall_right_def", "target_move_def", "pipe_ping_pong","ping_pong_pipe_wall_back_to_pipe"]
+State.navigation_mode = ["drive_simple_def","target_move_def","buoy_def", "pipeline_def", "wall_right_def", "target_move_def", "pipe_ping_pong","ping_pong_pipe_wall_back_to_pipe","rocking"]
 def check_for_switch
 #    #####  Checking wether we can start localication or not ############
 #    if State.lowlevel_state == 5 or State.lowlevel_state == 3 #or State.lowlevel_state == 2
