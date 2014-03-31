@@ -40,7 +40,7 @@ module Localization
 
     class DeadReckoning < Syskit::Composition
 	add UwParticleLocalization::MotionModel, :as => 'main'
-	add ::Base::OrientationSrv, :as => 'ori'
+	add ::Base::OrientationWithZSrv, :as => 'ori'
 	add Base::JointsControllerSrv, :as => 'hb'
 	
 	connect ori_child => main_child
