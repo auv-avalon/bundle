@@ -9,6 +9,10 @@ using_task_library "raw_control_command_converter"
 
 
 module AvalonControl
+    DELTA_YAW = 0.1
+    DELTA_Z = 0.2
+    DELTA_XY = 2
+    DELTA_TIMEOUT = 2
 
     Base::ControlLoop.specialize Base::ControlLoop.controller_child => AvalonControl::PositionControlTask do
         add Base::PoseSrv, :as => "pose"
@@ -70,56 +74,102 @@ module AvalonControl
         argument :speed_x, :default => nil
         argument :speed_y, :default => nil
         argument :timeout, :default => nil
-    
+        argument :finish_when_reached, :default => nil #true when it should success, if nil then this composition never stops based on the position
+        argument :event_on_timeout, :default => :success
+        argument :delta_z, :default => DELTA_Z 
+        argument :delta_yaw, :default => DELTA_YAW
+        argument :delta_timeout, :default => DELTA_TIMEOUT 
+
         attr_reader :start_time
+        add Base::OrientationWithZSrv, :as => "reading"
 
         on :start do |ev|
                 @start_time = Time.now
                 Robot.info "Starting Drive simple #{self}"
                 erg = controller_child.update_config(:speed_x => speed_x, :heading => heading, :depth=> depth, :speed_y => speed_y)
+                @reader = reading_child.orientation_samples_port.reader
+                @last_invalid_post = Time.new
                 Robot.info "Updated config returned #{erg}"
         end
-    
+        
         poll do
-                if(self.timeout)
-                        if(@start_time + self.timeout < Time.now)
-                                Robot.info "Finished Simple Move becaue time is over! #{@start_time} #{@start_time + self.timeout}"
-                                emit :success
-                        end
+            if(self.timeout)
+                if(@start_time + self.timeout < Time.now)
+                    Robot.info "Finished Simple Move becaue time is over! #{@start_time} #{@start_time + self.timeout}"
+                    emit event_on_timeout 
                 end
+            end
+            if finish_when_reached
+                if @reader
+                    if pos = @reader.read
+                        if 
+                            (pos.position[2] - depth).abs < delta_z and
+                            (pos.orientation.yaw - heading).abs < delta_yaw #TODO WARNING make this correct under respect of wraps
+                                if (@last_invalid_pose + delta_timeout) < Time.new
+                                    emit :success
+                                end
+                        else
+                            @last_invalid_pose = Time.new
+                        end
+                    end
+                end
+            end
         end
     end
     
     class SimplePosMove < ::Base::ControlLoop
         overload 'controller', AvalonControl::RelFakeWriter
- 
+
         argument :heading, :default => nil
         argument :depth, :default => nil
         argument :x, :default => nil
         argument :y, :default => nil
         argument :timeout, :default => nil
+        argument :finish_when_reached, :default => nil #true when it should success, if nil then this composition never stops based on the position
+        argument :event_on_timeout, :default => :success
+        argument :delta_xy, :default => DELTA_XY
+        argument :delta_z, :default => DELTA_Z
+        argument :delta_yaw, :default => DELTA_YAW
+        argument :delta_timeout, :default => DELTA_TIMEOUT
     
         attr_reader :start_time
 
-#        add Base::PoseSrv, :as => 'pose'
+        add Base::PoseSrv, :as => 'pose'
         
-#        add AuvRelPosController::Task, :as => 'fusel'
-#        connect pose_child => fusel_child
- 
+        @reader = pose_child.pose_samples_port.reader 
         on :start do |ev|
                 @start_time = Time.now
                 Robot.info "Starting Position moving #{self}"
                 controller_child.update_config(:x => x, :heading => heading, :depth=> depth, :y => y)
+                @last_invalid_post = Time.new
         end
-    
+        
         poll do
-                if(self.timeout)
-                        if(@start_time + self.timeout < Time.now)
-                                Robot.info  "Finished Pos Mover becaue time is over! #{@start_time} #{@start_time + self.timeout}"
-                                emit :success
-                        end
+            if self.timeout
+                if(@start_time + self.timeout < Time.now)
+                    Robot.info  "Finished Pos Mover becaue time is over! #{@start_time} #{@start_time + self.timeout}"
+                    emit event_on_timeout 
                 end
+            end
+            if finish_when_reached
+                if @reader
+                    if pos = @reader.read
+                        if 
+                            (pos.position[0] - x).abs < delta_xy and
+                            (pos.position[1] - y).abs < delta_xy and
+                            (pos.position[2] - depth).abs < delta_z and
+                            (pos.orientation.yaw - heading).abs < delta_yaw #TODO WARNING make this correct under respect of wraps
+                                if (@last_invalid_pose + delta_timeout) < Time.new
+                                    emit :success
+                                end
+                        else
+                            @last_invalid_pose = Time.new
+                        end
+                    end
+                end
+            end
         end
+
     end
 
 end
