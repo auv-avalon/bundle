@@ -5,6 +5,7 @@ require "models/blueprints/buoy"
 require "models/blueprints/pipeline"
 require "models/blueprints/localization"
 require "models/blueprints/avalon_control"
+require "models/blueprints/auv_control"
 
 using_task_library 'controldev'
 using_task_library 'raw_control_command_converter'
@@ -27,7 +28,6 @@ module Avalon
             define 'pipeline', Pipeline::Follower.use('controlled_system' => Base::ControlLoop.use('controlled_system' => Base::AUVMotionControlledSystemSrv, 'controller' => AuvRelPosController::Task.with_conf('default','relative_heading')))
             define 'buoy', Buoy::FollowerCmp.use('controlled_system' => Base::ControlLoop.use('controlled_system' => Base::AUVMotionControlledSystemSrv, 'controller' => AuvRelPosController::Task.with_conf('default','absolute_heading')))
             define 'simple_move', ::AvalonControl::SimpleMove.use(Base::AUVMotionControlledSystemSrv)
-
 
 
 

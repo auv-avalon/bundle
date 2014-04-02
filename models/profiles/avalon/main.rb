@@ -165,6 +165,8 @@ module Avalon
 
             define 'wall_detector_right', Wall::Detector
 
+            #define 'world_controller', ::AuvControl::WorldPosition.use(localization_detector_def, 'controlled_system' => thrusters_def)
+            define 'world_controller', Base::ControlLoop.use('controller' => AuvControl::AccelerationController, 'controlled_system' => thrusters_def)
         end
     end
 end
