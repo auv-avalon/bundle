@@ -166,8 +166,13 @@ module Avalon
             define 'wall_detector_right', Wall::Detector
 
             #define 'world_controller', ::AuvControl::WorldPosition.use(localization_detector_def, 'controlled_system' => thrusters_def)
-            define 'world_controller', ::AuvControl::WorldPosition.use(thrusters_def, AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev).use(AvalonControl::MotionControlTask), sonar_dev)
+            #define 'world_controller', ::AuvControl::WorldPosition.use(thrusters_def, AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev).use(AvalonControl::MotionControlTask), sonar_dev)
             #define 'world_controller', Base::ControlLoop.use('controller' => AuvControl::AccelerationController, 'controlled_system' => thrusters_def)
+            
+            define 'world_controller', ::Base::ControlLoop.use(thrusters_def) #Hier fehlt nun noch etwas das das system steuer, z.B. den waypoint navigator
+
+            #Das ist hacky weil nicht sichergestellt wird dass es wirklich jemanden gibt der das system kontrolliert:
+            #define 'world_controller', ::AuvControl::WorldPositionCmp.use(thrusters_def) #.use(thrusters_def, AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev).use(AvalonControl::MotionControlTask), sonar_dev)
         end
     end
 end
