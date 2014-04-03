@@ -120,10 +120,10 @@ module AvalonControl
     class SimplePosMove < ::Base::ControlLoop
         overload 'controller', AvalonControl::RelFakeWriter
 
-        argument :heading, :default => nil
-        argument :depth, :default => nil
-        argument :x, :default => nil
-        argument :y, :default => nil
+        argument :heading, :default => 0
+        argument :depth, :default => -4 
+        argument :x, :default => 0
+        argument :y, :default => 0
         argument :timeout, :default => nil
         argument :finish_when_reached, :default => nil #true when it should success, if nil then this composition never stops based on the position
         argument :event_on_timeout, :default => :success
