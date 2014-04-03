@@ -134,7 +134,7 @@ minimum_depth: 0.0
 # minimum number of perceptions before starting resampling
 minimum_perceptions: 5
 # no documentation available for this property
-orientation_offset: -4.040796326794897
+orientation_offset: 0.0
 # minimum time, in s, between two sequential samples arrive on orientation_samples
 orientation_samples_period: 0.01
 # Thruster Coefficient Matrix, which sets the direction of the thruster force
