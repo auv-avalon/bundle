@@ -115,6 +115,7 @@ module Avalon
             define 'base_loop', Base::ControlLoop.use('controller' => AvalonControl::MotionControlTask, 'controlled_system' => thrusters_def)
             define 'relative_control_loop', ::Base::ControlLoop.use('controller' => AuvRelPosController::Task, 'controlled_system' => base_loop_def)
             define 'position_control_loop', ::Base::ControlLoop.use('controller' =>  AvalonControl::PositionControlTask, 'controlled_system' => base_loop_def)
+            define 'world_controller', ::Base::ControlLoop.use(thrusters_def, 'controlled_system' => AuvControl::WorldPositionCmp) #Hier fehlt nun noch etwas das das system steuer, z.B. den waypoint navigator
             #define 'base_loop', Base::ControlLoop.use('controller' => AvalonControl::MotionControlTask, 'controlled_system' => thrusters_def)
             #define 'relative_control_loop', ::Base::ControlLoop.use('controller' => AuvRelPosController::Task, 'controlled_system' => base_loop_def)
 
@@ -134,7 +135,8 @@ module Avalon
             #use Wall::Detector => Wall::Detector.use(sonar_dev.with_conf('wall_servoing_right'))
 
 #            actuators = actuators_dev = robot.find_device("#{actuatorss}_actuators.#{thrusters}")
-            use  Base::PoseSrv => Localization::ParticleDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev).use(AvalonControl::MotionControlTask), sonar_dev)
+            define 'pose', Localization::ParticleDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev).use(AvalonControl::MotionControlTask), sonar_dev)
+            use  Base::PoseSrv => pose_def # has no effet
 
             use  Localization::ParticleDetector => Localization::ParticleDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev).use(AvalonControl::MotionControlTask), sonar_dev)
             use  Localization::HoughDetector => Localization::HoughDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev).use(AvalonControl::MotionControlTask), sonar_dev)
@@ -165,14 +167,9 @@ module Avalon
 
             define 'wall_detector_right', Wall::Detector
 
-            #define 'world_controller', ::AuvControl::WorldPosition.use(localization_detector_def, 'controlled_system' => thrusters_def)
-            #define 'world_controller', ::AuvControl::WorldPosition.use(thrusters_def, AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev).use(AvalonControl::MotionControlTask), sonar_dev)
-            #define 'world_controller', Base::ControlLoop.use('controller' => AuvControl::AccelerationController, 'controlled_system' => thrusters_def)
             
-            define 'world_controller', ::Base::ControlLoop.use(thrusters_def, AuvControl::ConstantCommand) #Hier fehlt nun noch etwas das das system steuer, z.B. den waypoint navigator
+            define 'target_move_new', world_controller_def.use(pose_def, 'controller' => AuvControl::ConstantCommand) 
 
-            #Das ist hacky weil nicht sichergestellt wird dass es wirklich jemanden gibt der das system kontrolliert:
-            #define 'world_controller', ::AuvControl::WorldPositionCmp.use(thrusters_def) #.use(thrusters_def, AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev).use(AvalonControl::MotionControlTask), sonar_dev)
         end
     end
 end

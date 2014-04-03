@@ -4,6 +4,7 @@ require "rock/models/blueprints/pose"
 module Avalon
     Base::ControlLoop.declare 'AUVMotion', '/base/AUVMotionCommand'
     Base::ControlLoop.declare 'AUVRelativeMotion', '/base/AUVPositionCommand'
+    Base::ControlLoop.declare "WorldXYZRollPitchYaw", 'base/LinearAngular6DCommand'
 
     data_service_type 'ModemConnectionSrv' do
             input_port 'white_light', 'bool'

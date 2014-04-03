@@ -1,5 +1,5 @@
-require 'models/blueprints/auv_control'
+require 'models/blueprints/avalon'
 
-class AuvControl::ConstantCommandTask
-    provides Base::WorldXYZRollPitchYawControllerSrv, :as => "world_cmd"
+class AuvControl::ConstantCommand
+    provides ::Base::WorldXYZRollPitchYawControllerSrv, :as => "world_cmd"
 end

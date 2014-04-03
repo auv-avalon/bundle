@@ -2,6 +2,7 @@ require 'models/blueprints/auv_control_services'
 require 'rock/models/blueprints/control'
 require "models/blueprints/control"
 require "models/blueprints/localization"
+require "models/blueprints/avalon"
 
 using_task_library 'auv_control'
 
@@ -16,7 +17,6 @@ module AuvControl
         input_port 'Velocity_cmd', 'base/LinearAngular6DCommand'
     end
     
-    ::Base::ControlLoop.declare "WorldXYZRollPitchYaw", 'base/LinearAngular6DCommand'
     
     
 
