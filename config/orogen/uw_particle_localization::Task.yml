@@ -100,7 +100,7 @@ gps_position:
   - 0.0
   - 0.0
 # ratio for generating new particles after each hough measurement
-hough_interspersal_ratio: 0.1
+hough_interspersal_ratio: 0.01
 # initial centre position for all particles
 init_position:
 - 0.0
@@ -114,7 +114,13 @@ init_variance:
 - 20.0
 - 1.0
 # no documentation available for this property
-joint_names: []
+joint_names:
+- pitch
+- dive
+- right
+- left
+- yaw
+- strave
 # minimum time, in s, between two sequential samples arrive on laser_samples
 laser_samples_period: 0.01
 # no documentation available for this property
@@ -128,22 +134,22 @@ minimum_depth: 0.0
 # minimum number of perceptions before starting resampling
 minimum_perceptions: 5
 # no documentation available for this property
-orientation_offset: 0.0
+orientation_offset: -4.040796326794897
 # minimum time, in s, between two sequential samples arrive on orientation_samples
 orientation_samples_period: 0.01
 # Thruster Coefficient Matrix, which sets the direction of the thruster force
 param_TCM:
 - 0.0
 - 0.0
-- -1.0
-- -1.0
-- 0.0
-- 0.0
-- 0.0
-- 0.0
-- 0.0
-- 0.0
 - 1.0
+- -1.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.1
 - -1.0
 - 1.0
 - -1.0
@@ -184,7 +190,7 @@ param_centerOfGravity:
 # true, if density of avalon = density of water
 param_floating: true
 # length of avalon
-param_length: 1.4
+param_length: 1.0
 # no documentation available for this property
 param_linDamp:
   rows: 6
@@ -268,9 +274,9 @@ param_linDampNeg:
   - 0.0
   - 0.0
 # mass of avalon
-param_mass: 30.0
+param_mass: 6.5
 # radius of avalon
-param_radius: 0.8
+param_radius: 0.1
 # no documentation available for this property
 param_sqDamp:
   rows: 6
@@ -374,7 +380,7 @@ param_thrusterCoefficient:
 - 0.0
 - 0.0
 # Thruster Volatage
-param_thrusterVoltage: 22.225
+param_thrusterVoltage: 25.4
 # number of used particles
 particle_number: 500
 # set history size for determing uncertainty_degree of best measurement samples
@@ -398,7 +404,7 @@ pure_random_motion: false
 # automatic reset of particle filter after not receiving any perception for X seconds
 reset_timeout: 10.0
 # sets sonar covariance for defining measurement uncertainty
-sonar_covariance: 1.0
+sonar_covariance: 1.5
 # This factor is used to size up the covariance, when the sonar leads up to a corner
 sonar_covariance_corner_factor: 1.0
 # This factor is used, when the sonar-distance is in an range, at which a refelction from the water surface is possible
@@ -406,7 +412,7 @@ sonar_covariance_reflection_factor: 1.0
 # sets importance ratio for sonar perception updates
 sonar_importance: 1.0
 # set maximum distance for filtering sonar samples
-sonar_maximum_distance: 20.0
+sonar_maximum_distance: 25.0
 # set maximum distance for filtering sonar samples
 sonar_minimum_distance: 1.0
 # transformation of the sonar, with respect to the origin of avalon
@@ -421,11 +427,11 @@ sonar_vertical_angle: 0.52
 speed_samples_period: 0.01
 # sets a static covariance for speed samples
 static_motion_covariance:
-- 0.005
+- 0.05
 - 0.0
 - 0.0
 - 0.0
-- 0.005
+- 0.05
 - 0.0
 - 0.0
 - 0.0
