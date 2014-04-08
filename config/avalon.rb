@@ -16,7 +16,7 @@ Syskit.conf.use_deployment 'lights', :on => "front"
 Syskit.conf.use_deployment 'low_level', :on => "front"
 
 #Rear machine
-Syskit.conf.use_deployment 'avalon_back_base_control'
+Syskit.conf.use_deployment 'avalon_back_base_control'#, :valgrind => true
 Syskit.conf.use_deployment 'sonar_distance_estimator'
 #Syskit.conf.use_deployment 'state_estimator'
 Syskit.conf.use_deployment 'orientation_estimator'
@@ -42,12 +42,12 @@ Syskit.conf.use_deployment 'taskmon_back'
 Syskit.conf.use_deployment 'localization'
 #Syskit.conf.use_deployment 'battery_management'
 Syskit.conf.use_deployment 'sonar_feature_estimator'
-Syskit.conf.use_deployment 'orientation_correction'
+#Syskit.conf.use_deployment 'orientation_correction'
 
 #Syskit.warn "!!!!!!!   Logging disabled       !!!!"
 #Syskit.warn "!!!!!!!   Logging disabled       !!!!"
 #Syskit.conf.disable_logging
-#
+
 Syskit.conf.exclude_from_log '/canbus/Message'
 Syskit.conf.exclude_from_log '/canbus/Statistics' 
 

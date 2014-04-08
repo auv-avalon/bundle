@@ -87,8 +87,9 @@ module AvalonControl
                 @start_time = Time.now
                 Robot.info "Starting Drive simple #{self}"
                 erg = controller_child.update_config(:speed_x => speed_x, :heading => heading, :depth=> depth, :speed_y => speed_y)
-                @reader = reading_child.orientation_samples_port.reader
-                @last_invalid_post = Time.new
+                #@reader = reading_child.orientation_samples_port.reader
+                @reader = reading_child.pose_samples_port.reader 
+                @last_invalid_pose = Time.new
                 Robot.info "Updated config returned #{erg}"
         end
         
@@ -136,8 +137,8 @@ module AvalonControl
 
         add Base::PoseSrv, :as => 'pose'
         
-        @reader = pose_child.pose_samples_port.reader 
         on :start do |ev|
+                @reader = pose_child.pose_samples_port.reader 
                 @start_time = Time.now
                 Robot.info "Starting Position moving #{self}"
                 controller_child.update_config(:x => x, :heading => heading, :depth=> depth, :y => y)
@@ -147,10 +148,11 @@ module AvalonControl
         poll do
             if self.timeout
                 if(@start_time + self.timeout < Time.now)
-                    Robot.info  "Finished Pos Mover becaue time is over! #{@start_time} #{@start_time + self.timeout}"
+                    Robot.info  "Finished Pos Mover because time is over! #{@start_time} #{@start_time + self.timeout}"
                     emit event_on_timeout 
                 end
             end
+
             if finish_when_reached
                 if @reader
                     if pos = @reader.read
@@ -159,11 +161,19 @@ module AvalonControl
                             (pos.position[1] - y).abs < delta_xy and
                             (pos.position[2] - depth).abs < delta_z and
                             (pos.orientation.yaw - heading).abs < delta_yaw #TODO WARNING make this correct under respect of wraps
+                                current_timeout = (@last_invalid_pose + delta_timeout - Time.now).to_i
+                                @last_timeout = 0 if @last_timeout.nil?
+                                Robot.info "Got there, timeout in #{(@last_invalid_pose + delta_timeout - Time.now).to_i}" if (current_timeout - @last_timeout) >= 1
+                                @last_timeout = current_timeout if (current_timeout - @last_timeout) >= 1
+                                @reached_position = true
                                 if (@last_invalid_pose + delta_timeout) < Time.new
+                                    Robot.info "Hold Position, recalculating"
                                     emit :success
                                 end
                         else
+                            Robot.info "################### Bad Pose! ################" if @reached_position
                             @last_invalid_pose = Time.new
+                            @reached_position = false
                         end
                     end
                 end

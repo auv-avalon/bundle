@@ -380,7 +380,7 @@ param_thrusterCoefficient:
 - 0.0
 - 0.0
 # Thruster Volatage
-param_thrusterVoltage: 25.4
+param_thrusterVoltage: 26.5
 # number of used particles
 particle_number: 500
 # set history size for determing uncertainty_degree of best measurement samples

@@ -4,7 +4,7 @@ debugging: 1
 # default value of x
 default_x: 0.35
 # default depth of operation [meter]
-depth: -6.3
+depth: -6.6
 # distance to pipe [meter], 0 = disabled
 distance_to_pipe: 0.0
 # minimum confidence for finding a pipeline
@@ -49,7 +49,7 @@ preprocessing_type: 0
 # if the angle between the pipeline and the auv is bigger than delta_aligning the task goes into the state ALIGNING_AUV
 delta_aligning: 0.25
 # the pipeline is considert to be out of center if this value is smaller than the shortest distance in meter between the image center and the pipeline center --> turning will be disabled if the follower is in ALIGN_AUV
-max_center_dist: 0.4
+max_center_dist: 0.3
 # minimum
 min_center_dist: 0.2
 # fallback to ALIGN_AUV if out_of_center is exceeded during FOLLOWING_PIPE
@@ -57,7 +57,7 @@ do_dynamic_aligning: 1
 weak_signal: 0.25
 align_during_check: 1
 change_search_direction_to_last_known_position: false 
-max_align_turn_speed_per_s: 0.314 #roughly 180deg in 10 sec
+max_align_turn_speed_per_s: 0.0005 #roughly 180deg in 10 sec
 --- name:simulation
 use_channel: 3
 invert_colors: 0 

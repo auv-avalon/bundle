@@ -30,15 +30,15 @@ class Main < Roby::Actions::Interface
     describe("lawn_mover_over_pipe")
     state_machine "lawn_mover_over_pipe" do
         s1 = state target_move_def(:finish_when_reached => true, :heading => Math::PI/2.0, :depth => -4, :delta_timeout => 10, :x => -5, :y => 0)
-        s2 = state target_move_def(:finish_when_reached => true, :heading => Math::PI/2.0, :depth => -4, :delta_timeout => 10, :x => -5, :y => 10)
+        s2 = state target_move_def(:finish_when_reached => true, :heading => Math::PI/2.0, :depth => -4, :delta_timeout => 10, :x => -5, :y => 4)
         s3 = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 5)
-        s4 = state target_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 10, :x => 0, :y => 10)
+        s4 = state target_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 10, :x => 0, :y => 4)
         s5 = state simple_move_def(:finish_when_reached => true, :heading => -Math::PI/2.0, :depth => -4, :delta_timeout => 5)
         s6 = state target_move_def(:finish_when_reached => true, :heading => Math::PI/2.0, :depth => -4, :delta_timeout => 10, :x => 0, :y => 0)
         s7 = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 5)
         s8 = state target_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 10, :x => 5, :y => 0)
         s9 = state simple_move_def(:finish_when_reached => true, :heading => Math::PI/2.0, :depth => -4, :delta_timeout => 5)
-        s10 =state target_move_def(:finish_when_reached => true, :heading => Math::PI/2.0, :depth => -4, :delta_timeout => 10, :x => 5, :y => 5)
+        s10 =state target_move_def(:finish_when_reached => true, :heading => Math::PI/2.0, :depth => -4, :delta_timeout => 10, :x => 5, :y => 4)
 
         start(s1)
         transition(s1.success_event,s2)
@@ -53,7 +53,8 @@ class Main < Roby::Actions::Interface
         forward s10.success_event,success_event
     end
     
-    
+   
+
     describe("Ping and Pong (once) on an pipeline")
     state_machine "pipe_ping_pong" do
         pipeline = state follow_pipe_a_turn_at_e_of_pipe(:initial_heading => 0,:post_heading => 3.13)
@@ -63,16 +64,35 @@ class Main < Roby::Actions::Interface
         forward pipeline2.success_event, success_event
     end
     
+    describe("Ping and Pong inf on an pipeline")
+    state_machine "loop_pipe_ping_pong" do
+        s1 = state pipe_ping_pong
+        s2 = state pipe_ping_pong
+        start(s1)
+        transition(s1.success_event,s2)
+        transition(s2.success_event,s1)
+    end
+
+    
     describe("Find_pipe_with_localization")
     state_machine "find_pipe_with_localization" do
         find_pipe_back = state lawn_mover_over_pipe
         pipe_detector = state pipeline_detector_def
         pipe_detector.depends_on find_pipe_back, :role => "detector"
         start(pipe_detector)
-        forward pipe_detector.align_auv_event, :success_event
+        forward pipe_detector.align_auv_event, success_event
         forward pipe_detector,find_pipe_back.success_event,failed_event
     end
     
+    describe("to_window")
+    state_machine "to_window" do
+        s1 = state target_move_def(:finish_when_reached => true, :heading => 0, :depth => -5.5, :delta_timeout => 10, :x => 7, :y => 6.5)
+        s2 = state target_move_def(:finish_when_reached => true, :heading => 0, :depth => -5.5, :delta_timeout => 120, :x => 8, :y => 6.5)
+        start(s1)
+
+        transition s1.success_event, s2 
+        forward s2.success_event, success_event
+    end
 
 
 
@@ -84,20 +104,40 @@ class Main < Roby::Actions::Interface
         #now we are on the lower-left-corner (opposide from window)
          
         #parralel blindly drive and waiting for detection of pipe
-        align_to_pipe = state simple_move_def(:heading => 0.65, :speed_x => 0 ,:depth=>-4, :timeout=> 20)
-        find_pipe_back = state simple_move_def(:heading => 0.65, :speed_x => 0.3 ,:depth=>-4, :timeout=> 80)
-        pipe_detector = state pipeline_detector_def
-        pipe_detector.depends_on find_pipe_back, :role => "detector"
-
+        #align_to_pipe = state simple_move_def(:heading => 0.65, :speed_x => 0 ,:depth=>-4, :timeout=> 20)
+        #find_pipe_back = state simple_move_def(:heading => 0.65, :speed_x => 0.3 ,:depth=>-4, :timeout=> 80)
+        #pipe_detector = state pipeline_detector_def
+        #pipe_detector.depends_on find_pipe_back, :role => "detector"
+        find_pipe_back = state find_pipe_with_localization 
         start(ping_pong)
         transition(ping_pong.success_event, wall)
-        transition(wall.success_event,align_to_pipe)
-        transition(align_to_pipe.success_event,pipe_detector)
+        transition(wall.success_event,find_pipe_back)
+#        transition(wall.success_event,align_to_pipe)
+#        transition(align_to_pipe.success_event,pipe_detector)
 
 	#timeout occured
-        forward pipe_detector.failed_event, failed_event
+        forward find_pipe_back.failed_event, failed_event
         #we found back the pipeline
-        forward pipe_detector.check_candidate_event, success_event ##todo maybe use align_auv insted?
+        forward find_pipe_back.success_event, success_event ##todo maybe use align_auv insted?
+
+     end
+    
+    describe("ping-pong-pipe-wall-back-to-pipe")
+    state_machine "ping_pong_pipe_wall_back_to_pipe_with_window" do
+        ping_pong = state pipe_ping_pong
+        wall = state wall_right_def(:max_corners => 2) 
+        window = state to_window
+
+        find_pipe_back = state find_pipe_with_localization 
+        start(ping_pong)
+        transition(ping_pong.success_event, wall)
+        transition(wall.success_event,window)
+        transition(window.success_event,find_pipe_back)
+
+	#timeout occured
+        forward find_pipe_back.failed_event, failed_event
+        #we found back the pipeline
+        forward find_pipe_back.success_event, success_event ##todo maybe use align_auv insted?
 
      end
 
