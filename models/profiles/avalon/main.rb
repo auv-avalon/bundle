@@ -141,13 +141,13 @@ module Avalon
 #            use  Localization::HoughParticleDetector => Localization::HoughParticleDetector
 #            use  Localization::ParticleDetector => Localization::ParticleDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev), sonar_dev,thrusters_def)
             define 'hough_detector', Localization::HoughDetector.use(Base::OrientationSrv => PoseAvalon::DagonOrientationEstimator)
-            
-#            define 'localization_detector', Localization::ParticleDetector.use('hb' => actuatorss_sensors_dev, Base::OrientationSrv => PoseAvalon::DagonOrientationEstimator)
-            define 'localization_detector', Localization::ParticleDetector.use(Base::OrientationSrv => PoseAvalon::DagonOrientationEstimator)
+    
+            #Including hough
+            define 'localization_detector', Localization::ParticleDetector.use(hough_detector, Base::OrientationSrv => PoseAvalon::DagonOrientationEstimator)
 
             define 'low_level', LowLevel::Cmp
 
-            define 'hough_localization_detector', Localization::HoughParticleDetector
+#            define 'hough_localization_detector', Localization::HoughParticleDetector
 #            define 'target_move', ::AvalonControl::SimplePosMove.use(relative_control_loop_def,localization_detector_def)
 
             define 'depth_fusion', AvalonControl::DephFusionCmp

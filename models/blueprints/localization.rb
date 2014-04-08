@@ -66,15 +66,15 @@ module Localization
         provides HoughSrv, as: 'hough'
     end
                
-    class HoughParticleDetector < Syskit::Composition
-        add ParticleDetector.use(Localization::HoughDetector), :as => 'main'
-        #add Localization::HoughDetector.use(Localization::ParticleDetector), as: 'hough'
-        add Localization::HoughDetector, as: 'hough'
-        
-        export main_child.pose_samples_port
-        provides Base::PoseSrv, as: 'pose'
-
-    end
+#    class HoughParticleDetector < Syskit::Composition
+#        add ParticleDetector.use(Localization::HoughDetector), :as => 'main'
+#        #add Localization::HoughDetector.use(Localization::ParticleDetector), as: 'hough'
+#        add Localization::HoughDetector, as: 'hough'
+#        
+#        export main_child.pose_samples_port
+#        provides Base::PoseSrv, as: 'pose'
+#
+#    end
 
 #    class Follower < ::Base::ControlLoop
 #        add_main AvalonControl::RelFakeWriter, :as => "controller_local" 
