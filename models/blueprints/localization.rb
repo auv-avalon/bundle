@@ -19,8 +19,8 @@ module Localization
     end
 
     class ParticleDetector < Syskit::Composition
-        argument :basing_width, :default => 20
-        argument :basing_height, :default => 10
+        argument :basin_width, :default => 23 
+        argument :basin_height, :default => 19
 
         #View of the basin:
         # -------
@@ -63,22 +63,23 @@ module Localization
                 if sample = @reader.read
                     col = nil
                     row= nil
-                    if (sample.position[0] + width/2.0) < (width/3.0 * 1.0)
+                    if (sample.position[0] + basin_width/2.0) < (basin_width/3.0 * 1.0)
                         col = 0
-                    elsif (sample.position[0] + width/2.0) < (width/3.0 * 2.0)
+                    elsif (sample.position[0] + basin_width/2.0) < (basin_width/3.0 * 2.0)
                         col = 1
                     else
                         col = 2
                     end
-                    if (sample.position[1] + height/2.0) < (height/3.0 * 1.0)
-                        row = 0
-                    elsif (sample.position[0] + height/2.0) < (height/3.0 * 2.0)
+                    if (sample.position[1] + basin_height/2.0) < (basin_height/3.0 * 1.0)
+                        row = 2
+                    elsif (sample.position[1] + basin_height/2.0) < (basin_height/3.0 * 2.0)
                         row = 1
                     else
-                        row = 2
+                        row = 0
                     end
                     new_position = my_events[col+(3*row)]
                     if new_position != @position
+                        Robot.info "Got new position i'm on #{new_position}"
                         emit new_position
                         @position = new_position
                     end

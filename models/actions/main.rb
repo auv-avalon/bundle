@@ -94,21 +94,32 @@ class Main
         transition(wall2.success_event, window)
         transition(window.success_event, detector)
     end
-
-    describe("Find pipeline localization based, and to a infinite pipe-ping-pong on it")
-    state_machine "start_pipe_loopings" do 
+    
+    describe("Workaround1")
+    state_machine "wa1" do 
         s1 = state drive_to_pipeline
         detector = state pipeline_detector_def
         detector.depends_on s1
+        start detector
+        forward detector.align_auv_event, success_event 
+    end
+
+    describe("Find pipeline localization based, and to a infinite pipe-ping-pong on it")
+    state_machine "start_pipe_loopings" do 
         
+        detector = state wa1
+        #turn = state simple_move_def(:heading => -Math::PI, :timeout => 5) 
+
         pipeline1 = state pipe_ping_pong(:post_heading => 0)
         pipeline2 = state pipe_ping_pong(:post_heading => 0)
         
         start detector
 
-        transition(detector.align_auv_event, pipeline1)
+        transition(detector.success_event, pipeline1)
+#        transition(turn.success_event, pipeline1)
         transition(pipeline1.success_event, pipeline2)
         transition(pipeline2.success_event, pipeline1)
     end
+    
 
 end

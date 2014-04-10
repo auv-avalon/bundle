@@ -62,8 +62,8 @@ class Main < Roby::Actions::Interface
     describe("Ping and Pong (once) on an pipeline").
 	optional_arg('post_heading', 'The final heading of the AUV, after pipeline tracking',3.13)
     state_machine "pipe_ping_pong" do
-        pipeline = state follow_pipe_a_turn_at_e_of_pipe(:initial_heading => 0,:post_heading => 3.13, :turn_dir => 1)
-        pipeline2 = state follow_pipe_a_turn_at_e_of_pipe(:initial_heading => 3.13, :post_heading => post_heading, :turn_dir => 2)
+        pipeline = state follow_pipe_a_turn_at_e_of_pipe(:initial_heading => 3.13,:post_heading => 0, :turn_dir => 1)
+        pipeline2 = state follow_pipe_a_turn_at_e_of_pipe(:initial_heading => 0, :post_heading => post_heading, :turn_dir => 2)
         start(pipeline)
         transition(pipeline.success_event,pipeline2)
         forward pipeline2.success_event, success_event
@@ -100,30 +100,30 @@ class Main < Roby::Actions::Interface
     describe("drive_to_pipeline")
     state_machine "drive_to_pipeline" do
         
-        control = state simple_move_def(:heading => 0, :depth => -5, :timeout => 60) 
-        localization = state localization_detector_def 
-        localization.depends_on control, :role => "detector"
+#        control = state simple_move_def(:heading => 0, :depth => -5, :timeout => 60) 
+#        localization = state localization_detector_def 
+#        localization.depends_on control, :role => "detector"
+#
+#        bottom_left_corner =        state target_move_def(:finish_when_reached => true, :delta_timeout => 2  , :heading =>  Math::PI*0.5, :depth => -5, :x => -5, :y => -5)
+#        top_left_corner =           state target_move_def(:finish_when_reached => true, :delta_timeout => 2  , :heading =>  Math::PI*0.5, :depth => -5, :x => -5, :y =>  5)
+#        top_right_corner =          state target_move_def(:finish_when_reached => true, :delta_timeout => 2  , :heading =>  Math::PI*0.5, :depth => -5, :x =>  5, :y =>  5)
+        pipeline_check_position =   state target_move_def(:finish_when_reached => true,  :delta_timeout => 60, :heading => -Math::PI,     :depth => -6, :x =>  5, :y =>  7.5)
 
-        bottom_left_corner =        state target_move_def(:finish_when_reached => true, :delta_timeout => 2  , :heading =>  Math::PI*0.5, :depth => -5, :x => -5, :y => -5)
-        top_left_corner =           state target_move_def(:finish_when_reached => true, :delta_timeout => 2  , :heading =>  Math::PI*0.5, :depth => -5, :x => -5, :y =>  5)
-        top_right_corner =          state target_move_def(:finish_when_reached => true, :delta_timeout => 2  , :heading =>  Math::PI*0.5, :depth => -5, :x =>  5, :y =>  5)
-        pipeline_check_position =   state target_move_def(:finish_when_reached => true,  :delta_timeout => 60, :heading => -Math::PI,     :depth => -5, :x => -2, :y => -3)
+        start(pipeline_check_position)
 
-        start(localization)
-
-        forward localization.success_event, failed_event
-        transition(localization.position1_event, pipeline_check_position)
-        transition(localization.position2_event, pipeline_check_position) 
-        transition(localization.position3_event, pipeline_check_position)
-        transition(localization.position4_event, top_left_corner)
-        transition(localization.position5_event, top_left_corner)
-        transition(localization.position6_event, top_right_corner)
-        transition(localization.position7_event, top_left_corner)
-        transition(localization.position8_event, bottom_left_corner)
-        transition(localization.position9_event, bottom_left_corner)
-        transition(bottom_left_corner.success_event, top_left_corner)
-        transition(top_left_corner.success_event, pipeline_check_position)
-        transition(top_right_corner.success_event, pipeline_check_position)
+#        forward localization.success_event, failed_event
+#        transition(localization.position1_event, pipeline_check_position)
+#        transition(localization.position2_event, pipeline_check_position) 
+#        transition(localization.position3_event, pipeline_check_position)
+#        transition(localization.position4_event, top_left_corner)
+#        transition(localization.position5_event, top_left_corner)
+#        transition(localization.position6_event, top_right_corner)
+#        transition(localization.position7_event, top_left_corner)
+#        transition(localization.position8_event, bottom_left_corner)
+#        transition(localization.position9_event, bottom_left_corner)
+#        transition(bottom_left_corner.success_event, top_left_corner)
+#        transition(top_left_corner.success_event, pipeline_check_position)
+#        transition(top_right_corner.success_event, pipeline_check_position)
         forward pipeline_check_position.success_event, success_event #TODO better failed?, because this should never be reached the composition should be stopped before
     end
     
