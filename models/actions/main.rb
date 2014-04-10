@@ -1,98 +1,7 @@
-require 'models/profiles/main'
+require 'models/actions/core'
 
-class Main < Roby::Actions::Interface
+class Main
 
-    action_library
-     PIPE_SPEED=0.5
-
-     def name
-         "Avalon's Action library"
-     end
-    
-
-
-
-    describe("follow-pipe-a-turn-at-e-of-pipe").
-	optional_arg('turn_dir', 'the turn direction').
-	required_arg('initial_heading', 'the heading for the pipe to follow').
-	required_arg('post_heading', 'the heading for the pipe to follow')
-    state_machine "follow_pipe_a_turn_at_e_of_pipe" do
-       follow = state pipeline_def(:heading => initial_heading, 	:speed_x => PIPE_SPEED, :turn_dir=> turn_dir)
-       stop = state pipeline_def(:heading => initial_heading, 	:speed_x => -PIPE_SPEED/2.0, :turn_dir=> turn_dir, :timeout => 5)
-       turn= state pipeline_def(:heading => post_heading, 	:speed_x => 0, 		 :turn_dir=> turn_dir, :timeout => 20)
-       start(follow)
-       transition(follow.weak_signal_event,stop)
-       transition(stop.success_event,turn)
-       forward turn.follow_pipe_event, success_event
-       forward turn.success_event, success_event
-    end
-
-    describe("lawn_mover_over_pipe")
-    state_machine "lawn_mover_over_pipe" do
-        s1 = state target_move_def(:finish_when_reached => true, :heading => Math::PI/2.0, :depth => -4, :delta_timeout => 10, :x => -5, :y => 0)
-        s2 = state target_move_def(:finish_when_reached => true, :heading => Math::PI/2.0, :depth => -4, :delta_timeout => 10, :x => -5, :y => 4)
-        s3 = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 5)
-        s4 = state target_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 10, :x => 0, :y => 4)
-        s5 = state simple_move_def(:finish_when_reached => true, :heading => -Math::PI/2.0, :depth => -4, :delta_timeout => 5)
-        s6 = state target_move_def(:finish_when_reached => true, :heading => Math::PI/2.0, :depth => -4, :delta_timeout => 10, :x => 0, :y => 0)
-        s7 = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 5)
-        s8 = state target_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 10, :x => 5, :y => 0)
-        s9 = state simple_move_def(:finish_when_reached => true, :heading => Math::PI/2.0, :depth => -4, :delta_timeout => 5)
-        s10 =state target_move_def(:finish_when_reached => true, :heading => Math::PI/2.0, :depth => -4, :delta_timeout => 10, :x => 5, :y => 4)
-
-        start(s1)
-        transition(s1.success_event,s2)
-        transition(s2.success_event,s3)
-        transition(s3.success_event,s4)
-        transition(s4.success_event,s5)
-        transition(s5.success_event,s6)
-        transition(s6.success_event,s7)
-        transition(s7.success_event,s8)
-        transition(s8.success_event,s9)
-        transition(s9.success_event,s10)
-        forward s10.success_event,success_event
-    end
-    
-   
-
-    describe("Ping and Pong (once) on an pipeline")
-    state_machine "pipe_ping_pong" do
-        pipeline = state follow_pipe_a_turn_at_e_of_pipe(:initial_heading => 0,:post_heading => 3.13)
-        pipeline2 = state follow_pipe_a_turn_at_e_of_pipe(:initial_heading => 3.13, :post_heading =>3.13)
-        start(pipeline)
-        transition(pipeline.success_event,pipeline2)
-        forward pipeline2.success_event, success_event
-    end
-    
-    describe("Ping and Pong inf on an pipeline")
-    state_machine "loop_pipe_ping_pong" do
-        s1 = state pipe_ping_pong
-        s2 = state pipe_ping_pong
-        start(s1)
-        transition(s1.success_event,s2)
-        transition(s2.success_event,s1)
-    end
-
-    
-    describe("Find_pipe_with_localization")
-    state_machine "find_pipe_with_localization" do
-        find_pipe_back = state lawn_mover_over_pipe
-        pipe_detector = state pipeline_detector_def
-        pipe_detector.depends_on find_pipe_back, :role => "detector"
-        start(pipe_detector)
-        forward pipe_detector.align_auv_event, success_event
-        forward pipe_detector,find_pipe_back.success_event,failed_event
-    end
-    
-    describe("to_window")
-    state_machine "to_window" do
-        s1 = state target_move_def(:finish_when_reached => true, :heading => 0, :depth => -5.5, :delta_timeout => 10, :x => 7, :y => 6.5)
-        s2 = state target_move_def(:finish_when_reached => true, :heading => 0, :depth => -5.5, :delta_timeout => 120, :x => 8, :y => 6.5)
-        start(s1)
-
-        transition s1.success_event, s2 
-        forward s2.success_event, success_event
-    end
 
 
 
@@ -101,19 +10,12 @@ class Main < Roby::Actions::Interface
         ping_pong = state pipe_ping_pong
         wall = state wall_right_def(:max_corners => 2) 
 
-        #now we are on the lower-left-corner (opposide from window)
-         
-        #parralel blindly drive and waiting for detection of pipe
-        #align_to_pipe = state simple_move_def(:heading => 0.65, :speed_x => 0 ,:depth=>-4, :timeout=> 20)
-        #find_pipe_back = state simple_move_def(:heading => 0.65, :speed_x => 0.3 ,:depth=>-4, :timeout=> 80)
-        #pipe_detector = state pipeline_detector_def
-        #pipe_detector.depends_on find_pipe_back, :role => "detector"
+        
+        find_pipe_back = state find_pipe_with_localization 
         find_pipe_back = state find_pipe_with_localization 
         start(ping_pong)
         transition(ping_pong.success_event, wall)
         transition(wall.success_event,find_pipe_back)
-#        transition(wall.success_event,align_to_pipe)
-#        transition(align_to_pipe.success_event,pipe_detector)
 
 	#timeout occured
         forward find_pipe_back.failed_event, failed_event
@@ -141,7 +43,7 @@ class Main < Roby::Actions::Interface
 
      end
 
-    describe("Ping and Pong (once) on an pipeline")
+    describe("Do a pipeline ping-pong, pass two corners with wall servoing and goind back to pape")
     state_machine "rocking" do
         s1 = state ping_pong_pipe_wall_back_to_pipe
         s2 = state ping_pong_pipe_wall_back_to_pipe
@@ -150,22 +52,63 @@ class Main < Roby::Actions::Interface
         transition(s2.success_event,s1)
     end
 
+    describe("Do the minimal demo for the halleneroeffnung, menas pipeline, then do wall-following and back to pipe-origin")
+    state_machine "minimal_demo" do
+        s1 = state drive_to_pipeline
+        detector = state pipeline_detector_def
+        detector.depends_on s1
+    
+        start(detector)
+        #Follow pipeline to right end
+        pipeline1 = state follow_pipe_a_turn_at_e_of_pipe(:initial_heading => 0, :post_heading => 3.14, :turn_dir => 1)
+        #Doing wall-servoing 
+        wall1 = state wall_right_def(:max_corners => 1) 
+        wall2 = state wall_right_def(:timeout => 10) 
 
-    describe("simple_move_tests")
-    state_machine "simple" do
-        s1 = state simple_move_def(:heading=>0, :depth=>-5,:timeout =>15)
-        s2 = state simple_move_def(:heading=>0, :speed_x=>3 ,:depth=>-5, :timeout=> 15)
-        s3 = state simple_move_def(:heading => Math::PI*0.5, :speed_x => 3 ,:depth=>-5, :timeout=> 15)
-        s4 = state simple_move_def(:heading => Math::PI*1.0, :speed_x => 3 ,:depth=>-5, :timeout=> 15)
-        s5 = state simple_move_def(:heading => Math::PI*1.5, :speed_x => 3 ,:depth=>-5, :timeout=> 15)
-        s6 = state simple_move_def(:heading => 0, :speed_x => 0 ,:depth=>-5, :timeout=> 15)
-        start(s1)
-        transition(s1.success_event,s2)
-        transition(s2.success_event,s3)
-        transition(s3.success_event,s4)
-        transition(s4.success_event,s5)
-        transition(s5.success_event,s6)
-        forward s6.success_event, success_event
+        transition(detector.align_auv_event, pipeline1)
+        transition(pipeline1.success_event, wall1)
+        transition(wall1.success_event, wall2)
+        transition(wall2.success_event, detector)
+    end
+    
+   
+    #TODO This could be extended by adding additional mocups
+    describe("do a full Demo, with visiting the window after wall-servoing")
+    state_machine "full_demo" do
+        s1 = state drive_to_pipeline
+        detector = state pipeline_detector_def
+        detector.depends_on s1
+    
+        #Follow pipeline to right end
+        pipeline1 = state follow_pipe_a_turn_at_e_of_pipe(:initial_heading => 0, :post_heading => 3.14, :turn_dir => 1)
+        #Doing wall-servoing 
+        wall1 = state wall_right_def(:max_corners => 1) 
+        wall2 = state wall_right_def(:timeout => 10) 
+        #window
+        window = state to_window 
+        
+        start(detector)
+        transition(detector.align_auv_event, pipeline1)
+        transition(pipeline1.success_event, wall1)
+        transition(wall1.success_event, wall2)
+        transition(wall2.success_event, window)
+        transition(window.success_event, detector)
+    end
+
+    describe("Find pipeline localization based, and to a infinite pipe-ping-pong on it")
+    state_machine "start_pipe_loopings" do 
+        s1 = state drive_to_pipeline
+        detector = state pipeline_detector_def
+        detector.depends_on s1
+        
+        pipeline1 = state pipe_ping_pong(:post_heading => 0)
+        pipeline2 = state pipe_ping_pong(:post_heading => 0)
+        
+        start detector
+
+        transition(detector.align_auv_event, pipeline1)
+        transition(pipeline1.success_event, pipeline2)
+        transition(pipeline2.success_event, pipeline1)
     end
 
 end

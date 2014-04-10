@@ -143,7 +143,7 @@ module Avalon
             define 'hough_detector', Localization::HoughDetector.use(Base::OrientationSrv => PoseAvalon::DagonOrientationEstimator)
     
             #Including hough
-            define 'localization_detector', Localization::ParticleDetector.use(hough_detector, Base::OrientationSrv => PoseAvalon::DagonOrientationEstimator)
+            define 'localization_detector', Localization::ParticleDetector.use(hough_detector_def, Base::OrientationSrv => PoseAvalon::DagonOrientationEstimator)
 
             define 'low_level', LowLevel::Cmp
 
