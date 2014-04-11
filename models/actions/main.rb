@@ -54,7 +54,7 @@ class Main
 
     describe("Do the minimal demo for the halleneroeffnung, menas pipeline, then do wall-following and back to pipe-origin")
     state_machine "minimal_demo" do
-        s1 = state drive_to_pipeline
+        s1 = state trajectory_move_def(:target => "pipeline")
         detector = state pipeline_detector_def
         detector.depends_on s1
     
@@ -75,7 +75,7 @@ class Main
     #TODO This could be extended by adding additional mocups
     describe("do a full Demo, with visiting the window after wall-servoing")
     state_machine "full_demo" do
-        s1 = state drive_to_pipeline
+        s1 = state trajectory_move_def(:target => "pipeline") 
         detector = state pipeline_detector_def
         detector.depends_on s1
     
@@ -95,19 +95,19 @@ class Main
         transition(window.success_event, detector)
     end
     
-    describe("Workaround1")
-    state_machine "wa1" do 
-        s1 = state drive_to_pipeline
-        detector = state pipeline_detector_def
-        detector.depends_on s1
-        start detector
-        forward detector.align_auv_event, success_event 
-    end
+#    describe("Workaround1")
+#    state_machine "wa1" do 
+#        s1 = state drive_to_pipeline
+#        detector = state pipeline_detector_def
+#        detector.depends_on s1
+#        start detector
+#        forward detector.align_auv_event, success_event 
+#    end
 
     describe("Find pipeline localization based, and to a infinite pipe-ping-pong on it")
     state_machine "start_pipe_loopings" do 
         
-        detector = state wa1
+        detector = state trajectory_move_def(:target => "pipeline") 
         #turn = state simple_move_def(:heading => -Math::PI, :timeout => 5) 
 
         pipeline1 = state pipe_ping_pong(:post_heading => 0)

@@ -34,6 +34,10 @@ module Localization
             event e
         end
 
+        def get_position
+            @position
+        end
+
         add UwParticleLocalization::Task, :as => 'main'
         add Base::SonarScanProviderSrv, :as => 'sonar'
         add SonarFeatureEstimator::Task, :as => 'sonar_estimator'
@@ -56,7 +60,8 @@ module Localization
         @position = :position2 
         
         on :start do |ev|
-                @reader = main_child.pose_samples_port.reader 
+                @reader = main_child.pose_samples_port.reader
+                emit @position if @position
         end
         poll do 
             if @reader

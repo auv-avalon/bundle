@@ -84,6 +84,7 @@ module AvalonControl
         add Base::OrientationWithZSrv, :as => "reading"
 
         on :start do |ev|
+                begin 
                 @start_time = Time.now
                 Robot.info "Starting Drive simple #{self}"
                 erg = controller_child.update_config(:speed_x => speed_x, :heading => heading, :depth=> depth, :speed_y => speed_y)
@@ -91,9 +92,13 @@ module AvalonControl
                 @reader = reading_child.pose_samples_port.reader 
                 @last_invalid_pose = Time.new
                 Robot.info "Updated config returned #{erg}"
+                rescue Exception => e
+                    Robot.warn "Got an error in simple move start hook: #{e}"
+                end
         end
         
         poll do
+            begin
             if(self.timeout)
                 if(@start_time + self.timeout < Time.now)
                     Robot.info "Finished Simple Move becaue time is over! #{@start_time} #{@start_time + self.timeout}"
@@ -114,6 +119,9 @@ module AvalonControl
                         end
                     end
                 end
+            end
+            rescue Exception => e 
+                Robot.warn "Got an error in poll block of simple_move #{e}"
             end
         end
     end
@@ -176,6 +184,41 @@ module AvalonControl
                             @reached_position = false
                         end
                     end
+                end
+            end
+        end
+
+    end
+    
+    
+    class TrajectoryMove < ::Base::ControlLoop
+        overload 'controller', AvalonControl::TrajectoryFollower
+        argument :target, :default => "pipeline"
+        argument :timeout, :default => nil
+        argument :event_on_timeout, :default => :success
+   
+        event :reached_end
+        event :align_at_end
+
+        
+        add_main AvalonControl::TrajectoryFollower, :as => "foo"
+
+        attr_reader :start_time
+
+        add Base::PoseSrv, :as => 'pose'
+        pose_child.connect_to controller_child
+
+        on :start do |ev|
+                @start_time = Time.now
+                Robot.info "Starting Trajectory moving #{self}"
+                controller_child.update_target(target)
+        end
+        
+        poll do
+            if self.timeout
+                if(@start_time + self.timeout < Time.now)
+                    Robot.info  "Finished Trajectory Follower because time is over! #{@start_time} #{@start_time + self.timeout}"
+                    emit event_on_timeout 
                 end
             end
         end

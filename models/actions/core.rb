@@ -47,7 +47,7 @@ class Main < Roby::Actions::Interface
 	required_arg('post_heading', 'the heading for the pipe to follow')
     state_machine "follow_pipe_a_turn_at_e_of_pipe" do
        follow = state pipeline_def(:heading => initial_heading, 	:speed_x => PIPE_SPEED, :turn_dir=> turn_dir)
-       stop = state pipeline_def(:heading => initial_heading, 	:speed_x => -PIPE_SPEED/2.0, :turn_dir=> turn_dir, :timeout => 5)
+       stop = state pipeline_def(:heading => initial_heading, 	:speed_x => -PIPE_SPEED/2.0, :turn_dir=> turn_dir, :timeout => 10)
        turn= state pipeline_def(:heading => post_heading, 	:speed_x => 0, 		 :turn_dir=> turn_dir, :timeout => 20)
        start(follow)
        transition(follow.weak_signal_event,stop)
@@ -62,8 +62,8 @@ class Main < Roby::Actions::Interface
     describe("Ping and Pong (once) on an pipeline").
 	optional_arg('post_heading', 'The final heading of the AUV, after pipeline tracking',3.13)
     state_machine "pipe_ping_pong" do
-        pipeline = state follow_pipe_a_turn_at_e_of_pipe(:initial_heading => 3.13,:post_heading => 0, :turn_dir => 1)
-        pipeline2 = state follow_pipe_a_turn_at_e_of_pipe(:initial_heading => 0, :post_heading => post_heading, :turn_dir => 2)
+        pipeline = state follow_pipe_a_turn_at_e_of_pipe(:initial_heading => 0,:post_heading => 3.13, :turn_dir => 1)
+        pipeline2 = state follow_pipe_a_turn_at_e_of_pipe(:initial_heading => 3.13, :post_heading => post_heading, :turn_dir => 1)
         start(pipeline)
         transition(pipeline.success_event,pipeline2)
         forward pipeline2.success_event, success_event
@@ -97,9 +97,21 @@ class Main < Roby::Actions::Interface
         forward s6.success_event, success_event
     end
 
-    describe("drive_to_pipeline")
-    state_machine "drive_to_pipeline" do
-        
+
+    describe("dive_and_localize")
+    state_machine "dive_and_localize" do
+        control = state simple_move_def(:heading => 0, :depth => -5, :timeout => 15) 
+        localization = state localization_detector_def 
+        control.depends_on localization, :role => "detector"
+        start(control)
+        forward control.success_event, success_event
+    end
+
+#    describe("drive_to_pipeline")
+#    state_machine "drive_to_pipeline" do
+#        
+#        init = state dive_and_localize 
+#        
 #        control = state simple_move_def(:heading => 0, :depth => -5, :timeout => 60) 
 #        localization = state localization_detector_def 
 #        localization.depends_on control, :role => "detector"
@@ -107,11 +119,13 @@ class Main < Roby::Actions::Interface
 #        bottom_left_corner =        state target_move_def(:finish_when_reached => true, :delta_timeout => 2  , :heading =>  Math::PI*0.5, :depth => -5, :x => -5, :y => -5)
 #        top_left_corner =           state target_move_def(:finish_when_reached => true, :delta_timeout => 2  , :heading =>  Math::PI*0.5, :depth => -5, :x => -5, :y =>  5)
 #        top_right_corner =          state target_move_def(:finish_when_reached => true, :delta_timeout => 2  , :heading =>  Math::PI*0.5, :depth => -5, :x =>  5, :y =>  5)
-        pipeline_check_position =   state target_move_def(:finish_when_reached => true,  :delta_timeout => 60, :heading => -Math::PI,     :depth => -6, :x =>  5, :y =>  7.5)
-
-        start(pipeline_check_position)
-
+#        pipeline_check_position =   state target_move_def(:finish_when_reached => true,  :delta_timeout => 60, :heading => -Math::PI,     :depth => -6, :x =>  5, :y =>  7.5)
+#
+#        #First diving, to keep the localization a chance to get a valid position reading 
+#        start(init)
+#
 #        forward localization.success_event, failed_event
+#        transition(init.success_event, localization)
 #        transition(localization.position1_event, pipeline_check_position)
 #        transition(localization.position2_event, pipeline_check_position) 
 #        transition(localization.position3_event, pipeline_check_position)
@@ -124,8 +138,8 @@ class Main < Roby::Actions::Interface
 #        transition(bottom_left_corner.success_event, top_left_corner)
 #        transition(top_left_corner.success_event, pipeline_check_position)
 #        transition(top_right_corner.success_event, pipeline_check_position)
-        forward pipeline_check_position.success_event, success_event #TODO better failed?, because this should never be reached the composition should be stopped before
-    end
+#        forward pipeline_check_position.success_event, success_event #TODO better failed?, because this should never be reached the composition should be stopped before
+#    end
     
     describe("to_window")
     state_machine "to_window" do
@@ -141,7 +155,7 @@ class Main < Roby::Actions::Interface
     describe("Find_pipe_with_localization")
     state_machine "find_pipe_with_localization" do
         #find_pipe_back = state lawn_mover_over_pipe
-        find_pipe_back = state drive_to_pipeline
+        find_pipe_back = state trajectory_move_def(:target => "pipeline") 
         pipe_detector = state pipeline_detector_def
         pipe_detector.depends_on find_pipe_back, :role => "detector"
         start(pipe_detector)

@@ -161,6 +161,10 @@ module Avalon
             define 'target_move', ::AvalonControl::SimplePosMove
             define 'lights', Lights::Lights
             
+            use ::AvalonControl::TrajectoryMove => ::AvalonControl::TrajectoryMove.use(position_control_loop_def, localization_detector_def, AvalonControl::DephFusionCmp)
+            
+            define 'trajectory_move', ::AvalonControl::TrajectoryMove
+            
             
             define 'wall_right', Wall::Follower.use(WallServoing::SingleSonarServoing.with_conf('default','wall_right'), 'controlled_system' => Base::ControlLoop.use('controlled_system' => Base::AUVMotionControlledSystemSrv, 'controller' => AuvRelPosController::Task.with_conf('default','relative_heading')))
 
