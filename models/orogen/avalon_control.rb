@@ -70,10 +70,10 @@ class AvalonControl::TrajectoryFollower
     def update_target(target)
         points = []
         if target == "pipeline"
-            points << Eigen::Vector3.new(3,3,-5)
-            points << Eigen::Vector3.new(6,3,-5)
-            points << Eigen::Vector3.new(6,6,-5)
-            points << Eigen::Vector3.new(-8,-3,-5)
+            points << Eigen::Vector3.new(-3,3,-3)
+            points << Eigen::Vector3.new(3,3,-3)
+            points << Eigen::Vector3.new(3,-3,-3)
+            points << Eigen::Vector3.new(-3,-3,-3)
         else
             raise ArgumentError, "#{target} is unspported as a target for the trajectory mover"
         end
@@ -81,7 +81,6 @@ class AvalonControl::TrajectoryFollower
         spline = Types::Base::Geometry::Spline3.interpolate(points)
         trajectory.spline = spline
         orocos_task.trajectory = trajectory
-        binding.pry
         @trajectory = trajectory
     end
     provides Base::AUVRelativeMotionControllerSrv, :as => "controller"

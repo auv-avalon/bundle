@@ -54,17 +54,19 @@ class Main
 
     describe("Do the minimal demo for the halleneroeffnung, menas pipeline, then do wall-following and back to pipe-origin")
     state_machine "minimal_demo" do
+        init = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 60, :timeout => 60)
         s1 = state trajectory_move_def(:target => "pipeline")
         detector = state pipeline_detector_def
         detector.depends_on s1
     
-        start(detector)
+        start(init)
         #Follow pipeline to right end
         pipeline1 = state follow_pipe_a_turn_at_e_of_pipe(:initial_heading => 0, :post_heading => 3.14, :turn_dir => 1)
         #Doing wall-servoing 
         wall1 = state wall_right_def(:max_corners => 1) 
         wall2 = state wall_right_def(:timeout => 10) 
 
+        transition(init.success_event, detector)
         transition(detector.align_auv_event, pipeline1)
         transition(pipeline1.success_event, wall1)
         transition(wall1.success_event, wall2)
