@@ -380,7 +380,7 @@ param_thrusterCoefficient:
 - 0.0
 - 0.0
 # Thruster Volatage
-param_thrusterVoltage: 27.0
+param_thrusterVoltage: 39.0
 # number of used particles
 particle_number: 500
 # set history size for determing uncertainty_degree of best measurement samples
@@ -427,11 +427,11 @@ sonar_vertical_angle: 0.52
 speed_samples_period: 0.01
 # sets a static covariance for speed samples
 static_motion_covariance:
-- 0.05
+- 0.2
 - 0.0
 - 0.0
 - 0.0
-- 0.05
+- 0.2
 - 0.0
 - 0.0
 - 0.0
