@@ -48,7 +48,7 @@ class Main < Roby::Actions::Interface
     state_machine "follow_pipe_a_turn_at_e_of_pipe" do
        follow = state pipeline_def(:heading => initial_heading, 	:speed_x => PIPE_SPEED, :turn_dir=> turn_dir)
        stop = state pipeline_def(:heading => initial_heading, 	:speed_x => -PIPE_SPEED/2.0, :turn_dir=> turn_dir, :timeout => 10)
-       turn= state pipeline_def(:heading => post_heading, 	:speed_x => 0, 		 :turn_dir=> turn_dir, :timeout => 20)
+       turn= state pipeline_def(:heading => post_heading, 	:speed_x => 0, 		 :turn_dir=> turn_dir, :timeout => 10)
        start(follow)
        transition(follow.weak_signal_event,stop)
        transition(stop.success_event,turn)

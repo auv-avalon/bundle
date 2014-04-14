@@ -63,18 +63,20 @@ module Avalon
 
             define 'sim', ::Simulation::Mars
 
-            use ::Base::PoseSrv => Localization::ParticleDetector.use(imu_def, sonar_def,thrusters_def)
+            #use ::Base::PoseSrv => Localization::ParticleDetector.use(imu_def, sonar_def,thrusters_def)
+            use ::Base::PoseSrv => imu_def 
             define 'hough_detector', Localization::HoughDetector.use(sonar_def, Base::OrientationSrv => imu_def)
             define 'localization_detector', Localization::ParticleDetector.use(hough_detector_def, imu_def, sonar_def,thrusters_def)
             
 #            define 'hough_localization_detector', Localization::HoughParticleDetector.use(hough_detector_def)
 
-            use Base::PoseSrv => localization_detector_def
+#            use Base::PoseSrv => localization_detector_def
             
             use ::AvalonControl::SimplePosMove => ::AvalonControl::SimplePosMove.use(position_control_loop_def, localization_detector_def, imu_def)
             define 'target_move', ::AvalonControl::SimplePosMove.use(position_control_loop_def, localization_detector_def, imu_def)
             
-            define 'trajectory_move', ::AvalonControl::TrajectoryMove.use(position_control_loop_def, localization_detector_def, imu_def)
+            #define 'trajectory_move', ::AvalonControl::TrajectoryMove.use(position_control_loop_def, localization_detector_def, imu_def)
+            define 'trajectory_move', ::AvalonControl::TrajectoryMove.use(position_control_loop_def, imu_def)
             
             define 'wall_right', Wall::Follower.use(sonar_def, WallServoing::SingleSonarServoing.with_conf('default','wall_right'), 'controlled_system' => Base::ControlLoop.use('controlled_system' => Base::AUVMotionControlledSystemSrv, 'controller' => AuvRelPosController::Task.with_conf('default','relative_heading')))
 

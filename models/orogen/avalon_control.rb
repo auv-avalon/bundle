@@ -70,6 +70,7 @@ class AvalonControl::TrajectoryFollower
     def update_target(target)
         points = []
         if target == "pipeline"
+            points << Eigen::Vector3.new(0,0,-3)
             points << Eigen::Vector3.new(-3,3,-3)
             points << Eigen::Vector3.new(3,3,-3)
             points << Eigen::Vector3.new(3,-3,-3)
