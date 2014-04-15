@@ -24,6 +24,7 @@ module PoseAvalon
 
         #export estimator_child.attitude_b_g_port, :as => 'orientation_samples'
         export correction_child.orientation_output_port, :as => 'orientation_samples'
+        #export correction_child.orientation_offset_corrected_port, :as => 'orientation_samples'
         provides Base::OrientationSrv, :as => "orientation"
     end
 

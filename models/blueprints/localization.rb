@@ -110,10 +110,12 @@ module Localization
         add Base::SonarScanProviderSrv, as: 'sonar'
         add Base::OrientationSrv, as: 'ori'
         add_optional Localization::DeadReckoning, as: 'dead'
+        add_optional UwParticleLocalization::OrientationCorrection, :as => 'correction'
 
         connect sonar_child => main_child
         connect ori_child => main_child
         connect dead_child => main_child
+        connect main_child.orientation_drift_port => correction_child.orientation_offset_port
 
         export main_child.position_port, as: 'position'
         export main_child.orientation_drift_port, as: 'ori_drift'

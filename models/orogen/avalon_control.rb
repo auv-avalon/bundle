@@ -70,11 +70,10 @@ class AvalonControl::TrajectoryFollower
     def update_target(target)
         points = []
         if target == "pipeline"
-            points << Eigen::Vector3.new(0,0,-3)
-            points << Eigen::Vector3.new(-3,3,-3)
-            points << Eigen::Vector3.new(3,3,-3)
-            points << Eigen::Vector3.new(3,-3,-3)
-            points << Eigen::Vector3.new(-3,-3,-3)
+            points << Eigen::Vector3.new(-5.5,4,-5)
+            #points << Eigen::Vector3.new(2,4,-5)
+            points << Eigen::Vector3.new(0,0,-5)
+            points << Eigen::Vector3.new(-5.5,-4,-5)
         else
             raise ArgumentError, "#{target} is unspported as a target for the trajectory mover"
         end
