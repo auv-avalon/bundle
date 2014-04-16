@@ -84,7 +84,7 @@ buoy_samples_period: 0.1
 # write all debug informations to output ports
 debug: true
 # effective sample size threshold controls the resampling timing and uses values between 0.0 and 1.0 particles
-effective_sample_size_threshold: 0.3
+effective_sample_size_threshold: 0.8
 # sets gps covariance for defining measurement uncertainty
 gps_covarianz: 1.0
 # sets importance ratio for gps perception updates
@@ -132,7 +132,7 @@ metadata:
 # minimum depth for collecting perception samples
 minimum_depth: 0.0
 # minimum number of perceptions before starting resampling
-minimum_perceptions: 5
+minimum_perceptions: 3
 # no documentation available for this property
 orientation_offset: 0.0
 # minimum time, in s, between two sequential samples arrive on orientation_samples
@@ -380,7 +380,7 @@ param_thrusterCoefficient:
 - 0.0
 - 0.0
 # Thruster Volatage
-param_thrusterVoltage: 30.0
+param_thrusterVoltage: 33.0
 # number of used particles
 particle_number: 500
 # set history size for determing uncertainty_degree of best measurement samples
@@ -412,9 +412,9 @@ sonar_covariance_reflection_factor: 1.0
 # sets importance ratio for sonar perception updates
 sonar_importance: 1.0
 # set maximum distance for filtering sonar samples
-sonar_maximum_distance: 25.0
+sonar_maximum_distance: 30.0
 # set maximum distance for filtering sonar samples
-sonar_minimum_distance: 2.5
+sonar_minimum_distance: 1.0
 # transformation of the sonar, with respect to the origin of avalon
 sonar_position:
   data:
@@ -427,11 +427,11 @@ sonar_vertical_angle: 0.52
 speed_samples_period: 0.01
 # sets a static covariance for speed samples
 static_motion_covariance:
-- 0.1
+- 0.2
 - 0.0
 - 0.0
 - 0.0
-- 0.1
+- 0.2
 - 0.0
 - 0.0
 - 0.0
