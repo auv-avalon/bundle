@@ -14,6 +14,8 @@ Syskit.conf.use_deployment 'taskmon_front', :on => "front"
 Syskit.conf.use_deployment 'sonar_wall_hough', :on => "front"
 Syskit.conf.use_deployment 'lights', :on => "front"
 Syskit.conf.use_deployment 'low_level', :on => "front"
+Syskit.conf.use_deployment 'line_scanner', :on => "front"
+Syskit.conf.use_deployment 'blur', :on => "front"
 
 #Rear machine
 Syskit.conf.use_deployment 'avalon_back_base_control'#, :valgrind => true
@@ -44,9 +46,9 @@ Syskit.conf.use_deployment 'localization'
 Syskit.conf.use_deployment 'sonar_feature_estimator'
 #Syskit.conf.use_deployment 'orientation_correction'
 
-Syskit.warn "!!!!!!!   Logging disabled       !!!!"
-Syskit.warn "!!!!!!!   Logging disabled       !!!!"
-Syskit.conf.disable_logging
+#Syskit.warn "!!!!!!!   Logging disabled       !!!!"
+#Syskit.warn "!!!!!!!   Logging disabled       !!!!"
+#Syskit.conf.disable_logging
 
 Syskit.conf.exclude_from_log '/canbus/Message'
 Syskit.conf.exclude_from_log '/canbus/Statistics' 

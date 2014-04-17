@@ -2,8 +2,16 @@ require 'models/blueprints/sensors'
 require 'models/blueprints/avalon'
 using_task_library 'auv_rel_pos_controller'
 using_task_library 'offshore_pipeline_detector'
+using_task_library 'line_scanner'
+using_task_library 'image_preprocessing'
 
 module Pipeline
+    class LineScanner < Syskit::Composition 
+        add Base::ImageProviderSrv, :as => 'camera'
+        add ::LineScanner::Task, :as => 'scanner'
+        connect camera_child => scanner_child
+    end
+        
     class Detector < Syskit::Composition 
         argument :heading, :default => nil
         argument :depth, :default => nil
@@ -21,11 +29,13 @@ module Pipeline
 
 
         add Base::ImageProviderSrv, :as => 'camera'
+        add ImagePreprocessing::HSVSegmentationAndBlur, :as => 'blur'
         add_main OffshorePipelineDetector::Task, :as => 'offshorePipelineDetector'
         add Base::OrientationWithZSrv, :as => "orienation_with_z"
         orienation_with_z_child.connect_to offshorePipelineDetector_child.orientation_sample_port
-        camera_child.frame_port.connect_to offshorePipelineDetector_child
-
+        #camera_child.frame_port.connect_to offshorePipelineDetector_child
+        camera_child.frame_port.connect_to blur_child
+        blur_child.oframe_port.connect_to offshorePipelineDetector_child
         export offshorePipelineDetector_child.find_port("position_command")
 #        export offshorePipelineDetector_child.position_command_port
         provides Base::AUVRelativeMotionControllerSrv, :as => 'controller'

@@ -145,6 +145,8 @@ module Avalon
             #Including hough
             define 'localization_detector', Localization::ParticleDetector.use(hough_detector_def, Base::OrientationSrv => PoseAvalon::DagonOrientationEstimator)
 
+            define 'line_scanner', Pipeline::LineScanner.use(bottom_camera_dev, LineScanner::Task.with_conf('default'))
+
             define 'low_level', LowLevel::Cmp
 
 #            define 'hough_localization_detector', Localization::HoughParticleDetector

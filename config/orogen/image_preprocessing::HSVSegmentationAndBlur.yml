@@ -1,0 +1,23 @@
+--- name:default
+# no documentation available for this property
+blur: 4 
+# no documentation available for this property
+hMax: 255 
+# no documentation available for this property
+hMin: 85
+# no documentation available for this property
+metadata:
+  metadata: []
+  properties: []
+  input_ports: []
+  output_ports: []
+# no documentation available for this property
+sMax: 256
+# no documentation available for this property
+sMin: 0
+# no documentation available for this property
+unsetValue: 0
+# no documentation available for this property
+vMax: 130
+# no documentation available for this property
+vMin: 100

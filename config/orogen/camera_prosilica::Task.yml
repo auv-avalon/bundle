@@ -85,7 +85,7 @@ region_x: 24
 # start of region readout, in pixels; top edge.
 region_y: 550
 # scale factor for the x direction which is used to scale the image before it is written to the output_port. 
-scale_x: 1.0 
+scale_x: 1.0
 # scale factor for the y direction which is used to scale the image before it is written to the output_port. 
 scale_y: 1.0
 #overwrite the resize algorithm for this frame, since bayer resize is not implemented for quarter images

@@ -2,17 +2,17 @@
 # no documentation available for this property
 debugging: 1
 # default value of x
-default_x: 0.35
+default_x: 0.2
 # default depth of operation [meter]
-depth: -6.6
+depth: -6.3
 # distance to pipe [meter], 0 = disabled
 distance_to_pipe: 0.0
 # minimum confidence for finding a pipeline
-find_confidence: 0.2
+find_confidence: 0.1
 # no documentation available for this property
-invert_colors: 1 
+invert_colors: 0 
 # minimum confidence before losing a pipeline
-lose_confidence: 0.1
+lose_confidence: 0.05
 # maximal depth of operation [meter], 0 = disabled
 max_depth: -10.0
 # maximal width of the pipe [m] 0 = disabled
@@ -40,24 +40,24 @@ default_distance_to_pipe: 2
 # A value close to zero means that the image is uniform for all angles. 
 find_anisotropy: -5
 # how many pixel must be classified as not belonging to the pipeline [%]
-find_end_of_pipe: 0.4
+find_end_of_pipe: 0.8
 # how many pixel must be classified as not belonging to the pipeline [%]. 
 # If this value is reachead and the end is on the top the pipeline follower 
 # will change to follow modex
-lose_end_of_pipe: 0.2
+lose_end_of_pipe: 0.7
 preprocessing_type: 0
 # if the angle between the pipeline and the auv is bigger than delta_aligning the task goes into the state ALIGNING_AUV
 delta_aligning: 0.25
 # the pipeline is considert to be out of center if this value is smaller than the shortest distance in meter between the image center and the pipeline center --> turning will be disabled if the follower is in ALIGN_AUV
-max_center_dist: 0.3
+max_center_dist: 0.2
 # minimum
-min_center_dist: 0.2
+min_center_dist: 0.15
 # fallback to ALIGN_AUV if out_of_center is exceeded during FOLLOWING_PIPE
 do_dynamic_aligning: 1
-weak_signal: 0.25
+weak_signal: 0.15
 align_during_check: 1
 change_search_direction_to_last_known_position: false 
-max_align_turn_speed_per_s: 0.5 #roughly 180deg in 10 sec
+max_align_turn_speed_per_s: 0.3 #roughly 180deg in 10 sec
 --- name:simulation
 use_channel: 3
 invert_colors: 0 
