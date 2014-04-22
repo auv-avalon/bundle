@@ -40,13 +40,29 @@ class Main < Roby::Actions::Interface
         forward s10.success_event,success_event
     end
     
+
+    describe("intelligend follow-pipe, only emitting weak_signal if heading is correkt")
+    required_arg('precision', 'precision the heading need to be')
+    action_script "intelligent_follow_pipe" do
+        follow = state pipeline_def(:heading => initial_heading,         :speed_x => PIPE_SPEED, :turn_dir=> turn_dir)
+        execute follow
+        wait follow.weak_signal_event
+        while(true) do
+            if State.pose.orientation.yaw < precision * MATH::PI && State.pose.orientation.yaw > -precision * MATH::PI
+                emit follow.weak_signal_event
+            else
+                execute follow
+            end
+        end
+    end
     
     describe("follow-pipe-a-turn-at-e-of-pipe").
 	optional_arg('turn_dir', 'the turn direction').
 	required_arg('initial_heading', 'the heading for the pipe to follow').
 	required_arg('post_heading', 'the heading for the pipe to follow')
     state_machine "follow_pipe_a_turn_at_e_of_pipe" do
-       follow = state pipeline_def(:heading => initial_heading, 	:speed_x => PIPE_SPEED, :turn_dir=> turn_dir)
+       #follow = state pipeline_def(:heading => initial_heading, 	:speed_x => PIPE_SPEED, :turn_dir=> turn_dir)
+        follow = intelligent_follew_pipe(precision: 0.5)
        stop = state pipeline_def(:heading => initial_heading, 	:speed_x => -PIPE_SPEED/2.0, :turn_dir=> turn_dir, :timeout => 10)
        turn= state pipeline_def(:heading => post_heading, 	:speed_x => 0, 		 :turn_dir=> turn_dir, :timeout => 10)
        start(follow)

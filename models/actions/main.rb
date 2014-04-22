@@ -43,7 +43,7 @@ class Main
 
      end
 
-    describe("Do a pipeline ping-pong, pass two corners with wall servoing and goind back to pape")
+    describe("Do a pipeline ping-pong, pass two corners with wall servoing and goind back to pipe")
     state_machine "rocking" do
         s1 = state ping_pong_pipe_wall_back_to_pipe
         s2 = state ping_pong_pipe_wall_back_to_pipe
@@ -52,20 +52,21 @@ class Main
         transition(s2.success_event,s1)
     end
 
-    describe("Do the minimal demo for the halleneroeffnung, menas pipeline, then do wall-following and back to pipe-origin")
+    describe("Do the minimal demo for the halleneroeffnung, means pipeline, then do wall-following and back to pipe-origin")
     state_machine "minimal_demo" do
+        use_fault_response_table HBridgeFailure::Retry 
         init = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 60, :timeout => 60)
         s1 = state trajectory_move_def(:target => "pipeline")
         detector = state pipeline_detector_def
         detector.depends_on s1
     
-        start(init)
         #Follow pipeline to right end
         pipeline1 = state follow_pipe_a_turn_at_e_of_pipe(:initial_heading => 0, :post_heading => 3.14, :turn_dir => 1)
         #Doing wall-servoing 
         wall1 = state wall_right_def(:max_corners => 1) 
         wall2 = state wall_right_def(:timeout => 10) 
 
+        start(init)
         transition(init.success_event, detector)
         transition(detector.align_auv_event, pipeline1)
         transition(pipeline1.success_event, wall1)
@@ -144,5 +145,29 @@ class Main
         transition(pipeline2.success_event, pipeline1)
     end
     
+end
 
+module FailureHandling
+    class Operator < Roby::Coordination::FaultResponseTable
+        describe("waits for the operator to do something").
+            returns(WaitForOperator)
+        def wait_for_operator
+            WaitForOperator.new
+        end
+        # This is a catch-all that makes the system stop doing anything until an
+        # operator comes
+        on_fault Roby::LocalizedError do
+            wait_for_operator!
+        end
+    end
+end
+
+module HBridgeFailure
+    class Retry
+        on_fault with_origin(HBrigde.timeout_event) do
+            retry
+        end
+
+
+    end
 end
