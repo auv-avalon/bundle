@@ -1,23 +1,21 @@
 --- name:default
 # no documentation available for this property
-blur: 4 
+blur: 16 
 # no documentation available for this property
-hMax: 255 
+hMax: 78
 # no documentation available for this property
-hMin: 85
-# no documentation available for this property
-metadata:
-  metadata: []
-  properties: []
-  input_ports: []
-  output_ports: []
+hMin: 18
 # no documentation available for this property
 sMax: 256
 # no documentation available for this property
-sMin: 0
+sMin: 121
+# no documentation available for this property
+steps_per_frame: 1
+# no documentation available for this property
+target_pixel_s: 70000
 # no documentation available for this property
 unsetValue: 0
 # no documentation available for this property
-vMax: 130
+vMax: 130 
 # no documentation available for this property
-vMin: 100
+vMin: 14

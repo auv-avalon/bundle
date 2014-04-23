@@ -1,63 +1,71 @@
 --- name:default
-# no documentation available for this property
-debugging: 1
-# default value of x
-default_x: 0.2
+# If set to true, the Vehicle will stop over an detectet pipeline and check it's validity for 'maximum_check_time', if not succsessfull, it falls back for at leased 'time_between_detection' to the SEACH_PIPE mode
+align_during_check: true 
+# ###############################################################
+# #########################DEBUGGING#############################
+# ###############################################################
+debugging: true
+# default value of x aka the speed that the system use during FOLLOW_PIPE state
+default_x: 0.3
+# if the angle between the pipeline and the auv is bigger than delta_aligning the task goes into the state ALIGNING_AUV
+delta_aligning: 0.785
 # default depth of operation [meter]
-depth: -6.3
+depth: -5.5
 # distance to pipe [meter], 0 = disabled
 distance_to_pipe: 0.0
+# fallback to ALIGN_AUV if out_of_center is exceeded during FOLLOWING_PIPE
+do_dynamic_aligning: true
+# offset between the center and the end of pipe during hovering [m] (should be positvie)
+end_of_pipe_offset: 0.2
+# Anisotropy of the image. It is always negative. A value close to zero means that the image is uniform for all angles.
+find_anisotropy: -5.0
 # minimum confidence for finding a pipeline
-find_confidence: 0.1
+find_confidence: 0.2
+# how many pixel must be classified as not belonging to the pipeline [%]
+find_end_of_pipe: 0.45
 # no documentation available for this property
-invert_colors: 0 
+invert_colors: false
 # minimum confidence before losing a pipeline
-lose_confidence: 0.05
+lose_confidence: 0.1
+# how many pixel must be classified as not belonging to the pipeline [%].If this value is reachead and the end is on the top the pipeline follower will change to follow mode
+lose_end_of_pipe: 0.2
+# The maximum speed per/s who the vehicle turns during aligning, to prevent an loss of pipeline during turn
+max_align_turn_speed_per_s: 0.1
+# the pipeline is considert to be out of center if this value is smaller than the shortest distance in meter between the image center and the pipeline center --> turning will be disabled if the follower is in ALIGN_AUV, if in FOLLLOWING_PIPE we go back to ALIGN_AUV
+max_center_dist: 0.4
 # maximal depth of operation [meter], 0 = disabled
 max_depth: -10.0
+# no documentation available for this property
+max_heading: 3.14
 # maximal width of the pipe [m] 0 = disabled
-max_width: 4.0
+max_width: 0.0
+# Time where the System should stay on an Candidate Pipeline before falling back for at leased 'time_between_detection' secounds to the SEARCH_PIPE mode
+maximum_check_time: 4.0
+# the pipeline is considert to be in center if this value is smaller than the shortest distance in meter between the image center and the pipeline center --> then transition vom ALIGN_AUV FOLLOWING_PIPE is emitted
+min_center_dist: 0.1
 # number of images where a valid pipeline must be pressent to switch to follow
 min_count: 10
 # minimal depth of operation [meter], 0 = disabled
 min_depth: -0.2
+# no documentation available for this property
+min_heading: -3.14
 # minimal width of the pipe [m] 0 = disabled
-min_width: 0.1
+min_width: 0.0
 # distance between center of gravity and camera
 out_of_center: 0.0
 # tries to follow the pipeline in this direction [rad], > PI = disabled
-prefered_heading: 3.14
-# no documentation available for this property
-use_channel: 1 
-# offset between the center and the end of pipe during 
-# hovering [m] at the end (should be positvie)
-end_of_pipe_offset: 0.25
-# default distance to pipe [meter] if distance_to_pipe is not 
-# set or there is no altitude reading. This is used to calculate 
-# the width of the pipex
-default_distance_to_pipe: 2
-# Anisotropy of the image. It is always negative. 
-# A value close to zero means that the image is uniform for all angles. 
-find_anisotropy: -5
-# how many pixel must be classified as not belonging to the pipeline [%]
-find_end_of_pipe: 0.8
-# how many pixel must be classified as not belonging to the pipeline [%]. 
-# If this value is reachead and the end is on the top the pipeline follower 
-# will change to follow modex
-lose_end_of_pipe: 0.7
+prefered_heading: 0 
+# 0 = disabled, 1 = right, 2 = left
+preffered_turn_direction: 0
+# different types of handling preprocession in the studiobad environment
 preprocessing_type: 0
-# if the angle between the pipeline and the auv is bigger than delta_aligning the task goes into the state ALIGNING_AUV
-delta_aligning: 0.25
-# the pipeline is considert to be out of center if this value is smaller than the shortest distance in meter between the image center and the pipeline center --> turning will be disabled if the follower is in ALIGN_AUV
-max_center_dist: 0.2
-# minimum
-min_center_dist: 0.15
-# fallback to ALIGN_AUV if out_of_center is exceeded during FOLLOWING_PIPE
-do_dynamic_aligning: 1
-weak_signal: 0.15
-align_during_check: 1
-change_search_direction_to_last_known_position: false 
-max_align_turn_speed_per_s: 0.3 #roughly 180deg in 10 sec
---- name:simulation
-use_channel: 3
-invert_colors: 0 
+# delta Depth ABOVE the pipeline that should be used during search or pipe-lost, should be positive!
+search_depth_delta: 1.5
+# Time where the system should go on to the desired direction after an false deected candidate to prevent an double detection of the same candidate-pipeline
+time_between_detection: 2.0
+# no documentation available for this property
+use_channel: 0
+# if the disruption is higher than that value the follower will switch to WEAK_SIGNAL
+weak_signal: 0.2
+# speed which is used if the disruption is higher than weak_signal
+weak_signal_x: 0.15
