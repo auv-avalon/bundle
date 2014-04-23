@@ -1,6 +1,6 @@
 --- name:default
 # no documentation available for this property
-optimal_heading_distance: 100.0
+optimal_heading_distance: 3.0
 timeout: 1.0
 # no documentation available for this property
 x_pid: 

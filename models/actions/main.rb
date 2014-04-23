@@ -54,8 +54,8 @@ class Main
 
     describe("Do the minimal demo for the halleneroeffnung, means pipeline, then do wall-following and back to pipe-origin")
     state_machine "minimal_demo" do
-        use_fault_response_table HBridgeFailure::Retry 
-        init = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 60, :timeout => 60)
+        #use_fault_response_table HBridgeFailure::Retry 
+        init = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 5, :timeout => 60)
         s1 = state find_pipe_with_localization 
 #        detector = state pipeline_detector_def
 #        detector.depends_on s1
@@ -65,8 +65,9 @@ class Main
         align_to_wall = state simple_move_def(:finish_when_reached => true, :heading => 3.14, :depth => -5, :delta_timeout => 5, :timeout => 30)
         #Doing wall-servoing 
         wall1 = state wall_right_def(:max_corners => 1) 
-        wall2 = state wall_right_def(:timeout => 10) 
+        wall2 = state wall_right_def(:timeout => 20) 
 
+        start(init)
         transition(init.success_event, s1)
         transition(s1.success_event, pipeline1)
         #transition(pipeline1.success_event, align_to_wall)
@@ -80,7 +81,7 @@ class Main
     describe("Do the minimal demo for the halleneroeffnung, menas pipeline, then do wall-following and back to pipe-origin")
     state_machine "minimal_demo_blind" do
         init = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 60, :timeout => 60)
-        s1 = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 60, :timeout => 60) 
+        s1 = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 10, :timeout => 60) 
         detector = state pipeline_detector_def
         detector.depends_on s1
     
@@ -150,27 +151,27 @@ class Main
     
 end
 
-module FailureHandling
-    class Operator < Roby::Coordination::FaultResponseTable
-        describe("waits for the operator to do something").
-            returns(WaitForOperator)
-        def wait_for_operator
-            WaitForOperator.new
-        end
-        # This is a catch-all that makes the system stop doing anything until an
-        # operator comes
-        on_fault Roby::LocalizedError do
-            wait_for_operator!
-        end
-    end
-end
+#module FailureHandling
+#    class Operator < Roby::Coordination::FaultResponseTable
+#        describe("waits for the operator to do something").
+#            returns(WaitForOperator)
+#        def wait_for_operator
+#            WaitForOperator.new
+#        end
+#        # This is a catch-all that makes the system stop doing anything until an
+#        # operator comes
+#        on_fault Roby::LocalizedError do
+#            wait_for_operator!
+#        end
+#    end
+#end
 
-module HBridgeFailure
-    class Retry
-        on_fault with_origin(HBrigde.timeout_event) do
-            retry
-        end
-
-
-    end
-end
+#module HBridgeFailure
+#    class Retry
+#        on_fault with_origin(HBrigde.timeout_event) do
+#            retry
+#        end
+#
+#
+#    end
+#end

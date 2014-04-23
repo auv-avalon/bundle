@@ -63,7 +63,7 @@ package_size: 0
 # unique camerea id
 camera_id: "53093"
 # frames per second
-fps: 10
+fps: 20
 # exposure value if exposure mode is not auto
 exposure: 20000
 # exposure mode (auto, manual, external, none)
