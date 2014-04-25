@@ -41,19 +41,31 @@ class Main < Roby::Actions::Interface
     end
     
 
-    describe("intelligend follow-pipe, only emitting weak_signal if heading is correkt")
-    required_arg('precision', 'precision the heading need to be')
+    describe("intelligend follow-pipe, only emitting weak_signal if heading is correkt").
+	optional_arg('turn_dir', 'the turn direction').
+	required_arg('initial_heading', 'the heading for the pipe to follow').
+        required_arg('precision', 'precision the heading need to be')
     action_script "intelligent_follow_pipe" do
-        follow = state pipeline_def(:heading => initial_heading,         :speed_x => PIPE_SPEED, :turn_dir=> turn_dir)
+        follow = task pipeline_def(:heading => initial_heading,         :speed_x => PIPE_SPEED, :turn_dir=> turn_dir, :timeout => 120)
         execute follow
-        wait follow.weak_signal_event
-        while(true) do
-            if State.pose.orientation.yaw < precision * MATH::PI && State.pose.orientation.yaw > -precision * MATH::PI
-                emit follow.weak_signal_event
-            else
-                execute follow
-            end
-        end
+        #wait follow.weak_signal_event
+        wait follow.end_of_pipe_event
+        emit success_event
+#        Robot.info "EndOfPipeEvent empfangen"
+#        yaw = [:pose, :orientation].inject(State) do |value, field_name|
+#            if value.respond_to?(field_name)
+#                value.send(field_name)
+#            else break
+#            end
+#        end
+#        
+#        script do
+#            if !yaw.nil? && (yaw.yaw < 10* 180/Math::PI) && (yaw.yaw > 10 * -180/Math::PI) #&& State.pose.orientation.yaw.read < precision * Math::PI && State.pose.orientation.yaw.read > -precision * MATH::PI
+#                Robot.info "EndOfPipeEvent weitergeleitet"
+#                emit success_event 
+#            end
+#            Robot.info "EndOfPipeEvent ignoriert"
+#        end
     end
     
     describe("follow-pipe-a-turn-at-e-of-pipe").
@@ -62,11 +74,11 @@ class Main < Roby::Actions::Interface
 	required_arg('post_heading', 'the heading for the pipe to follow')
     state_machine "follow_pipe_a_turn_at_e_of_pipe" do
        #follow = state pipeline_def(:heading => initial_heading, 	:speed_x => PIPE_SPEED, :turn_dir=> turn_dir)
-        follow = intelligent_follew_pipe(precision: 0.5)
+        follow = state intelligent_follow_pipe(initial_heading: initial_heading, precision: 0.5, turn_dir: turn_dir)
        stop = state pipeline_def(:heading => initial_heading, 	:speed_x => -PIPE_SPEED/2.0, :turn_dir=> turn_dir, :timeout => 10)
        turn= state pipeline_def(:heading => post_heading, 	:speed_x => 0, 		 :turn_dir=> turn_dir, :timeout => 10)
        start(follow)
-       transition(follow.weak_signal_event,stop)
+       transition(follow, follow.success_event,stop)
        transition(stop.success_event,turn)
        forward turn.follow_pipe_event, success_event
        forward turn.success_event, success_event
@@ -171,10 +183,13 @@ class Main < Roby::Actions::Interface
     describe("Find_pipe_with_localization")
     state_machine "find_pipe_with_localization" do
         #find_pipe_back = state lawn_mover_over_pipe
-        find_pipe_back = state target_move_def(:finish_when_reached => true, :heading => 1, :depth => -4.5, :delta_timeout => 120, :x => -6.5, :y => -1) 
+#        s1 = state target_move_def(:finish_when_reached => true, :heading => 1, :depth => -5, :delta_timeout => 10, :x => -6.3, :y => -0.8, :timeout => 10)
+        find_pipe_back = state target_move_def(:finish_when_reached => false , :heading => 1, :depth => -5, :x => -6.3, :y => -0.8, :timeout => 180) 
         pipe_detector = state pipeline_detector_def
         pipe_detector.depends_on find_pipe_back, :role => "detector"
         start(pipe_detector)
+        #start(pipe_detector)
+ #       transition(s1.success_event,pipe_detector)
         forward pipe_detector.align_auv_event, success_event
 #        forward pipe_detector.align_auv_event, success_event
         forward pipe_detector,find_pipe_back.success_event,failed_event

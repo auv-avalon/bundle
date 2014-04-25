@@ -10,7 +10,7 @@ Syskit.conf.use_deployment 'bottom_camera'
 Syskit.conf.use_deployment 'left_unicap_camera'
 Syskit.conf.use_deployment 'right_unicap_camera'
 Syskit.conf.use_deployment 'buoy_detector'
-Syskit.conf.use_deployment 'pipeline_follower'
+Syskit.conf.use_deployment 'pipeline_follower', :on => 'back'
 Syskit.conf.use_deployment 'taskmon_front'
 Syskit.conf.use_deployment 'sonar_wall_hough'
 Syskit.conf.use_deployment 'lights'
@@ -54,8 +54,9 @@ Syskit.conf.disable_logging
 Syskit.conf.exclude_from_log '/canbus/Message'
 Syskit.conf.exclude_from_log '/canbus/Statistics' 
 Syskit.conf.exclude_from_log 'blur' 
-Syskit.conf.exclude_from_log 'pipeline_following' 
+Syskit.conf.exclude_from_log 'pipeline_follower' 
 Syskit.conf.exclude_from_log 'line_scanner' 
+Syskit.conf.exclude_from_log 'front_camera' 
 
 
 module Avalon 

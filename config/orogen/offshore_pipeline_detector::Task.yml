@@ -10,7 +10,7 @@ default_x: 0.3
 # if the angle between the pipeline and the auv is bigger than delta_aligning the task goes into the state ALIGNING_AUV
 delta_aligning: 0.785
 # default depth of operation [meter]
-depth: -5.7
+depth: -6.3
 # distance to pipe [meter], 0 = disabled
 distance_to_pipe: 0.0
 # fallback to ALIGN_AUV if out_of_center is exceeded during FOLLOWING_PIPE
@@ -60,7 +60,7 @@ preffered_turn_direction: 0
 # different types of handling preprocession in the studiobad environment
 preprocessing_type: 0
 # delta Depth ABOVE the pipeline that should be used during search or pipe-lost, should be positive!
-search_depth_delta: 1.5
+search_depth_delta: 1.5 
 # Time where the system should go on to the desired direction after an false deected candidate to prevent an double detection of the same candidate-pipeline
 time_between_detection: 2.0
 # no documentation available for this property

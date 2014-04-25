@@ -52,6 +52,22 @@ module Pipeline
             end
         end
 
+#        refine_running_state do
+#            poll_in_state :end_of_pipe do |task|
+#                yaw = [:pose, :orientation].inject(State) do |value, field_name|
+#                    if value.respond_to?(field_name)
+#                        value.send(field_name)
+#                    else break
+#                    end
+#                end
+#                if !yaw.nil? && (yaw.yaw < 10* 180/Math::PI) && (yaw.yaw > 10 * -180/Math::PI)
+#                    emit :end_of_pipe
+#                else
+#                    Robot.info "Heading incorrect, don't emit event"
+#                end
+#            end
+#        end
+
         def update_config(options)
             offshorePipelineDetector_child.update_config(options)
         end

@@ -1,7 +1,7 @@
 require 'models/profiles/main'
 
 
-#State.soft_timeout = #something
+State.soft_timeout = nil #  1200 # 20min (timeout in sec)
 
 State.current_mode = nil 
 State.current_submode = nil
@@ -16,7 +16,9 @@ State.lowlevel_state = -1
 #Define the possible modes that can be set
 #State.navigation_mode = ["drive_simple_def","buoy_def", "pipeline_def", "wall_right_def"]
 
-State.navigation_mode = [nil,"drive_simple_def","target_move_def","buoy_def", "pipeline_def", "wall_right_def", "target_move_def", "pipe_ping_pong","ping_pong_pipe_wall_back_to_pipe","rocking"]
+#State.navigation_mode = [nil,"drive_simple_def","minimal_demo", "minimal_demo_once","target_move_def","buoy_def", "pipeline_def", "wall_right_def", "target_move_def", "pipe_ping_pong","ping_pong_pipe_wall_back_to_pipe","rocking"]
+State.navigation_mode = [nil,"drive_simple_def","minimal_demo", "minimal_demo_once"]
+
 def check_for_switch
 #    #####  Checking wether we can start localication or not ############
 #    if State.lowlevel_state == 5 or State.lowlevel_state == 3 #or State.lowlevel_state == 2
@@ -60,12 +62,16 @@ end
 def check_for_mission_timeout
     if(State.soft_timeout? and State.run_start)
         if(Time.now - State.run_start > State.soft_timeout)
-            begin
-    	        Orocos::TaskContext.get('hbridge').stop
-                rescue Exception => e
-                    Robot.info "Error #{e} during the stop of hbridges occured"
-            end
+            Robot.info "Mission Timeout, Exiting Roby, surfacing NOW"
+            #begin
+    	    #    Orocos::TaskContext.get('hbridge_writer').stop
+            #    rescue Exception => e
+            #        Robot.info "Error #{e} during the stop of hbridges occured"
+            #end
             Roby.engine.quit
+            if(Time.now - State.run_start > (State.soft_timeout + 5))
+                Roby.engine.force_quit
+            end
         end
     end
 end
