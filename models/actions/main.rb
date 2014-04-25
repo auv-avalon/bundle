@@ -58,8 +58,9 @@ class Main
         
         s1 = state find_pipe_with_localization 
         #pipeline1 = state intelligent_follow_pipe(:initial_heading => 0, :precision => 10, :turn_dir => 1)
-        pipeline1 = state pipeline_def(:depth=> -5.5, :heading => 0, :speed_x => 0.5, :turn_dir=> 1, :timeout => 180)
+        pipeline1 = state pipeline_def(:depth => -5.5, :heading => 0, :speed_x => 0.5, :turn_dir=> 1, :timeout => 180)
         align_to_wall = state simple_move_def(:finish_when_reached => true, :heading => 3.14, :depth => -5, :delta_timeout => 5, :timeout => 15)
+        rescue_move = state target_move_def(:finish_when_reached => true, :heading => 1, :depth => -5, :delta_timeout => 5, :x => 0.5, :y => 5.5)
         #Doing wall-servoing 
         wall1 = state wall_right_def(:max_corners => 1) 
         wall2 = state wall_right_def(:timeout => 20) 
@@ -69,8 +70,11 @@ class Main
         start(init)
         transition(init.success_event, s1)
         transition(s1.success_event, pipeline1)
+        transition(s1.failed_event, rescue_move)
         transition(pipeline1.end_of_pipe_event, align_to_wall)
         transition(pipeline1.success_event, align_to_wall)
+        transition(pipeline1.lost_pipe_event, rescue_move)
+        transition(rescue_move.success_event, wall1)
         transition(align_to_wall.success_event, wall1)
         
         transition(wall1.success_event, wall2)
