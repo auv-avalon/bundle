@@ -41,14 +41,23 @@ class Main < Roby::Actions::Interface
     end
     
 
-    describe("intelligend follow-pipe, only emitting weak_signal if heading is correkt")
-    required_arg('precision', 'precision the heading need to be')
+    describe("intelligend follow-pipe, only emitting weak_signal if heading is correkt").
+	optional_arg('turn_dir', 'the turn direction').
+	required_arg('initial_heading', 'the heading for the pipe to follow').
+        required_arg('precision', 'precision the heading need to be')
     action_script "intelligent_follow_pipe" do
-        follow = state pipeline_def(:heading => initial_heading,         :speed_x => PIPE_SPEED, :turn_dir=> turn_dir)
+        follow = task pipeline_def(:heading => initial_heading,         :speed_x => PIPE_SPEED, :turn_dir=> turn_dir)
         execute follow
         wait follow.weak_signal_event
         while(true) do
-            if State.pose.orientation.yaw < precision * MATH::PI && State.pose.orientation.yaw > -precision * MATH::PI
+            yaw = [:pose, :orientation].inject(State) do |value, field_name|
+                if value.respond_to?(field_name)
+                    value.send(field_name)
+                else break
+                end
+            end
+
+            if !yaw.nil? && yaw < precision * Math::PI && yaw > precision * -Math::PI #&& State.pose.orientation.yaw.read < precision * Math::PI && State.pose.orientation.yaw.read > -precision * MATH::PI
                 emit follow.weak_signal_event
             else
                 execute follow
@@ -62,7 +71,7 @@ class Main < Roby::Actions::Interface
 	required_arg('post_heading', 'the heading for the pipe to follow')
     state_machine "follow_pipe_a_turn_at_e_of_pipe" do
        #follow = state pipeline_def(:heading => initial_heading, 	:speed_x => PIPE_SPEED, :turn_dir=> turn_dir)
-        follow = intelligent_follew_pipe(precision: 0.5)
+        follow = intelligent_follew_pipe(heading: initial_heading, precision: 0.5, turn_dir: turn_dir)
        stop = state pipeline_def(:heading => initial_heading, 	:speed_x => -PIPE_SPEED/2.0, :turn_dir=> turn_dir, :timeout => 10)
        turn= state pipeline_def(:heading => post_heading, 	:speed_x => 0, 		 :turn_dir=> turn_dir, :timeout => 10)
        start(follow)

@@ -1,5 +1,6 @@
 mission*
 log
+logs
 scripts/controllers/logs
 results
 *.sw?

@@ -168,7 +168,7 @@ end
 module HBridgeFailure
     class Retry
         on_fault with_origin(HBrigde.timeout_event) do
-            retry
+#            retry
         end
 
 
