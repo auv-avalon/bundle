@@ -6,9 +6,9 @@ bundle:
           #        - rock_ugv_nav
 
 log:
-    filter_backtraces: false
-    events: true
-
+    #    filter_backtraces: false
+    #events: true
+    dir: /mnt/logs/new
     # logging Roby into file: logs/<date>/<file>.txt
     levels:
         #        roby/execution_engine: INFO

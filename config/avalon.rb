@@ -1,22 +1,22 @@
 #Front Machine
 #Syskit.conf.process_server 'front','192.168.128.50' #, :log_dir => '/mnt/logs/log', :result_dir => '/mnt/logs/results'
 Syskit.conf.process_server 'back','192.168.128.51' #, :log_dir => '/mnt/logs/log', :result_dir => '/mnt/logs/results'
-#Syskit.conf.process_server 'front','localhost' #, :log_dir => '/mnt/logs/log', :result_dir => '/mnt/logs/results'
+#Syskit.conf.process_server 'front','localhost', :log_dir => '/mnt/logs/log', :result_dir => '/mnt/logs/results'
 
 
-Syskit.conf.use_deployment 'dynamixel', :on => "front"
-Syskit.conf.use_deployment 'front_camera', :on => "front"
-Syskit.conf.use_deployment 'bottom_camera', :on => "front"
-Syskit.conf.use_deployment 'left_unicap_camera', :on => "front"
-Syskit.conf.use_deployment 'right_unicap_camera', :on => "front"
-Syskit.conf.use_deployment 'buoy_detector', :on => "front"
-Syskit.conf.use_deployment 'pipeline_follower', :on => "front"
-Syskit.conf.use_deployment 'taskmon_front', :on => "front"
-Syskit.conf.use_deployment 'sonar_wall_hough', :on => "front"
-Syskit.conf.use_deployment 'lights', :on => "front"
-Syskit.conf.use_deployment 'low_level', :on => "front"
-Syskit.conf.use_deployment 'line_scanner', :on => "front"
-Syskit.conf.use_deployment 'blur', :on => "front"
+Syskit.conf.use_deployment 'dynamixel'
+Syskit.conf.use_deployment 'front_camera'
+Syskit.conf.use_deployment 'bottom_camera'
+Syskit.conf.use_deployment 'left_unicap_camera'
+Syskit.conf.use_deployment 'right_unicap_camera'
+Syskit.conf.use_deployment 'buoy_detector'
+Syskit.conf.use_deployment 'pipeline_follower', :on => 'back'
+Syskit.conf.use_deployment 'taskmon_front'
+Syskit.conf.use_deployment 'sonar_wall_hough'
+Syskit.conf.use_deployment 'lights'
+Syskit.conf.use_deployment 'low_level'
+Syskit.conf.use_deployment 'line_scanner'
+Syskit.conf.use_deployment 'blur'
 
 #Rear machine
 Syskit.conf.use_deployment 'avalon_back_base_control', :on => 'back'
@@ -54,8 +54,9 @@ Syskit.conf.disable_logging
 Syskit.conf.exclude_from_log '/canbus/Message'
 Syskit.conf.exclude_from_log '/canbus/Statistics' 
 Syskit.conf.exclude_from_log 'blur' 
-Syskit.conf.exclude_from_log 'pipeline_following' 
+Syskit.conf.exclude_from_log 'pipeline_follower' 
 Syskit.conf.exclude_from_log 'line_scanner' 
+Syskit.conf.exclude_from_log 'front_camera' 
 
 
 module Avalon 

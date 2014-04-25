@@ -169,10 +169,10 @@ module AvalonControl
                             (pos.position[1] - y).abs < delta_xy and
                             (pos.position[2] - depth).abs < delta_z and
                             (pos.orientation.yaw - heading).abs < delta_yaw #TODO WARNING make this correct under respect of wraps
-                                current_timeout = (@last_invalid_pose + delta_timeout - Time.now).to_i
+                                current_timeout = (@last_invalid_pose + delta_timeout - Time.now).to_i unless @last_invalid_pose.nil?
                                 @last_timeout = 0 if @last_timeout.nil?
-                                Robot.info "Got there, timeout in #{(@last_invalid_pose + delta_timeout - Time.now).to_i}" if (current_timeout - @last_timeout) >= 1
-                                @last_timeout = current_timeout if (current_timeout - @last_timeout) >= 1
+                                Robot.info "Got there, timeout in #{(@last_invalid_pose + delta_timeout - Time.now).to_i}" if (@last_timeout.nil? && (current_timeout - @last_timeout) >= 1 )
+                                @last_timeout = current_timeout if (@last_timeout.nil? && (current_timeout - @last_timeout) >= 1)
                                 @reached_position = true
                                 if (@last_invalid_pose + delta_timeout) < Time.new
                                     Robot.info "Hold Position, recalculating"

@@ -52,25 +52,55 @@ class Main
         transition(s2.success_event,s1)
     end
 
+    describe("Do the minimal demo once")
+    state_machine "minimal_demo_once" do
+        init = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 5, :timeout => 15)
+        
+        s1 = state find_pipe_with_localization 
+        #pipeline1 = state intelligent_follow_pipe(:initial_heading => 0, :precision => 10, :turn_dir => 1)
+        pipeline1 = state pipeline_def(:depth=> -5.5, :heading => 0, :speed_x => 0.5, :turn_dir=> 1, :timeout => 180)
+        align_to_wall = state simple_move_def(:finish_when_reached => true, :heading => 3.14, :depth => -5, :delta_timeout => 5, :timeout => 15)
+        #Doing wall-servoing 
+        wall1 = state wall_right_def(:max_corners => 1) 
+        wall2 = state wall_right_def(:timeout => 20) 
+        
+        surface = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => 1, :speed_x => 0.1, :delta_timeout => 5, :timeout => 30)
+
+        start(init)
+        transition(init.success_event, s1)
+        transition(s1.success_event, pipeline1)
+        transition(pipeline1.end_of_pipe_event, align_to_wall)
+        transition(pipeline1.success_event, align_to_wall)
+        transition(align_to_wall.success_event, wall1)
+        
+        transition(wall1.success_event, wall2)
+        transition(wall2.success_event, surface)
+        forward surface.success_event, success_event
+    end
+    
+
     describe("Do the minimal demo for the halleneroeffnung, means pipeline, then do wall-following and back to pipe-origin")
     state_machine "minimal_demo" do
-        use_fault_response_table HBridgeFailure::Retry 
-        init = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 60, :timeout => 60)
+        init = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 5, :timeout => 15)
         s1 = state find_pipe_with_localization 
 #        detector = state pipeline_detector_def
 #        detector.depends_on s1
     
         #Follow pipeline to right end
-        pipeline1 = state pipeline_def(:depth=> -5.5, :heading => 0, :speed_x => 0.5, :turn_dir=> 1)
-        align_to_wall = state simple_move_def(:finish_when_reached => true, :heading => 3.14, :depth => -5, :delta_timeout => 5, :timeout => 30)
+        pipeline1 = state pipeline_def(:depth=> -5.5, :heading => 0, :speed_x => 0.5, :turn_dir=> 1, :timeout => 180)
+        #pipeline1 = state intelligent_follow_pipe(:precision => 5, :initial_heading => 0, :turn_dir=> 1)
+        #pipeline1 = state intelligent_follow_pipe(:initial_heading => 0, :precision => 10, :turn_dir => 1)
+        align_to_wall = state simple_move_def(:finish_when_reached => true, :heading => 3.14, :depth => -5, :delta_timeout => 5, :timeout => 15)
         #Doing wall-servoing 
         wall1 = state wall_right_def(:max_corners => 1) 
-        wall2 = state wall_right_def(:timeout => 10) 
+        wall2 = state wall_right_def(:timeout => 20) 
 
+        start(init)
         transition(init.success_event, s1)
         transition(s1.success_event, pipeline1)
         #transition(pipeline1.success_event, align_to_wall)
         transition(pipeline1.end_of_pipe_event, align_to_wall)
+        transition(pipeline1.success_event, align_to_wall)
         transition(align_to_wall.success_event, wall1)
         
         transition(wall1.success_event, wall2)
@@ -80,7 +110,7 @@ class Main
     describe("Do the minimal demo for the halleneroeffnung, menas pipeline, then do wall-following and back to pipe-origin")
     state_machine "minimal_demo_blind" do
         init = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 60, :timeout => 60)
-        s1 = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 60, :timeout => 60) 
+        s1 = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 10, :timeout => 60) 
         detector = state pipeline_detector_def
         detector.depends_on s1
     
@@ -150,27 +180,27 @@ class Main
     
 end
 
-module FailureHandling
-    class Operator < Roby::Coordination::FaultResponseTable
-        describe("waits for the operator to do something").
-            returns(WaitForOperator)
-        def wait_for_operator
-            WaitForOperator.new
-        end
-        # This is a catch-all that makes the system stop doing anything until an
-        # operator comes
-        on_fault Roby::LocalizedError do
-            wait_for_operator!
-        end
-    end
-end
-
-module HBridgeFailure
-    class Retry
-        on_fault with_origin(HBrigde.timeout_event) do
-#            retry
-        end
-
-
-    end
-end
+#module FailureHandling
+#    class Operator < Roby::Coordination::FaultResponseTable
+#        describe("waits for the operator to do something").
+#            returns(WaitForOperator)
+#        def wait_for_operator
+#            WaitForOperator.new
+#        end
+#        # This is a catch-all that makes the system stop doing anything until an
+#        # operator comes
+#        on_fault Roby::LocalizedError do
+#            wait_for_operator!
+#        end
+#    end
+#end
+#
+#module HBridgeFailure
+#    class Retry
+#        on_fault with_origin(HBrigde.timeout_event) do
+##            retry
+#        end
+#
+#
+#    end
+#end
