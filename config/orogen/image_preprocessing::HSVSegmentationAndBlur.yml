@@ -8,7 +8,7 @@ hMin: 18
 # no documentation available for this property
 sMax: 256
 # no documentation available for this property
-sMin: 121
+sMin: 0
 # no documentation available for this property
 steps_per_frame: 1
 # no documentation available for this property

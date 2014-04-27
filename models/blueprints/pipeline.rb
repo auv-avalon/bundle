@@ -9,11 +9,32 @@ using_task_library 'pipeline_inspection'
 using_task_library 'line_scanner'
 
 module Pipeline
-    class LineScanner < Syskit::Composition 
+
+#    class LineScanner < Syskit::Composition 
+#        add Base::ImageProviderSrv, :as => 'camera'
+#        add ::LineScanner::Task, :as => 'scanner'
+#        connect camera_child => scanner_child
+#    end
+
+
+    class LineScanner < Syskit::Composition
+
+        add PipelineInspection::Inspection, :as => 'inspection'
         add Base::ImageProviderSrv, :as => 'camera'
-        add ::LineScanner::Task, :as => 'scanner'
-        connect camera_child => scanner_child
-    end
+        add OffshorePipelineDetector::Task, :as => 'offshore_pipeline_detector'
+        add Localization::DeadReckoningSrv, :as => 'motion_model'
+        add ::LineScanner::Task, :as => 'line_scan'
+
+
+        connect camera_child => line_scan_child
+        connect line_scan_child => inspection_child.laserPointCloud_port
+        connect offshore_pipeline_detector_child => inspection_child
+        connect motion_model_child => inspection_child
+
+#        export inspection_child.inspectionStatus_port
+#        export inspection_child.pipeMap_port
+   end
+
         
     class Detector < Syskit::Composition 
         argument :heading, :default => nil
@@ -134,25 +155,5 @@ module Pipeline
         end
            
     end
-    
-    class LaserInspection < Syskit::Composition
-      
-        add PipelineInspection::Inspection, :as => 'inspection'
-        add Base::ImageProviderSrv, :as => 'camera'
-        add OffshorePipelineDetector::Task, :as => 'offshore_pipeline_detector'
-        add Localization::DeadReckoningSrv, :as => 'motion_model'
-        add ::LineScanner::Task, :as => 'line_scan'
-
-        
-        connect camera_child => line_scan_child
-        connect line_scan_child => inspection_child.laserPointCloud_port
-        connect offshore_pipeline_detector_child => inspection_child
-        connect motion_model_child => inspection_child
-
-        export inspection_child.inspectionStatus_port
-        export inspection_child.pipeMap_port
-   end
-    
-    
     
 end

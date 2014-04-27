@@ -60,7 +60,7 @@ class Main
         #pipeline1 = state intelligent_follow_pipe(:initial_heading => 0, :precision => 10, :turn_dir => 1)
         pipeline1 = state pipeline_def(:depth => -5.5, :heading => 0, :speed_x => 0.5, :turn_dir=> 1, :timeout => 180)
         align_to_wall = state simple_move_def(:finish_when_reached => true, :heading => 3.14, :depth => -5, :delta_timeout => 5, :timeout => 15)
-        rescue_move = state target_move_def(:finish_when_reached => true, :heading => 1, :depth => -5, :delta_timeout => 5, :x => 0.5, :y => 5.5)
+        rescue_move = state target_move_def(:finish_when_reached => true, :heading => Math::PI, :depth => -5, :delta_timeout => 5, :x => 0.5, :y => 5.5)
         #Doing wall-servoing 
         wall1 = state wall_right_def(:max_corners => 1) 
         wall2 = state wall_right_def(:timeout => 20) 
@@ -91,24 +91,32 @@ class Main
 #        detector.depends_on s1
     
         #Follow pipeline to right end
-        pipeline1 = state pipeline_def(:depth=> -5.5, :heading => 0, :speed_x => 0.5, :turn_dir=> 1, :timeout => 180)
+        pipeline1 = state pipeline_def(:depth=> -5.5, :heading => 0, :speed_x => 0.5, :turn_dir=> 1, :timeout => 120)
         #pipeline1 = state intelligent_follow_pipe(:precision => 5, :initial_heading => 0, :turn_dir=> 1)
         #pipeline1 = state intelligent_follow_pipe(:initial_heading => 0, :precision => 10, :turn_dir => 1)
-        align_to_wall = state simple_move_def(:finish_when_reached => true, :heading => 3.14, :depth => -5, :delta_timeout => 5, :timeout => 15)
+        align_to_wall = state simple_move_def(:finish_when_reached => true, :heading => 3.14, :depth => -6, :delta_timeout => 5, :timeout => 15)
+        rescue_move = state target_move_def(:finish_when_reached => true, :heading => Math::PI, :depth => -6, :delta_timeout => 5, :x => 0.5, :y => 5.5)
         #Doing wall-servoing 
         wall1 = state wall_right_def(:max_corners => 1) 
         wall2 = state wall_right_def(:timeout => 20) 
+        blind1 = state simple_move_def(:heading => 0.1, :depth => -5.5, :timeout => 5)
+        blind2 = state simple_move_def(:heading => 0.1, :depth => -5.5, :timeout => 10, :speed_x => 0.3)
 
         start(init)
         transition(init.success_event, s1)
         transition(s1.success_event, pipeline1)
+        transition(s1.failed_event, rescue_move)
         #transition(pipeline1.success_event, align_to_wall)
         transition(pipeline1.end_of_pipe_event, align_to_wall)
         transition(pipeline1.success_event, align_to_wall)
+        transition(pipeline1.lost_pipe_event, rescue_move)
+        transition(rescue_move.success_event, wall1)
         transition(align_to_wall.success_event, wall1)
         
         transition(wall1.success_event, wall2)
-        transition(wall2.success_event, s1)
+        transition(wall2.success_event, blind1)
+        transition(blind1.success_event, blind2)
+        transition(blind2.success_event, s1)
     end
     
     describe("Do the minimal demo for the halleneroeffnung, menas pipeline, then do wall-following and back to pipe-origin")
