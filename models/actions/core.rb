@@ -184,7 +184,7 @@ class Main < Roby::Actions::Interface
     state_machine "find_pipe_with_localization" do
         #find_pipe_back = state lawn_mover_over_pipe
 #        s1 = state target_move_def(:finish_when_reached => true, :heading => 1, :depth => -5, :delta_timeout => 10, :x => -6.3, :y => -0.8, :timeout => 10)
-        find_pipe_back = state target_move_def(:finish_when_reached => false , :heading => 1, :depth => -6, :x => -7.8, :y => -0.8, :timeout => 180) 
+        find_pipe_back = state target_move_def(:finish_when_reached => false , :heading => 1, :depth => -6, :x => -6.5, :y => -1, :timeout => 180) 
         pipe_detector = state pipeline_detector_def
         pipe_detector.depends_on find_pipe_back, :role => "detector"
         start(pipe_detector)

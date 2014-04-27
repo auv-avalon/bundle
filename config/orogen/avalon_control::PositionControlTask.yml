@@ -6,13 +6,13 @@ timeout: 1.0
 x_pid: 
   max: 1
   d: 0.0
-  p: 0.01
+  p: 0.05
   min: -1
   i: 0.0
 # no documentation available for this property
 y_pid: 
   max: 1
   d: 0.0
-  p: 0.5
+  p: 0.3
   min: -1
   i: 0.0

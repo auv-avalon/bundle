@@ -64,7 +64,7 @@ module Pipeline
         export offshorePipelineDetector_child.find_port("position_command")
 #        export offshorePipelineDetector_child.position_command_port
         provides Base::AUVRelativeMotionControllerSrv, :as => 'controller'
-
+        export offshorePipelineDetector_child.pipeline_port
         attr_accessor :pipeline_heading
         attr_accessor :last_valid_heading
 
@@ -121,7 +121,9 @@ module Pipeline
         #add AuvRelPosController::Task, :as => "workaround"
         #controller_child.position_command_port.connect_to workaround_child 
         #end workaround
-
+        
+        add_optional AvalonControl::PositionControlTask, :as => "workaround"
+        connect controller_local_child.pipeline_port => workaround_child
 
         argument :turn_dir, :default => nil
         argument :heading, :default => nil

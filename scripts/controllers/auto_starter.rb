@@ -20,19 +20,19 @@ State.lowlevel_state = -1
 State.navigation_mode = [nil,"drive_simple_def","minimal_demo", "minimal_demo_once"]
 
 def check_for_switch
-#    #####  Checking wether we can start localication or not ############
-#    if State.lowlevel_state == 5 or State.lowlevel_state == 3 #or State.lowlevel_state == 2
-#        if State.localization_task.nil?
-#            nm, _ = Robot.send("localization_detector_def!")
-#            State.localization_task = nm.as_service
-#        end
-#    else
-#        if State.localization_task
-#            Roby.plan.unmark_mission(State.localization_task.task)
-#            State.localization_task = nil
-#        end
-#    end
-#
+    #####  Checking wether we can start localication or not ############
+    if State.lowlevel_state == 5 or State.lowlevel_state == 3 #or State.lowlevel_state == 2
+        if State.localization_task.nil?
+            nm, _ = Robot.send("localization_detector_def!")
+            State.localization_task = nm.as_service
+        end
+    else
+        if State.localization_task
+            Roby.plan.unmark_mission(State.localization_task.task)
+            State.localization_task = nil
+        end
+    end
+
 
     #######################  Checking wether we can start some behaviour  ######################
     if State.lowlevel_state == 5 or State.lowlevel_state == 3

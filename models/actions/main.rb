@@ -85,22 +85,22 @@ class Main
 
     describe("Do the minimal demo for the halleneroeffnung, means pipeline, then do wall-following and back to pipe-origin")
     state_machine "minimal_demo" do
-        init = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 5, :timeout => 15, :speed_x => 0)
+        init = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -7, :delta_timeout => 5, :timeout => 15, :speed_x => 0)
         s1 = state find_pipe_with_localization 
 #        detector = state pipeline_detector_def
 #        detector.depends_on s1
     
         #Follow pipeline to right end
-        pipeline1 = state pipeline_def(:depth=> -6.8, :heading => 0, :speed_x => 0.5, :turn_dir=> 1, :timeout => 120)
+        pipeline1 = state pipeline_def(:depth=> -7.1, :heading => 0, :speed_x => 0.5, :turn_dir=> 1, :timeout => 120)
         #pipeline1 = state intelligent_follow_pipe(:precision => 5, :initial_heading => 0, :turn_dir=> 1)
         #pipeline1 = state intelligent_follow_pipe(:initial_heading => 0, :precision => 10, :turn_dir => 1)
         align_to_wall = state simple_move_def(:finish_when_reached => true, :heading => 3.14, :depth => -6, :delta_timeout => 5, :timeout => 15)
         rescue_move = state target_move_def(:finish_when_reached => true, :heading => Math::PI, :depth => -6, :delta_timeout => 5, :x => 0.5, :y => 5.5, :speed_x => 0)
         #Doing wall-servoing 
         wall1 = state wall_right_def(:max_corners => 1) 
-        wall2 = state wall_right_def(:timeout => 30) 
-        blind1 = state simple_move_def(:heading => 0.1, :depth => -5.5, :timeout => 5)
-        blind2 = state simple_move_def(:heading => 0.1, :depth => -5.5, :timeout => 10, :speed_x => 0.3)
+        wall2 = state wall_right_def(:timeout => 35) 
+        blind1 = state simple_move_def(:heading => 0.0, :depth => -6.0, :timeout => 5)
+        blind2 = state simple_move_def(:heading => 0.0, :depth => -6.0, :timeout => 5, :speed_x => 0.3)
 
         start(init)
         transition(init.success_event, s1)
@@ -109,7 +109,8 @@ class Main
         #transition(pipeline1.success_event, align_to_wall)
         transition(pipeline1.end_of_pipe_event, align_to_wall)
         transition(pipeline1.success_event, align_to_wall)
-        transition(pipeline1.lost_pipe_event, rescue_move)
+        transition(pipeline1.failed_event, rescue_move)
+        #transition(pipeline1.lost_pipe_event, rescue_move)
         transition(rescue_move.success_event, wall1)
         transition(align_to_wall.success_event, wall1)
         

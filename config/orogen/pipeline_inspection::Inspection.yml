@@ -1,6 +1,6 @@
 --- name:default
 # Size of the ringbuffer, containing the last n lasersamples
-buffer_size: 150
+buffer_size: 20
 # Orientation of the camera in the bodyframe
 cameraOrientation:
   im:
