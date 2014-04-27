@@ -44,7 +44,7 @@ whitebalance_blue: 100
 # Red gain expressed as a percentage of the camera default setting.
 whitebalance_red: 100
 # opening mode (Master, Monitor, MasterMulticast)
-mode: Master
+mode: Master 
 # whitebalance mode (auto, manual, auto_once, none)
 whitebalance_mode: auto
 # The camera_format is converted into this format before it is written to the output port 
@@ -63,7 +63,7 @@ package_size: 0
 # unique camerea id
 camera_id: "53093"
 # frames per second
-fps: 20
+fps: 15 
 # exposure value if exposure mode is not auto
 exposure: 20000
 # exposure mode (auto, manual, external, none)
@@ -85,13 +85,13 @@ region_x: 24
 # start of region readout, in pixels; top edge.
 region_y: 550
 # scale factor for the x direction which is used to scale the image before it is written to the output_port. 
-scale_x: 1.0
+scale_x: 0.5
 # scale factor for the y direction which is used to scale the image before it is written to the output_port. 
-scale_y: 1.0
+scale_y: 0.5
 #overwrite the resize algorithm for this frame, since bayer resize is not implemented for quarter images
-resize_algorithm: :INTER_NEAREST
+#resize_algorithm: :BAYER_RESIZE
 #fixed set the output format to RGB
-output_format: MODE_RGB
+#output_format: MODE_BAYER 
 
 
 
@@ -103,7 +103,7 @@ exposure: 20000
 # exposure mode (auto, manual, external, none)
 exposure_mode: auto
 # frames per second
-fps: 12
+fps: 15
 # gain value
 gain: 15
 # gain mode

@@ -3,6 +3,7 @@
 Syskit.conf.process_server 'back','192.168.128.51' #, :log_dir => '/mnt/logs/log', :result_dir => '/mnt/logs/results'
 #Syskit.conf.process_server 'front','localhost', :log_dir => '/mnt/logs/log', :result_dir => '/mnt/logs/results'
 
+Syskit.conf.app.orocos_start_all_deployments = true
 
 Syskit.conf.use_deployment 'dynamixel'
 Syskit.conf.use_deployment 'front_camera'

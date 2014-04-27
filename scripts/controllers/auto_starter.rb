@@ -1,7 +1,7 @@
 require 'models/profiles/main'
 
 
-State.soft_timeout = nil #  1200 # 20min (timeout in sec)
+State.soft_timeout = nil # 20min (timeout in sec)
 
 State.current_mode = nil 
 State.current_submode = nil
@@ -61,15 +61,17 @@ end
 
 def check_for_mission_timeout
     if(State.soft_timeout? and State.run_start)
-        if(Time.now - State.run_start > State.soft_timeout)
-            Robot.info "Mission Timeout, Exiting Roby, surfacing NOW"
-            #begin
-    	    #    Orocos::TaskContext.get('hbridge_writer').stop
-            #    rescue Exception => e
-            #        Robot.info "Error #{e} during the stop of hbridges occured"
-            #end
+        if(Time.now - State.run_start > State.soft_timeout )
+            if (Time.now - State.run_start < (State.soft_timeout + 5))
+                Robot.info "Mission Timeout, Exiting Roby, surfacing NOW"
+                begin
+                    Orocos::TaskContext.get('hbridge_writer').stop
+                rescue Exception => e
+                    Robot.info "Error #{e} during the stop of hbridges occured"
+                end
+            end
             Roby.engine.quit
-            if(Time.now - State.run_start > (State.soft_timeout + 5))
+            if(Time.now - State.run_start > (State.soft_timeout + 30))
                 Roby.engine.force_quit
             end
         end

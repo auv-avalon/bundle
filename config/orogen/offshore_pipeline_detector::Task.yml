@@ -10,7 +10,7 @@ default_x: 0.3
 # if the angle between the pipeline and the auv is bigger than delta_aligning the task goes into the state ALIGNING_AUV
 delta_aligning: 0.785
 # default depth of operation [meter]
-depth: -6.3
+depth: -7.2
 # distance to pipe [meter], 0 = disabled
 distance_to_pipe: 0.0
 # fallback to ALIGN_AUV if out_of_center is exceeded during FOLLOWING_PIPE
@@ -66,6 +66,6 @@ time_between_detection: 2.0
 # no documentation available for this property
 use_channel: 0
 # if the disruption is higher than that value the follower will switch to WEAK_SIGNAL
-weak_signal: 0.2
+weak_signal: 0.7
 # speed which is used if the disruption is higher than weak_signal
 weak_signal_x: 0.15

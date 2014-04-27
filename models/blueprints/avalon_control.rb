@@ -58,9 +58,11 @@ module AvalonControl
         add ::Base::ZProviderSrv, :as => 'z'
         add ::Base::OrientationSrv, :as => 'ori'
         add DepthReader::DepthAndOrientationFusion, :as => 'task'
+	add Base::GroundDistanceSrv, :as => 'echo'
     
         connect z_child => task_child.depth_samples_port
         connect ori_child => task_child.orientation_samples_port
+	connect echo_child => task_child.ground_distance_port
     
         export task_child.pose_samples_port
         provides ::Base::OrientationWithZSrv, :as => "orientation_with_z"
@@ -98,6 +100,7 @@ module AvalonControl
         end
         
         poll do
+            @last_invalid_pose = Time.new if @last_invalid_pose.nil?
             begin
             if(self.timeout)
                 if(@start_time + self.timeout < Time.now)
@@ -111,10 +114,15 @@ module AvalonControl
                         if 
                             (pos.position[2] - depth).abs < delta_z and
                             (pos.orientation.yaw - heading).abs < delta_yaw #TODO WARNING make this correct under respect of wraps
+                                #current_timeout = (@last_invalid_pose + delta_timeout - Time.now).to_i unless @last_invalid_pose.nil?
+                                #@last_timeout = current_timeout if (@last_timeout.nil? && (current_timeout - @last_timeout) >= 1)
+                                #Robot.info "Got there, timeout in #{(@last_invalid_pose + delta_timeout - Time.now).to_i}" if ( !@last_invalid_pose.nil? && !@last_timeout.nil? && (current_timeout - @last_timeout) >= 1 )
                                 if (@last_invalid_pose + delta_timeout) < Time.new
+                                    Robot.info "Reached Position"
                                     emit :success
                                 end
                         else
+                            Robot.info "################### Bad Pose! ################" if @reached_position
                             @last_invalid_pose = Time.new
                         end
                     end
@@ -154,6 +162,7 @@ module AvalonControl
         end
         
         poll do
+            @last_invalid_pose = Time.new if @last_invalid_pose.nil?
             if self.timeout
                 if(@start_time + self.timeout < Time.now)
                     Robot.info  "Finished Pos Mover because time is over! #{@start_time} #{@start_time + self.timeout}"
@@ -165,8 +174,8 @@ module AvalonControl
                 if @reader
                     if pos = @reader.read
                         if 
-                            (pos.position[0] - x).abs < delta_xy and
-                            (pos.position[1] - y).abs < delta_xy and
+                            #(pos.position[0] - x).abs < delta_xy and
+                            #(pos.position[1] - y).abs < delta_xy and
                             (pos.position[2] - depth).abs < delta_z and
                             (pos.orientation.yaw - heading).abs < delta_yaw #TODO WARNING make this correct under respect of wraps
                                 current_timeout = (@last_invalid_pose + delta_timeout - Time.now).to_i unless @last_invalid_pose.nil?
