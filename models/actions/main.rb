@@ -109,47 +109,63 @@ class Main
     
     describe("Do the minimal demo for the halleneroeffnung, menas pipeline, then do wall-following and back to pipe-origin")
     state_machine "minimal_demo_blind" do
-        init = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 60, :timeout => 60)
-        s1 = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 10, :timeout => 60) 
-        detector = state pipeline_detector_def
-        detector.depends_on s1
+        init = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 5, :timeout => 15)
+        s1 = state find_pipe_with_localization 
     
-        start(init)
         #Follow pipeline to right end
-        pipeline1 = state follow_pipe_a_turn_at_e_of_pipe(:initial_heading => 0, :post_heading => 3.14, :turn_dir => 1)
+        
+		pipeline1 = state trajectory_move_def(:target => 'over_pipeline')  
         #Doing wall-servoing 
         wall1 = state wall_right_def(:max_corners => 1) 
-        wall2 = state wall_right_def(:timeout => 10) 
+        wall2 = state wall_right_def(:timeout => 20) 
 
-        transition(init.success_event, detector)
-        transition(detector.align_auv_event, pipeline1)
+        start(init)
+        transition(init.success_event, s1)
+        transition(s1.success_event, pipeline1)
+        #transition(pipeline1.success_event, align_to_wall)
         transition(pipeline1.success_event, wall1)
+        transition(align_to_wall.success_event, wall1)
+        
         transition(wall1.success_event, wall2)
-        transition(wall2.success_event, detector)
+        transition(wall2.success_event, s1)
+
     end
     
    
     #TODO This could be extended by adding additional mocups
     describe("do a full Demo, with visiting the window after wall-servoing")
     state_machine "full_demo" do
-        s1 = state target_move_def(:finish_when_reached => true, :heading => 1, :depth => -5.5, :delta_timeout => 10, :x => -6.5, :y => -1) #trajectory_move_def(:target => "pipeline") 
-        detector = state pipeline_detector_def
-        detector.depends_on s1
+        init = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 5, :timeout => 15)
+        s1 = state find_pipe_with_localization 
     
         #Follow pipeline to right end
-        pipeline1 = state follow_pipe_a_turn_at_e_of_pipe(:initial_heading => 0, :post_heading => 3.14, :turn_dir => 1)
+        pipeline1 = state pipeline_def(:depth=> -5.5, :heading => 0, :speed_x => 0.5, :turn_dir=> 1, :timeout => 180)
+		align_to_wall = state simple_move_def(:finish_when_reached => true, :heading => 3.14, :depth => -5, :delta_timeout => 5, :timeout => 15)
         #Doing wall-servoing 
         wall1 = state wall_right_def(:max_corners => 1) 
-        wall2 = state wall_right_def(:timeout => 10) 
-        #window
-        window = state to_window 
+        wall2 = state wall_right_def(:timeout => 20) 
         
-        start(detector)
-        transition(detector.align_auv_event, pipeline1)
-        transition(pipeline1.success_event, wall1)
+		s2 = state find_pipe_with_localization 
+    
+        #Follow pipeline to right end
+        pipeline1_2 = state pipeline_def(:depth=> -5.5, :heading => 0, :speed_x => 0.5, :turn_dir=> 1, :timeout => 180)
+
+        throught_becken = state trajectory_move_def(:target => "explore") 
+
+
+        start(init)
+        transition(init.success_event, s1)
+        transition(s1.success_event, pipeline1)
+        #transition(pipeline1.success_event, align_to_wall)
+        transition(pipeline1.end_of_pipe_event, align_to_wall)
+        transition(pipeline1.success_event, align_to_wall)
+        transition(align_to_wall.success_event, wall1)
         transition(wall1.success_event, wall2)
-        transition(wall2.success_event, window)
-        transition(window.success_event, detector)
+        transition(wall2.success_event, s2)
+        transition(s2.success_event, pipeline1_2)
+        transition(pipeline1_2.success_event, throught_becken)
+        transition(pipeline1_2.end_of_pipe_event, throught_becken)
+		transition(throught_becken.success_event,s1)
     end
     
 #    describe("Workaround1")
@@ -161,22 +177,22 @@ class Main
 #        forward detector.align_auv_event, success_event 
 #    end
 
-    describe("Find pipeline localization based, and to a infinite pipe-ping-pong on it")
-    state_machine "start_pipe_loopings" do 
-        
-        detector = state trajectory_move_def(:target => "pipeline") 
-        #turn = state simple_move_def(:heading => -Math::PI, :timeout => 5) 
-
-        pipeline1 = state pipe_ping_pong(:post_heading => 0)
-        pipeline2 = state pipe_ping_pong(:post_heading => 0)
-        
-        start detector
-
-        transition(detector.success_event, pipeline1)
-#        transition(turn.success_event, pipeline1)
-        transition(pipeline1.success_event, pipeline2)
-        transition(pipeline2.success_event, pipeline1)
-    end
+#    describe("Find pipeline localization based, and to a infinite pipe-ping-pong on it")
+#    state_machine "start_pipe_loopings" do 
+#        
+#        detector = state trajectory_move_def(:target => "pipeline") 
+#        #turn = state simple_move_def(:heading => -Math::PI, :timeout => 5) 
+#
+#        pipeline1 = state pipe_ping_pong(:post_heading => 0)
+#        pipeline2 = state pipe_ping_pong(:post_heading => 0)
+#        
+#        start detector
+#
+#        transition(detector.success_event, pipeline1)
+##        transition(turn.success_event, pipeline1)
+#        transition(pipeline1.success_event, pipeline2)
+#        transition(pipeline2.success_event, pipeline1)
+#    end
     
 end
 

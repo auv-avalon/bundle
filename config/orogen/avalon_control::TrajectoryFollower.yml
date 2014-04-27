@@ -2,12 +2,6 @@
 # defaults to unset, so not taken into account
 final_heading: .nan
 # no documentation available for this property
-metadata:
-  metadata: []
-  properties: []
-  input_ports: []
-  output_ports: []
-# no documentation available for this property
 step_width: 3.0
 # no documentation available for this property
 timeout_at_end_before_mark_end_reached: 10.0
