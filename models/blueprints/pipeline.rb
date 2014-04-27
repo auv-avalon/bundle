@@ -1,9 +1,12 @@
 require 'models/blueprints/sensors'
 require 'models/blueprints/avalon'
+require 'models/blueprints/localization.rb'
 using_task_library 'auv_rel_pos_controller'
 using_task_library 'offshore_pipeline_detector'
 using_task_library 'line_scanner'
 using_task_library 'image_preprocessing'
+using_task_library 'pipeline_inspection'
+using_task_library 'line_scanner'
 
 module Pipeline
     class LineScanner < Syskit::Composition 
@@ -131,4 +134,25 @@ module Pipeline
         end
            
     end
+    
+    class LaserInspection < Syskit::Composition
+      
+        add PipelineInspection::Inspection, :as => 'inspection'
+        add Base::ImageProviderSrv, :as => 'camera'
+        add OffshorePipelineDetector::Task, :as => 'offshore_pipeline_detector'
+        add Localization::DeadReckoningSrv, :as => 'motion_model'
+        add ::LineScanner::Task, :as => 'line_scan'
+
+        
+        connect camera_child => line_scan_child
+        connect line_scan_child => inspection_child.laserPointCloud_port
+        connect offshore_pipeline_detector_child => inspection_child
+        connect motion_model_child => inspection_child
+
+        export inspection_child.inspectionStatus_port
+        export inspection_child.pipeMap_port
+   end
+    
+    
+    
 end
