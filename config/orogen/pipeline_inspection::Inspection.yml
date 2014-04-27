@@ -1,0 +1,103 @@
+--- name:default
+# Size of the ringbuffer, containing the last n lasersamples
+buffer_size: 150
+# Orientation of the camera in the bodyframe
+cameraOrientation:
+  im:
+  - 0.0
+  - 0.0
+  - 0.7071067811865476
+  re: 0.7071067811865476
+# Position of the camera in the body frame
+cameraPosition:
+  data:
+  - 2.0
+  - 0.0
+  - 0.0
+# Activate debug outputs
+debug: true
+# no documentation available for this property
+ground_color:
+  data:
+  - 1.0
+  - 1.0
+  - 1.0
+# no documentation available for this property
+invert_z: true
+# Normvector of the linelaserFrame
+laserNorm:
+  data:
+  - 0.7038453156522361
+  - 0.0
+  - 0.7103532724176078
+# Position of the linelaser in bodyframe
+laserPosition:
+  data:
+  - 0.0
+  - 0.0
+  - -0.1
+# Left laser boundary in percent
+laser_left_boundary: 0.4
+# Right laser boundray in percent
+laser_right_boundary: 0.4
+# no documentation available for this property
+matcher_iterations: 1500
+# tolerance, at which matcher stops
+matcher_parameter_tolerance: -0.001
+# no documentation available for this property
+matcher_pipe_up: true
+# no documentation available for this property
+matcher_value_tolerance: -0.001
+# no documentation available for this property
+matcher_variance_threshold: 1.0
+# Maximum pipe angle, at which the pipe_detector-status is used
+max_pipe_angle: 1.5
+# no documentation available for this property
+metadata:
+  metadata: []
+  properties: []
+  input_ports: []
+  output_ports: []
+# Minimum pipe confidence, at which the pipe_detector-status is used
+min_pipe_confidence: 0.2
+# Minimizer algorithm for pattern matching, refer to enu nlopt::algorithm
+minimizer: :GN_DIRECT_L
+# Second minimizer algorithm
+minimizer2: :LN_NELDERMEAD
+# Factor, which is multipliet to dead reckoning samples
+movement_factor: 1.0
+# no documentation available for this property
+overflooding_color:
+  data:
+  - 0.0
+  - 1.0
+  - 1.0
+# ####
+# # Detection parameter
+# ####
+# Output colors in rgb
+pipe_color:
+  data:
+  - 1.0
+  - 1.0
+  - 1.0
+# Radius the pipe must have to be detected as pipe
+pipe_min_radius: 0.02
+# no documentation available for this property
+pipe_radius_h: 0.09
+# no documentation available for this property
+pipe_radius_v: 0.14
+# no documentation available for this property
+pipe_tolerance_h: 0.5
+# no documentation available for this property
+pipe_tolerance_v: 0.3
+# no documentation available for this property
+underflooding_color:
+  data:
+  - 1.0
+  - 0.0
+  - 0.0
+# no documentation available for this property
+use_second_minimizer: true
+# no documentation available for this property
+z_offset: 2.0

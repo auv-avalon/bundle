@@ -11,3 +11,6 @@ orientation_samples_period: 0.01
 stream_aligner_status_period: 1.0
 # no documentation available for this property
 use_initial_heading: false
+ground_distance_period: 0.01
+depth_correction_buffer_size: 100
+ground_depth: -8.0
