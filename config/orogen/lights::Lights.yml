@@ -1,0 +1,7 @@
+--- name:default
+# Device string of the tty of the lights
+device: ''
+# no documentation available for this property
+# This property allows tasks to write to the int_in inputport.
+# If this property is set, the can_in is ignored.
+using_can: true 
