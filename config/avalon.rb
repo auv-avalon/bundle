@@ -16,7 +16,8 @@ Syskit.conf.use_deployment 'taskmon_front'
 Syskit.conf.use_deployment 'sonar_wall_hough'
 Syskit.conf.use_deployment 'lights'
 Syskit.conf.use_deployment 'low_level'
-Syskit.conf.use_deployment 'line_scanner'
+#Syskit.conf.use_deployment 'line_scanner', :on => 'back'
+Syskit.conf.use_deployment 'pipeline_laser_inspection', :on => 'back'
 Syskit.conf.use_deployment 'blur'
 
 #Rear machine

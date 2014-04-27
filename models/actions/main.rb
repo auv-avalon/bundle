@@ -85,20 +85,20 @@ class Main
 
     describe("Do the minimal demo for the halleneroeffnung, means pipeline, then do wall-following and back to pipe-origin")
     state_machine "minimal_demo" do
-        init = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 5, :timeout => 15)
+        init = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 5, :timeout => 15, :speed_x => 0)
         s1 = state find_pipe_with_localization 
 #        detector = state pipeline_detector_def
 #        detector.depends_on s1
     
         #Follow pipeline to right end
-        pipeline1 = state pipeline_def(:depth=> -5.5, :heading => 0, :speed_x => 0.5, :turn_dir=> 1, :timeout => 120)
+        pipeline1 = state pipeline_def(:depth=> -6.8, :heading => 0, :speed_x => 0.5, :turn_dir=> 1, :timeout => 120)
         #pipeline1 = state intelligent_follow_pipe(:precision => 5, :initial_heading => 0, :turn_dir=> 1)
         #pipeline1 = state intelligent_follow_pipe(:initial_heading => 0, :precision => 10, :turn_dir => 1)
         align_to_wall = state simple_move_def(:finish_when_reached => true, :heading => 3.14, :depth => -6, :delta_timeout => 5, :timeout => 15)
-        rescue_move = state target_move_def(:finish_when_reached => true, :heading => Math::PI, :depth => -6, :delta_timeout => 5, :x => 0.5, :y => 5.5)
+        rescue_move = state target_move_def(:finish_when_reached => true, :heading => Math::PI, :depth => -6, :delta_timeout => 5, :x => 0.5, :y => 5.5, :speed_x => 0)
         #Doing wall-servoing 
         wall1 = state wall_right_def(:max_corners => 1) 
-        wall2 = state wall_right_def(:timeout => 20) 
+        wall2 = state wall_right_def(:timeout => 30) 
         blind1 = state simple_move_def(:heading => 0.1, :depth => -5.5, :timeout => 5)
         blind2 = state simple_move_def(:heading => 0.1, :depth => -5.5, :timeout => 10, :speed_x => 0.3)
 
@@ -122,24 +122,24 @@ class Main
     describe("Do the minimal demo for the halleneroeffnung, menas pipeline, then do wall-following and back to pipe-origin")
     state_machine "minimal_demo_blind" do
         init = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 5, :timeout => 15)
-        s1 = state find_pipe_with_localization 
+        #s1 = state find_pipe_with_localization 
     
         #Follow pipeline to right end
         
-		pipeline1 = state trajectory_move_def(:target => 'over_pipeline')  
+	pipeline1 = state trajectory_move_def(:target => 'over_pipeline', :timeout => 125)  
         #Doing wall-servoing 
         wall1 = state wall_right_def(:max_corners => 1) 
-        wall2 = state wall_right_def(:timeout => 20) 
+        wall2 = state wall_right_def(:timeout => 23) 
 
         start(init)
-        transition(init.success_event, s1)
-        transition(s1.success_event, pipeline1)
+        transition(init.success_event, pipeline1)
+#        transition(s1.success_event, pipeline1)
         #transition(pipeline1.success_event, align_to_wall)
-        transition(pipeline1.success_event, wall1)
-        transition(align_to_wall.success_event, wall1)
+        transition(pipeline1.reached_end_event, wall1)
+        #transition(align_to_wall.success_event, wall1)
         
         transition(wall1.success_event, wall2)
-        transition(wall2.success_event, s1)
+        transition(wall2.success_event, pipeline1)
 
     end
     
@@ -147,12 +147,12 @@ class Main
     #TODO This could be extended by adding additional mocups
     describe("do a full Demo, with visiting the window after wall-servoing")
     state_machine "full_demo" do
-        init = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 5, :timeout => 15)
+        init = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -6, :delta_timeout => 5, :timeout => 15)
         s1 = state find_pipe_with_localization 
     
         #Follow pipeline to right end
         pipeline1 = state pipeline_def(:depth=> -5.5, :heading => 0, :speed_x => 0.5, :turn_dir=> 1, :timeout => 180)
-		align_to_wall = state simple_move_def(:finish_when_reached => true, :heading => 3.14, :depth => -5, :delta_timeout => 5, :timeout => 15)
+	align_to_wall = state simple_move_def(:finish_when_reached => true, :heading => 3.14, :depth => -6, :delta_timeout => 5, :timeout => 15)
         #Doing wall-servoing 
         wall1 = state wall_right_def(:max_corners => 1) 
         wall2 = state wall_right_def(:timeout => 20) 

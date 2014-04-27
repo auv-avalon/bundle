@@ -10,7 +10,7 @@ default_x: 0.3
 # if the angle between the pipeline and the auv is bigger than delta_aligning the task goes into the state ALIGNING_AUV
 delta_aligning: 0.785
 # default depth of operation [meter]
-depth: -7.2
+depth: -6.2
 # distance to pipe [meter], 0 = disabled
 distance_to_pipe: 0.0
 # fallback to ALIGN_AUV if out_of_center is exceeded during FOLLOWING_PIPE
@@ -18,17 +18,17 @@ do_dynamic_aligning: true
 # offset between the center and the end of pipe during hovering [m] (should be positvie)
 end_of_pipe_offset: 0.2
 # Anisotropy of the image. It is always negative. A value close to zero means that the image is uniform for all angles.
-find_anisotropy: -5.0
+find_anisotropy: 0.0
 # minimum confidence for finding a pipeline
-find_confidence: 0.2
+find_confidence: 0.6
 # how many pixel must be classified as not belonging to the pipeline [%]
-find_end_of_pipe: 0.45
+find_end_of_pipe: 0.9
 # no documentation available for this property
-invert_colors: false
+invert_colors: true 
 # minimum confidence before losing a pipeline
-lose_confidence: 0.1
+lose_confidence: 0.2
 # how many pixel must be classified as not belonging to the pipeline [%].If this value is reachead and the end is on the top the pipeline follower will change to follow mode
-lose_end_of_pipe: 0.2
+lose_end_of_pipe: 0.5
 # The maximum speed per/s who the vehicle turns during aligning, to prevent an loss of pipeline during turn
 max_align_turn_speed_per_s: 0.1
 # the pipeline is considert to be out of center if this value is smaller than the shortest distance in meter between the image center and the pipeline center --> turning will be disabled if the follower is in ALIGN_AUV, if in FOLLLOWING_PIPE we go back to ALIGN_AUV
@@ -64,7 +64,7 @@ search_depth_delta: 1.5
 # Time where the system should go on to the desired direction after an false deected candidate to prevent an double detection of the same candidate-pipeline
 time_between_detection: 2.0
 # no documentation available for this property
-use_channel: 0
+use_channel: -1 
 # if the disruption is higher than that value the follower will switch to WEAK_SIGNAL
 weak_signal: 0.7
 # speed which is used if the disruption is higher than weak_signal

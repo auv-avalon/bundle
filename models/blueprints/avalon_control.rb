@@ -73,8 +73,8 @@ module AvalonControl
         
         argument :heading, :default => nil
         argument :depth, :default => nil
-        argument :speed_x, :default => nil
-        argument :speed_y, :default => nil
+        argument :speed_x, :default => 0
+        argument :speed_y, :default => 0 
         argument :timeout, :default => nil
         argument :finish_when_reached, :default => nil #true when it should success, if nil then this composition never stops based on the position
         argument :event_on_timeout, :default => :success
