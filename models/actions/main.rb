@@ -98,9 +98,9 @@ class Main
         rescue_move = state target_move_def(:finish_when_reached => true, :heading => Math::PI, :depth => -6, :delta_timeout => 5, :x => 0.5, :y => 5.5, :speed_x => 0)
         #Doing wall-servoing 
         wall1 = state wall_right_def(:max_corners => 1) 
-        wall2 = state wall_right_def(:timeout => 35) 
+        wall2 = state wall_right_def(:timeout => 30) 
         blind1 = state simple_move_def(:heading => 0.0, :depth => -6.0, :timeout => 5)
-        blind2 = state simple_move_def(:heading => 0.0, :depth => -6.0, :timeout => 5, :speed_x => 0.3)
+        blind2 = state simple_move_def(:heading => 0.0, :depth => -6.0, :timeout => 5, :speed_x => 0.15)
 
         start(init)
         transition(init.success_event, s1)

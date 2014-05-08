@@ -10,7 +10,7 @@ default_x: 0.3
 # if the angle between the pipeline and the auv is bigger than delta_aligning the task goes into the state ALIGNING_AUV
 delta_aligning: 0.785
 # default depth of operation [meter]
-depth: -6.2
+depth: -6.0
 # distance to pipe [meter], 0 = disabled
 distance_to_pipe: 0.0
 # fallback to ALIGN_AUV if out_of_center is exceeded during FOLLOWING_PIPE

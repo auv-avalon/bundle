@@ -1,6 +1,6 @@
 --- name:default
 # Size of the ringbuffer, containing the last n lasersamples
-buffer_size: 20
+buffer_size: 50
 # Orientation of the camera in the bodyframe
 cameraOrientation:
   im:
@@ -101,3 +101,5 @@ underflooding_color:
 use_second_minimizer: true
 # no documentation available for this property
 z_offset: 2.0
+no_motion: true
+
