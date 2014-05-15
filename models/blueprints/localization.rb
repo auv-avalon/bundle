@@ -11,7 +11,7 @@ module Localization
 
     data_service_type 'HoughSrv' do
         output_port "position", "/base/samples/RigidBodyState"
-        output_port "orientation_drift", "double"
+        output_port "orientation_drift", "sonar_wall_hough/PositionQuality"
     end
     
     data_service_type 'DeadReckoningSrv' do
@@ -115,10 +115,10 @@ module Localization
         connect sonar_child => main_child
         connect ori_child => main_child
         connect dead_child => main_child
-        connect main_child.orientation_drift_port => correction_child.orientation_offset_port
+        connect main_child.position_quality_port => correction_child.orientation_offset_port
 
         export main_child.position_port, as: 'position'
-        export main_child.orientation_drift_port, as: 'ori_drift'
+        export main_child.position_quality_port, as: 'ori_drift'
         provides HoughSrv, as: 'hough'
     end
                
