@@ -74,6 +74,7 @@ show_debug: true
 usePositionSamples: false
 # If the incoming beams should be filtered with a minimum filter first
 withMinimumFilter: true
-
+ignoreOrientation: true
+sensorAngularTolerance: 10
 
 
