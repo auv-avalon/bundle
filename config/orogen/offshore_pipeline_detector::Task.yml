@@ -69,3 +69,6 @@ use_channel: -1
 weak_signal: 0.7
 # speed which is used if the disruption is higher than weak_signal
 weak_signal_x: 0.15
+
+--- name:simulation
+use_channel: 2 

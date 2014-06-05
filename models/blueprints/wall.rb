@@ -84,7 +84,7 @@ module Wall
                 @old_sonar_conf = controller_local_child.sonar_child.conf
             else
                 #Simulation special case
-#                @old_sonar_conf = controller_local_child.sonar_child.children.to_a[1].conf
+                @old_sonar_conf = controller_local_child.sonar_child.children.to_a[1].conf
             end
         end
         
@@ -95,7 +95,7 @@ module Wall
                     controller_local_child.sonar_child.orocos_task.apply_conf(@old_sonar_conf,true)
                 else
                     #Simulation special case
-#                    controller_local_child.sonar_child.children.to_a[1].orocos_task.apply_conf(@old_sonar_conf,true)
+                    controller_local_child.sonar_child.children.to_a[1].orocos_task.apply_conf(@old_sonar_conf,true)
                 end
             end
         end
