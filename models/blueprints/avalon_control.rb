@@ -6,9 +6,16 @@ using_task_library "avalon_control"
 using_task_library "depth_reader"
 using_task_library "controldev"
 using_task_library "raw_control_command_converter"
+    
+class Float 
+    def angle_in_range(target_angle, allowed_delta)
+        (self- target_angle).modulo(Math::PI) < allowed_delta
+    end
+end
 
 
 module AvalonControl
+
     DELTA_YAW = 0.1
     DELTA_Z = 0.2
     DELTA_XY = 2
@@ -90,8 +97,18 @@ module AvalonControl
                 @start_time = Time.now
                 Robot.info "Starting Drive simple #{self}"
                 erg = controller_child.update_config(:speed_x => speed_x, :heading => heading, :depth=> depth, :speed_y => speed_y)
-                #@reader = reading_child.orientation_samples_port.reader
-                @reader = reading_child.pose_samples_port.reader 
+                reader_port = nil
+                if reading_child.has_port?('pose_samples')
+                    reader_port = reading_child.pose_sample_port
+                else
+                    reading_child.each_child do |c| 
+                        if c.has_port?('pose_samples')
+                            reader_port = c.pose_samples_port
+                            break
+                        end
+                    end
+                end
+                @reader = reader_port.reader 
                 @last_invalid_pose = Time.new
                 Robot.info "Updated config returned #{erg}"
                 rescue Exception => e
@@ -100,7 +117,7 @@ module AvalonControl
         end
         
         poll do
-            @last_invalid_pose = Time.new if @last_invalid_pose.nil?
+#            @last_invalid_pose = Time.new if @last_invalid_pose.nil?
             begin
             if(self.timeout)
                 if(@start_time + self.timeout < Time.now)
@@ -113,7 +130,7 @@ module AvalonControl
                     if pos = @reader.read
                         if 
                             (pos.position[2] - depth).abs < delta_z and
-                            (pos.orientation.yaw - heading).abs < delta_yaw #TODO WARNING make this correct under respect of wraps
+                            pos.orientation.yaw.angle_in_range(heading,delta_yaw)
                                 #current_timeout = (@last_invalid_pose + delta_timeout - Time.now).to_i unless @last_invalid_pose.nil?
                                 #@last_timeout = current_timeout if (@last_timeout.nil? && (current_timeout - @last_timeout) >= 1)
                                 #Robot.info "Got there, timeout in #{(@last_invalid_pose + delta_timeout - Time.now).to_i}" if ( !@last_invalid_pose.nil? && !@last_timeout.nil? && (current_timeout - @last_timeout) >= 1 )
@@ -123,6 +140,7 @@ module AvalonControl
                                 end
                         else
                             Robot.info "################### Bad Pose! ################" if @reached_position
+                            Robot.info "Depth :#{depth}/#{pos.position[2]} -- Heading: i#{heading}/#{pos.orientation.yaw}"
                             @last_invalid_pose = Time.new
                         end
                     end
@@ -154,7 +172,18 @@ module AvalonControl
         add Base::PoseSrv, :as => 'pose'
         
         on :start do |ev|
-                @reader = pose_child.pose_samples_port.reader 
+                reader_port = nil
+                if pose_child.has_port?('pose_samples')
+                    reader_port = pose_child.pose_sample_port
+                else
+                    pose_child.each_child do |c| 
+                        if c.has_port?('pose_samples')
+                            reader_port = c.pose_samples_port
+                            break
+                        end
+                    end
+                end
+                @reader = reader_port.reader 
                 @start_time = Time.now
                 Robot.info "Starting Position moving #{self}"
                 controller_child.update_config(:x => x, :heading => heading, :depth=> depth, :y => y)
@@ -163,6 +192,7 @@ module AvalonControl
         
         poll do
             @last_invalid_pose = Time.new if @last_invalid_pose.nil?
+            @start_time = Time.now if @start_time.nil?
             if self.timeout
                 if(@start_time + self.timeout < Time.now)
                     Robot.info  "Finished Pos Mover because time is over! #{@start_time} #{@start_time + self.timeout}"
@@ -177,7 +207,7 @@ module AvalonControl
                             #(pos.position[0] - x).abs < delta_xy and
                             #(pos.position[1] - y).abs < delta_xy and
                             (pos.position[2] - depth).abs < delta_z and
-                            (pos.orientation.yaw - heading).abs < delta_yaw #TODO WARNING make this correct under respect of wraps
+                            pos.orientation.yaw.angle_in_range(heading,delta_yaw)
                                 current_timeout = (@last_invalid_pose + delta_timeout - Time.now).to_i unless @last_invalid_pose.nil?
                                 @last_timeout = 0 if @last_timeout.nil?
                                 Robot.info "Got there, timeout in #{(@last_invalid_pose + delta_timeout - Time.now).to_i}" if (@last_timeout.nil? && (current_timeout - @last_timeout) >= 1 )
@@ -188,7 +218,10 @@ module AvalonControl
                                     emit :success
                                 end
                         else
-                            Robot.info "################### Bad Pose! ################" if @reached_position
+                            if @reached_position
+                                Robot.info "################### Bad Pose! ################" 
+                                Robot.info "Depth :#{depth}/#{pos.position[2]} -- Heading: i#{heading}/#{pos.orientation.yaw}"
+                            end
                             @last_invalid_pose = Time.new
                             @reached_position = false
                         end

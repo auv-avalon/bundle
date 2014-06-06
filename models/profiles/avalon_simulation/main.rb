@@ -10,7 +10,6 @@ using_task_library 'avalon_simulation'
 #end
 
 module Avalon
-
     module Profiles
         profile "Simulation" do
             use_profile AvalonBase
@@ -63,8 +62,8 @@ module Avalon
 
             define 'sim', ::Simulation::Mars
 
-            use ::Base::PoseSrv => Localization::ParticleDetector.use(imu_def, sonar_def,thrusters_def)
-            #use ::Base::PoseSrv => imu_def 
+            #use ::Base::PoseSrv => Localization::ParticleDetector.use(imu_def, sonar_def,thrusters_def)
+            use ::Base::PoseSrv => imu_def 
             define 'hough_detector', Localization::HoughDetector.use(sonar_def, Base::OrientationSrv => imu_def)
             define 'localization_detector', Localization::ParticleDetector.use(hough_detector_def, imu_def, sonar_def,thrusters_def)
             
@@ -72,7 +71,8 @@ module Avalon
 
 #            use Base::PoseSrv => localization_detector_def
             
-            use ::AvalonControl::SimplePosMove => ::AvalonControl::SimplePosMove.use(position_control_loop_def, localization_detector_def, imu_def)
+            #use ::AvalonControl::SimplePosMove => ::AvalonControl::SimplePosMove.use(position_control_loop_def, localization_detector_def, imu_def)
+            use ::AvalonControl::SimplePosMove => ::AvalonControl::SimplePosMove.use(position_control_loop_def, imu_def) #Hack non-working ori
             define 'target_move', ::AvalonControl::SimplePosMove.use(position_control_loop_def, localization_detector_def, imu_def)
             
             define 'trajectory_move', ::AvalonControl::TrajectoryMove.use(position_control_loop_def, localization_detector_def, imu_def)

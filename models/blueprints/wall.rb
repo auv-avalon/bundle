@@ -120,7 +120,7 @@ module Wall
                 orocos_t = controller_local_child.sonar_child.orocos_task
             else
                 #Simulation special case
-                orocos_t = controller_local_child.sonar_child.children.to_a[1].orocos_task
+                orocos_t = controller_local_child.sonar_child.find_child {|c| c.class == Simulation::Sonar }.orocos_task
             end
 
             if orocos_t.state == :RUNNING and @sonar_workaround
@@ -128,7 +128,7 @@ module Wall
                 if controller_local_child.sonar_child.respond_to?(:orocos_task)
                     condition = orocos_t.config.continous == 1
                 else
-                    condition = false
+                    condition = orocos_t.ping_pong_mode == false
                     #Nothing for sim, workarounding always
                 end
 
@@ -138,7 +138,7 @@ module Wall
                     @sonar_workaround = false
                 else
                     @sonar_workaround = false
-                    #STDOUT.puts "Sonar config is fine did you solved the config issues? #{orocos_t.config.continous}"
+                    STDOUT.puts "Sonar config is fine did you solved the config issues? #{orocos_t.config.continous}"
                 end
             end
         end
