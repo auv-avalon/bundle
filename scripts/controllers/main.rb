@@ -162,3 +162,19 @@ Roby.every(1, :on_error => :disable) do
     add_status(status, "target z", "(%.2f m)", State, :target_depth) 
     Robot.info status.join(' ') if !status.empty?
 end
+
+State.sv_task = nil
+
+Roby.every(1, :on_error => :disable) do
+    if State.sv_task.nil?
+        State.sv_task = Orocos::RubyTaskContext.new("supervision") 
+        State.sv_task.create_output_port("actual_state","/std/string")
+        State.sv_task.create_output_port("delta_depth","double")
+        State.sv_task.create_output_port("delta_heading","double")
+        State.sv_task.create_output_port("delta_x","double")
+        State.sv_task.create_output_port("delta_y","double")
+        State.sv_task.create_output_port("delta_timeout","double")
+        State.sv_task.create_output_port("timeout","double")
+        State.sv_task.start
+    end
+end

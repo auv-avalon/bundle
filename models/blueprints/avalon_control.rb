@@ -9,10 +9,46 @@ using_task_library "raw_control_command_converter"
     
 class Float 
     def angle_in_range(target_angle, allowed_delta)
-        (self- target_angle).modulo(Math::PI) < allowed_delta
+        diff = (self-target_angle)
+        diff = diff.modulo(Math::PI) if diff > 0
+        State.sv_task.delta_heading.write(diff)
+        diff < allowed_delta
+    end
+    
+    def depth_in_range(target_depth, allowed_delta)
+        diff = (self-target_depth)
+        State.sv_task.delta_depth.write(diff)
+        diff < allowed_delta
+    end
+    def x_in_range(target_p, allowed_delta)
+        diff = (self-target_p)
+        State.sv_task.delta_x.write(diff)
+        diff < allowed_delta
+    end
+    def y_in_range(target_p, allowed_delta)
+        diff = (self-target_p)
+        State.sv_task.delta_y.write(diff)
+        diff < allowed_delta
     end
 end
 
+class Time
+    def delta_timeout?(timeout)
+        return false if timeout.nil?
+
+        diff = (self + timeout)
+        State.sv_task.delta_timeout.write (diff-Time.now).to_f
+        self + timeout < Time.now
+    end
+
+    def my_timeout?(start_time)
+        return false if start_time.nil?
+        
+        diff = (self + start_time)
+        State.sv_task.timeout.write (diff-Time.now).to_f
+        self + start_time < Time.now
+    end
+end
 
 module AvalonControl
 
@@ -117,37 +153,26 @@ module AvalonControl
         end
         
         poll do
-#            @last_invalid_pose = Time.new if @last_invalid_pose.nil?
-            begin
-            if(self.timeout)
-                if(@start_time + self.timeout < Time.now)
-                    Robot.info "Finished Simple Move becaue time is over! #{@start_time} #{@start_time + self.timeout}"
-                    emit event_on_timeout 
-                end
+            if @start_time.my_timeout?(self.timeout)
+                Robot.info "Finished Simple Move becaue time is over! #{@start_time} #{@start_time + self.timeout}"
+                emit event_on_timeout 
             end
             if finish_when_reached
                 if @reader
                     if pos = @reader.read
                         if 
-                            (pos.position[2] - depth).abs < delta_z and
+                            pos.position[2].depth_in_range(depth,delta_z) and
                             pos.orientation.yaw.angle_in_range(heading,delta_yaw)
-                                #current_timeout = (@last_invalid_pose + delta_timeout - Time.now).to_i unless @last_invalid_pose.nil?
-                                #@last_timeout = current_timeout if (@last_timeout.nil? && (current_timeout - @last_timeout) >= 1)
-                                #Robot.info "Got there, timeout in #{(@last_invalid_pose + delta_timeout - Time.now).to_i}" if ( !@last_invalid_pose.nil? && !@last_timeout.nil? && (current_timeout - @last_timeout) >= 1 )
-                                if (@last_invalid_pose + delta_timeout) < Time.new
+                                if @last_invalid_pose.delta_timeout?(delta_timeout) 
                                     Robot.info "Reached Position"
                                     emit :success
                                 end
                         else
                             Robot.info "################### Bad Pose! ################" if @reached_position
-                            Robot.info "Depth :#{depth}/#{pos.position[2]} -- Heading: i#{heading}/#{pos.orientation.yaw}"
                             @last_invalid_pose = Time.new
                         end
                     end
                 end
-            end
-            rescue Exception => e 
-                Robot.warn "Got an error in poll block of simple_move #{e}"
             end
         end
     end
@@ -193,34 +218,27 @@ module AvalonControl
         poll do
             @last_invalid_pose = Time.new if @last_invalid_pose.nil?
             @start_time = Time.now if @start_time.nil?
-            if self.timeout
-                if(@start_time + self.timeout < Time.now)
-                    Robot.info  "Finished Pos Mover because time is over! #{@start_time} #{@start_time + self.timeout}"
-                    emit event_on_timeout 
-                end
+            if @start_time.my_timeout?(self.timeout)
+                Robot.info  "Finished Pos Mover because time is over! #{@start_time} #{@start_time + self.timeout}"
+                emit event_on_timeout 
             end
 
             if finish_when_reached
                 if @reader
                     if pos = @reader.read
                         if 
-                            #(pos.position[0] - x).abs < delta_xy and
-                            #(pos.position[1] - y).abs < delta_xy and
-                            (pos.position[2] - depth).abs < delta_z and
+                            pos.position[0].x_in_range(x,delta_xy) and
+                            pos.position[1].y_in_range(y,delta_xy) and
+                            pos.position[2].depth_in_range(depth,delta_z) and
                             pos.orientation.yaw.angle_in_range(heading,delta_yaw)
-                                current_timeout = (@last_invalid_pose + delta_timeout - Time.now).to_i unless @last_invalid_pose.nil?
-                                @last_timeout = 0 if @last_timeout.nil?
-                                Robot.info "Got there, timeout in #{(@last_invalid_pose + delta_timeout - Time.now).to_i}" if (@last_timeout.nil? && (current_timeout - @last_timeout) >= 1 )
-                                @last_timeout = current_timeout if (@last_timeout.nil? && (current_timeout - @last_timeout) >= 1)
                                 @reached_position = true
-                                if (@last_invalid_pose + delta_timeout) < Time.new
+                                if @last_invalid_pose.delta_timeout?(delta_timeout) 
                                     Robot.info "Hold Position, recalculating"
                                     emit :success
                                 end
                         else
                             if @reached_position
                                 Robot.info "################### Bad Pose! ################" 
-                                Robot.info "Depth :#{depth}/#{pos.position[2]} -- Heading: i#{heading}/#{pos.orientation.yaw}"
                             end
                             @last_invalid_pose = Time.new
                             @reached_position = false
@@ -258,7 +276,7 @@ module AvalonControl
         
         poll do
             if self.timeout
-                if(@start_time + self.timeout < Time.now)
+                if @start_time.my_timeout?(self.timeout) 
                     Robot.info  "Finished Trajectory Follower because time is over! #{@start_time} #{@start_time + self.timeout}"
                     emit event_on_timeout 
                 end
