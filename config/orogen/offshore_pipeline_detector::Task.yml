@@ -72,3 +72,5 @@ weak_signal_x: 0.15
 
 --- name:simulation
 use_channel: 2 
+find_end_of_pipe: 0.95
+depth: -6.5
