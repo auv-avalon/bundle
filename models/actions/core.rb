@@ -194,5 +194,28 @@ class Main < Roby::Actions::Interface
 #        forward pipe_detector.align_auv_event, success_event
         forward pipe_detector,find_pipe_back.success_event,failed_event
     end
+    
+    describe("Find_pipe_with_localization")
+    action_script "find_pipe_with_localization_as" do
+        #find_pipe_back = state lawn_mover_over_pipe
+#        s1 = state target_move_def(:finish_when_reached => true, :heading => 1, :depth => -5, :delta_timeout => 10, :x => -6.3, :y => -0.8, :timeout => 10)
+        find_pipe_back = task target_move_def(:finish_when_reached => false , :heading => 1, :depth => -6, :x => -6.5, :y => --0.5, :timeout => 180) 
+        pipe_detector = task pipeline_detector_def
+
+        start pipe_detector
+        start find_pipe_back
+       
+        reader = pipe_detector.find_port('pipeline').reader
+
+        wait(pipe_detector.align_auv_event)
+
+        emit success_event
+
+#        poll do 
+#            if (data = reader.read_new) && data.angle > -0.2 and data.angle < 0.2
+#                emit :success
+#            end
+#        end
+    end
 
 end
