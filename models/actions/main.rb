@@ -11,8 +11,8 @@ class Main
         wall = state wall_right_def(:max_corners => 2) 
 
         
-        find_pipe_back = state find_pipe_with_localization_as 
-        find_pipe_back = state find_pipe_with_localization_as
+        find_pipe_back = state find_pipe_with_localization 
+        find_pipe_back = state find_pipe_with_localization
         start(ping_pong)
         transition(ping_pong.success_event, wall)
         transition(wall.success_event,find_pipe_back)
@@ -30,7 +30,7 @@ class Main
         wall = state wall_right_def(:max_corners => 2) 
         window = state to_window
 
-        find_pipe_back = state find_pipe_with_localization_as 
+        find_pipe_back = state find_pipe_with_localization 
         start(ping_pong)
         transition(ping_pong.success_event, wall)
         transition(wall.success_event,window)
@@ -56,7 +56,7 @@ class Main
     state_machine "minimal_demo_once" do
         init = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 5, :timeout => 15)
         
-        s1 = state find_pipe_with_localization_as
+        s1 = state find_pipe_with_localization
         #pipeline1 = state intelligent_follow_pipe(:initial_heading => 0, :precision => 10, :turn_dir => 1)
         pipeline1 = state pipeline_def(:depth => -5.5, :heading => 0, :speed_x => 0.5, :turn_dir=> 1, :timeout => 180)
         align_to_wall = state simple_move_def(:finish_when_reached => true, :heading => 3.14, :depth => -5, :delta_timeout => 5, :timeout => 15)
@@ -86,7 +86,7 @@ class Main
     describe("Do the minimal demo for the halleneroeffnung, means pipeline, then do wall-following and back to pipe-origin")
     state_machine "minimal_demo" do
         init = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -7, :delta_timeout => 5, :timeout => 15, :speed_x => 0)
-        s1 = state find_pipe_with_localization_as 
+        s1 = state find_pipe_with_localization(:check_pipe_angle => true) 
 #        detector = state pipeline_detector_def
 #        detector.depends_on s1
     
@@ -119,13 +119,13 @@ class Main
         transition(blind1.success_event, blind2)
         transition(blind2.success_event, s1)
         
-        prepare_jumpin("wall" => wall1, "pipeline"=> pipeline1)
+        #prepare_jumpin("wall" => wall1, "pipeline"=> pipeline1)
     end
     
     describe("Do the minimal demo for the halleneroeffnung, menas pipeline, then do wall-following and back to pipe-origin")
     state_machine "minimal_demo_blind" do
         init = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -4, :delta_timeout => 5, :timeout => 15)
-        #s1 = state find_pipe_with_localization_as_
+        #s1 = state find_pipe_with_localization_
     
         #Follow pipeline to right end
         
@@ -151,7 +151,7 @@ class Main
     describe("do a full Demo, with visiting the window after wall-servoing")
     state_machine "full_demo" do
         init = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -6, :delta_timeout => 5, :timeout => 15)
-        s1 = state find_pipe_with_localization_as 
+        s1 = state find_pipe_with_localization 
     
         #Follow pipeline to right end
         pipeline1 = state pipeline_def(:depth=> -5.5, :heading => 0, :speed_x => 0.5, :turn_dir=> 1, :timeout => 180)
@@ -160,7 +160,7 @@ class Main
         wall1 = state wall_right_def(:max_corners => 1) 
         wall2 = state wall_right_def(:timeout => 20) 
         
-		s2 = state find_pipe_with_localization_as 
+		s2 = state find_pipe_with_localization 
     
         #Follow pipeline to right end
         pipeline1_2 = state pipeline_def(:depth=> -5.5, :heading => 0, :speed_x => 0.5, :turn_dir=> 1, :timeout => 180)

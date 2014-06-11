@@ -180,42 +180,29 @@ class Main < Roby::Actions::Interface
     end
     
    
-    describe("Find_pipe_with_localization")
-    state_machine "find_pipe_with_localization" do
-        #find_pipe_back = state lawn_mover_over_pipe
-#        s1 = state target_move_def(:finish_when_reached => true, :heading => 1, :depth => -5, :delta_timeout => 10, :x => -6.3, :y => -0.8, :timeout => 10)
+    describe("Find_pipe_with_localization").
+        optional_arg("check_pipe_angle",false)
+    action_state_machine "find_pipe_with_localization" do
         find_pipe_back = state target_move_def(:finish_when_reached => false , :heading => 1, :depth => -6, :x => -6.5, :y => --0.5, :timeout => 180) 
         pipe_detector = state pipeline_detector_def
         pipe_detector.depends_on find_pipe_back, :role => "detector"
         start(pipe_detector)
-        #start(pipe_detector)
- #       transition(s1.success_event,pipe_detector)
-        forward pipe_detector.align_auv_event, success_event
-#        forward pipe_detector.align_auv_event, success_event
-        forward pipe_detector,find_pipe_back.success_event,failed_event
-    end
-    
-    describe("Find_pipe_with_localization")
-    action_script "find_pipe_with_localization_as" do
-        #find_pipe_back = state lawn_mover_over_pipe
-#        s1 = state target_move_def(:finish_when_reached => true, :heading => 1, :depth => -5, :delta_timeout => 10, :x => -6.3, :y => -0.8, :timeout => 10)
-        find_pipe_back = task target_move_def(:finish_when_reached => false , :heading => 1, :depth => -6, :x => -6.5, :y => --0.5, :timeout => 180) 
-        pipe_detector = task pipeline_detector_def
 
-        start pipe_detector
-        start find_pipe_back
-       
-        reader = pipe_detector.find_port('pipeline').reader
+        pipe_detector.monitor(
+            'angle_checker', #the Name
+            pipe_detector.find_port('pipeline'), #the port for the reader
+            :check_pipe_angle => check_pipe_angle). #arguments
+            trigger_on do |pipeline|
+                angle_in_range = true
+                if check_pipe_angle
+                    angle_in_range = pipeline.angle < 0.1 && pipeline.angle > -0.1
+                end
+                state_valid = pipeline.inspection_state == :ALIGN_AUV || pipeline.inspection_state == :FOLLOW_PIPE
+                state_valid && angle_in_range #last condition
+            end. emit pipe_detector.success_event
 
-        wait(pipe_detector.align_auv_event)
-
-        emit success_event
-
-#        poll do 
-#            if (data = reader.read_new) && data.angle > -0.2 and data.angle < 0.2
-#                emit :success
-#            end
-#        end
+        forward pipe_detector.success_event, success_event
+        forward pipe_detector,find_pipe_back.success_event,failed_event #timeout here on moving
     end
 
 end
