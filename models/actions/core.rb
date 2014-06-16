@@ -200,6 +200,8 @@ class Main < Roby::Actions::Interface
                 state_valid = pipeline.inspection_state == :ALIGN_AUV || pipeline.inspection_state == :FOLLOW_PIPE
                 state_valid && angle_in_range #last condition
             end. emit pipe_detector.success_event
+#        forward pipe_detector.align_auv_event, success_event
+#        forward pipe_detector.follow_pipe_event, success_event
 
         forward pipe_detector.success_event, success_event
         forward pipe_detector,find_pipe_back.success_event,failed_event #timeout here on moving

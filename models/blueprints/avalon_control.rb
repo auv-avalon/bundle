@@ -135,7 +135,7 @@ module AvalonControl
                 erg = controller_child.update_config(:speed_x => speed_x, :heading => heading, :depth=> depth, :speed_y => speed_y)
                 reader_port = nil
                 if reading_child.has_port?('pose_samples')
-                    reader_port = reading_child.pose_sample_port
+                    reader_port = reading_child.pose_samples_port
                 else
                     reading_child.each_child do |c| 
                         if c.has_port?('pose_samples')
@@ -199,7 +199,7 @@ module AvalonControl
         on :start do |ev|
                 reader_port = nil
                 if pose_child.has_port?('pose_samples')
-                    reader_port = pose_child.pose_sample_port
+                    reader_port = pose_child.pose_samples_port
                 else
                     pose_child.each_child do |c| 
                         if c.has_port?('pose_samples')
