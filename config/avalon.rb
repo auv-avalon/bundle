@@ -59,6 +59,8 @@ Syskit.conf.exclude_from_log 'pipeline_follower'
 Syskit.conf.exclude_from_log 'line_scanner' 
 Syskit.conf.exclude_from_log 'front_camera' 
 
+Syskit.conf.exclude_from_log 'low_level_driver' 
+
 
 module Avalon 
     class ShellInterface < Roby::Interface::CommandLibrary

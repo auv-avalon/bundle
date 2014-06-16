@@ -182,7 +182,85 @@ class Main
         transition(pipeline1_2.end_of_pipe_event, throught_becken)
 		transition(throught_becken.success_event,s1)
     end
+
+    describe("Do the minimal demo for the halleneroeffnung, means pipeline, then do wall-following and back to pipe-origin")
+    state_machine "advanced_demo" do
+        init = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -7, :delta_timeout => 5, :timeout => 15, :speed_x => 0)
+        s1 = state find_pipe_with_localization 
+#        detector = state pipeline_detector_def
+#        detector.depends_on s1
     
+        #Follow pipeline to right end
+        pipeline1 = state pipeline_def(:depth=> -7, :heading => 0, :speed_x => 0.5, :turn_dir=> 1, :timeout => 120)
+        #pipeline1 = state intelligent_follow_pipe(:precision => 5, :initial_heading => 0, :turn_dir=> 1)
+        #pipeline1 = state intelligent_follow_pipe(:initial_heading => 0, :precision => 10, :turn_dir => 1)
+        align_to_wall = state simple_move_def(:finish_when_reached => true, :heading => Math::PI/2, :depth => -7, :delta_timeout => 5, :timeout => 15)
+        rescue_move = state target_move_def(:finish_when_reached => true, :heading => 0, :depth => -7, :delta_timeout => 5, :x => 0.5, :y => 5.5, :speed_x => 0)
+        start_window_move = state target_move_def(:finish_when_reached => true, :heading => -Math::PI/5, :depth => -7, :delta_timeout => 5, :x => 9.5, :y => 0, :speed_x => 1)
+        #Doing wall-servoing 
+        wall1 = state wall_right_def(:max_corners => 3) 
+        #wall2 = state wall_right_def(:timeout => 30) 
+        blind1 = state simple_move_def(:heading => Math::PI/3, :depth => -7.0, :timeout => 5)
+        blind2 = state simple_move_def(:heading => Math::PI/3, :depth => -7.0, :timeout => 15, :speed_x => 0.15)
+
+        start(init)
+        transition(init.success_event, s1)
+        transition(s1.success_event, pipeline1)
+        transition(s1.failed_event, rescue_move)
+        #transition(pipeline1.success_event, align_to_wall)
+        transition(pipeline1.end_of_pipe_event, start_window_move)
+        transition(pipeline1.success_event, start_window_move)
+        transition(pipeline1.failed_event, rescue_move)
+        #transition(pipeline1.lost_pipe_event, rescue_move)
+        transition(start_window_move.success_event, align_to_wall)
+        transition(align_to_wall.success_event, wall1)
+        transition(rescue_move.success_event, start_window_move)
+        
+        transition(wall1.success_event, blind1)
+        #transition(wall2.success_event, blind1)
+        transition(blind1.success_event, blind2)
+        transition(blind2.success_event, s1)
+    end
+
+    
+    describe("Do the minimal demo for the halleneroeffnung, means pipeline, then do wall-following and back to pipe-origin")
+    state_machine "advanced_demo_once" do
+        init = state simple_move_def(:finish_when_reached => true, :heading => 0, :depth => -7, :delta_timeout => 5, :timeout => 15, :speed_x => 0)
+        s1 = state find_pipe_with_localization 
+#        detector = state pipeline_detector_def
+#        detector.depends_on s1
+    
+        #Follow pipeline to right end
+        pipeline1 = state pipeline_def(:depth=> -7.1, :heading => 0, :speed_x => 0.5, :turn_dir=> 1, :timeout => 120)
+        #pipeline1 = state intelligent_follow_pipe(:precision => 5, :initial_heading => 0, :turn_dir=> 1)
+        #pipeline1 = state intelligent_follow_pipe(:initial_heading => 0, :precision => 10, :turn_dir => 1)
+        align_to_wall = state simple_move_def(:finish_when_reached => true, :heading => 3.14, :depth => -6, :delta_timeout => 5, :timeout => 15)
+        rescue_move = state target_move_def(:finish_when_reached => true, :heading => Math::PI, :depth => -6, :delta_timeout => 5, :x => 0.5, :y => 5.5, :speed_x => 0)
+        #Doing wall-servoing 
+        wall1 = state wall_right_def(:max_corners => 1) 
+        wall2 = state wall_right_def(:timeout => 30) 
+        blind1 = state simple_move_def(:heading => 0.0, :depth => -6.0, :timeout => 5)
+        blind2 = state simple_move_def(:heading => 0.0, :depth => -6.0, :timeout => 5, :speed_x => 0.15)
+
+        start(init)
+        transition(init.success_event, s1)
+        transition(s1.success_event, pipeline1)
+        transition(s1.failed_event, rescue_move)
+        #transition(pipeline1.success_event, align_to_wall)
+        transition(pipeline1.end_of_pipe_event, align_to_wall)
+        transition(pipeline1.success_event, align_to_wall)
+        transition(pipeline1.failed_event, rescue_move)
+        #transition(pipeline1.lost_pipe_event, rescue_move)
+        transition(rescue_move.success_event, wall1)
+        transition(align_to_wall.success_event, wall1)
+        
+        transition(wall1.success_event, wall2)
+        transition(wall2.success_event, blind1)
+        transition(blind1.success_event, blind2)
+        forward blind2.success_event, success_event
+    end
+
+
 #    describe("Workaround1")
 #    state_machine "wa1" do 
 #        s1 = state drive_to_pipeline

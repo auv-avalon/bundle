@@ -17,7 +17,7 @@ State.lowlevel_state = -1
 #State.navigation_mode = ["drive_simple_def","buoy_def", "pipeline_def", "wall_right_def"]
 
 #State.navigation_mode = [nil,"drive_simple_def","minimal_demo", "minimal_demo_once","target_move_def","buoy_def", "pipeline_def", "wall_right_def", "target_move_def", "pipe_ping_pong","ping_pong_pipe_wall_back_to_pipe","rocking"]
-State.navigation_mode = [nil,"drive_simple_def","minimal_demo", "minimal_demo_once"]
+State.navigation_mode = [nil,"drive_simple_def","minimal_demo", "minimal_demo_once", "advanced_demo", "advanced_demo_once"]
 
 def check_for_switch
     #####  Checking wether we can start localication or not ############
