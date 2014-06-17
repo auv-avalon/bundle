@@ -1,4 +1,4 @@
---- name:default_aligned_position
+--- name:default
 # This property defines which parts of the command input is expected to be
 # set once we merged all the declared input ports.
 expected_inputs:
@@ -19,6 +19,30 @@ metadata:
   properties: []
   input_ports: []
   output_ports: []
+# This property defines the timeout for the cascade input port in seconds. 0
+# means that the timeout would be ignored.
+timeout_cascade: 1.0
+# This property defines the timeout for the cmd_in input port in seconds. 0
+# means that the timeout would be ignored.
+timeout_in: 1.0
+# The command frame (true:world or false:aligned)
+world_frame: false
+--- name:no_xy
+# This property defines which parts of the command input is expected to be
+# set once we merged all the declared input ports.
+expected_inputs:
+  linear:
+  - false
+  - false
+  - true
+  angular:
+  - true
+  - true
+  - true
+
+--- name:position
+# The command domain (true:position or false:velocity)
+position_control: true
 # Settings for the PID controllers
 pid_settings:
   linear:
@@ -77,43 +101,15 @@ pid_settings:
     Tt: -1.0
     YMin: -0.6
     YMax: 0.6
+
+--- name:position_simulation
 # The command domain (true:position or false:velocity)
 position_control: true
-# This property defines the timeout for the cascade input port in seconds. 0
-# means that the timeout would be ignored.
-timeout_cascade: 1.0
-# This property defines the timeout for the cmd_in input port in seconds. 0
-# means that the timeout would be ignored.
-timeout_in: 1.0
-# The command frame (true:world or false:aligned)
-world_frame: false
-
---- name:default_aligned_position_simulation
-# This property defines which parts of the command input is expected to be
-# set once we merged all the declared input ports.
-expected_inputs:
-  linear:
-  - true
-  - true
-  - true
-  angular:
-  - true
-  - true
-  - true
-# If true, the component will send a zero command before getting into an
-# exception state. Otherwise, it will not do anything
-keep_position_on_exception: true
-# no documentation available for this property
-metadata:
-  metadata: []
-  properties: []
-  input_ports: []
-  output_ports: []
 # Settings for the PID controllers
 pid_settings:
   linear:
   - Ts: 0.01
-    K: 1.0
+    K: 0.3
     Ti: 0.0
     Td: 0.0
     N: 0.0
@@ -167,38 +163,10 @@ pid_settings:
     Tt: -1.0
     YMin: -0.6
     YMax: 0.6
-# The command domain (true:position or false:velocity)
-position_control: true
-# This property defines the timeout for the cascade input port in seconds. 0
-# means that the timeout would be ignored.
-timeout_cascade: 1.0
-# This property defines the timeout for the cmd_in input port in seconds. 0
-# means that the timeout would be ignored.
-timeout_in: 1.0
-# The command frame (true:world or false:aligned)
-world_frame: false
 
---- name:default_aligned_velocity
-# This property defines which parts of the command input is expected to be
-# set once we merged all the declared input ports.
-expected_inputs:
-  linear:
-  - true
-  - true
-  - true
-  angular:
-  - true
-  - true
-  - true
-# If true, the component will send a zero command before getting into an
-# exception state. Otherwise, it will not do anything
-keep_position_on_exception: true
-# no documentation available for this property
-metadata:
-  metadata: []
-  properties: []
-  input_ports: []
-  output_ports: []
+--- name:aligned_velocity
+# The command domain (true:position or false:velocity)
+position_control: false
 # Settings for the PID controllers
 pid_settings:
   linear:
@@ -257,38 +225,73 @@ pid_settings:
     Tt: -1.0
     YMin: -1.0
     YMax: 1.0
+--- name:position_simulation_parallel
+# The command domain (true:position or false:velocity)
+position_control: true
+# Use the Ideal (false) or Parallel PID-Settings 
+use_parallel_pid_settings: true
+# Settings for the PID controllers
+parallel_pid_settings:
+  linear:
+  - Ts: 0.01
+    Kp: 0.3
+    Ki: 0.0
+    Kd: 0.0
+    N: 0.0
+    B: 1.0
+    Tt: -1.0
+    YMin: -0.98
+    YMax: 0.98
+  - Ts: 0.01
+    Kp: 0.5
+    Ki: 0.0
+    Kd: 0.0
+    N: 0.0
+    B: 1.0
+    Tt: -1.0
+    YMin: -0.163
+    YMax: 0.163
+  - Ts: 0.01
+    Kp: 0.5
+    Ki: 0.0
+    Kd: 0.0
+    N: 0.0
+    B: 1.0
+    Tt: -1.0
+    YMin: -0.13
+    YMax: 0.2
+  angular:
+  - Ts: 0.01
+    Kp: 0.0
+    Ki: 0.0
+    Kd: 0.0
+    N: 0.0
+    B: 1.0
+    Tt: -1.0
+    YMin: -0.0
+    YMax: 0.0
+  - Ts: 0.01
+    Kp: 2.0
+    Ki: 0.0
+    Kd: 0.0
+    N: 0.0
+    B: 1.0
+    Tt: -1.0
+    YMin: -0.1
+    YMax: 0.1
+  - Ts: 0.01
+    Kp: 0.5
+    Ki: 0.0
+    Kd: 0.0
+    N: 0.0
+    B: 1.0
+    Tt: -1.0
+    YMin: -0.25
+    YMax: 0.25
+
+--- name:velocity_simulation
 # The command domain (true:position or false:velocity)
 position_control: false
-# This property defines the timeout for the cascade input port in seconds. 0
-# means that the timeout would be ignored.
-timeout_cascade: 1.0
-# This property defines the timeout for the cmd_in input port in seconds. 0
-# means that the timeout would be ignored.
-timeout_in: 1.0
-# The command frame (true:world or false:aligned)
-world_frame: false
-
---- name:default_aligned_velocity_simulation
-# This property defines which parts of the command input is expected to be
-# set once we merged all the declared input ports.
-expected_inputs:
-  linear:
-  - true
-  - true
-  - true
-  angular:
-  - true
-  - true
-  - true
-# If true, the component will send a zero command before getting into an
-# exception state. Otherwise, it will not do anything
-keep_position_on_exception: true
-# no documentation available for this property
-metadata:
-  metadata: []
-  properties: []
-  input_ports: []
-  output_ports: []
 # Settings for the PID controllers
 pid_settings:
   linear:
@@ -347,13 +350,67 @@ pid_settings:
     Tt: -1.0
     YMin: -1.0
     YMax: 1.0
+
+--- name:velocity_simulation_parallel
 # The command domain (true:position or false:velocity)
 position_control: false
-# This property defines the timeout for the cascade input port in seconds. 0
-# means that the timeout would be ignored.
-timeout_cascade: 1.0
-# This property defines the timeout for the cmd_in input port in seconds. 0
-# means that the timeout would be ignored.
-timeout_in: 1.0
-# The command frame (true:world or false:aligned)
-world_frame: false
+# Use the Ideal (false) or Parallel PID-Settings 
+use_parallel_pid_settings: true
+# Settings for the PID controllers
+parallel_pid_settings:
+  linear:
+  - Ts: 0.01
+    Kp: 18.0
+    Ki: 15.0
+    Kd: 0.0
+    N: 0.0
+    B: 1.0
+    Tt: 0.01
+    YMin: -1.0
+    YMax: 1.0
+  - Ts: 0.01
+    Kp: 15.0
+    Ki: 4.0
+    Kd: 0.0
+    N: 0.0
+    B: 1.0
+    Tt: 0.01
+    YMin: -1.0
+    YMax: 1.0
+  - Ts: 0.01
+    Kp: 70.0
+    Ki: 20.0
+    Kd: 0.0
+    N: 0.0
+    B: 1.0
+    Tt: 0.01
+    YMin: -1.0
+    YMax: 1.0
+  angular:
+  - Ts: 0.01
+    Kp: 0.0
+    Ki: 0.0
+    Kd: 0.0
+    N: 0.0
+    B: 1.0
+    Tt: -1.0
+    YMin: -1.0
+    YMax: 1.0
+  - Ts: 0.01
+    Kp: 5.0
+    Ki: 2.0
+    Kd: 0.0
+    N: 0.0
+    B: 1.0
+    Tt: 0.01
+    YMin: -1.0
+    YMax: 1.0
+  - Ts: 0.01
+    Kp: 9.4
+    Ki: 4.27
+    Kd: 0.0
+    N: 0.0
+    B: 1.0
+    Tt: 0.01
+    YMin: -1.0
+    YMax: 1.0

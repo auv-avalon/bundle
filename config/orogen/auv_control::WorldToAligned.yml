@@ -28,3 +28,15 @@ timeout_cascade: 1.0
 # This property defines the timeout for the cmd_in input port in seconds. 0
 # means that the timeout would be ignored.
 timeout_in: 1.0
+--- name:no_xy
+# This property defines which parts of the command input is expected to be
+# set once we merged all the declared input ports.
+expected_inputs:
+  linear:
+  - false
+  - false
+  - true
+  angular:
+  - true
+  - true
+  - true
