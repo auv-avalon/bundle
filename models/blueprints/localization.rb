@@ -19,25 +19,25 @@ module Localization
     end
 
     class ParticleDetector < Syskit::Composition
-        argument :basin_width, :default => 23 
-        argument :basin_height, :default => 19
+#        argument :basin_width, :default => 23 
+#        argument :basin_height, :default => 19
 
-        #View of the basin:
-        # -------
-        # |1 2 3|
-        # |4 5 6|
-        # |7 8 9|
-        # -------
-        
-        my_events = [:position1, :position2, :position3, :position4, :position5, :position6, :position7, :position8, :position9]
-        my_events.each do |e|
-            event e
-        end
-
-        def get_position
-            @position
-        end
-
+#        #View of the basin:
+#        # -------
+#        # |1 2 3|
+#        # |4 5 6|
+#        # |7 8 9|
+#        # -------
+#        
+#        my_events = [:position1, :position2, :position3, :position4, :position5, :position6, :position7, :position8, :position9]
+#        my_events.each do |e|
+#            event e
+#        end
+#
+#        def get_position
+#            @position
+#        end
+#
         add UwParticleLocalization::Task, :as => 'main'
         add Base::SonarScanProviderSrv, :as => 'sonar'
         add SonarFeatureEstimator::Task, :as => 'sonar_estimator'
@@ -57,40 +57,40 @@ module Localization
         export main_child.pose_samples_port
         provides Base::PoseSrv, :as => 'pose'
 
-        @position = :position2 
-        
-        on :start do |ev|
-                @reader = main_child.pose_samples_port.reader
-                emit @position if @position
-        end
-        poll do 
-            if @reader
-                if sample = @reader.read
-                    col = nil
-                    row= nil
-                    if (sample.position[0] + basin_width/2.0) < (basin_width/3.0 * 1.0)
-                        col = 0
-                    elsif (sample.position[0] + basin_width/2.0) < (basin_width/3.0 * 2.0)
-                        col = 1
-                    else
-                        col = 2
-                    end
-                    if (sample.position[1] + basin_height/2.0) < (basin_height/3.0 * 1.0)
-                        row = 2
-                    elsif (sample.position[1] + basin_height/2.0) < (basin_height/3.0 * 2.0)
-                        row = 1
-                    else
-                        row = 0
-                    end
-                    new_position = my_events[col+(3*row)]
-                    if new_position != @position
-                        Robot.info "Got new position i'm on #{new_position}"
-                        emit new_position
-                        @position = new_position
-                    end
-                end
-            end
-        end
+#        @position = :position2 
+#        
+#        on :start do |ev|
+#                @reader = main_child.pose_samples_port.reader
+#                emit @position if @position
+#        end
+#        poll do 
+#            if @reader
+#                if sample = @reader.read
+#                    col = nil
+#                    row= nil
+#                    if (sample.position[0] + basin_width/2.0) < (basin_width/3.0 * 1.0)
+#                        col = 0
+#                    elsif (sample.position[0] + basin_width/2.0) < (basin_width/3.0 * 2.0)
+#                        col = 1
+#                    else
+#                        col = 2
+#                    end
+#                    if (sample.position[1] + basin_height/2.0) < (basin_height/3.0 * 1.0)
+#                        row = 2
+#                    elsif (sample.position[1] + basin_height/2.0) < (basin_height/3.0 * 2.0)
+#                        row = 1
+#                    else
+#                        row = 0
+#                    end
+#                    new_position = my_events[col+(3*row)]
+#                    if new_position != @position
+#                        Robot.info "Got new position i'm on #{new_position}"
+#                        emit new_position
+#                        @position = new_position
+#                    end
+#                end
+#            end
+#        end
     end
 
     class DeadReckoning < Syskit::Composition

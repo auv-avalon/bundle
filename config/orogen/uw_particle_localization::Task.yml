@@ -443,5 +443,5 @@ thruster_samples_period: 0.01
 # gives the angle difference between the coordinate-system and the utm-north
 utm_relative_angle: 0.0
 # start map for localization algorithm
-yaml_map: "<%= ENV['AUTOPROJ_PROJECT_BASE'] %>/avalon/orogen/uw_particle_localization/maps/testhalle.yml"
+yaml_map: "<%= ENV['AUTOPROJ_PROJECT_BASE'] %>/auv_avalon/orogen/uw_particle_localization/maps/testhalle.yml"
 

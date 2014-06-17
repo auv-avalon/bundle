@@ -35,7 +35,7 @@ Syskit.conf.use_deployment 'controldev'
 Syskit.conf.use_deployment 'modem'
 Syskit.conf.use_deployment 'controlconverter_movement'
 #Syskit.conf.use_deployment 'controlconverter_position'
-Syskit.conf.use_deployment 'asv_detector'
+#Syskit.conf.use_deployment 'asv_detector'
 Syskit.conf.use_deployment 'auv_rel_pos_controller'
 Syskit.conf.use_deployment 'wall_servoing'
 #Syskit.conf.use_deployment 'dual_wall_servoing'
@@ -58,6 +58,8 @@ Syskit.conf.exclude_from_log 'blur'
 Syskit.conf.exclude_from_log 'pipeline_follower' 
 Syskit.conf.exclude_from_log 'line_scanner' 
 Syskit.conf.exclude_from_log 'front_camera' 
+
+Syskit.conf.exclude_from_log 'low_level_driver' 
 
 
 module Avalon 
