@@ -175,7 +175,7 @@ module Avalon
             define 'pose', Localization::ParticleDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev).use(Hbridge::SensorReader), sonar_dev)
             #define 'pose', Localization::ParticleDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev, sonar_dev))
             use  Base::PoseSrv => pose_def # has no effet
-            define 'world_controller', ::Base::ControlLoop.use(thrusters_def, 'controlled_system' => AuvCont::WorldPositionCmp) #Hier fehlt nun noch etwas das das system steuer, z.B. den waypoint navigator
+            define 'world_controller', ::Base::ControlLoop.use(thrusters_def, 'controlled_system' => AuvCont::WorldPositionCmp.with_conf('default')) #Hier fehlt nun noch etwas das das system steuer, z.B. den waypoint navigator
             define 'target_move_new', world_controller_def.use(pose_def, 'controller' => AuvControl::ConstantCommand) 
         end
     end
