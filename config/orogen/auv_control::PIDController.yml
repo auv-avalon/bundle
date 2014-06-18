@@ -164,7 +164,7 @@ pid_settings:
     YMin: -0.6
     YMax: 0.6
 
---- name:aligned_velocity
+--- name:velocity
 # The command domain (true:position or false:velocity)
 position_control: false
 # Settings for the PID controllers
