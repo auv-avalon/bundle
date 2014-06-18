@@ -1,14 +1,42 @@
 require 'models/blueprints/avalon'
 require 'models/blueprints/localization'
 
-using_task_library 'auv_rel_pos_controller'
 using_task_library 'wall_servoing'
 using_task_library 'sonar_feature_estimator'
 
 module Wall
     class Detector < Syskit::Composition
 
+        class WallServoingCmp < Syskit::Composition
+            add Base::SonarScanProviderSrv, :as => 'sonar'
+            add SonarFeatureEstimator::Task, :as => 'sonar_feature_estimator'
+            add Base::OrientationWithZSrv, :as => 'orientation'
+            add_optional Base::PoseSrv, :as => 'pose'
+            add WallServoing::WallDetector.prefere_deployed_task('servoing_wall_detector'), :as => 'servoing_wall_detector'
+            add WallServoing::WallDetector.prefere_deployed_task('obstacle_wall_decector'), :as => 'obstacle_wall_detector'
+            add WassServoing::WallDetector.prefere_deployed_task('wall_servoing'), :as => 'wall_servoing'
+            add AuvCont::WorldAndXYAlignedVelocityCmp, :as => 'controller'
 
+            connect sonar_child => sonar_feature_estimator_child
+            connect orientation_child => sonar_feature_estimator_child
+            connect sonar_feature_estimator_child => servoing_wall_detector_child
+            connect sonar_feature_estimator_child => obstacle_wall_detector_child
+
+            connect servoing_wall_detector_child => wall_servoing_child.servoing_wall
+            connect obstacle_wall_detector_child => wall_servoing_child.obstacle_wall
+
+            connect orientation.child => servoing_wall_detector_child
+            connect orientation.child => obstacle_wall_detector_child
+            connect orientation.child => wall_servoing_child
+
+            connect pose_child => servoing_wall_detector_child
+            connect pose_child => obstacle_wall_detector_child
+
+            connect wall_servoing_child.world_command => controller_child.world_command
+            connect wall_servoing_child.velocity_command => controller_child.velocity_command
+
+        end
+=begin 
         add_main WallServoing::SingleSonarServoing, :as => 'detector'
         add Base::SonarScanProviderSrv, :as => 'sonar'
         add SonarFeatureEstimator::Task, :as => 'sonar_estimator'
@@ -143,7 +171,7 @@ module Wall
             end
         end
         
-        
+=end 
     end
 end
 
