@@ -35,6 +35,7 @@ module AuvCont
         pose_child.connect_to aligned_position_controller_child
         pose_child.connect_to aligned_velocity_controller_child
         pose_child.connect_to aligned_to_body_child
+        pose_child.connect_to optimal_heading_controller_child
 
         world_to_aligned_child.cmd_out_port.connect_to optimal_heading_controller_child.cmd_cascade_port
         optimal_heading_controller_child.cmd_out_port.connect_to aligned_position_controller_child.cmd_cascade_port
