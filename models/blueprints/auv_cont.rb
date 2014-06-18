@@ -24,8 +24,8 @@ module AuvCont
     class WorldPositionCmp < Syskit::Composition
         add ::Base::JointsControlledSystemSrv, :as => "joint"
         add ::Base::PoseSrv, :as => "pose"
-        add AuvControl::WorldToAligned.with_conf("default","all"), :as => "world_to_aligned"
-        add AuvControl::OptimalHeadingController.with_conf("default","all"), :as => "optimal_heading_controller"
+        add AuvControl::WorldToAligned.with_conf("default"), :as => "world_to_aligned"
+        add AuvControl::OptimalHeadingController.with_conf("default"), :as => "optimal_heading_controller"
         #add AuvControl::PIDController.with_conf("default","position").prefer_deployed_tasks("aligned_position_controller"), :as => "aligned_position_controller"
         add AuvControl::PIDController.prefer_deployed_tasks("aligned_position_controller"), :as => "aligned_position_controller"
         #add AuvControl::PIDController.with_conf("default","velocity").prefer_deployed_tasks("aligned_velocity_controller"), :as => "aligned_velocity_controller"
