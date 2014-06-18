@@ -80,7 +80,7 @@ module Avalon
             
             define 'wall_right', Wall::Follower.use(sonar_def, WallServoing::SingleSonarServoing.with_conf('default','wall_right'), 'controlled_system' => Base::ControlLoop.use('controlled_system' => Base::AUVMotionControlledSystemSrv, 'controller' => AuvRelPosController::Task.with_conf('default','relative_heading')))
 
-            define 'world_controller', ::Base::ControlLoop.use(thrusters_def, 'controlled_system' => AuvCont::WorldPositionCmp) #Hier fehlt nun noch etwas das das system steuer, z.B. den waypoint navigator
+            define 'world_controller', ::Base::ControlLoop.use(thrusters_def, 'controlled_system' => AuvCont::WorldPositionCmp.with_conf('simulation')) #Hier fehlt nun noch etwas das das system steuer, z.B. den waypoint navigator
             define 'target_move_new', world_controller_def.use(imu_def, 'controller' => AuvControl::ConstantCommand) 
 
         end
