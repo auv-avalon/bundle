@@ -32,11 +32,11 @@ module AuvCont
         add AuvControl::AccelerationController, :as => "controller"
         
         conf 'simulation', 'aligned_position_controller' => ['default', 'position_simulation_parallel'],
-                           'aligned_velocity_controller' => ['default', 'velocity_simulation_parallel']
+                           'aligned_velocity_controller' => ['default', 'velocity_simulation_parallel'],
                            'controller' => ['default_simulation']
 
         conf 'default', 'aligned_position_controller' => ['default', 'position'],
-                           'aligned_velocity_controller' => ['default', 'velocity']
+                           'aligned_velocity_controller' => ['default', 'velocity'],
                            'controller' => ['default']
 
         pose_child.connect_to world_to_aligned_child
