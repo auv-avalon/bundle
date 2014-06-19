@@ -119,7 +119,7 @@ module Avalon
             #define 'relative_control_loop', ::Base::ControlLoop.use('controller' => AuvRelPosController::Task, 'controlled_system' => base_loop_def)
 
             #Use Dagons Filter, comment out for XSens as Orientation Provider
-            use AvalonControl::DephFusionCmp => AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator)
+            use AvalonControl::DephFusionCmp => AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator, altimeter_dev)
 
             use Base::OrientationWithZSrv => AvalonControl::DephFusionCmp
 #            use Base::OrientationSrv => AvalonControl::DephFusionCmp
@@ -172,6 +172,9 @@ module Avalon
             define 'wall_right', Wall::Follower.use(WallServoing::SingleSonarServoing.with_conf('default','wall_right'), 'controlled_system' => Base::ControlLoop.use('controlled_system' => Base::AUVMotionControlledSystemSrv, 'controller' => AuvRelPosController::Task.with_conf('default','relative_heading')))
 
             define 'wall_detector_right', Wall::Detector
+
+            define 'world_controller', ::Base::ControlLoop.use(thrusters_def, 'controlled_system' => AuvCont::WorldPositionCmp)
+            define 'target_move_new', world_controller_def.use(Localization::ParticleDetector.use(hough_detector_def, Base::OrientationSrv => PoseAvalon::DagonOrientationEstimator), 'controller' => AuvControl::ConstantCommand, Base::GroundDistanceSrv => altimeter_dev, Base::ZProviderSrv => depth_reader_dev)
 
         end
     end
