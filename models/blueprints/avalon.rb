@@ -5,6 +5,10 @@ module Avalon
     Base::ControlLoop.declare 'AUVMotion', '/base/AUVMotionCommand'
     Base::ControlLoop.declare 'AUVRelativeMotion', '/base/AUVPositionCommand'
     Base::ControlLoop.declare "WorldXYZRollPitchYaw", 'base/LinearAngular6DCommand'
+    Base::ControlLoop.declare "WorldZRollPitchYaw", 'base/LinearAngular6DCommand'
+    Base::ControlLoop.declare "XYVelocity", 'base/LinearAngular6DCommand'
+
+
     data_service_type 'ModemConnectionSrv' do
             input_port 'white_light', 'bool'
             input_port 'position', '/base/samples/RigidBodyState'
