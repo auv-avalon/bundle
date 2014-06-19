@@ -143,14 +143,14 @@ module Avalon
             define 'hough_detector', Localization::HoughDetector.use(Base::OrientationSrv => PoseAvalon::DagonOrientationEstimator)
     
             #Including hough
-            define 'localization_detector', Localization::ParticleDetector.use(hough_detector_def, Base::OrientationSrv => PoseAvalon::DagonOrientationEstimator)
+            define 'localization_detector', Localization::ParticleDetector.use(hough_detector_def.use(AvalonControl::DephFusionCmp), Base::OrientationSrv => PoseAvalon::DagonOrientationEstimator)
 
             define 'line_scanner', Pipeline::LineScanner.use(bottom_camera_dev, LineScanner::Task.with_conf('default'))
 
             define 'low_level', LowLevel::Cmp
 
 #            define 'hough_localization_detector', Localization::HoughParticleDetector
-#            define 'target_move', ::AvalonControl::SimplePosMove.use(relative_control_loop_def,localization_detector_def)
+            define 'target_move', ::AvalonControl::SimplePosMove.use(relative_control_loop_def,localization_detector_def)
 
             define 'depth_fusion', AvalonControl::DephFusionCmp
             
@@ -160,7 +160,7 @@ module Avalon
             define 'pipeline_detector', Pipeline::Detector
             
             use ::AvalonControl::SimplePosMove => ::AvalonControl::SimplePosMove.use(position_control_loop_def, localization_detector_def, AvalonControl::DephFusionCmp)
-            define 'target_move', ::AvalonControl::SimplePosMove
+#            define 'target_move', ::AvalonControl::SimplePosMove.use(Base::ControlLoop, AuvCont::WorldPositionCmp.use(Hbridge::ControlSystem, localization_detector_def))
             define 'lights', Lights::Lights
             
             use ::AvalonControl::TrajectoryMove => ::AvalonControl::TrajectoryMove.use(position_control_loop_def, localization_detector_def, AvalonControl::DephFusionCmp)
@@ -168,9 +168,9 @@ module Avalon
             define 'trajectory_move', ::AvalonControl::TrajectoryMove
             
             
-            define 'wall_right', Wall::Follower.use(WallServoing::SingleSonarServoing.with_conf('default','wall_right'), 'controlled_system' => Base::ControlLoop.use('controlled_system' => Base::AUVMotionControlledSystemSrv, 'controller' => AuvRelPosController::Task.with_conf('default','relative_heading')))
+            #define 'wall_right', Wall::Follower.use(WallServoing::SingleSonarServoing.with_conf('default','wall_right'), 'controlled_system' => Base::ControlLoop.use('controlled_system' => Base::AUVMotionControlledSystemSrv, 'controller' => AuvRelPosController::Task.with_conf('default','relative_heading')))
 
-            define 'wall_detector_right', Wall::Detector
+            #define 'wall_detector_right', Wall::Detector
             
             define 'pose', Localization::ParticleDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev).use(Hbridge::SensorReader), sonar_dev)
             #define 'pose', Localization::ParticleDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev, sonar_dev))

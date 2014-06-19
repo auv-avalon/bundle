@@ -27,8 +27,9 @@ module Avalon
             define 'pipeline', Pipeline::Follower.use('controlled_system' => Base::ControlLoop.use('controlled_system' => Base::AUVMotionControlledSystemSrv, 'controller' => AuvRelPosController::Task.with_conf('default','relative_heading')))
             define 'buoy', Buoy::FollowerCmp.use('controlled_system' => Base::ControlLoop.use('controlled_system' => Base::AUVMotionControlledSystemSrv, 'controller' => AuvRelPosController::Task.with_conf('default','absolute_heading')))
             define 'simple_move', ::AvalonControl::SimpleMove.use(Base::AUVMotionControlledSystemSrv)
-            define 'target_move', ::AvalonControl::SimplePosMove
-
+#            define 'target_move', ::AvalonControl::SimplePosMove.use(Base::ControlLoop, Localization::ParticleDetector)
+##            define 'wall_ride', WallServoingCmp
+#
 
 
 

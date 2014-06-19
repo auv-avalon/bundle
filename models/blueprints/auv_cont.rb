@@ -18,7 +18,7 @@ module AuvCont
     end
    
     class WorldPositionCmp < Syskit::Composition
-        add ::Base::JointsControlledSystemSrv, :as => "joint"
+        add ::Base::JointsCommandConsumerSrv, :as => "joint"
         add ::Base::PoseSrv, :as => "pose"
         add AuvControl::WorldToAligned.with_conf("default"), :as => "world_to_aligned"
         add AuvControl::OptimalHeadingController.with_conf("default"), :as => "optimal_heading_controller"
@@ -50,11 +50,13 @@ module AuvCont
         controller_child.connect_to joint_child
         
         export world_to_aligned_child.cmd_in_port
+        export controller_child.cmd_out_port
         provides ::Base::WorldXYZRollPitchYawControlledSystemSrv, :as => "cmd_in"
+        provides ::Base::JointsCommandSrv, :as => "command_out"
     end
 
     class WorldAndXYVelocityCmp < Syskit::Composition
-        add ::Base::JointsControlledSystemSrv, :as => "joint"
+        add ::Base::JointsCommandConsumerSrv, :as => "joint"
         add ::Base::PoseSrv, :as => "pose"
         add AuvControl::WorldToAligned.with_conf("default"), :as => "world_to_aligned"
         add AuvControl::OptimalHeadingController.with_conf("default"), :as => "optimal_heading_controller"
@@ -87,8 +89,10 @@ module AuvCont
         
         export world_to_aligned_child.cmd_in_port, :as => 'world_in'
         export aligned_velocity_controller_child.cmd_in_port, :as => 'velocity_in'
+        export controller_child.cmd_out_port
         provides ::Base::WorldZRollPitchYawControlledSystemSrv, :as => "world_in_s", "command_in" => "velocity_in"
         provides ::Base::XYVelocityControlledSystemSrv, :as => "velocity_in_s", "command_in" => "world_in"
+        provides ::Base::JointsCommandSrv, :as => "command_out"
     end
     
     ::Base::ControlLoop.specialize ::Base::ControlLoop.controller_child => WorldPositionCmp
