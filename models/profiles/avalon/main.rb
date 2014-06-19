@@ -128,6 +128,7 @@ module Avalon
             use Base::AUVRelativeMotionControlledSystemSrv => relative_control_loop_def
             use AvalonControl::JoystickCommandCmp => AvalonControl::JoystickCommandCmp.use(joystick_dev)
 
+            use Base::JointsStatusSrv => thrusters_def
             use Buoy::DetectorCmp => Buoy::DetectorCmp.use(front_camera_dev)
             use Pipeline::Detector => Pipeline::Detector.use(bottom_camera_dev)
             
