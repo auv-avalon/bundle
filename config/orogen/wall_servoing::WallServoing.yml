@@ -1,0 +1,25 @@
+--- name:default
+# no documentation available for this property
+correction_factor: 0.3
+# no documentation available for this property
+correction_speed: 0.2
+# no documentation available for this property
+direction_clockwise: true
+# no documentation available for this property
+metadata:
+  metadata: []
+  properties: []
+  input_ports: []
+  output_ports: []
+# no documentation available for this property
+search_direction: 0.0
+# no documentation available for this property
+servoing_depth: -2.0
+# no documentation available for this property
+servoing_direction: 0.0
+# no documentation available for this property
+servoing_distance: 2.0
+# no documentation available for this property
+servoing_factor: 0.1
+# no documentation available for this property
+servoing_speed: 1.0

@@ -1,0 +1,33 @@
+--- name:default
+# no documentation available for this property
+fading_out_factor: 0.04
+# no documentation available for this property
+metadata:
+  metadata: []
+  properties: []
+  input_ports: []
+  output_ports: []
+# no documentation available for this property
+use_motion_model: false
+# no documentation available for this property
+wall_estimation_timeout: 10.0
+
+--- name:obstacle
+# no documentation available for this property
+opening_angle: 0.3141592653589793
+
+--- name:servoing
+# no documentation available for this property
+opening_angle: 0.6283185307179586
+
+--- name:left
+# no documentation available for this property
+wall_direction: 1.5707963267948966
+
+--- name:right
+# no documentation available for this property
+wall_direction: -1.5707963267948966
+
+--- name:front
+# no documentation available for this property
+wall_direction: 0.0
