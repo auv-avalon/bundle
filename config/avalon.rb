@@ -6,8 +6,7 @@ Syskit.conf.process_server 'front','192.168.128.50' #, :log_dir => '/mnt/logs/lo
 Syskit.conf.app.orocos_start_all_deployments = true
 
 Syskit.conf.use_deployment 'dynamixel', :on => 'front'
-Syskit.conf.use_deployment 'front_camera', :on => 'front'
-Syskit.conf.use_deployment 'bottom_camera', :on => 'front'
+Syskit.conf.use_deployment 'camera', :on => 'front'
 Syskit.conf.use_deployment 'left_unicap_camera', :on => 'front'
 Syskit.conf.use_deployment 'right_unicap_camera', :on => 'front'
 Syskit.conf.use_deployment 'buoy_detector', :on => 'front'
