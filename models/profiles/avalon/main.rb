@@ -17,6 +17,7 @@ using_task_library 'camera_prosilica'
 using_task_library 'sysmon'
 using_task_library 'lights'
 using_task_library 'modem_can'
+using_task_library 'video_streamer_vlc'
 
 
 module Avalon
@@ -132,6 +133,9 @@ module Avalon
             use Buoy::DetectorCmp => Buoy::DetectorCmp.use(front_camera_dev)
             use Pipeline::Detector => Pipeline::Detector.use(bottom_camera_dev)
             
+            define 'bottom_camera_def', VideoStreamerVlc.stream(bottom_camera_dev, 640, 480, 8090)
+            define 'front_camera_def', VideoStreamerVlc.stream(front_camera_dev, 1200, 600, 8080)
+
             #use Wall::Detector => Wall::Detector.use(sonar_dev.with_conf('wall_servoing_right'))
 
 #            actuators = actuators_dev = robot.find_device("#{actuatorss}_actuators.#{thrusters}")
