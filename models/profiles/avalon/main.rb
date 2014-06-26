@@ -17,6 +17,7 @@ using_task_library 'camera_prosilica'
 using_task_library 'sysmon'
 using_task_library 'lights'
 using_task_library 'modem_can'
+using_task_library 'video_streamer_vlc'
 
 
 module Avalon
@@ -129,6 +130,9 @@ module Avalon
                 'controller' => AuvRelPosController::Task.with_conf('default','relative_heading')
             )
             use Base::JointsStatusSrv => thrusters_def
+            
+
+
 
             ############### /DEPRICATED #########################
 
@@ -184,10 +188,12 @@ module Avalon
                 'controlled_system' => relative_heading_loop_def
             )
             
-            # JoystickControl
+            # external control
             define 'joystick_control', AvalonControl::JoystickCommandCmp.use(
                 joystick_dev
             )
+            define 'bottom_camera_def', VideoStreamerVlc.stream(bottom_camera_dev, 640, 480, 8090)
+            define 'front_camera_def', VideoStreamerVlc.stream(front_camera_dev, 1200, 600, 8080)
             
 #            #Use Dagons Filter, comment out for XSens as Orientation Provider
 #            use AvalonControl::DepthFusionCmp => AvalonControl::DepthFusionCmp.use(

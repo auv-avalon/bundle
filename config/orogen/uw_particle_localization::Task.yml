@@ -62,7 +62,9 @@ yaml_map: '/home/matthias/dev/avalon/orogen/uw_particle_localization/maps/nurc.y
 # uses the advanced motion model implemented in modul dagon/uwv_dynamic_model
 advanced_motion_model: false
 # maximum latency, in seconds, of the stream aligner. The aligner will start dropping samples if the difference between the last output and last input is greater than this
-aggregator_max_latency: 2.0
+aggregator_max_latency: 0.5
+# Calculate position by calculating the avg particle position
+avg_particle_position: true
 # transformation of the buoy detection cam, with respect to the origin of avalon
 buoy_cam_position:
   data:
@@ -83,8 +85,12 @@ buoy_importance: 0.5
 buoy_samples_period: 0.1
 # write all debug informations to output ports
 debug: true
+# minimum time, in s, between two sequential samples arrive on echosounder_samples
+echosounder_samples_period: 0.01
 # effective sample size threshold controls the resampling timing and uses values between 0.0 and 1.0 particles
 effective_sample_size_threshold: 0.8
+# Filter out particles with zero confidence (e.g. particle is out of map)
+filter_zeros: true
 # sets gps covariance for defining measurement uncertainty
 gps_covarianz: 1.0
 # sets importance ratio for gps perception updates
@@ -101,6 +107,10 @@ gps_position:
   - 0.0
 # ratio for generating new particles after each hough measurement
 hough_interspersal_ratio: 0.01
+# Timeout ,after not recieving any hough input for x seconds
+hough_timeout: 20.0
+# no documentation available for this property
+hough_timeout_interspersal: 0.0
 # initial centre position for all particles
 init_position:
 - 0.0
@@ -123,6 +133,8 @@ joint_names:
 - strave
 # minimum time, in s, between two sequential samples arrive on laser_samples
 laser_samples_period: 0.01
+# The maximum difference between the dead reckoning velocity and the randomized particle velocity
+max_velocity_drift: 0.1
 # no documentation available for this property
 metadata:
   metadata: []
@@ -133,6 +145,8 @@ metadata:
 minimum_depth: 0.0
 # minimum number of perceptions before starting resampling
 minimum_perceptions: 3
+# minimum time, in s, between two sequential samples arrive on obstacle_samples
+obstacle_samples_period: 0.1
 # no documentation available for this property
 orientation_offset: 0.0
 # minimum time, in s, between two sequential samples arrive on orientation_samples
@@ -404,7 +418,7 @@ pure_random_motion: false
 # automatic reset of particle filter after not receiving any perception for X seconds
 reset_timeout: 10.0
 # sets sonar covariance for defining measurement uncertainty
-sonar_covariance: 1.5
+sonar_covariance: 0.5
 # This factor is used to size up the covariance, when the sonar leads up to a corner
 sonar_covariance_corner_factor: 1.0
 # This factor is used, when the sonar-distance is in an range, at which a refelction from the water surface is possible
@@ -440,6 +454,10 @@ static_motion_covariance:
 stream_aligner_status_period: 1.0
 # minimum time, in s, between two sequential samples arrive on thruster_samples
 thruster_samples_period: 0.01
+# If false, feature ratings will be multiplied
+use_best_feature_only: true
+# no documentation available for this property
+use_markov: true
 # gives the angle difference between the coordinate-system and the utm-north
 utm_relative_angle: 0.0
 # start map for localization algorithm

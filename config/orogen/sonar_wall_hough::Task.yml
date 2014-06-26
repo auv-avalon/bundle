@@ -39,7 +39,7 @@ anglesPerBin: 2
 # Position of the sonar at Avalon, given as the relative x-Position to the origin of Avalon
 avalonSonarPose: 0.5
 # Height of the basin
-basinHeight: 19.0
+basinHeight: 20.0
 # Width of the basin
 basinWidth: 23.0
 # write continously each position sample to output
