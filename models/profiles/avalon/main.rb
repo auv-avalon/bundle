@@ -17,6 +17,7 @@ using_task_library 'camera_prosilica'
 using_task_library 'sysmon'
 using_task_library 'lights'
 using_task_library 'modem_can'
+using_task_library 'video_streamer_vlc'
 
 
 module Avalon
@@ -119,7 +120,7 @@ module Avalon
             #define 'relative_control_loop', ::Base::ControlLoop.use('controller' => AuvRelPosController::Task, 'controlled_system' => base_loop_def)
 
             #Use Dagons Filter, comment out for XSens as Orientation Provider
-            use AvalonControl::DephFusionCmp => AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator)
+            use AvalonControl::DephFusionCmp => AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator, altimeter_dev)
 
             use Base::OrientationWithZSrv => AvalonControl::DephFusionCmp
 #            use Base::OrientationSrv => AvalonControl::DephFusionCmp
@@ -128,9 +129,13 @@ module Avalon
             use Base::AUVRelativeMotionControlledSystemSrv => relative_control_loop_def
             use AvalonControl::JoystickCommandCmp => AvalonControl::JoystickCommandCmp.use(joystick_dev)
 
+            use Base::JointsStatusSrv => thrusters_def
             use Buoy::DetectorCmp => Buoy::DetectorCmp.use(front_camera_dev)
             use Pipeline::Detector => Pipeline::Detector.use(bottom_camera_dev)
             
+            define 'bottom_camera_def', VideoStreamerVlc.stream(bottom_camera_dev, 640, 480, 8090)
+            define 'front_camera_def', VideoStreamerVlc.stream(front_camera_dev, 1200, 600, 8080)
+
             #use Wall::Detector => Wall::Detector.use(sonar_dev.with_conf('wall_servoing_right'))
 
 #            actuators = actuators_dev = robot.find_device("#{actuatorss}_actuators.#{thrusters}")
@@ -171,6 +176,9 @@ module Avalon
             define 'wall_right', Wall::Follower.use(WallServoing::SingleSonarServoing.with_conf('default','wall_right'), 'controlled_system' => Base::ControlLoop.use('controlled_system' => Base::AUVMotionControlledSystemSrv, 'controller' => AuvRelPosController::Task.with_conf('default','relative_heading')))
 
             define 'wall_detector_right', Wall::Detector
+
+            define 'world_controller', ::Base::ControlLoop.use(thrusters_def, 'controlled_system' => AuvCont::WorldPositionCmp)
+            define 'target_move_new', world_controller_def.use(Localization::ParticleDetector.use(hough_detector_def, Base::OrientationSrv => PoseAvalon::DagonOrientationEstimator), 'controller' => AuvControl::ConstantCommand, Base::GroundDistanceSrv => altimeter_dev, Base::ZProviderSrv => depth_reader_dev)
 
         end
     end

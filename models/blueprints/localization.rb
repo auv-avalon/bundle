@@ -19,32 +19,13 @@ module Localization
     end
 
     class ParticleDetector < Syskit::Composition
-#        argument :basin_width, :default => 23 
-#        argument :basin_height, :default => 19
-
-#        #View of the basin:
-#        # -------
-#        # |1 2 3|
-#        # |4 5 6|
-#        # |7 8 9|
-#        # -------
-#        
-#        my_events = [:position1, :position2, :position3, :position4, :position5, :position6, :position7, :position8, :position9]
-#        my_events.each do |e|
-#            event e
-#        end
-#
-#        def get_position
-#            @position
-#        end
-#
         add UwParticleLocalization::Task, :as => 'main'
         add Base::SonarScanProviderSrv, :as => 'sonar'
         add SonarFeatureEstimator::Task, :as => 'sonar_estimator'
         add ::Base::OrientationWithZSrv, :as => 'ori'
         #add Dev::Sensors::Hbridge, :as => 'hb'
-        #add Base::JointsStatusSrv, :as => 'hb'
-        add Base::JointsControllerSrv, :as => 'hb'
+        add Base::JointsStatusSrv, :as => 'hb'
+        #add Base::JointsControllerSrv, :as => 'hb'
         add_optional ::Localization::HoughSrv, as: 'hough'
 
         connect sonar_child => sonar_estimator_child
@@ -96,7 +77,7 @@ module Localization
     class DeadReckoning < Syskit::Composition
 	add UwParticleLocalization::MotionModel, :as => 'main'
 	add ::Base::OrientationWithZSrv, :as => 'ori'
-	add Base::JointsControllerSrv, :as => 'hb'
+	add Base::JointsStatusSrv, :as => 'hb'
 	
 	connect ori_child => main_child
 	connect hb_child => main_child

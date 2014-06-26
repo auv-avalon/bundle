@@ -19,24 +19,15 @@ metadata:
   properties: []
   input_ports: []
   output_ports: []
-# The domain of what we are converting (true:position or false:velocity or
-# efforts)
-position_control: true
+# The optimal orientation of the vehicle, if the target position
+# is on an orientation of 0.0
+optimal_heading: 0.0
+# The distance to target position, over that the vehicle used
+# the optimal heading
+optimal_heading_distance: 1.0
 # This property defines the timeout for the cascade input port in seconds. 0
 # means that the timeout would be ignored.
 timeout_cascade: 1.0
 # This property defines the timeout for the cmd_in input port in seconds. 0
 # means that the timeout would be ignored.
 timeout_in: 1.0
---- name:no_xy
-# This property defines which parts of the command input is expected to be
-# set once we merged all the declared input ports.
-expected_inputs:
-  linear:
-  - false
-  - false
-  - true
-  angular:
-  - true
-  - true
-  - true
