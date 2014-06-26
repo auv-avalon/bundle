@@ -98,84 +98,104 @@ module Avalon
                         period(0.1).
                         with_conf('default')
                 end
-                
-
             end
 
+            # Define thrustersystem 'actuatorss'
             Hbridge.system(self,'can0','actuatorss','thrusters',6, 3, 2, -1, 4, 5)
-#            define 'thrusters', Hbridge::Task.dispatch('thrusters',[6, 3, 2, -1, 4, 5]).
-#                with_arguments('driver_dev' => thrusters_dev)
 
-
-            #New HBridge interface not ported yet
-            #Hbridge.system self, 'can0', 'hb_group0', 'thrusters', 0, 1, 2, 3, 4, 5
-            use Base::GroundDistanceSrv => altimeter_dev
+            # Use basic sensor-information-providers
             use Base::ZProviderSrv => depth_reader_dev
+            use Base::GroundDistanceSrv => altimeter_dev
 
-            define 'base_loop', Base::ControlLoop.use('controller' => AvalonControl::MotionControlTask, 'controlled_system' => thrusters_def)
-            define 'relative_control_loop', ::Base::ControlLoop.use('controller' => AuvRelPosController::Task, 'controlled_system' => base_loop_def)
-            define 'position_control_loop', ::Base::ControlLoop.use('controller' =>  AvalonControl::PositionControlTask, 'controlled_system' => base_loop_def)
-            #define 'base_loop', Base::ControlLoop.use('controller' => AvalonControl::MotionControlTask, 'controlled_system' => thrusters_def)
-            #define 'relative_control_loop', ::Base::ControlLoop.use('controller' => AuvRelPosController::Task, 'controlled_system' => base_loop_def)
+            # use global sensorfusions
+            use Base::OrientationWithZSrv => AvalonControl::DepthFusionCmp
 
-            #Use Dagons Filter, comment out for XSens as Orientation Provider
-            use AvalonControl::DephFusionCmp => AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator, altimeter_dev)
-
-            use Base::OrientationWithZSrv => AvalonControl::DephFusionCmp
-#            use Base::OrientationSrv => AvalonControl::DephFusionCmp
-
-            use Base::AUVMotionControlledSystemSrv => base_loop_def
-            use Base::AUVRelativeMotionControlledSystemSrv => relative_control_loop_def
-            use AvalonControl::JoystickCommandCmp => AvalonControl::JoystickCommandCmp.use(joystick_dev)
-
+            ############### DEPRICATED ##########################
+            # Define old ControlLoops
+            define 'base_loop', Base::ControlLoop.use(
+                'controller' => AvalonControl::MotionControlTask, 
+                'controlled_system' => thrusters_def
+            )
+            define 'relative_control_loop', ::Base::ControlLoop.use(
+                'controller' => AuvRelPosController::Task, 
+                'controlled_system' => base_loop_def
+            )
+            define 'position_control_loop', ::Base::ControlLoop.use(
+                'controller' =>  AvalonControl::PositionControlTask, 
+                'controlled_system' => base_loop_def
+            )
+            define 'relative_heading_loop', ::Base::ControlLoop.use(
+                'controlled_system' => base_loop_def, 
+                'controller' => AuvRelPosController::Task.with_conf('default','relative_heading')
+            )
             use Base::JointsStatusSrv => thrusters_def
-            use Buoy::DetectorCmp => Buoy::DetectorCmp.use(front_camera_dev)
-            use Pipeline::Detector => Pipeline::Detector.use(bottom_camera_dev)
+
+            ############### /DEPRICATED #########################
+
+            # Define new ControlLoops
+            #define 'world_controller', ::Base::ControlLoop.use(
+            #    'controller' => thrusters_def, 
+            #    'controlled_system' => AuvCont::WorldPositionCmp
+            #)
             
-            #use Wall::Detector => Wall::Detector.use(sonar_dev.with_conf('wall_servoing_right'))
-
-#            actuators = actuators_dev = robot.find_device("#{actuatorss}_actuators.#{thrusters}")
-            use  Base::PoseSrv => Localization::ParticleDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev).use(AvalonControl::MotionControlTask), sonar_dev)
-
-#            use  Localization::ParticleDetector => Localization::ParticleDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev).use(AvalonControl::MotionControlTask), sonar_dev)
-#            use  Localization::HoughDetector => Localization::HoughDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev).use(AvalonControl::MotionControlTask), sonar_dev)
-#            use  Localization::HoughParticleDetector => Localization::HoughParticleDetector
-#            use  Localization::ParticleDetector => Localization::ParticleDetector.use(AvalonControl::DephFusionCmp.use(PoseAvalon::DagonOrientationEstimator,depth_reader_dev), sonar_dev,thrusters_def)
-            define 'hough_detector', Localization::HoughDetector.use(Base::OrientationSrv => PoseAvalon::DagonOrientationEstimator)
-    
-            #Including hough
-            define 'localization_detector', Localization::ParticleDetector.use(hough_detector_def, Base::OrientationSrv => PoseAvalon::DagonOrientationEstimator)
-
-            define 'line_scanner', Pipeline::LineScanner.use(bottom_camera_dev, LineScanner::Task.with_conf('default'))
-
+            # Background tasks
+            define 'lights', Lights::Lights
             define 'low_level', LowLevel::Cmp
 
-#            define 'hough_localization_detector', Localization::HoughParticleDetector
-#            define 'target_move', ::AvalonControl::SimplePosMove.use(relative_control_loop_def,localization_detector_def)
+            # Localization
+            define 'hough_detector', Localization::HoughDetector
+            define 'localization', Localization::ParticleDetector.use(
+                'hough' => hough_detector_def
+            )
 
-            define 'depth_fusion', AvalonControl::DephFusionCmp
-            
-            define 'joystick_control', AvalonControl::JoystickCommandCmp
-            
-            define 'buoy_detector', Buoy::DetectorCmp
-            define 'pipeline_detector', Pipeline::Detector
-            
-            use ::AvalonControl::SimplePosMove => ::AvalonControl::SimplePosMove.use(position_control_loop_def, localization_detector_def, AvalonControl::DephFusionCmp)
-            define 'target_move', ::AvalonControl::SimplePosMove
-            define 'lights', Lights::Lights
-            
-            use ::AvalonControl::TrajectoryMove => ::AvalonControl::TrajectoryMove.use(position_control_loop_def, localization_detector_def, AvalonControl::DephFusionCmp)
-            
-            define 'trajectory_move', ::AvalonControl::TrajectoryMove
-            
-            
-            define 'wall_right', Wall::Follower.use(WallServoing::SingleSonarServoing.with_conf('default','wall_right'), 'controlled_system' => Base::ControlLoop.use('controlled_system' => Base::AUVMotionControlledSystemSrv, 'controller' => AuvRelPosController::Task.with_conf('default','relative_heading')))
+            # Basic Movements
+            define 'target_move', ::AvalonControl::SimplePosMove.use(
+                'controlled_system' => base_loop_def,
+                'pose' => localization_def,
+                'controller' => AvalonControl::RelFakeWriter
+            )
+#            define 'target_move_new', world_controller_def.use(
+#                'localization' => localization_def, 
+#                'controller' => AuvControl::ConstantCommand, 
+#                Base::GroundDistanceSrv => altimeter_dev, 
+#                Base::ZProviderSrv => depth_reader_dev
+#            )
 
+            # HighLevelDetectors
+            define 'buoy_detector', Buoy::DetectorCmp.use(
+                'camera' => front_camera_dev
+            )
+            define 'pipeline_detector', Pipeline::Detector.use(
+                'camera' => bottom_camera_dev
+            )
+            define 'line_scanner', Pipeline::LineScanner.use(
+               bottom_camera_dev, 
+                LineScanner::Task.with_conf('default')
+            )
             define 'wall_detector_right', Wall::Detector
 
-            define 'world_controller', ::Base::ControlLoop.use(thrusters_def, 'controlled_system' => AuvCont::WorldPositionCmp)
-            define 'target_move_new', world_controller_def.use(Localization::ParticleDetector.use(hough_detector_def, Base::OrientationSrv => PoseAvalon::DagonOrientationEstimator), 'controller' => AuvControl::ConstantCommand, Base::GroundDistanceSrv => altimeter_dev, Base::ZProviderSrv => depth_reader_dev)
+            # HighLevelController
+            define 'trajectory_move', ::AvalonControl::TrajectoryMove.use(
+                position_control_loop_def, 
+                localization_def, 
+                AvalonControl::DepthFusionCmp
+            )
+            define 'wall_right', Wall::Follower.use(
+                'controlled_system' => relative_heading_loop_def
+            )
+            
+            # JoystickControl
+            define 'joystick_control', AvalonControl::JoystickCommandCmp.use(
+                joystick_dev
+            )
+            
+#            #Use Dagons Filter, comment out for XSens as Orientation Provider
+#            use AvalonControl::DepthFusionCmp => AvalonControl::DepthFusionCmp.use(
+#                PoseAvalon::DagonOrientationEstimator, 
+#                altimeter_dev
+#            )
 
+#            use ::AvalonControl::SimplePosMove => ::AvalonControl::SimplePosMove.use(position_control_loop_def, localization_def, AvalonControl::DepthFusionCmp)
         end
     end
 end

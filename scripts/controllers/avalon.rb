@@ -7,7 +7,7 @@ require 'models/profiles/avalon/main'
 require 'scripts/controllers/auto_starter'
     
 
-class AvalonControl::DephFusionCmp
+class AvalonControl::DepthFusionCmp
     on :start do |event|
         @pose_reader = task_child.pose_samples_port.reader
     end

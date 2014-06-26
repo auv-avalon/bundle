@@ -97,7 +97,7 @@ module AvalonControl
 
     end
 
-    class DephFusionCmp < Syskit::Composition
+    class DepthFusionCmp < Syskit::Composition
         add ::Base::ZProviderSrv, :as => 'z'
         add ::Base::OrientationSrv, :as => 'ori'
         add DepthReader::DepthAndOrientationFusion, :as => 'task'

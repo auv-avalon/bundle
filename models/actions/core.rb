@@ -129,7 +129,7 @@ class Main < Roby::Actions::Interface
     describe("dive_and_localize")
     state_machine "dive_and_localize" do
         control = state simple_move_def(:heading => 0, :depth => -5, :timeout => 15) 
-        localization = state localization_detector_def 
+        localization = state localization_def 
         control.depends_on localization, :role => "detector"
         start(control)
         forward control.success_event, success_event
