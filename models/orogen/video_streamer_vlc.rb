@@ -21,7 +21,7 @@ module VideoStreamerVlc
                 config.config.frame_height = height
                 config.config.vcodec = "MJPG"
                 config.config.mux = "mpjpeg"
-                config.config.dst= "127.0.0.1:#{port}/video.mjpg"
+                config.config.dst= "192.168.128.50:#{port}/video.mjpg"
                 task.createInput(config)
             end
         end
