@@ -72,7 +72,7 @@ module Avalon
 
                     device(Dev::Sensors::DepthReader, :as => 'depth_reader').
                         prefer_deployed_tasks('depth').
-                        can_id(0x440,0x7F0).
+                        can_id(0x440,0x7FF).
                         period(0.1).
                         with_conf('default')
 
@@ -131,7 +131,10 @@ module Avalon
             )
             use Base::JointsStatusSrv => thrusters_def
             
+            define 'bottom_camera_def', VideoStreamerVlc.stream(bottom_camera_dev, 640, 480, 8090)
+            define 'front_camera_def', VideoStreamerVlc.stream(front_camera_dev, 1200, 600, 8080)
 
+            #use Wall::Detector => Wall::Detector.use(sonar_dev.with_conf('wall_servoing_right'))
 
 
             ############### /DEPRICATED #########################
