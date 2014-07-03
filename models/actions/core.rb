@@ -188,20 +188,20 @@ class Main < Roby::Actions::Interface
         pipe_detector.depends_on find_pipe_back, :role => "detector"
         start(pipe_detector)
 
-        pipe_detector.monitor(
-            'angle_checker', #the Name
-            pipe_detector.find_port('pipeline'), #the port for the reader
-            :check_pipe_angle => check_pipe_angle). #arguments
-            trigger_on do |pipeline|
-                angle_in_range = true
-                if check_pipe_angle
-                    angle_in_range = pipeline.angle < 0.1 && pipeline.angle > -0.1
-                end
-                state_valid = pipeline.inspection_state == :ALIGN_AUV || pipeline.inspection_state == :FOLLOW_PIPE
-                state_valid && angle_in_range #last condition
-            end. emit pipe_detector.success_event
-#        forward pipe_detector.align_auv_event, success_event
-#        forward pipe_detector.follow_pipe_event, success_event
+#        pipe_detector.monitor(
+#            'angle_checker', #the Name
+#            pipe_detector.find_port('pipeline'), #the port for the reader
+#            :check_pipe_angle => check_pipe_angle). #arguments
+#            trigger_on do |pipeline|
+#                angle_in_range = true
+#                if check_pipe_angle
+#                    angle_in_range = pipeline.angle < 0.1 && pipeline.angle > -0.1
+#                end
+#                state_valid = pipeline.inspection_state == :ALIGN_AUV || pipeline.inspection_state == :FOLLOW_PIPE
+#                state_valid && angle_in_range #last condition
+#            end. emit pipe_detector.success_event
+        forward pipe_detector.align_auv_event, success_event
+        forward pipe_detector.follow_pipe_event, success_event
 
         forward pipe_detector.success_event, success_event
         forward pipe_detector,find_pipe_back.success_event,failed_event #timeout here on moving

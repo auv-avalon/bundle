@@ -71,7 +71,7 @@ module Avalon
 
                     device(Dev::Sensors::DepthReader, :as => 'depth_reader').
                         prefer_deployed_tasks('depth').
-                        can_id(0x440,0x7F0).
+                        can_id(0x440,0x7FF).
                         period(0.1).
                         with_conf('default')
 
@@ -94,7 +94,7 @@ module Avalon
                 through 'can1' do
                     device(Dev::Sensors::DepthReader, :as => 'depth_reader_rear').
                         prefer_deployed_tasks('depth_rear').
-                        can_id(0x440,0x7F0).
+                        can_id(0x440,0x7FF).
                         period(0.1).
                         with_conf('default')
                 end
