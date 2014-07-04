@@ -23,7 +23,7 @@ class AvalonControl::DephFusionCmp
     end
 end
 Robot.sysmon_dev!
-Robot.modem_dev!
+#Robot.modem_dev!
 Robot.depth_reader_dev!
 Robot.depth_reader_rear_dev!
 Robot.depth_fusion_def!
