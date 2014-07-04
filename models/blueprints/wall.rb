@@ -1,5 +1,6 @@
 require 'models/blueprints/avalon'
 require 'models/blueprints/localization'
+require 'rock_auv/models/blueprints/control'
 
 using_task_library 'auv_rel_pos_controller'
 using_task_library 'wall_servoing'

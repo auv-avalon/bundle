@@ -1,6 +1,6 @@
 --- name:default
 # start the simulation graphical interface with this module
-initial_scenes:  ["<%= ENV['AUTOPROJ_PROJECT_BASE'] %>/simulation/orogen/avalon_simulation/configuration/pool.scn","<%= ENV['AUTOPROJ_PROJECT_BASE'] %>/simulation/orogen/avalon_simulation/configuration/avalon_objects.scn"]
+initial_scenes:  ["<%= ENV['AUTOPROJ_CURRENT_ROOT'] %>/simulation/orogen/avalon_simulation/configuration/pool.scn","<%= ENV['AUTOPROJ_CURRENT_ROOT'] %>/simulation/orogen/avalon_simulation/configuration/avalon_objects.scn"]
 enable_gui: 1
 #use_osg_ocean: 0
 #debug_sonar: 1
