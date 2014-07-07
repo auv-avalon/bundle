@@ -13,7 +13,7 @@ module PoseAvalon
         add OrientationEstimator::BaseEstimator, :as => 'estimator'
         add UwParticleLocalization::OrientationCorrection, :as => 'correction'
 
-        add XsensImu::Task, :as => 'imu'
+        add Base::OrientationSrv, :as => 'imu'
         add FogKvh::Dsp3000Task, :as => 'fog'
 
         #imu_child.connect_to correction_child.absolute_orientation_port

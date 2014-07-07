@@ -44,7 +44,11 @@ module AuvCont
         export world_to_aligned_child.cmd_in_port
         export controller_child.cmd_out_port
         provides ::Base::WorldXYZRollPitchYawControlledSystemSrv, :as => "cmd_in"
+
+        #TODO @Christian, wenn du hier "nur" ein CommandSrv definierst erfüllt das den controlloop ja nicht, das meinte ich schonmal
+        #provides ::Base::JointsControllerSrv, :as => "command_out"
         provides ::Base::JointsCommandSrv, :as => "command_out"
+
     end
     class WorldAndXYVelocityCmp < Syskit::Composition
         add ::Base::JointsCommandConsumerSrv, :as => "joint"
