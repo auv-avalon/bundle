@@ -17,7 +17,7 @@ Syskit.conf.use_deployment 'low_level', :on => 'front'
 Syskit.conf.use_deployment 'blur', :on => 'front'
 
 #Rear machine
-Syskit.conf.use_deployment 'pipeline_laser_inspection'
+#Syskit.conf.use_deployment 'pipeline_laser_inspection'
 Syskit.conf.use_deployment 'pipeline_follower'
 Syskit.conf.use_deployment 'avalon_back_base_control'
 Syskit.conf.use_deployment 'sonar_distance_estimator'

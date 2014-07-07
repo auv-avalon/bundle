@@ -137,7 +137,7 @@ module Avalon
             #use Base::OrientationWithZSrv => depth_fusion_def
 
             ############### DEPRICATED ##########################
-            # Define old ControlLoops
+            # Define old base ControlLoops
             define 'base_loop', Base::ControlLoop.use(
                 Base::OrientationWithZSrv => depth_fusion_def,
                 'dist' => altimeter_dev,
@@ -146,10 +146,6 @@ module Avalon
             )
             define 'relative_control_loop', ::Base::ControlLoop.use(
                 'controller' => AuvRelPosController::Task, 
-                'controlled_system' => base_loop_def
-            )
-            define 'position_control_loop', ::Base::ControlLoop.use(
-                'controller' =>  AvalonControl::PositionControlTask, 
                 'controlled_system' => base_loop_def
             )
             define 'relative_heading_loop', ::Base::ControlLoop.use(
@@ -195,6 +191,15 @@ module Avalon
                 'hb' => thrusters_def,
             )
 
+            ############### DEPRICATED ##########################
+            # Define HighLevelControllers
+            define 'position_control_loop', ::Base::ControlLoop.use(
+                'controller' =>  AvalonControl::PositionControlTask, 
+                'controlled_system' => base_loop_def,
+                'pose' => localization_def
+            )
+            ############### /DEPRICATED #########################
+
 
             # Basic Movements
             define 'target_move', ::AvalonControl::SimplePosMove.use(
@@ -209,6 +214,10 @@ module Avalon
 #                #Base::GroundDistanceSrv => altimeter_dev, 
 #                #Base::ZProviderSrv => depth_reader_dev
 #            )
+            define 'simple_pos_move', ::AvalonControl::SimplePosMove.use(
+                'controlled_system' => position_control_loop_def, 
+                'pose' => localization_def, 
+            )
 
             # HighLevelDetectors
             define 'buoy_detector', Buoy::DetectorCmp.use(
@@ -238,13 +247,6 @@ module Avalon
                 joystick_dev
             )
             
-#            #Use Dagons Filter, comment out for XSens as Orientation Provider
-#            use AvalonControl::DepthFusionCmp => AvalonControl::DepthFusionCmp.use(
-#                PoseAvalon::DagonOrientationEstimator, 
-#                altimeter_dev
-#            )
-#            use ::AvalonControl::SimplePosMove => ::AvalonControl::SimplePosMove.use(position_control_loop_def, localization_def, AvalonControl::DepthFusionCmp)
-
         end
     end
 end

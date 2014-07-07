@@ -9,7 +9,7 @@ require "rock/models/blueprints/pose"
 require "models/blueprints/avalon.rb"
 
 module PoseAvalon
-    class DagonOrientationEstimator < Syskit::Composition
+    class OrientationEstimatorCmp < Syskit::Composition
         add OrientationEstimator::BaseEstimator, :as => 'estimator'
         add UwParticleLocalization::OrientationCorrection, :as => 'correction'
 
