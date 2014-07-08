@@ -10,13 +10,13 @@ cob:
   - 0.0
   - 0.08
 # The names of the joints, array indexes must equal to the positions
-joint_names: []
-    #- pitch
-    #- dive
-    #- left
-    #- right
-    #- yaw
-    #- strave
+joint_names:
+    - pitch
+    - dive
+    - right
+    - left
+    - yaw
+    - strave
 # Linear damping coefficients, in 6 degrees of freedom
 linear_damp:
   data:
@@ -68,22 +68,22 @@ thruster_direction:
 - data:
   - 0.0
   - 0.0
-  - 1.0
-- data:
   - -1.0
-  - 0.0
-  - 0.0
 - data:
-  - -1.0
-  - 0.0
-  - 0.0
-- data:
-  - 0.0
   - 1.0
   - 0.0
+  - 0.0
+- data:
+  - -1.0
+  - 0.0
+  - 0.0
 - data:
   - 0.0
   - -1.0
+  - 0.0
+- data:
+  - 0.0
+  - 1.0
   - 0.0
 # no documentation available for this property
 thruster_position:

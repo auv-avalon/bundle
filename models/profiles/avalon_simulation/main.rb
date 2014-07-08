@@ -1,6 +1,7 @@
 require "models/profiles/main.rb"
 require "models/blueprints/avalon"
 require "models/blueprints/pose_avalon"
+require "rock_auv/models/blueprints/control"
 
 using_task_library 'simulation'
 using_task_library 'avalon_simulation'
