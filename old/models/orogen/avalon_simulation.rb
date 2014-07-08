@@ -1,6 +1,6 @@
 class AvalonSimulation::Task
     def configure
-        autoproj = ENV['AUTOPROJ_PROJECT_BASE']
+        autoproj = ENV['AUTOPROJ_CURRENT_ROOT']
 
         file = "avalon.scn"
 

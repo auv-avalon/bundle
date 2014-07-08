@@ -5,7 +5,7 @@ class UwParticleLocalization::Task
     def configure
         super
 
-        autoproj = ENV['AUTOPROJ_PROJECT_BASE']
+        autoproj = ENV['AUTOPROJ_CURRENT_ROOT']
 
         map = "nurc.yml"
 
