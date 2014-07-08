@@ -18,10 +18,11 @@ using_task_library 'sysmon'
 using_task_library 'lights'
 using_task_library 'modem_can'
 using_task_library 'video_streamer_vlc'
+using_task_library 'auv_control'
 
 
 module Avalon
-    USE_DAGON_FILTER = true
+    USE_ORIENTATION_FILTER = true
 
     module Profiles
         profile "Avalon" do
@@ -67,9 +68,9 @@ module Avalon
                     with_conf('default', 'can1')
 
                 through 'can0' do
-                    device(Dev::Controldev::Raw, :as => 'joystick', :using => Controldev::Remote).
-                        period(0.1).
-                        can_id(0x502,0x7FF)
+            #        device(Dev::Controldev::Raw, :as => 'joystick', :using => Controldev::Remote).
+            #            period(0.1).
+            #            can_id(0x502,0x7FF)
 
                     device(Dev::Sensors::DepthReader, :as => 'depth_reader').
                         prefer_deployed_tasks('depth').
@@ -111,10 +112,10 @@ module Avalon
 
             ############## Orientation Provider and Depth fusion also orientation corretion if needed #####
 
-            if not USE_DAGON_FILTER
+            if not USE_ORIENTATION_FILTER
                 define "raw_orientation", imu_dev
             else
-                define "raw_orientation", PoseAvalon::DagonOrientationEstimator.use(
+                define "raw_orientation", PoseAvalon::OrientationEstimatorCmp.use(
                     'imu' => imu_dev
                 )
             end
@@ -152,7 +153,8 @@ module Avalon
                 'controlled_system' => base_loop_def, 
                 'controller' => AuvRelPosController::Task.with_conf('default','relative_heading')
             )
-            use Base::JointsStatusSrv => thrusters_def
+            #TODO Bug
+            #use Base::JointsStatusSrv => thrusters_def
             
             define 'bottom_camera_def', VideoStreamerVlc.stream(bottom_camera_dev, 640, 480, 8090)
             define 'front_camera_def', VideoStreamerVlc.stream(front_camera_dev, 1200, 600, 8080)
@@ -162,11 +164,12 @@ module Avalon
 
             ############### /DEPRICATED #########################
 
-#            # Define new ControlLoops
-#            define 'world_controller', ::Base::ControlLoop.use(
-#                'controlled_system' => thrusters_def, 
-#                'controller' => AuvCont::WorldPositionCmp
-#            )
+
+            # Define new ControlLoops
+            define 'world_controller', ::Base::ControlLoop.use(
+                'controlled_system' =>thrusters_def,
+                'controller' => AuvCont::WorldPositionCmp 
+            )
             
             # Background tasks
             define 'lights', Lights::Lights
@@ -208,12 +211,14 @@ module Avalon
                 'controller' => AvalonControl::RelFakeWriter
             )
 
-#            define 'target_move_new', world_controller_def.use(
-#                'localization' => localization_def, 
-#                'controller' => AuvControl::ConstantCommand#, 
-#                #Base::GroundDistanceSrv => altimeter_dev, 
-#                #Base::ZProviderSrv => depth_reader_dev
-#            )
+            define 'target_move_new', ::AuvCont::PositionMove.use(
+                Base::PoseSrv => localization_def, 
+                'controlled_system' => world_controller_def,
+                'controller' => AuvControl::ConstantCommand
+                #Base::GroundDistanceSrv => altimeter_dev, 
+                #Base::ZProviderSrv => depth_reader_dev
+            )
+
             define 'simple_pos_move', ::AvalonControl::SimplePosMove.use(
                 'controlled_system' => position_control_loop_def, 
                 'pose' => localization_def, 
@@ -243,11 +248,10 @@ module Avalon
             )
             
             # external control
-            define 'joystick_control', AvalonControl::JoystickCommandCmp.use(
-                joystick_dev
-            )
-            
-        end
+#            define 'joystick_control', AvalonControl::JoystickCommandCmp.use(
+#                joystick_dev
+#            )
+        end 
     end
 end
 
