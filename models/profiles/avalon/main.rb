@@ -107,7 +107,7 @@ module Avalon
 
             # Use basic sensor-information-providers
             #use Base::ZProviderSrv => depth_reader_dev
-            #use Base::GroundDistanceSrv => altimeter_dev
+            use Base::GroundDistanceSrv => altimeter_dev
 
             ############## Orientation Provider and Depth fusion also orientation corretion if needed #####
 
@@ -122,7 +122,7 @@ module Avalon
             define 'depth_fusion',   AvalonControl::DepthFusionCmp.use(
                 Base::ZProviderSrv => depth_reader_dev,
                 Base::OrientationSrv => raw_orientation_def,
-                Base::GroundDistanceSrv => altimeter_dev
+                #Base::GroundDistanceSrv => altimeter_dev
             )
 
 
