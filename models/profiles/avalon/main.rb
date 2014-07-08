@@ -167,8 +167,8 @@ module Avalon
 
             # Define new ControlLoops
             define 'world_controller', ::Base::ControlLoop.use(
-                'controlled_system' =>thrusters_def,
-                'controller' => AuvCont::WorldPositionCmp 
+                'controlled_system' => thrusters_def,
+                'controller' => AuvCont::WorldPositionCmp.use('controlled_system' => thrusters_def)
             )
             
             # Background tasks

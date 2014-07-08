@@ -2,7 +2,6 @@ require 'rock/models/blueprints/control'
 require "models/blueprints/control"
 require "models/blueprints/localization"
 require "models/blueprints/avalon"
-require "models/orogen/auv_control"
 
 using_task_library 'auv_control'
 module AuvCont
@@ -20,15 +19,21 @@ module AuvCont
     end
    
     class WorldPositionCmp < Syskit::Composition
-        add ::Base::JointsCommandConsumerSrv, :as => "joint"
+        add ::Base::JointsCommandConsumerSrv, :as => "controlled_system"
         add ::Base::PoseSrv, :as => "pose"
         add AuvControl::WorldToAligned.with_conf("default"), :as => "world_to_aligned"
         add AuvControl::OptimalHeadingController.with_conf("default"), :as => "optimal_heading_controller"
-        add AuvControl::PIDController.prefer_deployed_tasks("aligned_position_controller"), :as => "aligned_position_controller"
-        add AuvControl::PIDController.prefer_deployed_tasks("aligned_velocity_controller"), :as => "aligned_velocity_controller"
+        #add AuvControl::PIDController.prefer_deployed_tasks("aligned_position_controller"), :as => "aligned_position_controller"
+        #add AuvControl::PIDController.prefer_deployed_tasks("aligned_velocity_controller"), :as => "aligned_velocity_controller"
+        
+        add AuvControl::PIDController, :as => "aligned_position_controller"
+        aligned_position_controller_child.prefer_deployed_tasks("aligned_position_controller")
+
+        add AuvControl::PIDController, :as => "aligned_velocity_controller"
+        aligned_velocity_controller_child.prefer_deployed_tasks("aligned_velocity_controller")
+        
         add AuvControl::AlignedToBody, :as => "aligned_to_body"
         add AuvControl::AccelerationController, :as => "controller"
-       # add ::Base::JointsStatusSrv, :as => "status_in"
         
         conf 'simulation', 'aligned_position_controller' => ['default', 'position_simulation_parallel'],
                            'aligned_velocity_controller' => ['default', 'velocity_simulation_parallel'],
@@ -46,7 +51,7 @@ module AuvCont
         aligned_position_controller_child.cmd_out_port.connect_to aligned_velocity_controller_child.cmd_cascade_port
         aligned_velocity_controller_child.cmd_out_port.connect_to aligned_to_body_child.cmd_cascade_port
         aligned_to_body_child.cmd_out_port.connect_to controller_child.cmd_cascade_port
-        controller_child.connect_to joint_child
+        controller_child.connect_to controlled_system_child
 
        # status_in_child.connect_to controller_child
         
