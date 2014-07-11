@@ -175,6 +175,7 @@ Roby.every(1, :on_error => :disable) do
         State.sv_task.create_output_port("delta_y","double")
         State.sv_task.create_output_port("delta_timeout","double")
         State.sv_task.create_output_port("timeout","double")
+        State.sv_task.configure
         State.sv_task.start
     end
 end
