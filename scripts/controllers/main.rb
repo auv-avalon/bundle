@@ -160,6 +160,7 @@ Roby.every(1, :on_error => :disable) do
         [q.yaw * 180.0 / Math::PI, q.yaw]
     end
     add_status(status, "target z", "(%.2f m)", State, :target_depth) 
+    add_status(status, "Min-Cell", "(%.2fV)", State, :lowest_cell) 
     Robot.info status.join(' ') if !status.empty?
 end
 
