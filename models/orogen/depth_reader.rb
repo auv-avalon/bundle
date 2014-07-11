@@ -1,5 +1,7 @@
 require "models/blueprints/avalon"
 
+using_task_library "canbus"
+
 module Dev
     module Sensors
         device_type "DepthReader" do
