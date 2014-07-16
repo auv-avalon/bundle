@@ -17,6 +17,7 @@ using_task_library 'camera_prosilica'
 using_task_library 'sysmon'
 using_task_library 'lights'
 using_task_library 'modem_can'
+using_task_library 'battery_watcher'
 
 
 module Avalon
