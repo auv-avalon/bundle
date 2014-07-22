@@ -39,192 +39,136 @@ expected_inputs:
   - true
   - true
   - true
-
---- name:position
+--- name:position_parallel
 # The command domain (true:position or false:velocity)
 position_control: true
+# Use the Ideal (false) or Parallel PID-Settings 
+use_parallel_pid_settings: true
 # Settings for the PID controllers
-pid_settings:
+parallel_pid_settings:
   linear:
   - Ts: 0.01
-    K: 1.0
-    Ti: 0.0
-    Td: 0.0
+    Kp: 0.0
+    Ki: 0.0
+    Kd: 0.0
     N: 0.0
     B: 1.0
     Tt: -1.0
-    YMin: -2.0
-    YMax: 2.0
+    YMin: -0.0
+    YMax: 0.0
   - Ts: 0.01
-    K: 1.0
-    Ti: 0.0
-    Td: 0.0
+    Kp: 0.0
+    Ki: 0.0
+    Kd: 0.0
     N: 0.0
     B: 1.0
     Tt: -1.0
-    YMin: -1.0
-    YMax: 1.0
+    YMin: -0.0
+    YMax: 0.0
   - Ts: 0.01
-    K: 0.1
-    Ti: 0.0
-    Td: 0.0
+    Kp: 0.0
+    Ki: 0.0
+    Kd: 0.0
     N: 0.0
     B: 1.0
     Tt: -1.0
-    YMin: -1.0
-    YMax: 1.0
+    YMin: -0.0
+    YMax: 0.0
   angular:
   - Ts: 0.01
-    K: 1.0e-17
-    Ti: 0.0
-    Td: 0.0
+    Kp: 0.0
+    Ki: 0.0
+    Kd: 0.0
     N: 0.0
     B: 1.0
     Tt: -1.0
-    YMin: -1.0
-    YMax: 1.0
+    YMin: -0.0
+    YMax: 0.0
   - Ts: 0.01
-    K: 0.2
-    Ti: 0.0
-    Td: 0.0
+    Kp: 0.0
+    Ki: 0.0
+    Kd: 0.0
     N: 0.0
     B: 1.0
     Tt: -1.0
-    YMin: -1.0
-    YMax: 1.0
+    YMin: -0.0
+    YMax: 0.0
   - Ts: 0.01
-    K: 0.4
-    Ti: 0.0
-    Td: 0.0
+    Kp: 0.0
+    Ki: 0.0
+    Kd: 0.0
     N: 0.0
     B: 1.0
     Tt: -1.0
-    YMin: -0.6
-    YMax: 0.6
+    YMin: -0.0
+    YMax: 0.0
 
---- name:position_simulation
-# The command domain (true:position or false:velocity)
-position_control: true
-# Settings for the PID controllers
-pid_settings:
-  linear:
-  - Ts: 0.01
-    K: 0.3
-    Ti: 0.0
-    Td: 0.0
-    N: 0.0
-    B: 1.0
-    Tt: -1.0
-    YMin: -2.0
-    YMax: 2.0
-  - Ts: 0.01
-    K: 1.0
-    Ti: 0.0
-    Td: 0.0
-    N: 0.0
-    B: 1.0
-    Tt: -1.0
-    YMin: -1.0
-    YMax: 1.0
-  - Ts: 0.01
-    K: 0.1
-    Ti: 0.0
-    Td: 0.0
-    N: 0.0
-    B: 1.0
-    Tt: -1.0
-    YMin: -1.0
-    YMax: 1.0
-  angular:
-  - Ts: 0.01
-    K: 1.0e-17
-    Ti: 0.0
-    Td: 0.0
-    N: 0.0
-    B: 1.0
-    Tt: -1.0
-    YMin: -1.0
-    YMax: 1.0
-  - Ts: 0.01
-    K: 0.2
-    Ti: 0.0
-    Td: 0.0
-    N: 0.0
-    B: 1.0
-    Tt: -1.0
-    YMin: -1.0
-    YMax: 1.0
-  - Ts: 0.01
-    K: 1.0
-    Ti: 0.0
-    Td: 0.0
-    N: 0.0
-    B: 1.0
-    Tt: -1.0
-    YMin: -0.6
-    YMax: 0.6
 
---- name:aligned_velocity
+--- name:velocity_parallel
 # The command domain (true:position or false:velocity)
 position_control: false
+# Use the Ideal (false) or Parallel PID-Settings 
+use_parallel_pid_settings: true
 # Settings for the PID controllers
-pid_settings:
+parallel_pid_settings:
   linear:
   - Ts: 0.01
-    K: 1.0
-    Ti: 0.0
-    Td: 0.0
+    Kp: 0.0
+    Ki: 0.0
+    Kd: 0.0
     N: 0.0
     B: 1.0
-    Tt: -1.0
+    Tt: 0.01
     YMin: -1.0
     YMax: 1.0
   - Ts: 0.01
-    K: 1.0
-    Ti: 0.0
-    Td: 0.0
+    Kp: 0.0
+    Ki: 0.0
+    Kd: 0.0
     N: 0.0
     B: 1.0
-    Tt: -1.0
+    Tt: 0.01
     YMin: -1.0
     YMax: 1.0
   - Ts: 0.01
-    K: 1.65
-    Ti: 0.215
-    Td: 0.388
+    Kp: 0.0
+    Ki: 0.0
+    Kd: 0.0
     N: 0.0
     B: 1.0
-    Tt: -1.0
+    Tt: 0.01
     YMin: -1.0
     YMax: 1.0
   angular:
   - Ts: 0.01
-    K: 1.0e-10
-    Ti: 0.0
-    Td: 0.0
+    Kp: 0.0
+    Ki: 0.0
+    Kd: 0.0
     N: 0.0
     B: 1.0
-    Tt: -1.0
+    Tt: 0.01
     YMin: -1.0
     YMax: 1.0
   - Ts: 0.01
-    K: 2.0
-    Ti: 0.0
-    Td: 0.0
+    Kp: 0.0
+    Ki: 0.0
+    Kd: 0.0
     N: 0.0
     B: 1.0
-    Tt: -1.0
+    Tt: 0.01
     YMin: -1.0
     YMax: 1.0
   - Ts: 0.01
-    K: 5.0
-    Ti: 0.0
-    Td: 0.0
+    Kp: 0.0
+    Ki: 0.0
+    Kd: 0.0
     N: 0.0
     B: 1.0
-    Tt: -1.0
+    Tt: 0.01
     YMin: -1.0
     YMax: 1.0
+
+        
 --- name:position_simulation_parallel
 # The command domain (true:position or false:velocity)
 position_control: true
@@ -289,67 +233,6 @@ parallel_pid_settings:
     YMin: -0.25
     YMax: 0.25
 
---- name:velocity_simulation
-# The command domain (true:position or false:velocity)
-position_control: false
-# Settings for the PID controllers
-pid_settings:
-  linear:
-  - Ts: 0.01
-    K: 60.0
-    Ti: 0.0
-    Td: 0.0
-    N: 0.0
-    B: 1.0
-    Tt: -1.0
-    YMin: -1.0
-    YMax: 1.0
-  - Ts: 0.01
-    K: 200.0
-    Ti: 0.0
-    Td: 0.0
-    N: 0.0
-    B: 1.0
-    Tt: -1.0
-    YMin: -1.0
-    YMax: 1.0
-  - Ts: 0.01
-    K: 1.65
-    Ti: 0.215
-    Td: 0.388
-    N: 0.0
-    B: 1.0
-    Tt: -1.0
-    YMin: -1.0
-    YMax: 1.0
-  angular:
-  - Ts: 0.01
-    K: 1.0e-10
-    Ti: 0.0
-    Td: 0.0
-    N: 0.0
-    B: 1.0
-    Tt: -1.0
-    YMin: -1.0
-    YMax: 1.0
-  - Ts: 0.01
-    K: 2.0
-    Ti: 0.0
-    Td: 0.0
-    N: 0.0
-    B: 1.0
-    Tt: -1.0
-    YMin: -1.0
-    YMax: 1.0
-  - Ts: 0.01
-    K: 5.0
-    Ti: 0.0
-    Td: 0.0
-    N: 0.0
-    B: 1.0
-    Tt: -1.0
-    YMin: -1.0
-    YMax: 1.0
 
 --- name:velocity_simulation_parallel
 # The command domain (true:position or false:velocity)
