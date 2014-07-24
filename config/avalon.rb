@@ -3,7 +3,7 @@
 #Syskit.conf.process_server 'back','192.168.128.51' #, :log_dir => '/mnt/logs/log', :result_dir => '/mnt/logs/results'
 Syskit.conf.process_server 'front','localhost', :log_dir => '/mnt/logs/log', :result_dir => '/mnt/logs/results'
 
-Syskit.conf.app.orocos_start_all_deployments = true
+#Syskit.conf.app.orocos_start_all_deployments = true
 
 Syskit.conf.use_deployment 'dynamixel', :on => 'front'
 Syskit.conf.use_deployment 'camera', :on => 'front'
@@ -24,6 +24,7 @@ Syskit.conf.use_deployment 'sonar_distance_estimator'
 #Syskit.conf.use_deployment 'state_estimator'
 Syskit.conf.use_deployment 'orientation_estimator'
 #Syskit.conf.use_deployment 'ikf_orientation_estimator'
+Syskit.conf.use_deployment 'battery_watcher'
 Syskit.conf.use_deployment 'xsens'
 Syskit.conf.use_deployment 'fog'
 Syskit.conf.use_deployment 'echosounder'

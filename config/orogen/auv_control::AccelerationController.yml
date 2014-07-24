@@ -91,37 +91,37 @@ matrix:
   rows: 6
   cols: 6
   data:
-  - 0.0
+  - 0.0    # Pitch Thruster
   - 0.0
   - 0.375
   - 0.0
   - 0.75
   - 0.0
-  - 0.0
+  - 0.0    # Dive Thruster
   - 0.0
   - -0.75
   - 0.0
   - 0.25
   - 0.0
-  - -0.695
+  - -0.695 # Right Thruster?
   - 0.0
   - 0.0
   - 0.0
   - 0.0
-  - 0.0
-  - -0.75
-  - 0.0
-  - 0.0
+  - 0.0   
+  - -0.75 # Left Thruster ?
   - 0.0
   - 0.0
   - 0.0
   - 0.0
+  - 0.0   
+  - 0.0   # Yaw thruster
   - 0.273
   - 0.0
   - 0.0
-  - 0.0
+  - 0.0   
   - -0.75
-  - 0.0
+  - 0.0   # Strave Thruster
   - -0.75
   - 0.0
   - 0.0
@@ -139,7 +139,8 @@ timeout_cascade: 1.0
 # This property defines the timeout for the cmd_in input port in seconds. 0
 # means that the timeout would be ignored.
 timeout_in: 1.0
-names: ["right", "left", "dive", "pitch", "strave", "yaw"]
+names: ["pitch", "dive", "right", "left", "yaw", "strave"]
+#names: ["right", "left", "dive", "pitch", "strave", "yaw"]
 
 --- name:default_simulation
 # Lists which command parameter are being controlled on a per-joint basis.
@@ -234,42 +235,42 @@ matrix:
   rows: 6
   cols: 6
   data:
-  - 0.0
+  - 0.0  # pitch
   - 0.0
   - 0.02
   - 0.0
   - 1.0
   - 0.0
+  - 0.0 # dive
+  - 0.0
+  - -1.0
+  - 0.0
+  - 0.1
+  - 0.0
+  - 1.0 # right ?
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - -1.0 # left ?
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0 # yaw 
+  - 0.0
+  - 0.0
   - 0.0
   - 0.0
   - 1.0
-  - 0.0
-  - -0.1
-  - 0.0
-  - -1.0
+  - 0.0 #strave 
+  - 1.0
   - 0.0
   - 0.0
   - 0.0
-  - 0.0
-  - 0.0
-  - -1.0
-  - 0.0
-  - 0.0
-  - 0.0
-  - 0.0
-  - 0.0
-  - 0.0
-  - 0.0
-  - 0.0
-  - 0.0
-  - 0.0
-  - -1.0
-  - 0.0
-  - -1.0
-  - 0.0
-  - 0.0
-  - 0.0
-  - -1.0
+  - 1.0
 # no documentation available for this property
 metadata:
   metadata: []
@@ -282,4 +283,5 @@ timeout_cascade: 1.0
 # This property defines the timeout for the cmd_in input port in seconds. 0
 # means that the timeout would be ignored.
 timeout_in: 1.0
-names: ["right", "left", "dive", "pitch", "strave", "yaw"]
+names: ["pitch", "dive", "right", "left", "yaw", "strave"]
+#names: ["right", "left", "dive", "pitch", "strave", "yaw"]

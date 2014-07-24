@@ -1,6 +1,7 @@
 require "models/profiles/main.rb"
 require "models/blueprints/avalon"
 require "models/blueprints/pose_avalon"
+require "rock_auv/models/blueprints/control"
 
 using_task_library 'simulation'
 using_task_library 'avalon_simulation'
@@ -38,11 +39,16 @@ module Avalon
             end
 
             #use ::Simulation::Mars => ::AvalonSimulation::Task
-            use ::Base::GroundDistanceSrv => altimeter_def
+#            use ::Base::GroundDistanceSrv => altimeter_def
             use ::Base::OrientationWithZSrv => imu_def
             use ::Base::OrientationSrv => imu_def
 
-            define 'base_loop', Base::ControlLoop.use('controller' => AvalonControl::MotionControlTask.with_conf('default','simulation'), 'controlled_system' => thrusters_def)
+            define 'base_loop', Base::ControlLoop.use(
+                'controller' => AvalonControl::MotionControlTask.with_conf('default','simulation'), 
+                'controlled_system' => thrusters_def,
+                ::Base::GroundDistanceSrv => altimeter_def
+            )
+
             define 'relative_control_loop', ::Base::ControlLoop.use('controller' => AuvRelPosController::Task, 'controlled_system' => base_loop_def)
             define 'position_control_loop', ::Base::ControlLoop.use('controller' =>  AvalonControl::PositionControlTask, 'controlled_system' => base_loop_def)
 

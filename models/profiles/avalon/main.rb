@@ -18,6 +18,7 @@ using_task_library 'sysmon'
 using_task_library 'lights'
 using_task_library 'modem_can'
 using_task_library 'video_streamer_vlc'
+using_task_library 'battery_watcher'
 
 
 module Avalon
@@ -91,12 +92,16 @@ module Avalon
                     device(Dev::Sensors::Modem , :as => 'modem').
                         can_id(0x504,0x7FF).
                         period(0.1)
+                    
+                    device(Dev::Sensors::Battery, :as => 'battery').
+                        can_id(0x775,0x7FF).
+                        period(0.1)
                 end
 
                 through 'can1' do
                     device(Dev::Sensors::DepthReader, :as => 'depth_reader_rear').
                         prefer_deployed_tasks('depth_rear').
-                        can_id(0x440,0x7F0).
+                        can_id(0x440,0x7FF).
                         period(0.1).
                         with_conf('default')
                 end

@@ -36,7 +36,7 @@ perception_history_number: 20
 # waiting time for starting filtering
 init_sample_rejection: 100
 # start map for localization algorithm
-yaml_map: "<%= ENV['AUTOPROJ_PROJECT_BASE'] %>/avalon/orogen/uw_particle_localization/maps/nurc.yml"
+yaml_map: "<%= ENV['AUTOPROJ_CURRENT_ROOT'] %>/avalon/orogen/uw_particle_localization/maps/nurc.yml"
 # interspersal ratio for hough position samples
 hough_interspersal_ratio: 0.3
 # streamaligner attributes
@@ -461,5 +461,5 @@ use_markov: true
 # gives the angle difference between the coordinate-system and the utm-north
 utm_relative_angle: 0.0
 # start map for localization algorithm
-yaml_map: "<%= ENV['AUTOPROJ_PROJECT_BASE'] %>/auv_avalon/orogen/uw_particle_localization/maps/testhalle.yml"
+yaml_map: "<%= ENV['AUTOPROJ_CURRENT_ROOT'] %>/auv_avalon/orogen/uw_particle_localization/maps/testhalle.yml"
 
