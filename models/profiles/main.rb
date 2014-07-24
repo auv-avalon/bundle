@@ -13,24 +13,128 @@ using_task_library 'avalon_control'
 using_task_library 'auv_rel_pos_controller'
 #using_task_library 'buoy'
 
-module Avalon
+module DFKI 
     module Profiles
-        profile "AvalonBase" do
+        profile "AUV" do
+            
+#            tag 'base_loop', ::Base::ControlLoop
+#            tag 'drive_simpe', ::Base::ControlLoop
+            tag 'final_orientation_with_z', ::Base::OrientationWithZSrv
+            tag 'pose', ::Base::PoseSrv
+            tag 'altimeter', ::Base::GroundDistanceSrv
+            tag 'thruster',  ::Base::JointsControlledSystemSrv 
+            tag 'down_looking_camera',  ::Base::ImageProviderSrv
+            tag 'forward_looking_camera',  ::Base::ImageProviderSrv
+            
+            
+            ############### DEPRICATED ##########################
+            # Define old ControlLoops
+            define 'base_loop', Base::ControlLoop.use(
+                Base::OrientationWithZSrv => final_orientation_with_z_tag,
+                'dist' => altimeter_tag,
+                'controller' => AvalonControl::MotionControlTask,
+                'controlled_system' => thruster_tag
+            )
+            define 'relative_control_loop', ::Base::ControlLoop.use(
+                'controller' => AuvRelPosController::Task, 
+                'controlled_system' => base_loop_def
+            )
+
+            define 'position_control_loop', ::Base::ControlLoop.use(
+                'controller' =>  AvalonControl::PositionControlTask, 
+                'controlled_system' => base_loop_def
+            )
+            define 'relative_heading_loop', ::Base::ControlLoop.use(
+                'controlled_system' => base_loop_def, 
+                'controller' => AuvRelPosController::Task.with_conf('default','relative_heading')
+            )
+            ############### /DEPRICATED #########################
+
+            define 'relative_loop', Base::ControlLoop.use(
+                    'controlled_system' => Base::AUVMotionControlledSystemSrv, 
+                    'controller' => AuvRelPosController::Task.with_conf('default','relative_heading')
+            )
+
+            define 'absolute_loop', Base::ControlLoop.use(
+                    'controlled_system' => Base::AUVMotionControlledSystemSrv, 
+                    'controller' => AuvRelPosController::Task.with_conf('default','absolute_heading')
+            )
 
 
-            define 'base_loop_test', ::Base::ControlLoop.use(AvalonControl::FakeWriter,Base::AUVMotionControlledSystemSrv)
-            define 'base_rel_loop_test', ::Base::ControlLoop.use(AvalonControl::RelFakeWriter, Base::AUVRelativeMotionControlledSystemSrv)
+            define 'pipeline', Pipeline::Follower.use(
+                'controlled_system' =>  relative_loop_def
+            )
 
-            #You need an joystick for this....
-            define('drive_simple', ::Base::ControlLoop).use(AvalonControl::JoystickCommandCmp, Base::AUVMotionControlledSystemSrv)
+            define 'buoy', Buoy::FollowerCmp.use(
+                'controlled_system' => absolute_loop_def
+            )
 
-            define 'pipeline', Pipeline::Follower.use('controlled_system' => Base::ControlLoop.use('controlled_system' => Base::AUVMotionControlledSystemSrv, 'controller' => AuvRelPosController::Task.with_conf('default','relative_heading')))
-            define 'buoy', Buoy::FollowerCmp.use('controlled_system' => Base::ControlLoop.use('controlled_system' => Base::AUVMotionControlledSystemSrv, 'controller' => AuvRelPosController::Task.with_conf('default','absolute_heading')))
-            define 'simple_move', ::AvalonControl::SimpleMove.use(Base::AUVMotionControlledSystemSrv)
-            define 'target_move', ::AvalonControl::SimplePosMove
+            define('drive_simple', ::Base::ControlLoop).use(
+                AvalonControl::JoystickCommandCmp.use(
+                    "orientation_with_z" => final_orientation_with_z_tag,
+                    "dist" => altimeter_tag
+                ), 
+                'controlled_system' => base_loop_def    
+            )
+            
+            ############### Localization stuff  ######################
+            define 'motion_model', Localization::DeadReckoning.use(
+                'hb' => thruster_tag 
+            )
 
+            define 'hough_detector', Localization::HoughDetector.use(
+                Base::OrientationSrv => final_orientation_with_z_tag 
+            )
 
+            define 'localization', Localization::ParticleDetector.use(
+                motion_model_def,
+                Base::OrientationWithZSrv => final_orientation_with_z_tag, 
+                'hough' => hough_detector_def,
+                'hb' => thruster_tag,
+            )
 
+            ################# Basic Movements #########################
+            define 'target_move', ::AvalonControl::SimplePosMove.use(
+                'controlled_system' => base_loop_def,
+                'pose' => localization_def,
+                'controller' => AvalonControl::RelFakeWriter
+            )
+
+            define 'simple_move', ::AvalonControl::SimpleMove.use(
+                    Base::AUVMotionControlledSystemSrv
+            )
+
+            define 'pipeline_detector', Pipeline::Detector.use(
+                'camera' => down_looking_camera_tag 
+            )
+            define 'wall_right', Wall::Follower.use(
+                'controlled_system' => relative_heading_loop_def
+            )
+
+            ################ HighLevelController ######################
+            define 'trajectory_move', ::AvalonControl::TrajectoryMove.use(
+                position_control_loop_def, 
+                localization_def, 
+                final_orientation_with_z_tag, 
+            )
+            
+            define 'buoy_detector', Buoy::DetectorCmp.use(
+                'camera' => forward_looking_camera_tag 
+            )
+
+            define 'line_scanner', Pipeline::LineScanner.use(
+               down_looking_camera_tag, 
+               LineScanner::Task.with_conf('default')
+            )
+
+            ###     New Stuff not (yet) integrated #######################
+####            define 'target_move_new', world_controller_def.use(
+####                'localization' => localization_def, 
+####                'controller' => AuvControl::ConstantCommand#, 
+####                #Base::GroundDistanceSrv => altimeter_dev, 
+####                #Base::ZProviderSrv => depth_reader_dev
+####            )
+###
 
         end
     end

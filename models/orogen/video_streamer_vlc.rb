@@ -3,7 +3,7 @@ require "models/blueprints/sensors"
 
 
 module VideoStreamerVlc
-    class Task
+    class Streamer 
         dynamic_service Base::ImageConsumerSrv, :as => "dispatch" do
             component_model.argument "width"
             component_model.argument "height"
@@ -29,11 +29,11 @@ module VideoStreamerVlc
 
 
     class Composition < Syskit::Composition
-        add VideoStreamerVlc::Task, :as => "vlc"
+        add VideoStreamerVlc::Streamer, :as => "vlc"
     end
 
     def self.stream(camera, width, height, port)
-        model = VideoStreamerVlc::Task.specialize
+        model = VideoStreamerVlc::Streamer.specialize
         model.require_dynamic_service('dispatch', :as => camera.name, :width => width, :height => height, :port => port)
 
         Composition.new_submodel do

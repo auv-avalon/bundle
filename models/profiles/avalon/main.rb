@@ -26,7 +26,7 @@ module Avalon
 
     module Profiles
         profile "Avalon" do
-            use_profile AvalonBase
+            tag 'final_orientation', ::Base::OrientationSrv
 
             robot do
                 device(Dev::Sensors::Cameras::Network, :as => 'front_camera').
@@ -110,12 +110,6 @@ module Avalon
             # Define thrustersystem 'actuatorss'
             Hbridge.system(self,'can0','actuatorss','thrusters',6, 3, 2, -1, 4, 5)
 
-            # Use basic sensor-information-providers
-            #use Base::ZProviderSrv => depth_reader_dev
-            #use Base::GroundDistanceSrv => altimeter_dev
-
-            ############## Orientation Provider and Depth fusion also orientation corretion if needed #####
-
             if not USE_DAGON_FILTER
                 define "raw_orientation", imu_dev
             else
@@ -130,46 +124,11 @@ module Avalon
                 Base::GroundDistanceSrv => altimeter_dev
             )
 
-
             ###TODO Add if needed some offsets to the orientation or use first define
             define 'orientation', raw_orientation_def
 
             #TODO add offset tools?
 
-
-
-            #TODO bug does not work:
-            #use Base::OrientationWithZSrv => depth_fusion_def
-
-            ############### DEPRICATED ##########################
-            # Define old ControlLoops
-            define 'base_loop', Base::ControlLoop.use(
-                Base::OrientationWithZSrv => depth_fusion_def,
-                'dist' => altimeter_dev,
-                'controller' => AvalonControl::MotionControlTask,
-                'controlled_system' => thrusters_def
-            )
-            define 'relative_control_loop', ::Base::ControlLoop.use(
-                'controller' => AuvRelPosController::Task, 
-                'controlled_system' => base_loop_def
-            )
-            define 'position_control_loop', ::Base::ControlLoop.use(
-                'controller' =>  AvalonControl::PositionControlTask, 
-                'controlled_system' => base_loop_def
-            )
-            define 'relative_heading_loop', ::Base::ControlLoop.use(
-                'controlled_system' => base_loop_def, 
-                'controller' => AuvRelPosController::Task.with_conf('default','relative_heading')
-            )
-            use Base::JointsStatusSrv => thrusters_def
-            
-            define 'bottom_camera_def', VideoStreamerVlc.stream(bottom_camera_dev, 640, 480, 8090)
-            define 'front_camera_def', VideoStreamerVlc.stream(front_camera_dev, 1200, 600, 8080)
-
-            #use Wall::Detector => Wall::Detector.use(sonar_dev.with_conf('wall_servoing_right'))
-
-
-            ############### /DEPRICATED #########################
 
 #            # Define new ControlLoops
 #            define 'world_controller', ::Base::ControlLoop.use(
@@ -181,74 +140,13 @@ module Avalon
             define 'lights', Lights::Lights
             define 'low_level', LowLevel::Cmp
 
+            use_profile ::DFKI::Profiles::AUV,
+                "final_orientation_with_z" => depth_fusion_def,
+                "altimeter" => altimeter_dev,
+                "thruster" => thrusters_def,
+                "down_looking_camera" => bottom_camera_dev,
+                "forward_looking_camera" => front_camera_dev
 
-            # Localization
-            
-            #BUG or intended?: i need the deadRecogning only to definne to resolve hbridges?! for the localization?
-            define 'motion_model', Localization::DeadReckoning.use(
-                'hb' => thrusters_def
-            )
-
-            define 'hough_detector', Localization::HoughDetector.use(
-                Base::OrientationSrv => orientation_def 
-            )
-
-            define 'localization', Localization::ParticleDetector.use(
-                motion_model_def,
-                Base::OrientationWithZSrv => depth_fusion_def, 
-                'hough' => hough_detector_def,
-                'hb' => thrusters_def,
-            )
-
-
-            # Basic Movements
-            define 'target_move', ::AvalonControl::SimplePosMove.use(
-                'controlled_system' => base_loop_def,
-                'pose' => localization_def,
-                'controller' => AvalonControl::RelFakeWriter
-            )
-
-#            define 'target_move_new', world_controller_def.use(
-#                'localization' => localization_def, 
-#                'controller' => AuvControl::ConstantCommand#, 
-#                #Base::GroundDistanceSrv => altimeter_dev, 
-#                #Base::ZProviderSrv => depth_reader_dev
-#            )
-
-            # HighLevelDetectors
-            define 'buoy_detector', Buoy::DetectorCmp.use(
-                'camera' => front_camera_dev
-            )
-            define 'pipeline_detector', Pipeline::Detector.use(
-                'camera' => bottom_camera_dev
-            )
-            define 'line_scanner', Pipeline::LineScanner.use(
-               bottom_camera_dev, 
-                LineScanner::Task.with_conf('default')
-            )
-            define 'wall_detector_right', Wall::Detector
-
-            # HighLevelController
-            define 'trajectory_move', ::AvalonControl::TrajectoryMove.use(
-                position_control_loop_def, 
-                localization_def, 
-                depth_fusion_def, 
-            )
-            define 'wall_right', Wall::Follower.use(
-                'controlled_system' => relative_heading_loop_def
-            )
-            
-            # external control
-            define 'joystick_control', AvalonControl::JoystickCommandCmp.use(
-                joystick_dev
-            )
-            
-#            #Use Dagons Filter, comment out for XSens as Orientation Provider
-#            use AvalonControl::DepthFusionCmp => AvalonControl::DepthFusionCmp.use(
-#                PoseAvalon::DagonOrientationEstimator, 
-#                altimeter_dev
-#            )
-#            use ::AvalonControl::SimplePosMove => ::AvalonControl::SimplePosMove.use(position_control_loop_def, localization_def, AvalonControl::DepthFusionCmp)
 
         end
     end
