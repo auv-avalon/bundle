@@ -23,6 +23,7 @@ module DFKI
             tag 'pose', ::Base::PoseSrv
             tag 'altimeter', ::Base::GroundDistanceSrv
             tag 'thruster',  ::Base::JointsControlledSystemSrv 
+            tag 'thruster_feedback',  ::Base::JointsStatusSrv 
             tag 'down_looking_camera',  ::Base::ImageProviderSrv
             tag 'forward_looking_camera',  ::Base::ImageProviderSrv
             
@@ -51,17 +52,27 @@ module DFKI
             ############### /DEPRICATED #########################
 
             define 'relative_loop', Base::ControlLoop.use(
-                    'controlled_system' => Base::AUVMotionControlledSystemSrv, 
+                    'controlled_system' => base_loop_def, 
                     'controller' => AuvRelPosController::Task.with_conf('default','relative_heading')
             )
 
             define 'absolute_loop', Base::ControlLoop.use(
-                    'controlled_system' => Base::AUVMotionControlledSystemSrv, 
+                    'controlled_system' => base_loop_def, 
                     'controller' => AuvRelPosController::Task.with_conf('default','absolute_heading')
             )
 
+            define 'line_scanner', Pipeline::LineScanner.use(
+               LineScanner::Task.with_conf('default'),
+               'camera' => down_looking_camera_tag
+            )
 
+            define 'pipeline_detector', Pipeline::Detector.use(
+                'camera' => down_looking_camera_tag,
+                'laser_scanner' => line_scanner_def
+            )
+            
             define 'pipeline', Pipeline::Follower.use(
+                'controller' => pipeline_detector_def,
                 'controlled_system' =>  relative_loop_def
             )
 
@@ -79,7 +90,8 @@ module DFKI
             
             ############### Localization stuff  ######################
             define 'motion_model', Localization::DeadReckoning.use(
-                'hb' => thruster_tag 
+                'hb' => thruster_feedback_tag,
+                'ori' => final_orientation_with_z_tag
             )
 
             define 'hough_detector', Localization::HoughDetector.use(
@@ -91,6 +103,7 @@ module DFKI
                 Base::OrientationWithZSrv => final_orientation_with_z_tag, 
                 'hough' => hough_detector_def,
                 'hb' => thruster_tag,
+                'ori' => final_orientation_with_z_tag
             )
 
             ################# Basic Movements #########################
@@ -101,13 +114,17 @@ module DFKI
             )
 
             define 'simple_move', ::AvalonControl::SimpleMove.use(
-                    Base::AUVMotionControlledSystemSrv
+                base_loop_def,
+                'reading' => final_orientation_with_z_tag
             )
 
-            define 'pipeline_detector', Pipeline::Detector.use(
-                'camera' => down_looking_camera_tag 
+
+            define 'wall_detector', Wall::Detector.use(
+                "orienation_with_z" => final_orientation_with_z_tag
             )
+
             define 'wall_right', Wall::Follower.use(
+                wall_detector_def,
                 'controlled_system' => relative_heading_loop_def
             )
 
@@ -122,10 +139,6 @@ module DFKI
                 'camera' => forward_looking_camera_tag 
             )
 
-            define 'line_scanner', Pipeline::LineScanner.use(
-               down_looking_camera_tag, 
-               LineScanner::Task.with_conf('default')
-            )
 
             ###     New Stuff not (yet) integrated #######################
 ####            define 'target_move_new', world_controller_def.use(

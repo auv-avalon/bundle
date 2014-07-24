@@ -23,14 +23,13 @@ class AvalonControl::DepthFusionCmp
     end
 end
 
-Robot.battery_dev!
+#Robot.battery_dev!
 Robot.sysmon_dev!
 #Robot.modem_dev!
-Robot.depth_reader_dev!
-Robot.depth_reader_rear_dev!
+#Robot.depth_reader_dev!
+#Robot.depth_reader_rear_dev!
 Robot.depth_fusion_def!
-Robot.joystick_control_def!
-Robot.lights_def!
+#Robot.lights_def!
 Robot.low_level_def!
 
 #Robot.actuatorss_sensors_dev!

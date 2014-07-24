@@ -138,12 +138,18 @@ module Avalon
             
             # Background tasks
             define 'lights', Lights::Lights
-            define 'low_level', LowLevel::Cmp
+            define 'low_level', LowLevel::Cmp.use(
+                'z' => depth_fusion_def 
+            )
+
+            use Base::OrientationWithZSrv => depth_fusion_def
+            use Base::JointsStatusSrv => thrusters_def
 
             use_profile ::DFKI::Profiles::AUV,
                 "final_orientation_with_z" => depth_fusion_def,
                 "altimeter" => altimeter_dev,
                 "thruster" => thrusters_def,
+                "thruster_feedback" => thrusters_def,
                 "down_looking_camera" => bottom_camera_dev,
                 "forward_looking_camera" => front_camera_dev
 
