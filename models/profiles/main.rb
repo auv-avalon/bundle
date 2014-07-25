@@ -46,33 +46,43 @@ module DFKI
                 'controlled_system' => base_loop_def
             )
             define 'relative_heading_loop', ::Base::ControlLoop.use(
-                'controlled_system' => base_loop_def, 
+                'controlled_system' => base_loop_def,
+                'orientation_with_z' => final_orientation_with_z_tag,
                 'controller' => AuvRelPosController::Task.with_conf('default','relative_heading')
             )
             ############### /DEPRICATED #########################
 
             define 'relative_loop', Base::ControlLoop.use(
+                    'orientation_with_z' => final_orientation_with_z_tag,
                     'controlled_system' => base_loop_def, 
                     'controller' => AuvRelPosController::Task.with_conf('default','relative_heading')
             )
 
             define 'absolute_loop', Base::ControlLoop.use(
+                    'orientation_with_z' => final_orientation_with_z_tag,
                     'controlled_system' => base_loop_def, 
                     'controller' => AuvRelPosController::Task.with_conf('default','absolute_heading')
             )
 
+            define 'motion_model', Localization::DeadReckoning.use(
+                'hb' => thruster_feedback_tag,
+                'ori' => final_orientation_with_z_tag
+            )
+            
             define 'line_scanner', Pipeline::LineScanner.use(
                LineScanner::Task.with_conf('default'),
-               'camera' => down_looking_camera_tag
+               'camera' => down_looking_camera_tag,
+               'motion_model' => motion_model_def
             )
 
             define 'pipeline_detector', Pipeline::Detector.use(
                 'camera' => down_looking_camera_tag,
-                'laser_scanner' => line_scanner_def
+                'laser_scanner' => line_scanner_def,
+                'orienation_with_z' => final_orientation_with_z_tag
             )
             
             define 'pipeline', Pipeline::Follower.use(
-                'controller' => pipeline_detector_def,
+                pipeline_detector_def,
                 'controlled_system' =>  relative_loop_def
             )
 
@@ -89,13 +99,10 @@ module DFKI
             )
             
             ############### Localization stuff  ######################
-            define 'motion_model', Localization::DeadReckoning.use(
-                'hb' => thruster_feedback_tag,
-                'ori' => final_orientation_with_z_tag
-            )
 
             define 'hough_detector', Localization::HoughDetector.use(
-                Base::OrientationSrv => final_orientation_with_z_tag 
+                Base::OrientationSrv => final_orientation_with_z_tag,
+                'dead' => motion_model_def
             )
 
             define 'localization', Localization::ParticleDetector.use(
@@ -120,7 +127,8 @@ module DFKI
 
 
             define 'wall_detector', Wall::Detector.use(
-                "orienation_with_z" => final_orientation_with_z_tag
+                "orienation_with_z" => final_orientation_with_z_tag,
+                "dead_reckoning" => motion_model_def
             )
 
             define 'wall_right', Wall::Follower.use(

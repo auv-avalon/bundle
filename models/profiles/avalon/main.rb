@@ -142,9 +142,6 @@ module Avalon
                 'z' => depth_fusion_def 
             )
 
-            use Base::OrientationWithZSrv => depth_fusion_def
-            use Base::JointsStatusSrv => thrusters_def
-
             use_profile ::DFKI::Profiles::AUV,
                 "final_orientation_with_z" => depth_fusion_def,
                 "altimeter" => altimeter_dev,
