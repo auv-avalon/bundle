@@ -5,7 +5,7 @@ comTimeout:
 # Configuration for all hbridges (initial values)
 configuration:
     - actuator:
-        name: 'right'
+        name: 'left'
         maxPWM: 10000
         openCircuit: 0
         maxMotorTemp: 0
@@ -18,7 +18,7 @@ configuration:
         pwmStepPerMs: 20
         controllerInputEncoder: :INTERNAL
     - actuator:
-        name: 'left'
+        name: 'right'
         maxPWM: 10000
         openCircuit: 0
         maxMotorTemp: 0
