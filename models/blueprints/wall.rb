@@ -14,9 +14,9 @@ module Wall
         add Base::SonarScanProviderSrv, :as => 'sonar'
         add SonarFeatureEstimator::Task, :as => 'sonar_estimator'
         connect sonar_child => sonar_estimator_child
-        add Base::OrientationWithZSrv, :as => "orienation_with_z"
+        add Base::OrientationWithZSrv, :as => "orientation_with_z"
 	add_optional ::Localization::DeadReckoningSrv, :as => "dead_reckoning"
-        connect orienation_with_z_child => detector_child.orientation_sample_port
+        connect orientation_with_z_child => detector_child.orientation_sample_port
         connect sonar_estimator_child => detector_child
 	connect dead_reckoning_child => detector_child.position_sample_port
         #TODO Add motion model

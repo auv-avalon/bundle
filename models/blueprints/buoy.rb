@@ -15,7 +15,7 @@ module Buoy
         event :timeout
 
         add Base::ImageProviderSrv, :as => 'camera'
-        add Base::OrientationWithZSrv, :as => "orienation_with_z"
+        add Base::OrientationWithZSrv, :as => "orientation_with_z"
         add Buoy::Detector, :as => 'detector'
         add_main Buoy::Survey, :as => 'servoing'
         #TODO Reintegrate modem
@@ -24,7 +24,7 @@ module Buoy
         #connect modem => servoing
 
         camera_child.frame_port.connect_to  detector_child
-        orienation_with_z_child.connect_to  servoing_child
+        orientation_with_z_child.connect_to  servoing_child
         detector_child.light_port.connect_to servoing_child.light_port
         detector_child.buoy_port.connect_to servoing_child.input_buoy_port
        

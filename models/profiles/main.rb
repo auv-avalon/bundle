@@ -78,7 +78,7 @@ module DFKI
             define 'pipeline_detector', Pipeline::Detector.use(
                 'camera' => down_looking_camera_tag,
                 'laser_scanner' => line_scanner_def,
-                'orienation_with_z' => final_orientation_with_z_tag
+                'orientation_with_z' => final_orientation_with_z_tag
             )
             
             define 'pipeline', Pipeline::Follower.use(
@@ -127,7 +127,7 @@ module DFKI
 
 
             define 'wall_detector', Wall::Detector.use(
-                "orienation_with_z" => final_orientation_with_z_tag,
+                "orientation_with_z" => final_orientation_with_z_tag,
                 "dead_reckoning" => motion_model_def
             )
 

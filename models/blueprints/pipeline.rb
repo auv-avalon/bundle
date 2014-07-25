@@ -55,9 +55,9 @@ module Pipeline
         add Base::ImageProviderSrv, :as => 'camera'
 #        add ImagePreprocessing::HSVSegmentationAndBlur, :as => 'blur'
         add_main OffshorePipelineDetector::Task, :as => 'offshorePipelineDetector'
-        add Base::OrientationWithZSrv, :as => "orienation_with_z"
+        add Base::OrientationWithZSrv, :as => "orientation_with_z"
 	add Pipeline::LineScanner, :as => "laser_scanner"
-        orienation_with_z_child.connect_to offshorePipelineDetector_child.orientation_sample_port
+        orientation_with_z_child.connect_to offshorePipelineDetector_child.orientation_sample_port
         camera_child.frame_port.connect_to offshorePipelineDetector_child
   #      camera_child.frame_port.connect_to blur_child
  #       blur_child.oframe_port.connect_to offshorePipelineDetector_child
@@ -69,7 +69,7 @@ module Pipeline
         attr_accessor :last_valid_heading
 
         script do
-            orientation_reader = orienation_with_z_child.orientation_z_samples_port.reader
+            orientation_reader = orientation_with_z_child.orientation_z_samples_port.reader
             poll do
                 if o = orientation_reader.read
                     pipeline_heading = o.orientation.yaw
