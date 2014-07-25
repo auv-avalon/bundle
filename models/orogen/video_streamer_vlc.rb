@@ -1,4 +1,4 @@
-require "models/blueprints/avalon"
+require "models/blueprints/auv"
 require "models/blueprints/sensors"
 
 

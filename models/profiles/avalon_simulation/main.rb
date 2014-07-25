@@ -1,5 +1,5 @@
 require "models/profiles/main.rb"
-require "models/blueprints/avalon"
+require "models/blueprints/auv"
 require "models/blueprints/pose_avalon"
 require "rock_auv/models/blueprints/control"
 

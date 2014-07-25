@@ -1,4 +1,4 @@
-require "models/blueprints/avalon"
+require "models/blueprints/auv"
 
 using_task_library "canbus"
 

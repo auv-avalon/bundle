@@ -3,8 +3,9 @@ bundle:
     dependencies:
         - rock
         - rock.dfki
-        - rock_auv
-          #        - rock_ugv_nav
+          #        - rock_auv
+        - auv 
+        - sauce 
 
 log:
     #    filter_backtraces: false

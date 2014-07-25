@@ -1,6 +1,6 @@
 require "models/profiles/main"
-require "models/blueprints/avalon"
-require "models/blueprints/pose_avalon"
+require "models/blueprints/auv"
+require "models/blueprints/pose_auv"
 require "models/blueprints/low_level"
 
 using_task_library 'controldev'
@@ -113,7 +113,7 @@ module Avalon
             if not USE_DAGON_FILTER
                 define "raw_orientation", imu_dev
             else
-                define "raw_orientation", PoseAvalon::DagonOrientationEstimator.use(
+                define "raw_orientation", PoseAuv::DagonOrientationEstimator.use(
                     'imu' => imu_dev
                 )
             end

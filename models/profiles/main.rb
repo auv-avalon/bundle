@@ -1,5 +1,5 @@
-require "models/blueprints/avalon"
-require "models/blueprints/pose_avalon"
+require "models/blueprints/auv"
+require "models/blueprints/pose_auv"
 require "models/blueprints/wall"
 require "models/blueprints/buoy"
 require "models/blueprints/pipeline"
