@@ -46,7 +46,6 @@ orientation_samples_period: 0.01
 thruster_samples_period: 0.01
 pipeline_samples_period: 0.1
 speed_samples_period: 0.01
-pose_update_period: 0.1
 param_TCM: [ 0.0, 0.0, -1.0, -1.0, 0.0, 0.0,
 	     0.0, 0.0, 0.0, 0.0, 1.0, -1.0,
 	     1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 
@@ -411,8 +410,6 @@ pipeline_position:
   - -2.0
 # minimum time, in s, between two sequential samples arrive on pipeline_samples
 pipeline_samples_period: 0.1
-# minimum time, in s, between two sequential samples arrive on pose_update
-pose_update_period: 0.1
 # ignore velocity in speed samples for dynamic update
 pure_random_motion: false
 # automatic reset of particle filter after not receiving any perception for X seconds
