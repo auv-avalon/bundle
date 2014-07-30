@@ -1,8 +1,9 @@
-require "models/profiles/main.rb"
+require "auv/models/profiles/main"
 require "models/blueprints/auv"
-require "models/blueprints/pose_avalon"
-require "rock_auv/models/blueprints/control"
+require "models/blueprints/pose_auv"
+#require "rock_auv/models/blueprints/control"
 
+using_task_library 'controldev'
 using_task_library 'simulation'
 using_task_library 'avalon_simulation'
 
@@ -32,10 +33,11 @@ module Avalon
             end
 
             robot do
-                device(Dev::Controldev::Raw, :as => 'joystick').using(Controldev::JoystickTask)
+                device(Dev::Controldev::Joystick, :as => 'joystick', :using => Controldev::JoystickTask)
             end
 
-            
+            define "sim", ::Simulation::Mars
+
             use_profile ::DFKI::Profiles::AUV,
                 "final_orientation_with_z" => imu_def,
                 "altimeter" => altimeter_def,
