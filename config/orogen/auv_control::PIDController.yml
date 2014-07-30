@@ -1,3 +1,4 @@
+--- name:dummy
 --- name:default
 # This property defines which parts of the command input is expected to be
 # set once we merged all the declared input ports.
