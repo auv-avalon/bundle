@@ -69,7 +69,7 @@ module Avalon
                     with_conf('default', 'can1')
 
                 through 'can0' do
-                    device(Dev::Controldev::Raw, :as => 'joystick', :using => Controldev::Remote).
+                    device(Dev::Controldev::Joystick, :as => 'joystick', :using => Controldev::Remote).
                         period(0.1).
                         can_id(0x502,0x7FF)
 
