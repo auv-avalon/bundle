@@ -52,7 +52,7 @@ module Avalon
                 device(Dev::Sensors::XsensAHRS, :as => 'imu').
                     period(0.01)
 
-                device(Dev::Sensors::FOG, :as => 'fog').
+                device(Dev::Sensors::KVH::DSP3000, :as => 'fog').
                     period(0.01)
                 
 #                device(Dev::Micron, :as => 'sonar').
