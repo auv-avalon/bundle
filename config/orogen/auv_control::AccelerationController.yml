@@ -93,9 +93,9 @@ matrix:
   data:
   - 0.0    # Pitch Thruster
   - 0.0
-  - 0.375
+  - -0.350
   - 0.0
-  - 0.75
+  - -0.75
   - 0.0
   - 0.0    # Dive Thruster
   - 0.0
@@ -103,30 +103,30 @@ matrix:
   - 0.0
   - 0.25
   - 0.0
-  - -0.695 # Right Thruster?
+  - -0.63 # Right Thruster?
   - 0.0
   - 0.0
   - 0.0
   - 0.0
   - 0.0   
-  - -0.75 # Left Thruster ?
+  - 0.75 # Left Thruster ?
   - 0.0
   - 0.0
   - 0.0
   - 0.0
   - 0.0   
   - 0.0   # Yaw thruster
-  - 0.273
+  - -0.15
   - 0.0
   - 0.0
   - 0.0   
-  - -0.75
+  - 0.75
   - 0.0   # Strave Thruster
-  - -0.75
+  - 0.75
   - 0.0
   - 0.0
   - 0.0
-  - -0.5
+  - 0.6
 # no documentation available for this property
 metadata:
   metadata: []
