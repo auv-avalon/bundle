@@ -3,6 +3,7 @@ require "models/blueprints/auv"
 require "models/blueprints/pose_auv"
 require "models/blueprints/low_level"
 
+using_task_library 'auv_helper'
 using_task_library 'controldev'
 using_task_library 'canbus'
 using_task_library 'hbridge'
@@ -68,7 +69,7 @@ module Avalon
                     with_conf('default', 'can1')
 
                 through 'can0' do
-                    device(Dev::Controldev::Raw, :as => 'joystick', :using => Controldev::Remote).
+                    device(Dev::Controldev::Joystick, :as => 'joystick', :using => Controldev::Remote).
                         period(0.1).
                         can_id(0x502,0x7FF)
 
@@ -117,15 +118,16 @@ module Avalon
                     'imu' => imu_dev
                 )
             end
+            
 
-            define 'depth_fusion',   AvalonControl::DepthFusionCmp.use(
+            define 'depth_fusion',   AuvControl::DepthFusionCmp.use(
                 Base::ZProviderSrv => depth_reader_dev,
                 Base::OrientationSrv => raw_orientation_def,
                 Base::GroundDistanceSrv => altimeter_dev
             )
 
             ###TODO Add if needed some offsets to the orientation or use first define
-            define 'orientation', raw_orientation_def
+            define 'orientation', depth_fusion_def 
 
             #TODO add offset tools?
 
@@ -141,6 +143,11 @@ module Avalon
             define 'low_level', LowLevel::Cmp.use(
                 'z' => depth_fusion_def 
             )
+            
+            define 'motion_model', Localization::DeadReckoning.use(
+                'hb' => thrusters_def,
+                'ori' => orientation_def
+            )
 
             use_profile ::DFKI::Profiles::AUV,
                 "final_orientation_with_z" => depth_fusion_def,
@@ -148,7 +155,8 @@ module Avalon
                 "thruster" => thrusters_def,
                 "thruster_feedback" => thrusters_def,
                 "down_looking_camera" => bottom_camera_dev,
-                "forward_looking_camera" => front_camera_dev
+                "forward_looking_camera" => front_camera_dev,
+                "motion_model" => motion_model_def
 
 
         end

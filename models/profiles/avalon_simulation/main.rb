@@ -1,8 +1,9 @@
-require "models/profiles/main.rb"
+require "auv/models/profiles/main"
 require "models/blueprints/auv"
-require "models/blueprints/pose_avalon"
-require "rock_auv/models/blueprints/control"
+require "models/blueprints/pose_auv"
+#require "rock_auv/models/blueprints/control"
 
+using_task_library 'controldev'
 using_task_library 'simulation'
 using_task_library 'avalon_simulation'
 
@@ -32,16 +33,27 @@ module Avalon
             end
 
             robot do
-                device(Dev::Controldev::Raw, :as => 'joystick').using(Controldev::JoystickTask)
+                device(Dev::Controldev::Joystick, :as => 'joystick', :using => Controldev::JoystickTask)
             end
 
-            
+            define "sim", ::Simulation::Mars
+
+            define 'motion_model', Localization::DeadReckoning.use(
+                'hb' => thrusters_def,
+                'ori' => imu_def
+            )
+
+            use Base::SonarScanProviderSrv => sonar_def
+
             use_profile ::DFKI::Profiles::AUV,
                 "final_orientation_with_z" => imu_def,
                 "altimeter" => altimeter_def,
                 "thruster" => thrusters_def,
+                "thruster_feedback" => thrusters_def,
                 "down_looking_camera" => bottom_camera_def,
-                "forward_looking_camera" => front_camera_def
+                "forward_looking_camera" => front_camera_def,
+                "motion_model" => motion_model_def
+
 
         end
     end

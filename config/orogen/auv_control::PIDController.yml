@@ -1,3 +1,4 @@
+--- name:dummy
 --- name:default
 # This property defines which parts of the command input is expected to be
 # set once we merged all the declared input ports.
@@ -66,14 +67,14 @@ parallel_pid_settings:
     YMin: -0.0
     YMax: 0.0
   - Ts: 0.01
-    Kp: 0.0
+    Kp: 0.2
     Ki: 0.0
     Kd: 0.0
     N: 0.0
     B: 1.0
     Tt: -1.0
-    YMin: -0.0
-    YMax: 0.0
+    YMin: -0.18
+    YMax: 0.3
   angular:
   - Ts: 0.01
     Kp: 0.0
@@ -85,23 +86,23 @@ parallel_pid_settings:
     YMin: -0.0
     YMax: 0.0
   - Ts: 0.01
-    Kp: 0.0
-    Ki: 0.0
+    Kp: 0.5
+    Ki: 0.5
     Kd: 0.0
     N: 0.0
     B: 1.0
     Tt: -1.0
-    YMin: -0.0
-    YMax: 0.0
+    YMin: -0.2
+    YMax: 0.2
   - Ts: 0.01
-    Kp: 0.0
+    Kp: 0.7
     Ki: 0.0
     Kd: 0.0
     N: 0.0
     B: 1.0
     Tt: -1.0
-    YMin: -0.0
-    YMax: 0.0
+    YMin: -0.6
+    YMax: 0.6
 
 
 --- name:velocity_parallel
@@ -131,8 +132,8 @@ parallel_pid_settings:
     YMin: -1.0
     YMax: 1.0
   - Ts: 0.01
-    Kp: 0.0
-    Ki: 0.0
+    Kp: 7.0
+    Ki: 2.0
     Kd: 0.0
     N: 0.0
     B: 1.0
@@ -150,8 +151,8 @@ parallel_pid_settings:
     YMin: -1.0
     YMax: 1.0
   - Ts: 0.01
-    Kp: 0.0
-    Ki: 0.0
+    Kp: 7.0
+    Ki: 2.0
     Kd: 0.0
     N: 0.0
     B: 1.0
@@ -159,8 +160,8 @@ parallel_pid_settings:
     YMin: -1.0
     YMax: 1.0
   - Ts: 0.01
-    Kp: 0.0
-    Ki: 0.0
+    Kp: 7.0
+    Ki: 2.0
     Kd: 0.0
     N: 0.0
     B: 1.0
