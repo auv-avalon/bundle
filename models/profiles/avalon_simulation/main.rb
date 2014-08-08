@@ -1,3 +1,4 @@
+CONFIG_HACK = 'simulation'
 require "auv/models/profiles/main"
 require "models/blueprints/auv"
 require "models/blueprints/pose_auv"

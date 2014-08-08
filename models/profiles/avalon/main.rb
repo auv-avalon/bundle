@@ -1,3 +1,4 @@
+CONFIG_HACK = 'default'
 require "models/profiles/main"
 require "models/blueprints/auv"
 require "models/blueprints/pose_auv"
@@ -52,7 +53,7 @@ module Avalon
                 device(Dev::Sensors::XsensAHRS, :as => 'imu').
                     period(0.01)
 
-                device(Dev::Sensors::FOG, :as => 'fog').
+                device(Dev::Sensors::KVH::DSP3000, :as => 'fog').
                     period(0.01)
                 
 #                device(Dev::Micron, :as => 'sonar').
