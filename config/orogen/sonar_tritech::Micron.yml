@@ -115,6 +115,16 @@ config:
   right_limit:
     rad: -0.7853
 port: /dev/ttyS7
+--- name:new_wall_servoing_right
+config:
+  continous: 0
+  gain: 0.5
+  max_distance: 30.0
+  resolution: 0.1
+  left_limit:
+    rad: 0.70
+  right_limit:
+    rad: -2.30
 
 
 

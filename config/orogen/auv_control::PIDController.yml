@@ -77,23 +77,23 @@ use_parallel_pid_settings: true
 parallel_pid_settings:
   linear:
   - Ts: 0.01
-    Kp: 0.0
+    Kp: 0.2
     Ki: 0.0
     Kd: 0.0
     N: 0.0
     B: 1.0
     Tt: -1.0
-    YMin: -0.0
-    YMax: 0.0
+    YMin: -0.65
+    YMax: 0.65
   - Ts: 0.01
-    Kp: 0.0
+    Kp: 0.1
     Ki: 0.0
     Kd: 0.0
     N: 0.0
     B: 1.0
     Tt: -1.0
-    YMin: -0.0
-    YMax: 0.0
+    YMin: -0.13
+    YMax: 0.13
   - Ts: 0.01
     Kp: 0.2
     Ki: 0.0
@@ -142,8 +142,8 @@ use_parallel_pid_settings: true
 parallel_pid_settings:
   linear:
   - Ts: 0.01
-    Kp: 0.0
-    Ki: 0.0
+    Kp: 7.0
+    Ki: 2.0
     Kd: 0.0
     N: 0.0
     B: 1.0
@@ -151,8 +151,8 @@ parallel_pid_settings:
     YMin: -1.0
     YMax: 1.0
   - Ts: 0.01
-    Kp: 0.0
-    Ki: 0.0
+    Kp: 7.0
+    Ki: 2.0
     Kd: 0.0
     N: 0.0
     B: 1.0
