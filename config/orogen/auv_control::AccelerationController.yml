@@ -285,3 +285,31 @@ timeout_cascade: 1.0
 timeout_in: 1.0
 names: ["pitch", "dive", "right", "left", "yaw", "strave"]
 #names: ["right", "left", "dive", "pitch", "strave", "yaw"]
+--- name:cutoff
+limits:
+  names: ["right", "left", "dive", "pitch", "strave", "yaw"]
+  elements:
+  - min: 
+      raw: 0
+    max: 
+      raw: 0
+  - min: 
+      raw: 0
+    max: 
+      raw: 0
+  - min: 
+      raw: 0
+    max: 
+      raw: 0
+  - min: 
+      raw: 0
+    max: 
+      raw: 0
+  - min: 
+      raw: 0
+    max: 
+      raw: 0
+  - min: 
+      raw: 0
+    max: 
+      raw: 0

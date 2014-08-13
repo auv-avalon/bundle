@@ -24,10 +24,20 @@ metadata:
 optimal_heading: 0.0
 # The distance to target position, over that the vehicle used
 # the optimal heading
-optimal_heading_distance: 1.0
+optimal_heading_distance: 999.0
 # This property defines the timeout for the cascade input port in seconds. 0
 # means that the timeout would be ignored.
 timeout_cascade: 1.0
 # This property defines the timeout for the cmd_in input port in seconds. 0
 # means that the timeout would be ignored.
 timeout_in: 1.0
+--- name:no_xy
+expected_inputs:
+  linear:
+  - false 
+  - false
+  - true
+  angular:
+  - true
+  - true
+  - true
