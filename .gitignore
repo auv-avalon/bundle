@@ -8,3 +8,4 @@ results
 orocos.log
 *.log
 logs
+local_process_server.txt
