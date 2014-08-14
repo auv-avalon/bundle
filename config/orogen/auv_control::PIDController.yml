@@ -326,3 +326,27 @@ parallel_pid_settings:
     Tt: 0.01
     YMin: -1.0
     YMax: 1.0
+--- name:no_x
+# This property defines which parts of the command input is expected to be
+# set once we merged all the declared input ports.
+expected_inputs:
+  linear:
+  - false
+  - true 
+  - true
+  angular:
+  - true
+  - true
+  - true
+--- name:no_y
+# This property defines which parts of the command input is expected to be
+# set once we merged all the declared input ports.
+expected_inputs:
+  linear:
+  - true
+  - false 
+  - true
+  angular:
+  - true
+  - true
+  - true
