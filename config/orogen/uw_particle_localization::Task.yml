@@ -61,7 +61,7 @@ yaml_map: '/home/matthias/dev/avalon/orogen/uw_particle_localization/maps/nurc.y
 # uses the advanced motion model implemented in modul dagon/uwv_dynamic_model
 advanced_motion_model: false
 # maximum latency, in seconds, of the stream aligner. The aligner will start dropping samples if the difference between the last output and last input is greater than this
-aggregator_max_latency: 0.5
+aggregator_max_latency: 0.1
 # Calculate position by calculating the avg particle position
 avg_particle_position: true
 # transformation of the buoy detection cam, with respect to the origin of avalon

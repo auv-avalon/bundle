@@ -4,7 +4,7 @@ comTimeout:
   microseconds: 500000 
 # Configuration for all hbridges (initial values)
 configuration:
-  - name: 'right'
+  - name: 'left'
     externalTempSensor: 0
     statusFrequency: 1
     encoder_config_intern:
@@ -21,7 +21,7 @@ configuration:
       ticksPerTurnDivided: 0
       zeroPosition: 0.0
       type: :ENCODER_NONE
-  - name: 'left'
+  - name: 'right'
     externalTempSensor: 0
     statusFrequency: 1
     encoder_config_intern:
