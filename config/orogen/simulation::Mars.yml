@@ -1,6 +1,10 @@
 --- name:default
 # start the simulation graphical interface with this module
-initial_scenes:  ["<%= ENV['AUTOPROJ_CURRENT_ROOT'] %>/simulation/orogen/avalon_simulation/configuration/pool.scn","<%= ENV['AUTOPROJ_CURRENT_ROOT'] %>/simulation/orogen/avalon_simulation/configuration/avalon_objects.scn"]
+initial_scenes: 
+    - "<%= ENV['AUTOPROJ_CURRENT_ROOT'] %>/simulation/orogen/avalon_simulation/configuration/floor_large.scn"
+    - "<%= ENV['AUTOPROJ_CURRENT_ROOT'] %>/simulation/orogen/avalon_simulation/configuration/walls.scene"
+    - "<%= ENV['AUTOPROJ_CURRENT_ROOT'] %>/simulation/orogen/avalon_simulation/configuration/avalon_objects.scn"
+    - "<%= ENV['AUTOPROJ_CURRENT_ROOT'] %>/simulation/orogen/avalon_simulation/configuration/assambly.scn"
 enable_gui: 1
 #use_osg_ocean: 0
 #debug_sonar: 1
@@ -14,13 +18,25 @@ gravity:
   - 0 
   - 0 
   - 0
-# Initial position - complete mission
-#initial_x: 0.0
-#initial_y: -2.5
-#initial_z: 0.0
-#initial_yaw: 0.7
-
-# Initial position - gate
-# initial_position:
-#     data: [48, 0, -2]
-# initial_yaw: 0
+positions:
+- nodename: 'Cylinder' #The pipeline
+  posx: -80
+  posy: 50
+  posz: -10
+  rotx: 0 
+  roty: 0
+  rotz: 0
+- nodename: 'assambly' #Der pipeline-tannenbaum
+  posx: -80
+  posy: 20
+  posz: -10
+  rotx: 0 
+  roty: 0
+  rotz: 0
+- nodename: 'avalon' #This is a really fancy thing
+  posx: -20
+  posy: 20
+  posz: 0
+  rotx: 0 
+  roty: 0
+  rotz: 0
