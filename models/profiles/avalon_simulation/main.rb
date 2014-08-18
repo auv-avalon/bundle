@@ -38,6 +38,8 @@ module Avalon
             end
 
             define "sim", ::Simulation::Mars
+            
+            define "sim_setter", ::Simulation::MarsNodePositionSetter
 
             define 'motion_model', Localization::DeadReckoning.use(
                 'hb' => thrusters_def,
