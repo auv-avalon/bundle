@@ -218,6 +218,13 @@ class Main
         transition(blind2.success_event, s1)
     end
 
+    describe("foo")
+    state_machine "sim_test_structure" do
+        set = state sim_setter_def(:node => "avalon", :posX => -80, :posY => 25, :posZ => -10, :rotZ => -90)
+        detector = state structure_inspection_def
+        start set
+        transition(set.success_event, detector)
+    end
     
     describe("Do the minimal demo for the halleneroeffnung, means pipeline, then do wall-following and back to pipe-origin")
     state_machine "advanced_demo_once" do
