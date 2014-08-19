@@ -12,6 +12,7 @@ enable_gui: 1
 # scenefile of the robot module, which should be loaded
 #with_manipulator_gui: 1
 reaction_to_physics_error: "warn"
+use_now_instead_of_sim_time: true
 start_sim: true 
 realtime_calc: true
 gravity: 
