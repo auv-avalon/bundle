@@ -19,5 +19,3 @@ internalPressureOffset: 10555.555555556
 temperatureFactor: 330.0
 # no documentation available for this property
 temperatureOffset: -60.0
-#smoothing depth and depth velocity
-smooth_factor: 0.7
