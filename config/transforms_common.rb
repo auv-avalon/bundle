@@ -51,6 +51,18 @@ static_transform Eigen::Quaternion.Identity,
     "fog" => "body"
 
 
+### Map
+
+## map in world orientation at the sauc-e area
+static_transform Eigen::Quaternion.from_angle_axis( 17.9045 / 180.0 * Math::PI, Eigen::Vector3.UnitZ ),
+    Eigen::Vector3.new( 0.0, 0.0, 0.0 ),
+    "map" => "world_orientation_sauce"
+
+## world orientation to utm coordinates at the sauc-e area
+static_transform Eigen::Quaternion.Identity,
+    Eigen::Vector3.new( 569254.0, 4882870.0, 0.0 ),
+    "world_orientation_sauce" => "world_utm_sauce"
+
 ### Misc
 
 ## angle of the reference wall in the world frame
