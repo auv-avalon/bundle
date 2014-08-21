@@ -514,15 +514,15 @@ hough_timeout: 20.0
 hough_timeout_interspersal: 0.0
 # initial centre position for all particles
 init_position:
-- 0.0
+- 30.0
 - 0.0
 - 0.0
 # dont use the first n sonar samples for state estimation
 init_sample_rejection: 10
 # spatial covariance from initial centre position for initialization
 init_variance:
-- 24.0
-- 20.0
+- 60.0
+- 50.0
 - 1.0
 # no documentation available for this property
 joint_names:
@@ -825,7 +825,7 @@ sonar_covariance_reflection_factor: 1.0
 # sets importance ratio for sonar perception updates
 sonar_importance: 1.0
 # set maximum distance for filtering sonar samples
-sonar_maximum_distance: 30.0
+sonar_maximum_distance: 50.0
 # set maximum distance for filtering sonar samples
 sonar_minimum_distance: 1.0
 # transformation of the sonar, with respect to the origin of avalon
