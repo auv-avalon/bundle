@@ -56,17 +56,17 @@ static_transform Eigen::Quaternion.Identity,
 ## map in world orientation at the sauc-e area
 static_transform Eigen::Quaternion.from_angle_axis( 17.9045 / 180.0 * Math::PI, Eigen::Vector3.UnitZ ),
     Eigen::Vector3.new( 0.0, 0.0, 0.0 ),
-    "map" => "world_orientation_sauce"
+    "map_sauce" => "world_orientation"
 
 ## world orientation to utm coordinates at the sauc-e area
 static_transform Eigen::Quaternion.Identity,
     Eigen::Vector3.new( 569254.0, 4882870.0, 0.0 ),
-    "world_orientation_sauce" => "world_utm_sauce"
+    "world_orientation" => "world_utm_sauce"
 
 ### Misc
 
 ## angle of the reference wall in the world frame
 ## this is the angle of lower wall in the sauc-e basin, based on google earth gps coordinates
-static_transform Eigen::Quaternion.from_angle_axis( 72.09528 / 180.0 * Math::PI, Eigen::Vector3.UnitZ ),
+static_transform Eigen::Quaternion.from_angle_axis( -72.09528 / 180.0 * Math::PI, Eigen::Vector3.UnitZ ),
     Eigen::Vector3.new( 0.0, 0.0, 0.0 ),
-    "reference_wall" => "world"
+    "reference_wall" => "world_orientation"
