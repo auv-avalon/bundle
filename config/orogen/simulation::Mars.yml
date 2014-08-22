@@ -29,16 +29,16 @@ positions:
   roty: 0
   rotz: 0
 - nodename: 'assambly' #Der pipeline-tannenbaum
-  posx: -80
-  posy: 20
+  posx: -50
+  posy: 25
   posz: -10
   rotx: 0 
   roty: 0
   rotz: 0
 - nodename: 'avalon' #This is a really fancy thing
-  posx: -20
-  posy: 20
+  posx: -45.0
+  posy: 2.5
   posz: 0
   rotx: 0 
   roty: 0
-  rotz: 0
+  rotz: 90.0 

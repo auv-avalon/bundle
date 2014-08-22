@@ -255,6 +255,37 @@ class Main
         forward blind2.success_event, success_event
     end
 
+    describe("We win the SAUC-E")
+    state_machine "win" do 
+        dive = state simple_move_def(:finish_when_reached => true, :depth => -7, :delta_timeout => 5, :heading => Math::PI/2.0)
+        search_structure = state structure_detector_down_def
+        fusel = search_structure.find_port("size")
+        STDOUT.puts "Founr here a #{fusel}"
+        search_structure.monitor(
+            'foo', #the Name
+            search_structure.find_port('size') #The name is missleading, speed defines how much we see in our image
+        ).trigger_on do |speed|
+                speed > 0.1
+         end.emit search_structure.success_event
+
+        align_to_gate = state simple_move_def(:timeout => 5, :heading => 3.14, :depth => -6, :speed_x => 0)
+        throught_gate = state simple_move_def(:timeout => 20, :heading => 3.14, :speed_x => 2, :depth => -6)
+        align_from_gate = state simple_move_def(:timeout => 5, :heading => 0, :depth => -6,:speed_x => 0)
+        back_from_gate= state simple_move_def(:timeout => 20, :heading => 0, :speed_x => 2, :depth => -6)
+        to_wall = state target_move_new_def(:finish_when_reached => true,  :heading => Math::PI/2.0, :depth => -5, :delta_timeout => 5, :x => -30, :y => 3 )
+        wall  = state wall_new_right_def
+
+        start(dive)
+        transition(dive.success_event, search_structure)
+        transition(search_structure.success_event, align_to_gate)
+        transition(align_to_gate.success_event, throught_gate)
+        transition(throught_gate.success_event, align_from_gate)
+        transition(align_from_gate.success_event, back_from_gate)
+        transition(back_from_gate.success_event, to_wall)
+        transition(to_wall.success_event, wall)
+        forward wall.success_event, success_event
+    end
+
 
 #    describe("Workaround1")
 #    state_machine "wa1" do 
