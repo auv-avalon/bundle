@@ -39,6 +39,7 @@ end
 
 @i = 0
 
+=begin
 
 def find_parent_task_for_task(current_task,task)
 #    STDOUT.puts "Called with #{task}"
@@ -76,9 +77,11 @@ end
     
 
 def process_child_tasks(task)
-    task.children.each do |child|
-        process_child_tasks child
-    end
+    #task.children.each do |child|
+    #    process_child_tasks child
+    #end
+    binding.pry
+
     state_machines = Roby::Coordination.instances.select{|t| t.kind_of?(Roby::Coordination::ActionStateMachine)}
     state_machines.each do |m|
         if m.root_task == task
@@ -119,7 +122,7 @@ def process_child_tasks(task)
 end
 
 @first=false
-=begin
+
 Roby.every(1, :on_error => :disable) do
     #return
     #Waiting until we start our search algorithm
@@ -146,6 +149,7 @@ Roby.every(1, :on_error => :disable) do
     end
 end
 =end
+
 Roby.every(1, :on_error => :disable) do
     status = []
 
