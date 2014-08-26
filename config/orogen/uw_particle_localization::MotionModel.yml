@@ -757,3 +757,258 @@ param_thrusterCoefficient:
 - 0.0
 # Thruster Volatage
 param_thrusterVoltage: 33.0
+--- name:dagon
+# uses the advanced motion model implemented in modul dagon/uwv_dynamic_model
+advanced_motion_model: false
+joint_names:
+- dive_tail
+- dive_head
+- surge_left
+- surge_right
+- sway_tail
+- foo
+# minimum time, in s, between two sequential samples arrive on laser_samples
+param_TCM:
+- 0.0
+- 0.0
+- 1.0
+- 1.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 1.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+# no documentation available for this property
+param_centerOfBuoyancy:
+  data:
+  - 0.0
+  - 0.0
+  - 0.0
+# no documentation available for this property
+param_centerOfGravity:
+  data:
+  - 0.0
+  - 0.0
+  - 0.0
+# true, if density of avalon = density of water
+param_floating: true
+# length of avalon
+param_length: 1.0
+# no documentation available for this property
+param_linDamp:
+  rows: 6
+  cols: 6
+  data:
+  - 8.203187564
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 24.94216
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+# no documentation available for this property
+param_linDampNeg:
+  rows: 6
+  cols: 6
+  data:
+  - 8.203187564
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 24.94216
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+# mass of avalon
+param_mass: 50
+# radius of avalon
+param_radius: 0.1
+# no documentation available for this property
+param_sqDamp:
+  rows: 6
+  cols: 6
+  data:
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+# no documentation available for this property
+param_sqDampNeg:
+  rows: 6
+  cols: 6
+  data:
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+# Third row: square factor
+param_thrusterCoefficient:
+- 0.005
+- 0.005
+- 0.0590525/2.0
+- 0.0590525/2.0
+- 0.0208693
+- 0.005
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+# Thruster Volatage
+param_thrusterVoltage: 30.0
+
