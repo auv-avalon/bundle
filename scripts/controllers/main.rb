@@ -85,6 +85,9 @@ def process_child_tasks(task)
     state_machines = Roby::Coordination.instances.select{|t| t.kind_of?(Roby::Coordination::ActionStateMachine)}
     state_machines.each do |m|
         if m.root_task == task
+            State.current_state = m.current_task
+            State.current_state_machine = m
+            State.following_states = m.possible_following_states
             STDOUT.puts "Found state-machine #{m} in state #{m.current_task}"
             STDOUT.puts "Possible followers: #{m.possible_following_states}"
             m.possible_following_states.each do |s|
@@ -173,7 +176,7 @@ State.sv_task = nil
 Roby.every(1, :on_error => :disable) do
     if State.sv_task.nil?
         State.sv_task = Orocos::RubyTaskContext.new("supervision") 
-        State.sv_task.create_output_port("actual_state","/std/string")
+        State.sv_task.create_output_port("current_state","/std/string")
         State.sv_task.create_output_port("delta_depth","double")
         State.sv_task.create_output_port("delta_heading","double")
         State.sv_task.create_output_port("delta_x","double")
@@ -183,4 +186,7 @@ Roby.every(1, :on_error => :disable) do
         State.sv_task.configure
         State.sv_task.start
     end
+
+    current_state = State.sv_task.port('current_state')
+    current_state.write State.current_state
 end

@@ -3,7 +3,9 @@ require "models/blueprints/sensors"
 
 
 module VideoStreamerVlc
+    Model = VideoStreamerVlc::Streamer.specialize
     class Streamer 
+
         dynamic_service Base::ImageConsumerSrv, :as => "dispatch" do
             component_model.argument "width"
             component_model.argument "height"
@@ -33,13 +35,12 @@ module VideoStreamerVlc
     end
 
     def self.stream(camera, width, height, port)
-        model = VideoStreamerVlc::Streamer.specialize
-        model.require_dynamic_service('dispatch', :as => camera.name, :width => width, :height => height, :port => port)
+        Model.require_dynamic_service('dispatch', :as => camera.name, :width => width, :height => height, :port => port)
 
         Composition.new_submodel do
-            overload 'vlc', model
+            overload 'vlc', Model
             add camera, :as => "camera"
-            camera_child.connect_to vlc_child
+            camera_child.connect_to vlc_child.find_input_port("frame_" + camera.name)
         end
     end
 end
