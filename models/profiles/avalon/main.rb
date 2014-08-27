@@ -1,5 +1,5 @@
 CONFIG_HACK = 'default'
-require "models/profiles/main"
+require "auv/models/profiles/main"
 require "models/blueprints/auv"
 require "models/blueprints/pose_auv"
 require "models/blueprints/low_level"
@@ -96,7 +96,7 @@ module Avalon
                         period(0.1)
                     
                     device(Dev::Sensors::Battery, :as => 'battery').
-                        can_id(0x775,0x7FF).
+                        can_id(0x447,0x7FF).
                         period(0.1)
                 end
 
@@ -152,6 +152,7 @@ module Avalon
                 "final_orientation_with_z" => depth_fusion_def,
                 "altimeter" => altimeter_dev,
                 "thruster" => thrusters_def,
+                #"thruster_feedback" => actuatorss_actuators_dev,
                 "thruster_feedback" => thrusters_def,
                 "down_looking_camera" => bottom_camera_dev,
                 "forward_looking_camera" => front_camera_dev

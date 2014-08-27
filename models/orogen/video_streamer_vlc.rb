@@ -11,6 +11,7 @@ module VideoStreamerVlc
             component_model.argument "height"
             component_model.argument "port"
             provides Base::ImageConsumerSrv, :as => name, 'frame' => "frame_#{name}"
+            raise if name.nil?
         end
 
         def configure 
