@@ -148,13 +148,19 @@ module Avalon
             define 'bottom_camera', VideoStreamerVlc.stream(bottom_camera_dev, 640, 480, 8090)
             define 'front_camera', VideoStreamerVlc.stream(front_camera_dev, 1200, 600, 8080)
             
+            define 'motion_model', Localization::DeadReckoning.use(
+                'hb' => thrusters_def,
+                'ori' => orientation_def
+            )
+            
             use_profile ::DFKI::Profiles::AUV,
                 "final_orientation_with_z" => depth_fusion_def,
                 "altimeter" => altimeter_dev,
                 "thruster" => thrusters_def,
                 "thruster_feedback" => thrusters_def,
                 "down_looking_camera" => bottom_camera_dev,
-                "forward_looking_camera" => front_camera_dev
+                "forward_looking_camera" => front_camera_dev,
+                "motion_model" => motion_model_def
 
 
         end
