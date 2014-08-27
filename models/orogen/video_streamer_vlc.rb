@@ -37,7 +37,8 @@ module VideoStreamerVlc
     def self.stream(camera, width, height, port)
         Model.require_dynamic_service('dispatch', :as => camera.name, :width => width, :height => height, :port => port)
 
-        Composition.new_submodel do
+    #binding.pry
+        Composition.new_submodel(:name => "test") do
             overload 'vlc', Model
             add camera, :as => "camera"
             camera_child.connect_to vlc_child.find_input_port("frame_" + camera.name)
