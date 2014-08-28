@@ -26,6 +26,21 @@ static_transform Eigen::Quaternion.Identity,
     Eigen::Vector3.new( 0.0, 0.0, 0.0 ),
     "pressure_sensor" => "body"
 
+#FIXME REALLY TODO I DONT KNOW WHAT I DO add the real transformation
+static_transform Eigen::Quaternion.Identity,
+    Eigen::Vector3.new( 0.0, 0.0, 0.0 ),
+    "dvl" => "body"
+
+#FIXME REALLY TODO I DONT KNOW WHAT I DO add the real transformation
+static_transform Eigen::Quaternion.Identity,
+    Eigen::Vector3.new( 0.0, 0.0, 0.0 ),
+    "lbl" => "body"
+
+#FIXME REALLY TODO I DONT KNOW WHAT I DO add the real transformation
+static_transform Eigen::Quaternion.Identity,
+    Eigen::Vector3.new( 0.0, 0.0, 0.0 ),
+    "map" => "world"
+
 #FIXME add the real transformation
 ## front camera in body frame
 static_transform Eigen::Quaternion.from_angle_axis( 10.0 / 180.0 * Math::PI, Eigen::Vector3.UnitY ),
@@ -54,12 +69,12 @@ static_transform Eigen::Quaternion.Identity,
 ### Map
 
 ## map in world orientation at the sauc-e area
-static_transform Eigen::Quaternion.from_angle_axis( −72.09528 / 180.0 * Math::PI, Eigen::Vector3.UnitZ ),
+static_transform Eigen::Quaternion.from_angle_axis( -72.09528 / 180.0 * Math::PI, Eigen::Vector3.UnitZ ),
     Eigen::Vector3.new( 0.0, 0.0, 0.0 ),
     "map_sauce" => "world_orientation"
 
 ## map in world orientation at the dfki main tank
-static_transform Eigen::Quaternion.from_angle_axis( −116.56 / 180.0 * Math::PI, Eigen::Vector3.UnitZ ),
+static_transform Eigen::Quaternion.from_angle_axis( -116.56 / 180.0 * Math::PI, Eigen::Vector3.UnitZ ),
     Eigen::Vector3.new( 0.0, 0.0, 0.0 ),
     "map_halle" => "world_orientation"
 

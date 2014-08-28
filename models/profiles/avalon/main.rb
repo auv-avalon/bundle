@@ -109,6 +109,10 @@ module Avalon
                 end
             end
 
+            transformer do
+                load 'config', 'transforms_common.rb'
+            end
+
             # Define thrustersystem 'actuatorss'
             Hbridge.system(self,'can0','actuatorss','thrusters',6, 3, 2, -1, 4, 5)
 
