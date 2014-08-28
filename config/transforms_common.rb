@@ -54,7 +54,7 @@ static_transform Eigen::Quaternion.Identity,
 ### Map
 
 ## map in world orientation at the sauc-e area
-static_transform Eigen::Quaternion.from_angle_axis( 17.9045 / 180.0 * Math::PI, Eigen::Vector3.UnitZ ),
+static_transform Eigen::Quaternion.from_angle_axis( −72.09528 / 180.0 * Math::PI, Eigen::Vector3.UnitZ ),
     Eigen::Vector3.new( 0.0, 0.0, 0.0 ),
     "map_sauce" => "world_orientation"
 
@@ -75,3 +75,4 @@ static_transform Eigen::Quaternion.Identity,
 static_transform Eigen::Quaternion.from_angle_axis( -72.09528 / 180.0 * Math::PI, Eigen::Vector3.UnitZ ),
     Eigen::Vector3.new( 0.0, 0.0, 0.0 ),
     "reference_wall" => "world_orientation"
+
