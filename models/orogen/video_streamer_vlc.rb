@@ -3,13 +3,9 @@ require "models/blueprints/sensors"
 
 
 module VideoStreamerVlc
-    Model = VideoStreamerVlc::Streamer.specialize
-    class Streamer 
-
+    
+    class Streamer
         dynamic_service Base::ImageConsumerSrv, :as => "dispatch" do
-            component_model.argument "width"
-            component_model.argument "height"
-            component_model.argument "port"
             provides Base::ImageConsumerSrv, :as => name, 'frame' => "frame_#{name}"
         end
 
@@ -17,32 +13,37 @@ module VideoStreamerVlc
             super
             each_data_service do |srv|
                 config = Types::VideoStreamerVlc::PortConfig.new
-                config.port_name = "frame"
+                config.port_name = "frame_#{srv.name}" 
                 config.config.fps = 30
-                config.config.frame_width = width
-                config.config.frame_height = height
+                config.config.frame_width = srv.model.dynamic_service_options[:width]
+                config.config.frame_height = srv.model.dynamic_service_options[:height]
                 config.config.vcodec = "MJPG"
                 config.config.mux = "mpjpeg"
-                config.config.dst= "127.0.0.1:#{port}/video.mjpg"
-                task.createInput(config)
+                config.config.dst= "192.168.128.50:#{srv.model.dynamic_service_options[:port]}/video.mjpg"
+                orocos_task.createInput(config)
             end
         end
     end
 
+#    class Test < Syskit::Composition
+#        add Streamer, :as => "fusel"
+#    end
+    Model = VideoStreamerVlc::Streamer.specialize
 
-    class Composition < Syskit::Composition
-        add VideoStreamerVlc::Streamer, :as => "vlc"
-    end
+#    class Composition < Syskit::Composition
+#        add VideoStreamerVlc::Streamer, :as => "vlc"
+#    end
 
     def self.stream(camera, width, height, port)
-        Model.require_dynamic_service('dispatch', :as => camera.name, :width => width, :height => height, :port => port)
+        VideoStreamerVlc::Streamer.require_dynamic_service('dispatch', :as => camera.name, :width => width, :height => height, :port => port, :name => "#{camera.name}_fusel")
 
-    #binding.pry
-        Composition.new_submodel(:name => "test") do
-            overload 'vlc', Model
+        Syskit::Composition.new_submodel(:name => "#{camera.name}_cmp") do
+            add VideoStreamerVlc::Streamer, :as => "vlc"
+
             add camera, :as => "camera"
             camera_child.connect_to vlc_child.find_input_port("frame_" + camera.name)
         end
     end
+
 end
 

@@ -1,0 +1,23 @@
+--- name:default
+# Origin of our map
+map_origin:
+  data:
+  - 11.5
+  - 10.0
+# Span of our map
+map_span:
+  data:
+  - 23.0
+  - 20.0
+# no documentation available for this property
+metadata:
+  metadata: []
+  properties: []
+  input_ports: []
+  output_ports: []
+# Objects must have at least this many cells
+minimum_object_cells: 2
+# Ignore features, which are closer than x meters tto the wall
+minimum_wall_distance: 2.5
+# Rate features with this size as best
+optimal_object_size: 2.0

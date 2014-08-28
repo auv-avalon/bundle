@@ -1263,3 +1263,34 @@ use_markov: true
 utm_relative_angle: 0.0
 # start map for localization algorithm
 yaml_map: "<%= ENV['AUTOPROJ_CURRENT_ROOT'] %>/auv_avalon/orogen/uw_particle_localization/maps/nurc.yml"
+--- name:slam_testhalle
+# Variance of the echosounder samples
+echosounder_variance: 0.5
+# This value should be between 0 and 1
+feature_confidence: 0.85
+# Features below this value will be removed during filtering
+feature_confidence_threshold: 0.3
+# This value should be between 0 and 1
+feature_empty_cell_confidence: 0.6
+# If value is 0, no features will be filtered
+feature_filter_threshold: 0.3
+# Size of one grid-cell in meter
+feature_grid_resolution: 1.0
+# If we observed a feature this many time without removing it, this feature will be saved
+feature_observation_count_threshold: 7
+# Only use features inside this range
+feature_observation_minimum_range: 2.0
+# Only reduce feature_weights inside this range
+feature_observation_range: 15.0
+# Only features above this threshold will be shown in the output-map
+feature_output_confidence_threshold: 0.5
+# Reducce the weight of features by this value
+feature_weight_reduction: 0.9
+# Use only a single depth map, instead of a map for all particle
+single_depth_map: true
+# Takes only effect, if use_slam is true
+use_mapping_only: true
+# no documentation available for this property
+use_markov: true
+# Use dp-slam algorithm for additional mapping
+use_slam: true
