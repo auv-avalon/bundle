@@ -2,7 +2,7 @@
 class RawControlCommandConverter::Movement
 
     on :start do |event|
-        @raw_reader = data_reader :motion_command
+#        @raw_reader = data_reader :motion_command
     end
 
     poll do
