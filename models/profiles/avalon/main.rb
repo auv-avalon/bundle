@@ -115,7 +115,7 @@ module Avalon
             if not USE_DAGON_FILTER
                 define "raw_orientation", imu_dev
             else
-                define "raw_orientation", PoseAuv::DagonOrientationEstimator.use(
+                define "raw_orientation", PoseAuv::DagonOrientationEstimatorCmp.use(
                     'imu' => imu_dev
                 )
             end
