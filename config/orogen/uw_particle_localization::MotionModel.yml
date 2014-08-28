@@ -252,10 +252,11 @@ param_thrusterCoefficient:
 # Thruster Volatage
 param_thrusterVoltage: 33.0
 # covariance of the estimated velocities.
-velocity_covariance: 
-- 1.0
-- 1.0
-- 1.0
+velocity_covariance:
+  data:
+  - 1.0
+  - 1.0
+  - 1.0
 --- name:default
 # uses the advanced motion model implemented in modul dagon/uwv_dynamic_model
 advanced_motion_model: false
@@ -511,9 +512,10 @@ param_thrusterCoefficient:
 param_thrusterVoltage: 33.0
 # covariance of the estimated velocities.
 velocity_covariance: 
-- 1.0
-- 1.0
-- 1.0
+  data:
+  - 1.0
+  - 1.0
+  - 1.0
 --- name:sim_nurc
 # uses the advanced motion model implemented in modul dagon/uwv_dynamic_model
 advanced_motion_model: false
@@ -769,9 +771,10 @@ param_thrusterCoefficient:
 param_thrusterVoltage: 33.0
 # covariance of the estimated velocities.
 velocity_covariance: 
-- 1.0
-- 1.0
-- 1.0
+  data:
+  - 1.0
+  - 1.0
+  - 1.0
 --- name:dagon
 # uses the advanced motion model implemented in modul dagon/uwv_dynamic_model
 advanced_motion_model: false
@@ -1028,6 +1031,7 @@ param_thrusterCoefficient:
 param_thrusterVoltage: 30.0
 # covariance of the estimated velocities.
 velocity_covariance: 
-- 1.0
-- 1.0
-- 1.0
+  data:
+  - 1.0
+  - 1.0
+  - 1.0
