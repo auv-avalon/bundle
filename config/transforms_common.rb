@@ -36,11 +36,6 @@ static_transform Eigen::Quaternion.Identity,
     Eigen::Vector3.new( 0.0, 0.0, 0.0 ),
     "lbl" => "body"
 
-#FIXME REALLY TODO I DONT KNOW WHAT I DO add the real transformation
-static_transform Eigen::Quaternion.Identity,
-    Eigen::Vector3.new( 0.0, 0.0, 0.0 ),
-    "map" => "world"
-
 #FIXME add the real transformation
 ## front camera in body frame
 static_transform Eigen::Quaternion.from_angle_axis( 10.0 / 180.0 * Math::PI, Eigen::Vector3.UnitY ),
