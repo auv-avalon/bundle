@@ -28,6 +28,11 @@ module Avalon
 
     module Profiles
         profile "Avalon" do
+            # load static transforms
+            transformer do
+                load 'config', 'transforms_common.rb'
+            end
+
             tag 'final_orientation', ::Base::OrientationSrv
 
             robot do
@@ -116,10 +121,6 @@ module Avalon
                 end
             end
 
-            transformer do
-                load 'config', 'transforms_common.rb'
-            end
-
             # Define thrustersystem 'actuatorss'
             Hbridge.system(self,'can0','actuatorss','thrusters',6, 3, 2, -1, 4, 5)
 
@@ -164,6 +165,7 @@ module Avalon
                 'ori' => orientation_def
             )
             
+            # Load AUV profile
             use_profile ::DFKI::Profiles::AUV,
                 "final_orientation_with_z" => depth_fusion_def,
                 "altimeter" => altimeter_dev,
@@ -176,6 +178,53 @@ module Avalon
                 "depth" => depth_reader_dev
 
 
+            # Set local frame names
+            ikf_orientation_estimator_def.use_frames(
+                'imu' => 'imu',
+                'fog' => 'fog',
+                'body' => 'body'
+            )
+
+            ikf_orientation_estimator_def.ori_in_map_child.use_frames(
+                'map' => 'map_halle',
+                'world' => 'world_orientation'
+            )
+
+            initial_orientation_estimator_def.use_frames(
+                'body' => 'body',
+                'odometry' => 'odometry',
+                'wall' => 'reference_wall',
+                'world' => 'world_orientation'
+            )
+
+            initial_orientation_estimator_def.estimator_child.use_frames(
+                'fog' => 'fog',
+                'imu' => 'imu',
+                'body' => 'body'
+            )
+    
+            pose_estimator_def.use_frames(
+                'imu' => 'imu',
+                'lbl' => 'lbl',
+                'pressure_sensor' => 'pressure_sensor',
+                'body' => 'body',
+                'dvl' => 'dvl'
+            )
+
+            imu_dev.use_frames(
+                'imu' => 'imu',
+                'world' => 'imu_nwu'
+            )
+
+
+            # Define dynamic transformation providers
+            transformer do
+                frames 'dvl', 'body'
+                frames 'lbl', 'body'
+                dynamic_transform pose_estimator_blind_def, 'body' => 'map_halle'
+                dynamic_transform pose_estimator_def, 'body' => 'map_halle'
+                #dynamic_transform imu_dev, 'imu' => 'imu_nwu'
+            end
 
         end
     end
