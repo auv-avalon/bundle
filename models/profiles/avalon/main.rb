@@ -149,8 +149,8 @@ module Avalon
                 'z' => depth_fusion_def 
             )
 
-            define 'bottom_camera', VideoStreamerVlc.stream(bottom_camera_dev, 640, 480, 8090)
-            define 'front_camera', VideoStreamerVlc.stream(front_camera_dev, 1200, 600, 8080)
+            define 'bottom_camera', VideoStreamerVlc.stream(bottom_camera_dev, 640, 480, 5004)
+            define 'front_camera', VideoStreamerVlc.stream(front_camera_dev, 1200, 600, 5005)
             
             define 'motion_model', Localization::DeadReckoning.use(
                 'hb' => thrusters_def,
