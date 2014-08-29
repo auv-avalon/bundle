@@ -33,27 +33,33 @@ module Avalon
             robot do
                 device(Dev::Sensors::Cameras::Network, :as => 'front_camera').
                     with_conf('default',"front_camera").
+                    frame('front_camera').
                     prefer_deployed_tasks(/front_camera/).
                     period(0.2)
 
                 device(Dev::Sensors::Cameras::Network, :as => 'bottom_camera').
                     with_conf('default',"bottom_camera").
+                    frame('bottom_camera').
                     prefer_deployed_tasks(/bottom_camera/).
                     period(0.2)
 
                 device(Dev::Micron, :as => 'sonar').
                     with_conf('default','maritime_hall').
+                    frame('sonar').
                     prefer_deployed_tasks("sonar").
                     period(0.1)
 
                 device(Dev::Echosounder, :as => 'altimeter').
                     with_conf('default').
+                    frame('echosounder').
                     period(0.1)
 
                 device(Dev::Sensors::XsensAHRS, :as => 'imu').
+                    frame_transform('imu' => 'imu_nwu').
                     period(0.01)
 
                 device(Dev::Sensors::KVH::DSP3000, :as => 'fog').
+                    frame('fog').
                     period(0.01)
                 
 #                device(Dev::Micron, :as => 'sonar').
@@ -76,6 +82,7 @@ module Avalon
 
                     device(Dev::Sensors::DepthReader, :as => 'depth_reader').
                         prefer_deployed_tasks('depth').
+                        frame('pressure_sensor').
                         can_id(0x440,0x7FF).
                         period(0.1).
                         with_conf('default')
