@@ -172,7 +172,9 @@ module Avalon
                 "thruster_feedback" => thrusters_def,
                 "down_looking_camera" => bottom_camera_dev,
                 "forward_looking_camera" => front_camera_dev,
-                "motion_model" => motion_model_def
+                "motion_model" => motion_model_def,
+                "depth" => depth_reader_dev
+
 
 
         end
