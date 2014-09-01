@@ -192,9 +192,10 @@ module Avalon
 
             initial_orientation_estimator_def.use_frames(
                 'body' => 'body',
-                'odometry' => 'odometry',
+                'odometry' => 'local_orientation',
                 'wall' => 'reference_wall',
-                'world' => 'world_orientation'
+                'world' => 'world_orientation',
+                'sonar' => 'sonar'
             )
 
             initial_orientation_estimator_def.estimator_child.use_frames(
@@ -208,7 +209,8 @@ module Avalon
                 'lbl' => 'lbl',
                 'pressure_sensor' => 'pressure_sensor',
                 'body' => 'body',
-                'dvl' => 'dvl'
+                'dvl' => 'dvl',
+                'fog' => 'fog'
             )
 
             imu_dev.use_frames(
@@ -221,6 +223,7 @@ module Avalon
             transformer do
                 frames 'dvl', 'body'
                 frames 'lbl', 'body'
+                dynamic_transform initial_orientation_estimator_def.estimator_child, 'body' => 'local_orientation'
                 dynamic_transform pose_estimator_blind_def, 'body' => 'map_halle'
                 dynamic_transform pose_estimator_def, 'body' => 'map_halle'
                 #dynamic_transform imu_dev, 'imu' => 'imu_nwu'
