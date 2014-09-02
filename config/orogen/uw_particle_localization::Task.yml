@@ -395,7 +395,7 @@ param_thrusterCoefficient:
 # Thruster Volatage
 param_thrusterVoltage: 33.0
 # number of used particles
-particle_number: 500
+particle_number: 200
 # set history size for determing uncertainty_degree of best measurement samples
 perception_history_number: 8
 # sets pipeline covariance for defining measurement uncertainty
@@ -1293,4 +1293,4 @@ use_mapping_only: true
 # no documentation available for this property
 use_markov: true
 # Use dp-slam algorithm for additional mapping
-use_slam: true
+use_slam: false 

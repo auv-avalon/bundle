@@ -165,7 +165,7 @@ parallel_pid_settings:
     Kd: 0.0
     N: 0.0
     B: 1.0
-    Tt: -0.01
+    Tt: 0.01
     YMin: -1.0
     YMax: 1.0
   angular:

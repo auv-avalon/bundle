@@ -53,9 +53,9 @@ Syskit.conf.use_deployment 'localization'
 Syskit.conf.use_deployment 'sonar_feature_estimator'
 #Syskit.conf.use_deployment 'orientation_correction'
 
-Syskit.warn "!!!!!!!   Logging disabled       !!!!"
-Syskit.warn "!!!!!!!   Logging disabled       !!!!"
-Syskit.conf.disable_logging
+#Syskit.warn "!!!!!!!   Logging disabled       !!!!"
+#Syskit.warn "!!!!!!!   Logging disabled       !!!!"
+#Syskit.conf.disable_logging
 
 Syskit.conf.exclude_from_log '/canbus/Message'
 Syskit.conf.exclude_from_log '/canbus/Statistics' 
