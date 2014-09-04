@@ -165,15 +165,12 @@ module Avalon
                 'ori' => orientation_def
             )
             
+
+
             # Load AUV profile
-            use_profile ::DFKI::Profiles::AUV,
+            use_profile ::DFKI::Profiles::PoseEstimation,
                 "final_orientation_with_z" => depth_fusion_def,
-                "altimeter" => altimeter_dev,
-                "thruster" => thrusters_def,
-                #"thruster_feedback" => actuatorss_actuators_dev,
                 "thruster_feedback" => thrusters_def,
-                "down_looking_camera" => bottom_camera_dev,
-                "forward_looking_camera" => front_camera_dev,
                 "motion_model" => motion_model_def,
                 "depth" => depth_reader_dev
 
@@ -228,6 +225,19 @@ module Avalon
                 dynamic_transform pose_estimator_def, 'body' => 'map_halle'
                 #dynamic_transform imu_dev, 'imu' => 'imu_nwu'
             end
+
+
+            # Load AUV profile
+            use_profile ::DFKI::Profiles::AUV,
+                "final_orientation_with_z" => depth_fusion_def,
+                "altimeter" => altimeter_dev,
+                "thruster" => thrusters_def,
+                "down_looking_camera" => bottom_camera_dev,
+                "forward_looking_camera" => front_camera_dev,
+                "pose_blind" => pose_estimator_blind_def,
+                #"pose" => localization_def,
+                "pose" => pose_estimator_def,
+                "motion_model" => motion_model_def
 
         end
     end
