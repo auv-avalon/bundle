@@ -210,6 +210,15 @@ module Avalon
                 'fog' => 'fog'
             )
 
+            pose_estimator_blind_def.use_frames(
+                'imu' => 'imu',
+                'lbl' => 'lbl',
+                'pressure_sensor' => 'pressure_sensor',
+                'body' => 'body',
+                'dvl' => 'dvl',
+                'fog' => 'fog'
+            )
+
             imu_dev.use_frames(
                 'imu' => 'imu',
                 'world' => 'imu_nwu'
