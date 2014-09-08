@@ -179,13 +179,11 @@ module Avalon
 
 
             # Set local frame names
-            ikf_orientation_estimator_def.use_frames(
+            define 'ikf_orientation_estimator', ikf_orientation_estimator_def.use_frames(
                 'imu' => 'imu',
                 'fog' => 'fog',
                 'body' => 'body'
-            )
-
-            ikf_orientation_estimator_def.ori_in_map_child.use_frames(
+            ).ori_in_map_child.use_frames(
                 'map' => 'map_halle',
                 'world' => 'world_orientation'
             )
@@ -204,7 +202,7 @@ module Avalon
                 'body' => 'body'
             )
     
-            pose_estimator_def.use_frames(
+            define 'pose_estimator', pose_estimator_def.use_frames(
                 'imu' => 'imu',
                 'lbl' => 'lbl',
                 'pressure_sensor' => 'pressure_sensor',
@@ -218,6 +216,25 @@ module Avalon
                 'world' => 'imu_nwu'
             )
 
+            target_move_new_def.use_frames(
+                 'imu' => 'imu',
+                 'lbl' => 'lbl',
+                 'pressure_sensor' => 'pressure_sensor',
+                 'body' => 'body',
+                 'dvl' => 'dvl',
+                 'fog' => 'fog'
+            )
+
+            simple_move_new_def.use_frames( 
+                'imu' => 'imu',
+              'lbl' => 'lbl',
+                'pressure_sensor' => 'pressure_sensor',
+                 'body' => 'body',
+                'dvl' => 'dvl',
+            'fog' => 'fog'
+            )
+
+            
 
             # Define dynamic transformation providers
             transformer do

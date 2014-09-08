@@ -1,6 +1,6 @@
 
 if Socket.gethostname == "avalon-rear" or Socket.gethostname == "avalon"
-    Syskit.conf.process_server 'front','192.168.128.50' #, :log_dir => '/mnt/logs/log', :result_dir => '/mnt/logs/results'
+    Syskit.conf.process_server 'front','192.168.128.50', :log_dir => '/mnt/logs/results', :result_dir => '/mnt/logs/results'
 elsif
     Syskit.conf.process_server 'front','localhost'
 end
@@ -63,6 +63,7 @@ Syskit.conf.exclude_from_log 'blur'
 Syskit.conf.exclude_from_log 'pipeline_follower' 
 Syskit.conf.exclude_from_log 'line_scanner' 
 Syskit.conf.exclude_from_log 'front_camera' 
+Syskit.conf.exclude_from_log 'bottom_camera' 
 
 Syskit.conf.exclude_from_log 'low_level_driver' 
 
