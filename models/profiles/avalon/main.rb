@@ -124,13 +124,13 @@ module Avalon
             # Define thrustersystem 'actuatorss'
             Hbridge.system(self,'can0','actuatorss','thrusters',6, 3, 2, -1, 4, 5)
 
-            if not USE_DAGON_FILTER
-                define "raw_orientation", imu_dev
-            else
-                define "raw_orientation", PoseAuv::DagonOrientationEstimatorCmp.use(
-                    'imu' => imu_dev
-                )
-            end
+#            if not USE_DAGON_FILTER
+#                define "raw_orientation", imu_dev
+#            else
+#                define "raw_orientation", PoseAuv::DagonOrientationEstimatorCmp.use(
+#                    'imu' => imu_dev
+#                )
+#            end
             
             use_profile ::DFKI::Profiles::OrientationEstimation,
                 'imu' => imu_dev
@@ -147,21 +147,16 @@ module Avalon
                 Base::OrientationSrv => orientation_def
             )
             
+            
             define 'motion_model', Localization::DeadReckoning.use(
-                'hb' => thrusters_def,
+                'hb' => thrusters_def, 
                 'ori' => depth_fusion_def
             )
-
-            use_profile ::DFKI::Profiles::PoseEstimation,
-                'depth' => depth_reader_dev,
-                'motion_model' => motion_model_def,
-                'orientation' => depth_fusion_def,
-                "thruster_feedback" => thrusters_def.find_data_service('all__controlled_system')
 
 
             define 'depth_fusion',   AuvControl::DepthFusionCmp.use(
                 Base::ZProviderSrv => depth_reader_dev,
-                Base::OrientationSrv => raw_orientation_def,
+                Base::OrientationSrv => orientation_def,
                 Base::GroundDistanceSrv => altimeter_dev
             )
 
@@ -171,12 +166,6 @@ module Avalon
             #TODO add offset tools?
 
 
-#            # Define new ControlLoops
-#            define 'world_controller', ::Base::ControlLoop.use(
-#                'controlled_system' => thrusters_def, 
-#                'controller' => AuvCont::WorldPositionCmp
-#            )
-            
             # Background tasks
             define 'lights', Lights::Lights
             define 'low_level', LowLevel::Cmp.use(
@@ -186,12 +175,6 @@ module Avalon
             define 'bottom_camera', VideoStreamerVlc.stream(bottom_camera_dev, 640, 480, 5004)
             define 'front_camera', VideoStreamerVlc.stream(front_camera_dev, 1200, 600, 5005)
             
-            
-            # Load AUV profile
-            use_profile ::DFKI::Profiles::OrientationEstimation,
-                "imu" => imu_dev 
-
-
             # Load AUV profile
             use_profile ::DFKI::Profiles::PoseEstimation,
                 "orientation" => depth_fusion_def,
@@ -246,26 +229,26 @@ module Avalon
                 'imu' => 'imu',
                 'world' => 'imu_nwu'
             )
-
-            target_move_new_def.use_frames(
-                 'imu' => 'imu',
-                 'lbl' => 'lbl',
-                 'pressure_sensor' => 'pressure_sensor',
-                 'body' => 'body',
-                 'dvl' => 'dvl',
-                 'fog' => 'fog'
-            )
-
-            simple_move_new_def.use_frames( 
-                'imu' => 'imu',
-              'lbl' => 'lbl',
-                'pressure_sensor' => 'pressure_sensor',
-                 'body' => 'body',
-                'dvl' => 'dvl',
-            'fog' => 'fog'
-            )
-
             
+#            target_move_new_def.use_frames(
+#                 'imu' => 'imu',
+#                 'lbl' => 'lbl',
+#                 'pressure_sensor' => 'pressure_sensor',
+#                 'body' => 'body',
+#                 'dvl' => 'dvl',
+#                 'fog' => 'fog'
+#            )
+#
+#            simple_move_new_def.use_frames( 
+#                'imu' => 'imu',
+#              'lbl' => 'lbl',
+#                'pressure_sensor' => 'pressure_sensor',
+#                 'body' => 'body',
+#                'dvl' => 'dvl',
+#            'fog' => 'fog'
+#            )
+#
+#            
 
             # Define dynamic transformation providers
             transformer do
