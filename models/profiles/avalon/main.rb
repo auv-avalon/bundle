@@ -132,6 +132,32 @@ module Avalon
                 )
             end
             
+            use_profile ::DFKI::Profiles::OrientationEstimation,
+                'imu' => imu_dev
+
+            #### Choose between:
+            #define "orientation", old_orientation_estimator_def
+            define "orientation", ikf_orientation_estimator_def
+            #define "orientation",initial_orientation_estimator_def 
+            
+
+            ### This is optional an can be removed soon:
+            define 'depth_fusion',   AuvControl::DepthFusionCmp.use(
+                Base::ZProviderSrv => depth_reader_dev,
+                Base::OrientationSrv => orientation_def
+            )
+            
+            define 'motion_model', Localization::DeadReckoning.use(
+                'hb' => thrusters_def,
+                'ori' => depth_fusion_def
+            )
+
+            use_profile ::DFKI::Profiles::PoseEstimation,
+                'depth' => depth_reader_dev,
+                'motion_model' => motion_model_def,
+                'orientation' => depth_fusion_def,
+                "thruster_feedback" => thrusters_def.find_data_service('all__controlled_system')
+
 
             define 'depth_fusion',   AuvControl::DepthFusionCmp.use(
                 Base::ZProviderSrv => depth_reader_dev,
@@ -160,20 +186,16 @@ module Avalon
             define 'bottom_camera', VideoStreamerVlc.stream(bottom_camera_dev, 640, 480, 5004)
             define 'front_camera', VideoStreamerVlc.stream(front_camera_dev, 1200, 600, 5005)
             
-            define 'motion_model', Localization::DeadReckoning.use(
-                'hb' => thrusters_def,
-                'ori' => orientation_def
-            )
             
             # Load AUV profile
-            use_profile ::DFKI::Profiles::AUV,
-                "final_orientation_with_z" => depth_fusion_def,
-                "altimeter" => altimeter_dev,
-                "thruster" => thrusters_def,
-                #"thruster_feedback" => actuatorss_actuators_dev,
+            use_profile ::DFKI::Profiles::OrientationEstimation,
+                "imu" => imu_dev 
+
+
+            # Load AUV profile
+            use_profile ::DFKI::Profiles::PoseEstimation,
+                "orientation" => depth_fusion_def,
                 "thruster_feedback" => thrusters_def,
-                "down_looking_camera" => bottom_camera_dev,
-                "forward_looking_camera" => front_camera_dev,
                 "motion_model" => motion_model_def,
                 "depth" => depth_reader_dev
 
@@ -203,6 +225,15 @@ module Avalon
             )
     
             define 'pose_estimator', pose_estimator_def.use_frames(
+                'imu' => 'imu',
+                'lbl' => 'lbl',
+                'pressure_sensor' => 'pressure_sensor',
+                'body' => 'body',
+                'dvl' => 'dvl',
+                'fog' => 'fog'
+            )
+
+            pose_estimator_blind_def.use_frames(
                 'imu' => 'imu',
                 'lbl' => 'lbl',
                 'pressure_sensor' => 'pressure_sensor',
@@ -245,6 +276,32 @@ module Avalon
                 dynamic_transform pose_estimator_def, 'body' => 'map_halle'
                 #dynamic_transform imu_dev, 'imu' => 'imu_nwu'
             end
+
+            ##### Choose between
+            define "pose", pose_estimator_blind_def
+            define "pose_blind", pose_estimator_def
+            #### and
+            #define "pose", localization_def
+            #define "blind_pose", localization_def
+            ### end choose
+
+            ####More Chooses
+            #define "ori_with_z", pose_estimator_blind_def
+            #define "ori_with_z", pose_estimator_def
+            define "ori_with_z", depth_fusion_def 
+            ##### end choosing
+
+            # Load AUV profile
+            use_profile ::DFKI::Profiles::AUV,
+                "orientation_with_z" => depth_fusion_def,
+                "altimeter" => altimeter_dev,
+                "thruster" => thrusters_def,
+                "down_looking_camera" => bottom_camera_dev,
+                "forward_looking_camera" => front_camera_dev,
+                "pose_blind" => pose_estimator_blind_def,
+                #"pose" => localization_def,
+                "pose" => pose_estimator_def,
+                "motion_model" => motion_model_def
 
         end
     end

@@ -58,6 +58,8 @@ param_thrusterCoefficient: [0.005, 0.005,0.005,0.005,0.005,0.005,
 --- name:simulation
 yaml_map: '/home/matthias/dev/avalon/orogen/uw_particle_localization/maps/nurc.yml'
 --- name:default
+# Output variances below this sigma threshold will be set the value of the threshold
+position_covariance_threshold: 10
 # uses the advanced motion model implemented in modul dagon/uwv_dynamic_model
 advanced_motion_model: false
 # maximum latency, in seconds, of the stream aligner. The aligner will start dropping samples if the difference between the last output and last input is greater than this
@@ -862,6 +864,8 @@ utm_relative_angle: 0.0
 # start map for localization algorithm
 yaml_map: "<%= ENV['AUTOPROJ_CURRENT_ROOT'] %>/auv_avalon/orogen/uw_particle_localization/maps/nurc.yml"
 --- name:dagon
+# Output variances below this sigma threshold will be set the value of the threshold
+position_covariance_threshold: 10
 # uses the advanced motion model implemented in modul dagon/uwv_dynamic_model
 advanced_motion_model: false
 # maximum latency, in seconds, of the stream aligner. The aligner will start dropping samples if the difference between the last output and last input is greater than this
@@ -1264,6 +1268,8 @@ utm_relative_angle: 0.0
 # start map for localization algorithm
 yaml_map: "<%= ENV['AUTOPROJ_CURRENT_ROOT'] %>/auv_avalon/orogen/uw_particle_localization/maps/nurc.yml"
 --- name:slam_testhalle
+# Output variances below this sigma threshold will be set the value of the threshold
+position_covariance_threshold: 10
 # Variance of the echosounder samples
 echosounder_variance: 0.5
 # This value should be between 0 and 1
