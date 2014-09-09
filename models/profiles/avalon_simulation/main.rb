@@ -15,6 +15,10 @@ using_task_library 'avalon_simulation'
 module Avalon
     module Profiles
         profile "Simulation" do
+            # load static transforms
+            transformer do
+                load 'config', 'transforms_common.rb'
+            end
 
             define_simulated_device("bottom_camera", Dev::Simulation::Mars::Camera) do |dev|
                 dev.prefer_deployed_tasks("bottom_camera").with_conf("default","bottom_cam")
@@ -47,6 +51,11 @@ module Avalon
             )
 
             use Base::SonarScanProviderSrv => sonar_def
+
+            # Define dynamic transformation providers
+            transformer do
+                dynamic_transform imu_def, 'body' => 'odometry'
+            end
 
             use_profile ::DFKI::Profiles::AUV,
                 "orientation_with_z" => imu_def,
