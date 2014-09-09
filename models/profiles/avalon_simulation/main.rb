@@ -49,13 +49,14 @@ module Avalon
             use Base::SonarScanProviderSrv => sonar_def
 
             use_profile ::DFKI::Profiles::AUV,
-                "final_orientation_with_z" => imu_def,
+                "orientation_with_z" => imu_def,
                 "altimeter" => altimeter_def,
                 "thruster" => thrusters_def,
-                "thruster_feedback" => thrusters_def,
                 "down_looking_camera" => bottom_camera_def,
-                "forward_looking_camera" => front_camera_def
-
+                "forward_looking_camera" => front_camera_def,
+                "pose_blind" => imu_def,
+                "pose" => imu_def,
+                "motion_model" => motion_model_def
 
         end
     end
