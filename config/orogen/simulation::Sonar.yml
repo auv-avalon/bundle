@@ -29,4 +29,8 @@ ping_pong_mode: true
 ping_pong_mode: 1
 left_limit: 0.785
 right_limit: -0.785
-
+--- name:structure_servoing_front
+ping_pong_mode: 1
+left_limit: 1.01
+right_limit: -1.01
+maximum_distance: 10.0
