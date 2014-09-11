@@ -32,8 +32,11 @@
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
-      <widget class="QWidget" name="">
-       <layout class="QVBoxLayout" name="verticalLayout">
+      <widget class="QWidget" name="layoutWidget">
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="spacing">
+         <number>0</number>
+        </property>
         <item>
          <widget class="QScrollArea" name="scrollarea">
           <property name="minimumSize">
@@ -51,39 +54,77 @@
              <x>0</x>
              <y>0</y>
              <width>503</width>
-             <height>223</height>
+             <height>225</height>
             </rect>
            </property>
           </widget>
          </widget>
         </item>
         <item>
-         <widget class="OrientationView" name="orientationview">
-          <property name="minimumSize">
-           <size>
-            <width>500</width>
-            <height>150</height>
-           </size>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <property name="spacing">
+           <number>0</number>
           </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>150</height>
-           </size>
-          </property>
-          <property name="sizeIncrement">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>OrientationView</string>
-          </property>
-          <property name="whatsThis">
-           <string/>
-          </property>
-         </widget>
+          <item>
+           <widget class="OrientationView" name="orientationview">
+            <property name="minimumSize">
+             <size>
+              <width>350</width>
+              <height>150</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>150</height>
+             </size>
+            </property>
+            <property name="sizeIncrement">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>OrientationView</string>
+            </property>
+            <property name="whatsThis">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QRadioButton" name="button_off">
+              <property name="text">
+               <string>Cameras Off</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="button_cam_tasks">
+              <property name="autoFillBackground">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>Camera Tasks</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="button_vlc_task">
+              <property name="text">
+               <string>Camera VLC Stream</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
         </item>
        </layout>
       </widget>
