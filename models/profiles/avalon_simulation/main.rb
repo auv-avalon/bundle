@@ -51,8 +51,30 @@ module Avalon
                 'hb' => thrusters_def,
                 'ori' => imu_def
             )
+            
+            # Load AUV profile
+            use_profile ::DFKI::Profiles::PoseEstimation,
+                "orientation" => imu_def,
+                "thruster_feedback" => thrusters_def,
+                "motion_model" => motion_model_def,
+                "depth" => imu_def 
 
             use Base::SonarScanProviderSrv => sonar_def
+            
+            
+            pose_estimator_blind_def.use_frames(
+                'imu' => 'imu',
+                'lbl' => 'lbl',
+                'pressure_sensor' => 'pressure_sensor',
+                'body' => 'body',
+                'dvl' => 'dvl',
+                'fog' => 'fog'
+            )
+
+            imu_dev.use_frames(
+                'imu' => 'imu',
+                'world' => 'imu_nwu'
+            )
 
             # Load AUV profile
             use_profile ::DFKI::Profiles::PoseEstimation,
