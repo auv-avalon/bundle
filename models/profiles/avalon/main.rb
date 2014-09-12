@@ -196,7 +196,7 @@ module Avalon
             initial_orientation_estimator_def.use_frames(
                 'body' => 'body',
                 'odometry' => 'local_orientation',
-                'wall' => 'reference_wall',
+                'wall' => 'reference_wall_halle',
                 'world' => 'world_orientation',
                 'sonar' => 'sonar'
             )
