@@ -85,7 +85,7 @@ module Avalon
                         period(0.1).
                         can_id(0x502,0x7FF)
 
-                    device(Dev::Sensors::DepthReader, :as => 'depth_reader').
+                    device(Dev::Sensors::DepthReaderAvalon, :as => 'depth_reader').
                         prefer_deployed_tasks('depth').
                         frame('pressure_sensor').
                         can_id(0x440,0x7FF).
@@ -113,7 +113,7 @@ module Avalon
                 end
 
                 through 'can1' do
-                    device(Dev::Sensors::DepthReader, :as => 'depth_reader_rear').
+                    device(Dev::Sensors::DepthReaderAvalon, :as => 'depth_reader_rear').
                         prefer_deployed_tasks('depth_rear').
                         can_id(0x440,0x7FF).
                         period(0.1).
@@ -196,7 +196,7 @@ module Avalon
             initial_orientation_estimator_def.use_frames(
                 'body' => 'body',
                 'odometry' => 'local_orientation',
-                'wall' => 'reference_wall',
+                'wall' => 'reference_wall_halle',
                 'world' => 'world_orientation',
                 'sonar' => 'sonar'
             )

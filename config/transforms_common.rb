@@ -84,5 +84,11 @@ static_transform Eigen::Quaternion.Identity,
 ## this is the angle of lower wall in the sauc-e basin, based on google earth gps coordinates
 static_transform Eigen::Quaternion.from_angle_axis( -72.09528 / 180.0 * Math::PI, Eigen::Vector3.UnitZ ),
     Eigen::Vector3.new( 0.0, 0.0, 0.0 ),
-    "reference_wall" => "world_orientation"
+    "reference_wall_sauce" => "world_orientation"
+
+## angle of the reference wall in the world frame
+## this is the angle of the northern wall in the DFKI testbed, based on google earth gps coordinates
+static_transform Eigen::Quaternion.from_angle_axis( 63.44 / 180.0 * Math::PI, Eigen::Vector3.UnitZ ),
+    Eigen::Vector3.new( 0.0, 0.0, 0.0 ),
+    "reference_wall_halle" => "world_orientation"
 

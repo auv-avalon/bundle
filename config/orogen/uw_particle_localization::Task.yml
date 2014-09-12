@@ -135,7 +135,7 @@ joint_names:
 # minimum time, in s, between two sequential samples arrive on laser_samples
 laser_samples_period: 0.01
 # The maximum difference between the dead reckoning velocity and the randomized particle velocity
-max_velocity_drift: 0.1
+max_velocity_drift: 0.15
 # no documentation available for this property
 metadata:
   metadata: []
@@ -211,7 +211,7 @@ param_linDamp:
   rows: 6
   cols: 6
   data:
-  - 14.995940
+  - 7.0
   - 0.0
   - 0.0
   - 0.0
@@ -252,7 +252,7 @@ param_linDampNeg:
   rows: 6
   cols: 6
   data:
-  - 11.064814
+  - 7.0
   - 0.0
   - 0.0
   - 0.0
@@ -289,7 +289,7 @@ param_linDampNeg:
   - 0.0
   - 0.0
 # mass of avalon
-param_mass: 80
+param_mass: 160
 # radius of avalon
 param_radius: 0.1
 # no documentation available for this property
@@ -297,14 +297,14 @@ param_sqDamp:
   rows: 6
   cols: 6
   data:
-  - 33.714584
   - 0.0
   - 0.0
   - 0.0
   - 0.0
   - 0.0
   - 0.0
-  - 41.932719
+  - 0.0
+  - 0.0
   - 0.0
   - 0.0
   - 0.0
@@ -338,7 +338,7 @@ param_sqDampNeg:
   rows: 6
   cols: 6
   data:
-  - 33.714584
+  - 0.0
   - 0.0
   - 0.0
   - 0.0
@@ -440,11 +440,11 @@ sonar_vertical_angle: 0.52
 speed_samples_period: 0.01
 # sets a static covariance for speed samples
 static_motion_covariance:
-- 0.2
+- 0.25
 - 0.0
 - 0.0
 - 0.0
-- 0.2
+- 0.25
 - 0.0
 - 0.0
 - 0.0
