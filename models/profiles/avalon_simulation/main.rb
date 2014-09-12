@@ -2,7 +2,6 @@ CONFIG_HACK = 'simulation'
 require "auv/models/profiles/main"
 require "models/blueprints/auv"
 require "models/blueprints/pose_auv"
-#require "rock_auv/models/blueprints/control"
 
 using_task_library 'controldev'
 using_task_library 'simulation'
@@ -13,8 +12,15 @@ using_task_library 'avalon_simulation'
 #end
 
 module Avalon
+
     module Profiles
         profile "Simulation" do
+            # load static transforms
+            transformer do
+                load 'config', 'transforms_common.rb'
+            end
+
+            tag 'final_orientation', ::Base::OrientationSrv
 
             define_simulated_device("bottom_camera", Dev::Simulation::Mars::Camera) do |dev|
                 dev.prefer_deployed_tasks("bottom_camera").with_conf("default","bottom_cam")
@@ -48,14 +54,94 @@ module Avalon
 
             use Base::SonarScanProviderSrv => sonar_def
 
-            use_profile ::DFKI::Profiles::AUV,
-                "final_orientation_with_z" => imu_def,
-                "altimeter" => altimeter_def,
-                "thruster" => thrusters_def,
+            # Load AUV profile
+            use_profile ::DFKI::Profiles::PoseEstimation,
                 "thruster_feedback" => thrusters_def,
-                "down_looking_camera" => bottom_camera_def,
-                "forward_looking_camera" => front_camera_def
+                "motion_model" => motion_model_def,
+                "depth" => imu_dev
 
+
+            # Set local frame names
+            ikf_orientation_estimator_def.use_frames(
+                'imu' => 'imu',
+                'fog' => 'fog',
+                'body' => 'body'
+            )
+
+            ikf_orientation_estimator_def.ori_in_map_child.use_frames(
+                'map' => 'map_halle',
+                'world' => 'world_orientation'
+            )
+
+            initial_orientation_estimator_def.use_frames(
+                'body' => 'body',
+                'odometry' => 'local_orientation',
+                'wall' => 'reference_wall',
+                'world' => 'world_orientation',
+                'sonar' => 'sonar'
+            )
+
+            initial_orientation_estimator_def.estimator_child.use_frames(
+                'fog' => 'fog',
+                'imu' => 'imu',
+                'body' => 'body'
+            )
+    
+            pose_estimator_def.use_frames(
+                'imu' => 'imu',
+                'lbl' => 'lbl',
+                'pressure_sensor' => 'pressure_sensor',
+                'body' => 'body',
+                'dvl' => 'dvl',
+                'fog' => 'fog'
+            )
+
+            pose_estimator_blind_def.use_frames(
+                'imu' => 'imu',
+                'lbl' => 'lbl',
+                'pressure_sensor' => 'pressure_sensor',
+                'body' => 'body',
+                'dvl' => 'dvl',
+                'fog' => 'fog'
+            )
+
+            imu_dev.use_frames(
+                'imu' => 'imu',
+                'world' => 'imu_nwu'
+            )
+
+
+            # Define dynamic transformation providers
+            transformer do
+                frames 'dvl', 'body'
+                frames 'lbl', 'body'
+                dynamic_transform initial_orientation_estimator_def.estimator_child, 'body' => 'local_orientation'
+                dynamic_transform pose_estimator_blind_def, 'body' => 'map_halle'
+                dynamic_transform pose_estimator_def, 'body' => 'map_halle'
+                #dynamic_transform imu_dev, 'imu' => 'imu_nwu'
+            end
+
+
+            # Load AUV profile
+            use_profile ::DFKI::Profiles::AUV,
+                "final_orientation_with_z" => depth_fusion_def,
+                "altimeter" => altimeter_dev,
+                "thruster" => thrusters_def,
+                "down_looking_camera" => bottom_camera_dev,
+                "forward_looking_camera" => front_camera_dev,
+                "pose_blind" => pose_estimator_blind_def,
+                #"pose" => localization_def,
+                "pose" => pose_estimator_def,
+                "motion_model" => motion_model_def
+
+#            use_profile ::DFKI::Profiles::AUV,
+#                "final_orientation_with_z" => imu_def,
+#                "altimeter" => altimeter_def,
+#                "thruster" => thrusters_def,
+#                "thruster_feedback" => thrusters_def,
+#                "down_looking_camera" => bottom_camera_def,
+#                "forward_looking_camera" => front_camera_def
+#
 
         end
     end
