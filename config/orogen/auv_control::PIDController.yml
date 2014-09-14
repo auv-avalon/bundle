@@ -13,6 +13,8 @@ expected_inputs:
 # If true, the component will send a zero command before getting into an
 # exception state. Otherwise, it will not do anything
 keep_position_on_exception: true
+
+nan_on_keep_position: true    
 # no documentation available for this property
 metadata:
   metadata: []
@@ -42,6 +44,8 @@ expected_inputs:
 # If true, the component will send a zero command before getting into an
 # exception state. Otherwise, it will not do anything
 keep_position_on_exception: true
+
+nan_on_keep_position: true    
 # no documentation available for this property
 metadata:
   metadata: []
@@ -77,7 +81,7 @@ use_parallel_pid_settings: true
 parallel_pid_settings:
   linear:
   - Ts: 0.01
-    Kp: 0.2
+    Kp: 0.1
     Ki: 0.0
     Kd: 0.0
     N: 0.0
@@ -142,7 +146,7 @@ use_parallel_pid_settings: true
 parallel_pid_settings:
   linear:
   - Ts: 0.01
-    Kp: 7.0
+    Kp: 10.0
     Ki: 2.0
     Kd: 0.0
     N: 0.0

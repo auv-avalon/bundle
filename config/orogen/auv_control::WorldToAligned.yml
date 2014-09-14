@@ -13,6 +13,8 @@ expected_inputs:
 # If true, the component will send a zero command before getting into an
 # exception state. Otherwise, it will not do anything
 keep_position_on_exception: true
+
+nan_on_keep_position: true
 # no documentation available for this property
 metadata:
   metadata: []

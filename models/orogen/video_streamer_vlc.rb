@@ -17,10 +17,10 @@ module VideoStreamerVlc
                 config.config.fps = 30
                 config.config.frame_width = srv.model.dynamic_service_options[:width]
                 config.config.frame_height = srv.model.dynamic_service_options[:height]
-                #config.config.vcodec = "MJPG"
-                #config.config.mux = "mpjpeg"
-                #config.config.dst= "192.168.128.50:#{srv.model.dynamic_service_options[:port]}/video.mjpg"
-                config.config.raw_config = "#transcode{vcodec=mjpg,scale=0.5,vb=100,threads=4}:rtp{mux=ts,dst=239.255.12.42,port=#{srv.model.dynamic_service_options[:port]},ttl=30}"
+                config.config.vcodec = "MJPG"
+                config.config.mux = "mpjpeg"
+                config.config.dst= "192.168.128.50:#{srv.model.dynamic_service_options[:port]}/video.mjpg"
+                #config.config.raw_config = "#transcode{vcodec=mjpg,scale=0.5,vb=100,threads=4}:rtp{mux=ts,dst=239.255.12.42,port=#{srv.model.dynamic_service_options[:port]},ttl=30}"
                 orocos_task.createInput(config)
             end
         end

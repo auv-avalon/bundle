@@ -86,3 +86,8 @@ static_transform Eigen::Quaternion.from_angle_axis( -72.09528 / 180.0 * Math::PI
     Eigen::Vector3.new( 0.0, 0.0, 0.0 ),
     "reference_wall" => "world_orientation"
 
+## this is the angle of side walls in the DFKI basin, based on google earth gps coordinates
+static_transform Eigen::Quaternion.from_angle_axis( -116.56 / 180.0 * Math::PI, Eigen::Vector3.UnitZ ),
+    Eigen::Vector3.new( 0.0, 0.0, 0.0 ),
+    "reference_wall_halle" => "world_orientation"
+

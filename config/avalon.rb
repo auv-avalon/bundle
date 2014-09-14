@@ -78,7 +78,10 @@ module Avalon
             :substate => "The given substate"
         
 	def reset_heading
-            Orocos::TaskContext.get('orientation_correction').reset(0.0)
+            t = Orocos::TaskContext.get('orientation_estimator')
+            t.resetHeading(-2.03) if t.running? #TODO Halle
+            t = Orocos::TaskContext.get('base_orientation_estimator')
+            t.resetHeading(-2.03) if t.running? #TODO halle
 	end
 	command :reset_heading, "Reset the orientation to zero -here-"
 	

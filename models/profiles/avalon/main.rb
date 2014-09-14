@@ -135,6 +135,7 @@ module Avalon
             use_profile ::DFKI::Profiles::OrientationEstimation,
                 'imu' => imu_dev
 
+
             #### Choose between:
             #define "orientation", old_orientation_estimator_def
             define "orientation", ikf_orientation_estimator_def
@@ -143,7 +144,7 @@ module Avalon
 
             ### This is optional an can be removed soon:
             define 'depth_fusion',   AuvControl::DepthFusionCmp.use(
-                Base::ZProviderSrv => depth_reader_dev,
+                'z' => depth_reader_dev,
                 Base::OrientationSrv => orientation_def
             )
             
@@ -196,7 +197,7 @@ module Avalon
             initial_orientation_estimator_def.use_frames(
                 'body' => 'body',
                 'odometry' => 'local_orientation',
-                'wall' => 'reference_wall',
+                'wall' => 'reference_wall_halle',
                 'world' => 'world_orientation',
                 'sonar' => 'sonar'
             )
