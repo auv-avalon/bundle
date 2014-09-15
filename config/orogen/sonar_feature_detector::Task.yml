@@ -1,23 +1,21 @@
 --- name:default
+# Weight factor for optimal path search. If this property is a high value, paths to a feature with high confidence will be rated better
+confidence_weight: 1.0
+# Filter out structures, which are connected with the wall-borders
+filter_border_structures: true
 # Origin of our map
 map_origin:
   data:
-  - 11.5
-  - 10.0
+  - 60.0
+  - 0.0
 # Span of our map
 map_span:
   data:
-  - 23.0
-  - 20.0
-# no documentation available for this property
-metadata:
-  metadata: []
-  properties: []
-  input_ports: []
-  output_ports: []
+  - 60.0
+  - 50.0
 # Objects must have at least this many cells
 minimum_object_cells: 2
 # Ignore features, which are closer than x meters tto the wall
-minimum_wall_distance: 2.5
+minimum_wall_distance: 3.0
 # Rate features with this size as best
 optimal_object_size: 2.0
