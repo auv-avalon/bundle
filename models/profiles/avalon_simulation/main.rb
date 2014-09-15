@@ -46,41 +46,42 @@ module Avalon
             define "sim", ::Simulation::Mars
             
             define "sim_setter", ::Simulation::MarsNodePositionSetter
-
-            define 'motion_model', Localization::DeadReckoning.use(
-                'hb' => thrusters_def,
-                'ori' => imu_def
-            )
             
-            # Load AUV profile
-            use_profile ::DFKI::Profiles::PoseEstimation,
-                "orientation" => imu_def,
-                "thruster_feedback" => thrusters_def,
-                "motion_model" => motion_model_def,
-                "depth" => imu_def 
-
             use Base::SonarScanProviderSrv => sonar_def
+
+            use_profile ::DFKI::Profiles::OrientationEstimation,
+                'imu' => imu_def
+
+            #### Choose between:
+            #define "orientation", old_orientation_estimator_def
+            #define "orientation", ikf_orientation_estimator_def
+            #define "orientation",initial_orientation_estimator_def 
+            define "orientation",imu_def
+           
+
+            ### This is optional an can be removed soon:
+            define 'depth_fusion',   AuvControl::DepthFusionCmp.use(
+                Base::ZProviderSrv => imu_def,
+                Base::OrientationSrv => orientation_def
+            )
             
             
-            pose_estimator_blind_def.use_frames(
-                'imu' => 'imu',
-                'lbl' => 'lbl',
-                'pressure_sensor' => 'pressure_sensor',
-                'body' => 'body',
-                'dvl' => 'dvl',
-                'fog' => 'fog'
-            )
+            #define 'motion_model', Localization::DeadReckoning.use(
+            #    'hb' => thrusters_def, 
+            #    'ori' => depth_fusion_def
+            #)
+#
+#            ###TODO Add if needed some offsets to the orientation or use first define
+#            define 'orientation', depth_fusion_def 
 
-            imu_dev.use_frames(
-                'imu' => 'imu',
-                'world' => 'imu_nwu'
-            )
+            #TODO add offset tools?
 
-            # Load AUV profile
+
             use_profile ::DFKI::Profiles::PoseEstimation,
                 "thruster_feedback" => thrusters_def,
-                "motion_model" => motion_model_def,
-                "depth" => imu_dev
+#                "motion_model" => imu_def, #motion_model_def,
+                "depth" => imu_def,
+                'orientation' => orientation_def
 
 
             # Set local frame names
@@ -109,23 +110,23 @@ module Avalon
                 'body' => 'body'
             )
     
-            pose_estimator_def.use_frames(
-                'imu' => 'imu',
-                'lbl' => 'lbl',
-                'pressure_sensor' => 'pressure_sensor',
-                'body' => 'body',
-                'dvl' => 'dvl',
-                'fog' => 'fog'
-            )
+            #pose_estimator_def.use_frames(
+            #    'imu' => 'imu',
+            #    'lbl' => 'lbl',
+            #    'pressure_sensor' => 'pressure_sensor',
+            #    'body' => 'body',
+            #    'dvl' => 'dvl',
+            #    'fog' => 'fog'
+            #)
 
-            pose_estimator_blind_def.use_frames(
-                'imu' => 'imu',
-                'lbl' => 'lbl',
-                'pressure_sensor' => 'pressure_sensor',
-                'body' => 'body',
-                'dvl' => 'dvl',
-                'fog' => 'fog'
-            )
+            #pose_estimator_blind_def.use_frames(
+            #    'imu' => 'imu',
+            #    'lbl' => 'lbl',
+            #    'pressure_sensor' => 'pressure_sensor',
+            #    'body' => 'body',
+            #    'dvl' => 'dvl',
+            #    'fog' => 'fog'
+            #)
 
             imu_dev.use_frames(
                 'imu' => 'imu',
@@ -138,23 +139,25 @@ module Avalon
                 frames 'dvl', 'body'
                 frames 'lbl', 'body'
                 dynamic_transform initial_orientation_estimator_def.estimator_child, 'body' => 'local_orientation'
-                dynamic_transform pose_estimator_blind_def, 'body' => 'map_halle'
-                dynamic_transform pose_estimator_def, 'body' => 'map_halle'
+                #dynamic_transform pose_estimator_blind_def, 'body' => 'map_halle'
+                #dynamic_transform pose_estimator_def, 'body' => 'map_halle'
                 #dynamic_transform imu_dev, 'imu' => 'imu_nwu'
             end
 
 
             # Load AUV profile
             use_profile ::DFKI::Profiles::AUV,
-                "final_orientation_with_z" => depth_fusion_def,
-                "altimeter" => altimeter_dev,
+                "orientation_with_z" => imu_def,
+                "altimeter" => altimeter_def,
                 "thruster" => thrusters_def,
-                "down_looking_camera" => bottom_camera_dev,
-                "forward_looking_camera" => front_camera_dev,
-                "pose_blind" => pose_estimator_blind_def,
-                #"pose" => localization_def,
-                "pose" => pose_estimator_def,
-                "motion_model" => motion_model_def
+                "down_looking_camera" => bottom_camera_def,
+                "forward_looking_camera" => front_camera_def,
+                #"pose_blind" => pose_estimator_blind_def,
+                #"pose" => localization_def
+                #"pose" => depth_fusion_def #Geth nicht 
+                "pose" => imu_def #Geth nicht 
+                #"pose" => pose_estimator_def
+             #   "motion_model" => motion_model_def
 
 #            use_profile ::DFKI::Profiles::AUV,
 #                "final_orientation_with_z" => imu_def,
