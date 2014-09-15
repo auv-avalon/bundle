@@ -1,0 +1,81 @@
+--- name:default
+# Variance of the imu in m/s^2
+acceleration_error: 2.5
+# damping coefficients in x and y, vector must have the size 2
+damping_coefficients: []
+# Convert gps from East-North-Frame to North-West-Frame
+enframe_to_nwframe: false
+# Use gps for velocity-estimation
+estimate_velocity: true
+# Variance of the gps in meter
+gps_error: 10.0
+# no documentation available for this property
+gps_period: 0.01
+# no documentation available for this property
+gps_reject_threshold: 999999999999999.0
+# no documentation available for this property
+gps_timeout: 10.0
+# no documentation available for this property
+imu_period: 0.01
+# rotation of the imu around the z-axis
+imu_rotation: 0.0
+# When true, the first recieved gps-position is used as the origin
+initial_gps_origin: false
+# no documentation available for this property
+laser_max_range: 20.0
+# no documentation available for this property
+laser_min_range: 1.0
+# no documentation available for this property
+laser_period: 0.1
+# no documentation available for this property
+laser_rotation_euler:
+  data:
+  - 0.0
+  - 0.0
+  - 0.0
+# no documentation available for this property
+laser_translation:
+  data:
+  - 0.0
+  - 0.0
+  - 0.0
+# no documentation available for this property
+laser_variance: 0.2
+# Max delay of incomming streams
+max_delay: 0.5
+# no documentation available for this property
+model_variance: 0.2
+# no documentation available for this property
+number_of_thruster: 4
+# no documentation available for this property
+ori_period: 0.01
+# no documentation available for this property
+orientation_timeout: 10.0
+# Position of the gps in the body frame
+relative_gps_position:
+  data:
+  - 0.0
+  - 0.0
+  - 0.0
+# Thruster coeffiecients in x and y, as a number_of_thruster x 2 matrix
+tcm: []
+# Thruster coefficients, vector must have the size of number_of_thruster
+thruster_coef: []
+# no documentation available for this property
+thruster_period: 0.01
+# no documentation available for this property
+thruster_voltage: 24.0
+# 0: zero velocity, 1: gps-estimated velocity, 2: imu-estimated velocity, 3: gps-estimated x-velocity, yz-velocity zero
+use_gps_velocity: 1
+# no documentation available for this property
+vehicle_mass: 20.0
+# no documentation available for this property
+vel_period: 0.1
+# Variance of the velocity estimation im  m/s
+velocity_error: 0.2
+# Number of gps-samples, which are used for one velocity estimation
+velocity_estimation_count: 20
+# no documentation available for this property
+velocity_reject_threshold: 999999999999999.0
+# yaml file for initial wall-map. this is used for laser-localiziation
+yaml_file: "<%= ENV['AUTOPROJ_CURRENT_ROOT'] %>/auv_avalon/orogen/asv_localization/maps/nurc_sim.yml"
