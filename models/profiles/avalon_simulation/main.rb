@@ -155,7 +155,8 @@ module Avalon
                 #"pose_blind" => pose_estimator_blind_def,
                 #"pose" => localization_def
                 #"pose" => depth_fusion_def #Geth nicht 
-                "pose" => imu_def #Geth nicht 
+                "pose" => imu_def,
+                "pose_blind" => imu_def
                 #"pose" => pose_estimator_def
              #   "motion_model" => motion_model_def
 
