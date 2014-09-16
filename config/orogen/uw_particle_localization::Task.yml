@@ -453,8 +453,8 @@ hough_timeout: 20.0
 hough_timeout_interspersal: 0.0
 # initial centre position for all particles
 init_position:
-- 30.0
-- 0.0
+- -30.0
+- 25.0
 - 0.0
 # dont use the first n sonar samples for state estimation
 init_sample_rejection: 10
@@ -851,8 +851,8 @@ hough_timeout: 20.0
 hough_timeout_interspersal: 0.0
 # initial centre position for all particles
 init_position:
-- 30.0
-- 0.0
+- -30.0
+- 25.0
 - 0.0
 # dont use the first n sonar samples for state estimation
 init_sample_rejection: 10
