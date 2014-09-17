@@ -453,8 +453,8 @@ hough_timeout: 20.0
 hough_timeout_interspersal: 0.0
 # initial centre position for all particles
 init_position:
-- 30.0
-- 0.0
+- -30.0
+- 25.0
 - 0.0
 # dont use the first n sonar samples for state estimation
 init_sample_rejection: 10
@@ -851,8 +851,8 @@ hough_timeout: 20.0
 hough_timeout_interspersal: 0.0
 # initial centre position for all particles
 init_position:
-- 30.0
-- 0.0
+- -30.0
+- 25.0
 - 0.0
 # dont use the first n sonar samples for state estimation
 init_sample_rejection: 10
@@ -1265,9 +1265,9 @@ echosounder_variance: 0.5
 # effective sample size threshold controls the resampling timing and uses values between 0.0 and 1.0 particles
 effective_sample_size_threshold: 0.8
 # This value should be between 0 and 1
-feature_confidence: 0.8
+feature_confidence: 0.85
 # Features below this value will be removed during filtering
-feature_confidence_threshold: 0.3
+feature_confidence_threshold: 0.1
 # This value should be between 0 and 1
 feature_empty_cell_confidence: 0.55
 # If value is 0, no features will be filtered

@@ -47,6 +47,8 @@ module Avalon
             
             define "sim_setter", ::Simulation::MarsNodePositionSetter
             
+            define "fix_map", ::Localization::FixMapHack
+            
             use Base::SonarScanProviderSrv => sonar_def
 
             use_profile ::DFKI::Profiles::OrientationEstimation,

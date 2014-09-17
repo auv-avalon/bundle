@@ -275,6 +275,8 @@ module Avalon
             define "ori_with_z", depth_fusion_def 
             ##### end choosing
 
+            define "fix_map", ::Localization::FixMapHack
+            
             # Load AUV profile
             use_profile ::DFKI::Profiles::AUV,
                 "orientation_with_z" => depth_fusion_def,
