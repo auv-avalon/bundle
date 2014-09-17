@@ -89,9 +89,7 @@ module Avalon
                 'imu' => 'imu',
                 'fog' => 'fog',
                 'body' => 'body'
-            )
-
-            ikf_orientation_estimator_def.ori_in_map_child.use_frames(
+            ).ori_in_map_child.use_frames(
                 'map' => 'map_halle',
                 'world' => 'world_orientation'
             )
@@ -99,7 +97,7 @@ module Avalon
             initial_orientation_estimator_def.use_frames(
                 'body' => 'body',
                 'odometry' => 'local_orientation',
-                'wall' => 'reference_wall',
+                'wall' => 'reference_wall_sauce',
                 'world' => 'world_orientation',
                 'sonar' => 'sonar'
             )
