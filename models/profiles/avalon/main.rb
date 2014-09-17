@@ -49,7 +49,7 @@ module Avalon
                     period(0.2)
 
                 device(Dev::Micron, :as => 'sonar').
-                    #with_conf('default','maritime_hall').
+                    with_conf('default','maritime_hall').
                     frame('sonar').
                     prefer_deployed_tasks("sonar").
                     period(0.1)

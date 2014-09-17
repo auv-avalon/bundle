@@ -144,7 +144,7 @@ param_linDampNeg:
   - 0.0
   - 0.0
 # mass of avalon
-param_mass: 160
+param_mass: 37.5
 # radius of avalon
 param_radius: 0.1
 # no documentation available for this property
