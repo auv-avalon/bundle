@@ -13,6 +13,7 @@ class Main < Roby::Actions::Interface
         detector = state structure_inspection_def
         start set
         transition(set.success_event, detector)
+        forward detector.success_event, success_event
     end
     
     describe("foo")
@@ -21,6 +22,7 @@ class Main < Roby::Actions::Interface
         detector = state structure_alignment_def 
         start set
         transition(set.success_event, detector)
+        forward detector.success_event, success_event
     end
     
     describe("foo")
@@ -29,6 +31,7 @@ class Main < Roby::Actions::Interface
         detector = state buoy_detector_def 
         start set
         transition(set.success_event, detector)
+        forward detector.success_event, success_event
     end
   
 end
@@ -43,12 +46,22 @@ class Main
         detector = state buoy_wall
         start set
         transition(set.success_event, detector)
+        forward detector.success_event, success_event
     end
     describe("foo")
     state_machine "sim_test_sauce" do
         set = state sim_setter_def(:node => "avalon", :posX => -45, :posY => 2.5, :posZ => 0, :rotZ => 90) 
-        detector = state win
+        sauce = state win
         start set
-        transition(set.success_event, detector)
+        transition(set.success_event, sauce)
+        forward sauce.success_event, success_event
+    end
+    describe("fara")
+    state_machine "sim_test_wall" do
+        set = state sim_setter_def(:node => "avalon", :posX => -45, :posY => 25, :posZ => -1.5, :rotZ => 0) 
+        wall = state win(:start_state => "wall")
+        start set 
+        transition(set.success_event, wall)
+        forward set.success_event, success_event
     end
 end
