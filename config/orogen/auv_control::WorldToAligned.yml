@@ -42,3 +42,15 @@ expected_inputs:
   - true
   - true
   - true
+--- name:no_xyz
+# This property defines which parts of the command input is expected to be
+# set once we merged all the declared input ports.
+expected_inputs:
+  linear:
+  - false
+  - false
+  - false
+  angular:
+  - true
+  - true
+  - true

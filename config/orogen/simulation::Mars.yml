@@ -29,7 +29,7 @@ positions:
   roty: 0
   rotz: 0
 - nodename: 'assambly' #Der pipeline-tannenbaum
-  posx: -50
+  posx: -45
   posy: 25
   posz: -10
   rotx: 0 

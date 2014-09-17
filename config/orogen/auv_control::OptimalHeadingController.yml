@@ -41,3 +41,13 @@ expected_inputs:
   - true
   - true
   - true
+--- name:no_xyz
+expected_inputs:
+  linear:
+  - false 
+  - false
+  - false
+  angular:
+  - true
+  - true
+  - true

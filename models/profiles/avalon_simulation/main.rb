@@ -91,9 +91,7 @@ module Avalon
                 'imu' => 'imu',
                 'fog' => 'fog',
                 'body' => 'body'
-            )
-
-            ikf_orientation_estimator_def.ori_in_map_child.use_frames(
+            ).ori_in_map_child.use_frames(
                 'map' => 'map_halle',
                 'world' => 'world_orientation'
             )
@@ -101,7 +99,7 @@ module Avalon
             initial_orientation_estimator_def.use_frames(
                 'body' => 'body',
                 'odometry' => 'local_orientation',
-                'wall' => 'reference_wall',
+                'wall' => 'reference_wall_sauce',
                 'world' => 'world_orientation',
                 'sonar' => 'sonar'
             )
@@ -157,7 +155,8 @@ module Avalon
                 #"pose_blind" => pose_estimator_blind_def,
                 #"pose" => localization_def
                 #"pose" => depth_fusion_def #Geth nicht 
-                "pose" => imu_def #Geth nicht 
+                "pose" => imu_def,
+                "pose_blind" => imu_def
                 #"pose" => pose_estimator_def
              #   "motion_model" => motion_model_def
 
