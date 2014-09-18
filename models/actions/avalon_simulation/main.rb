@@ -64,4 +64,12 @@ class Main
         transition(set.success_event, wall)
         forward set.success_event, success_event
     end
+    describe("foo")
+    state_machine "sim_test_blackbox_wall" do
+        set = state sim_setter_def(:node => "avalon", :posX => -20, :posY => 5, :posZ => -1.5, :rotZ => 0) 
+        box = state win(:start_state => 'blackbox')
+        start set
+        transition(set.success_event, box)
+        forward box.success_event, success_event
+    end
 end
