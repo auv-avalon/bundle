@@ -69,9 +69,9 @@ static_transform Eigen::Quaternion.from_angle_axis( -72.09528 / 180.0 * Math::PI
     "map_sauce" => "world_orientation"
 
 ## map in world orientation at the dfki main tank
-static_transform Eigen::Quaternion.from_angle_axis( -116.56 / 180.0 * Math::PI, Eigen::Vector3.UnitZ ),
-    Eigen::Vector3.new( 0.0, 0.0, 0.0 ),
-    "map_halle" => "world_orientation"
+#static_transform Eigen::Quaternion.from_angle_axis( -116.56 / 180.0 * Math::PI, Eigen::Vector3.UnitZ ),
+#    Eigen::Vector3.new( 0.0, 0.0, 0.0 ),
+#    "map_halle" => "world_orientation"
 
 ## world orientation to utm coordinates at the sauc-e area
 static_transform Eigen::Quaternion.Identity,
@@ -88,7 +88,7 @@ static_transform Eigen::Quaternion.from_angle_axis( -162.09528 / 180.0 * Math::P
 
 ## angle of the reference wall in the world frame
 ## this is the angle of the northern wall in the DFKI testbed, based on google earth gps coordinates
-static_transform Eigen::Quaternion.from_angle_axis( -26.56 / 180.0 * Math::PI, Eigen::Vector3.UnitZ ),
-    Eigen::Vector3.new( 0.0, 0.0, 0.0 ),
-    "reference_wall_halle" => "world_orientation"
+#static_transform Eigen::Quaternion.from_angle_axis( -26.56 / 180.0 * Math::PI, Eigen::Vector3.UnitZ ),
+#    Eigen::Vector3.new( 0.0, 0.0, 0.0 ),
+#    "reference_wall_halle" => "world_orientation"
 

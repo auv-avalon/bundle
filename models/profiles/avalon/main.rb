@@ -190,14 +190,14 @@ module Avalon
                 'fog' => 'fog',
                 'body' => 'body'
             ).ori_in_map_child.use_frames(
-                'map' => 'map_halle',
+                'map' => 'map_sauce',
                 'world' => 'world_orientation'
             )
 
             initial_orientation_estimator_def.use_frames(
                 'body' => 'body',
                 'odometry' => 'local_orientation',
-                'wall' => 'reference_wall_halle',
+                'wall' => 'reference_wall_sauce',
                 'world' => 'world_orientation',
                 'sonar' => 'sonar'
             )
@@ -256,8 +256,8 @@ module Avalon
                 frames 'dvl', 'body'
                 frames 'lbl', 'body'
                 dynamic_transform initial_orientation_estimator_def.estimator_child, 'body' => 'local_orientation'
-                dynamic_transform pose_estimator_blind_def, 'body' => 'map_halle'
-                dynamic_transform pose_estimator_def, 'body' => 'map_halle'
+                dynamic_transform pose_estimator_blind_def, 'body' => 'map_sauce'
+                dynamic_transform pose_estimator_def, 'body' => 'map_sauce'
                 #dynamic_transform imu_dev, 'imu' => 'imu_nwu'
             end
 
