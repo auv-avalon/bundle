@@ -9,7 +9,25 @@ require 'models/profiles/avalon/main'
 require 'scripts/controllers/auto_starter'
     
 
-class AuvHelper::DepthAndOrientationFusion
+#class AuvHelper::DepthAndOrientationFusion
+#    on :start do |event|
+#        @pose_reader = data_reader :pose_samples
+#    end
+#    poll do
+#        if @pose_reader 
+#            if rbs = @pose_reader.read
+#               State.pose.orientation = rbs.orientation
+#               if !State.pose.respond_to?(:position)
+#                   State.pose.position = Eigen::Vector3.new(0, 0, 0)
+#               end
+#               State.pose.position[2] = rbs.position[2]
+#               State.pose.orientation= rbs.orientation
+#            end
+#        end
+#    end
+#end
+
+class PoseEstimation::UWPoseEstimator
     on :start do |event|
         @pose_reader = data_reader :pose_samples
     end
