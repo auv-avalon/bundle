@@ -1193,8 +1193,6 @@ utm_relative_angle: 0.0
 # start map for localization algorithm
 yaml_map: "<%= ENV['AUTOPROJ_CURRENT_ROOT'] %>/auv_avalon/orogen/uw_particle_localization/maps/nurc.yml"
 --- name:slam_testhalle
-# Output variances below this sigma threshold will be set the value of the threshold
-position_covariance_threshold: 10
 # Variance of the echosounder samples
 echosounder_variance: 0.5
 # This value should be between 0 and 1
@@ -1264,27 +1262,6 @@ echosounder_samples_period: 0.01
 echosounder_variance: 0.5
 # effective sample size threshold controls the resampling timing and uses values between 0.0 and 1.0 particles
 effective_sample_size_threshold: 0.8
-# This value should be between 0 and 1
-feature_confidence: 0.85
-# Features below this value will be removed during filtering
-feature_confidence_threshold: 0.1
-# This value should be between 0 and 1
-feature_empty_cell_confidence: 0.55
-# If value is 0, no features will be filtered
-feature_filter_threshold: 0.1
-# Size of one grid-cell in meter
-feature_grid_resolution: 1.0
-# If we observed a feature this many time without removing it, this feature will be saved
-feature_observation_count_threshold: 3
-# Only use features inside this range
-feature_observation_minimum_range: 1.5
-# Only reduce feature_weights inside this range
-feature_observation_range: 40.0
-# Only features above this threshold will be shown in the output-map
-feature_output_confidence_threshold: 0.6
-# Reducce the weight of features by this value
-feature_weight_reduction: 0.8
-# Filter out particles with zero confidence (e.g. particle is out of map)
 filter_zeros: true
 # sets gps covariance for defining measurement uncertainty
 gps_covarianz: 1.0
@@ -1659,12 +1636,8 @@ stream_aligner_status_period: 1.0
 thruster_samples_period: 0.01
 # If false, feature ratings will be multiplied
 use_best_feature_only: true
-# Takes only effect, if use_slam is true
-use_mapping_only: true
 # no documentation available for this property
 use_markov: true
-# Use dp-slam algorithm for additional mapping
-use_slam: false
 # gives the angle difference between the coordinate-system and the utm-north
 utm_relative_angle: 0.0
 # Start depth map
