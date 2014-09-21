@@ -1,4 +1,4 @@
 --- name:default
-diveScale: 7.5 
-turnScale: 1.0
+diveScale: 10.0 
+turnScale: 0.4
 delta_depth_control: false 

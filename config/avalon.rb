@@ -61,13 +61,12 @@ Syskit.conf.use_deployment 'sonar_feature_estimator'
 
 Syskit.conf.exclude_from_log '/canbus/Message'
 Syskit.conf.exclude_from_log '/canbus/Statistics' 
-Syskit.conf.exclude_from_log 'blur' 
-Syskit.conf.exclude_from_log 'pipeline_follower' 
-Syskit.conf.exclude_from_log 'line_scanner' 
-Syskit.conf.exclude_from_log 'front_camera' 
-Syskit.conf.exclude_from_log 'bottom_camera' 
-
-Syskit.conf.exclude_from_log 'low_level_driver' 
+#Syskit.conf.exclude_from_log 'blur' 
+#Syskit.conf.exclude_from_log 'pipeline_follower' 
+#Syskit.conf.exclude_from_log 'line_scanner' 
+#Syskit.conf.exclude_from_log 'front_camera' 
+#Syskit.conf.exclude_from_log 'bottom_camera' 
+#Syskit.conf.exclude_from_log 'low_level_driver' 
 
 
 module Avalon 
@@ -80,9 +79,9 @@ module Avalon
         
 	def reset_heading
             t = Orocos::TaskContext.get('orientation_estimator')
-            t.resetHeading(-2.03) if t.running? #TODO Halle
+            t.resetHeading(-1.26) if t.running? #TODO Halle
             t = Orocos::TaskContext.get('base_orientation_estimator')
-            t.resetHeading(-2.03) if t.running? #TODO halle
+            t.resetHeading(-1.26) if t.running? #TODO halle
 	end
 	command :reset_heading, "Reset the orientation to zero -here-"
 	

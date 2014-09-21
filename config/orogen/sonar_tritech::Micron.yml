@@ -35,16 +35,15 @@ config:
 --- name:sauce
 config:
   continous: 1
-  gain: 0.5
-  max_distance: 30.0
-  resolution: 0.1
+  gain: 0.8
+  max_distance: 50.0
+  resolution: 0.02
 --- name:studiobad
 config:
   continous: 1
   gain: 0.5
   max_distance: 15.0
   resolution: 0.1
-port: /dev/ttyS7
 --- name:wall_front
 config:
   continous: 0
@@ -55,7 +54,6 @@ config:
     rad: 1.01
   right_limit:
     rad: -1.01
-port: /dev/ttyS7
 --- name:wall_front_far
 config:
   continous: 0
@@ -66,7 +64,6 @@ config:
     rad: 0.393
   right_limit:
     rad: -0.393
-port: /dev/ttyS7
 --- name:wall_left
 config:
   continous: 0
@@ -77,7 +74,6 @@ config:
     rad: 2.67
   right_limit:
     rad: 0.0
-port: /dev/ttyS7
 --- name:wall_right
 config:
   continous: 0
@@ -88,7 +84,6 @@ config:
     rad: 0.0
   right_limit:
     rad: -2.67
-port: /dev/ttyS7
 --- name:dual_wall_servoing
 config:
   continous: 0
@@ -99,7 +94,6 @@ config:
     rad: 0.094 #0.03 * PI
   right_limit:
     rad: -1.67 #-0.53 * PI
-port: /dev/ttyS7
 --- name:straight_front
 config:
   continous: 0
@@ -110,7 +104,6 @@ config:
     rad: 0.05
   right_limit:
     rad: -0.05
-port: /dev/ttyS7
 --- name:asv_search
 config:
   continous: 0
@@ -121,7 +114,6 @@ config:
     rad: 0.7853
   right_limit:
     rad: -0.7853
-port: /dev/ttyS7
 --- name:new_wall_servoing_right
 config:
   continous: 0
@@ -142,7 +134,6 @@ config:
     rad: 1.01
   right_limit:
     rad: -1.01
-port: /dev/ttyS7
 
 
 

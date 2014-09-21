@@ -50,7 +50,7 @@ module Avalon
 
                 device(Dev::Micron, :as => 'sonar').
                     #with_conf('default','maritime_hall').
-                    with_conf('default','sauce').
+                    #with_conf('default').
                     frame('sonar').
                     prefer_deployed_tasks("sonar").
                     period(0.1)
