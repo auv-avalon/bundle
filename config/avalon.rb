@@ -1,6 +1,6 @@
 
 if Socket.gethostname == "avalon-rear" or Socket.gethostname == "avalon"
-    Syskit.conf.process_server 'front','192.168.128.50', :log_dir => '/mnt/logs/results', :result_dir => '/mnt/logs/results'
+    Syskit.conf.process_server 'front','192.168.128.50', :log_dir => '/mnt/logs/current', :result_dir => '/mnt/logs/results'
 elsif
     Syskit.conf.process_server 'front','localhost'
 end
@@ -9,6 +9,7 @@ end
 
 Syskit.conf.use_deployment 'dynamixel', :on => 'front'
 Syskit.conf.use_deployment 'camera', :on => 'front'
+Syskit.conf.use_deployment 'avalon_gps', :on => 'front'
 Syskit.conf.use_deployment 'left_unicap_camera', :on => 'front'
 Syskit.conf.use_deployment 'right_unicap_camera', :on => 'front'
 Syskit.conf.use_deployment 'buoy_detector', :on => 'front'
