@@ -51,13 +51,53 @@ class AvalonGUI < Qt::Widget
         end
 
         @sonar = Orocos::Async.proxy 'sonar'
-        @orientation_estimator = Orocos::Async.proxy 'depth_orientation_fusion'
+        @orientation_estimator = if @options[:robot] == "dagon" 
+                                    Orocos::Async.proxy 'depth_fusion'
+                                else
+                                    Orocos::Async.proxy 'depth_orientation_fusion'
+                                end
         @imu_sim = Orocos::Async.proxy 'imu'
         @front_camera = Orocos::Async.proxy 'front_camera'
-        @bottom_camera = Orocos::Async.proxy 'bottom_camera'
+        @bottom_camera = if @options[:robot] == "dagon" 
+                            Orocos::Async.proxy 'left_camera'
+                        else
+                            Orocos::Async.proxy 'bottom_camera'
+                        end
+        @pose_estimator = Orocos::Async.proxy 'pose_estimator'
+        @echosounder = if @options[:robot] == "dagon" 
+                            Orocos::Async.proxy 'dvl'
+                        else
+                            Orocos::Async.proxy 'echosounder'
+                        end 
+        @supervision = Orocos::Async.proxy 'supervision'
 
         @orientation_estimator.port("pose_samples").once_on_reachable do
             Vizkit.display @orientation_estimator.port("pose_samples"), :widget => @widget.orientationview
+        end
+
+        @pose_estimator.port("pose_samples").once_on_reachable do
+            # show x,y,z (rbs)
+            @pose_estimator.port("pose_samples").on_data do |data|
+                @widget.position_label_value.text = vertex3d_to_s(data.position)
+            end
+        end
+
+        @echosounder.port("ground_distance").once_on_reachable do
+            # show dist to ground (rbs)
+            @echosounder.port("ground_distance").on_data do |data|
+                @widget.distance_value.text = sprintf("%#.2f",data.position.z).to_s
+            end
+        end
+
+        @supervision.port("current_state").once_on_reachable do
+            # show current state (string)
+            @supervision.port("current_state").on_data do |data|
+                @widget.state_value.text = data
+            end
+        end
+
+        @supervision.port("target_pos").once_on_reachable do
+            # show target pos (?)
         end
 
         @imu_sim.port("pose_samples").once_on_reachable do
@@ -86,6 +126,7 @@ class AvalonGUI < Qt::Widget
         options[:state_viewer_max_rows] = 6
         options[:vlc_front_cam_port] = 5005
         options[:vlc_bottom_cam_port] = 5004
+        options[:robot] = "avalon"
         options
     end
 
@@ -154,6 +195,11 @@ class AvalonGUI < Qt::Widget
             task = @async.proxy name
             @state_viewer.add(task)
         end
+    end
+
+    def vertex3d_to_s(v)
+        s = "(" + sprintf("%#.2f",v.x) + "," + sprintf("%#.2f",v.y) + "," + sprintf("%#.2f",v.z) + ")"
+        s
     end
 
 end
