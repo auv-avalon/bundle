@@ -55,9 +55,10 @@ Robot.depth_fusion_def!
 Robot.low_level_def!
 
 #Robot.actuatorss_sensors_dev!
-#Robot.front_camera_def!
-#Robot.bottom_camera_def!
+Robot.front_camera_dev!
+Robot.bottom_camera_dev!
 Robot.sonar_dev!
+Robot.gps_dev!
 
 #Robot.buoy_detector_def!
 #Robot.pipeline_detector_def!

@@ -19,10 +19,7 @@
   <property name="windowTitle">
    <string>Avalon GUI</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <property name="margin">
-    <number>3</number>
-   </property>
+  <layout class="QGridLayout" name="gridLayout_7">
    <item row="0" column="0">
     <widget class="QSplitter" name="splitter_3">
      <property name="orientation">
@@ -33,11 +30,11 @@
        <enum>Qt::Vertical</enum>
       </property>
       <widget class="QWidget" name="layoutWidget">
-       <layout class="QVBoxLayout" name="verticalLayout_2">
+       <layout class="QGridLayout" name="gridLayout_6">
         <property name="spacing">
          <number>0</number>
         </property>
-        <item>
+        <item row="0" column="0">
          <widget class="QScrollArea" name="scrollarea">
           <property name="minimumSize">
            <size>
@@ -53,77 +50,160 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>503</width>
-             <height>225</height>
+             <width>498</width>
+             <height>223</height>
             </rect>
            </property>
           </widget>
          </widget>
         </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout">
+        <item row="1" column="0">
+         <layout class="QGridLayout" name="gridLayout_5">
           <property name="spacing">
            <number>0</number>
           </property>
-          <item>
-           <widget class="OrientationView" name="orientationview">
-            <property name="minimumSize">
-             <size>
-              <width>350</width>
-              <height>150</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>150</height>
-             </size>
-            </property>
-            <property name="sizeIncrement">
-             <size>
-              <width>0</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="toolTip">
-             <string>OrientationView</string>
-            </property>
-            <property name="whatsThis">
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout">
+          <item row="0" column="0">
+           <layout class="QGridLayout" name="gridLayout_4">
             <property name="spacing">
              <number>0</number>
             </property>
-            <item>
-             <widget class="QRadioButton" name="button_off">
+            <item row="0" column="0">
+             <widget class="QLabel" name="state_label">
               <property name="text">
-               <string>Cameras Off</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
+               <string>State:</string>
               </property>
              </widget>
             </item>
-            <item>
-             <widget class="QRadioButton" name="button_cam_tasks">
-              <property name="autoFillBackground">
-               <bool>false</bool>
+            <item row="0" column="1">
+             <widget class="QLabel" name="state_value">
+              <property name="minimumSize">
+               <size>
+                <width>451</width>
+                <height>0</height>
+               </size>
               </property>
               <property name="text">
-               <string>Camera Tasks</string>
+               <string>..</string>
               </property>
              </widget>
             </item>
-            <item>
-             <widget class="QRadioButton" name="button_vlc_task">
-              <property name="text">
-               <string>Camera VLC Stream</string>
+           </layout>
+          </item>
+          <item row="1" column="0">
+           <layout class="QGridLayout" name="gridLayout_3">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <item row="0" column="0" rowspan="2">
+             <widget class="OrientationView" name="orientationview">
+              <property name="minimumSize">
+               <size>
+                <width>275</width>
+                <height>125</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>150</height>
+               </size>
+              </property>
+              <property name="sizeIncrement">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="toolTip">
+               <string>OrientationView</string>
+              </property>
+              <property name="whatsThis">
+               <string/>
               </property>
              </widget>
+            </item>
+            <item row="0" column="1">
+             <layout class="QGridLayout" name="gridLayout">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <item row="0" column="0">
+               <widget class="QLabel" name="position_label">
+                <property name="text">
+                 <string>Position:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1" colspan="2">
+               <widget class="QLabel" name="position_label_value">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0" colspan="2">
+               <widget class="QLabel" name="distance_label">
+                <property name="text">
+                 <string>Distance to ground:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="QLabel" name="distance_value">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="target_label">
+                <property name="text">
+                 <string>Target Position:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1" colspan="2">
+               <widget class="QLabel" name="target_label_2">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="1" column="1">
+             <layout class="QGridLayout" name="gridLayout_2">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <item row="0" column="0">
+               <widget class="QRadioButton" name="button_cam_tasks">
+                <property name="autoFillBackground">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Camera Tasks</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QRadioButton" name="button_vlc_task">
+                <property name="text">
+                 <string>VLC Stream</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QRadioButton" name="button_off">
+                <property name="text">
+                 <string>Cameras Off</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
            </layout>
           </item>
@@ -149,6 +229,9 @@
      <widget class="QSplitter" name="splitter_2">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
+      </property>
+      <property name="handleWidth">
+       <number>6</number>
       </property>
       <widget class="ImageView" name="imageview_front">
        <property name="minimumSize">

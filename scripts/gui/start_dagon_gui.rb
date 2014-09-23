@@ -4,7 +4,7 @@ require 'rock/bundle'
 require './avalon_gui.rb'
 
 if ARGV.size < 1
-    puts "usage: start_avalon_gui.rb host-address or log-files"
+    puts "usage: start_dagon_gui.rb host-address or log-files"
     #exit(0)
 end
 
@@ -17,7 +17,7 @@ host_address = '127.0.0.1'
 replay = nil
 
 if ARGV.size < 1
-    host_address = '192.168.128.51'
+    host_address = '192.168.128.20'
 else
     if File.directory? ARGV[0] or File.exists? ARGV[0]
         replay = Orocos::Log::Replay.open(ARGV)
@@ -33,7 +33,7 @@ Orocos::Async.name_service << Orocos::Async::CORBA::NameService.new(host_address
 Orocos.run "video_streamer_vlc::Capturer" => "vlc_consumer"  do 
 
     vlc_consumer = Orocos::TaskContext.get "vlc_consumer"
-    options = {:host_address => host_address, :vlc_server => "192.168.128.50", :show_loggers => false, :state_viewer_max_rows => 20, :vlc_front_cam_port => 5005, :vlc_bottom_cam_port => 5004, :robot => "avalon"}
+    options = {:host_address => host_address, :vlc_server => "192.168.128.50", :show_loggers => false, :state_viewer_max_rows => 20, :vlc_front_cam_port => 5005, :vlc_bottom_cam_port => 5004, :robot => "dagon"}
     avalon_gui = AvalonGUI.new options, vlc_consumer
     avalon_gui.show
 
