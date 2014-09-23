@@ -74,7 +74,7 @@ static_transform Eigen::Quaternion.from_angle_axis( -72.09528 / 180.0 * Math::PI
 #    "map_halle" => "world_orientation"
 
 ## world orientation to utm coordinates at the sauc-e area
-static_transform Eigen::Quaternion.Identity,
+static_transform Eigen::Quaternion.from_angle_axis( 90.0 / 180.0 * Math::PI, Eigen::Vector3.UnitZ ),
     Eigen::Vector3.new( 569254.0, 4882870.0, 0.0 ),
     "world_orientation" => "world_utm_sauce"
 
