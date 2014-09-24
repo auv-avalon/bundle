@@ -1,6 +1,6 @@
 
 if Socket.gethostname == "avalon-rear" or Socket.gethostname == "avalon"
-    Syskit.conf.process_server 'front','192.168.128.50', :log_dir => '/mnt/logs/results', :result_dir => '/mnt/logs/results'
+    Syskit.conf.process_server 'front','192.168.128.50', :log_dir => '/mnt/logs/current', :result_dir => '/mnt/logs/results'
 elsif
     Syskit.conf.process_server 'front','localhost'
 end
@@ -9,6 +9,7 @@ end
 
 Syskit.conf.use_deployment 'dynamixel', :on => 'front'
 Syskit.conf.use_deployment 'camera', :on => 'front'
+Syskit.conf.use_deployment 'avalon_gps', :on => 'front'
 Syskit.conf.use_deployment 'left_unicap_camera', :on => 'front'
 Syskit.conf.use_deployment 'right_unicap_camera', :on => 'front'
 Syskit.conf.use_deployment 'buoy_detector', :on => 'front'
@@ -54,10 +55,14 @@ Syskit.conf.use_deployment 'localization'
 #Syskit.conf.use_deployment 'battery_management'
 Syskit.conf.use_deployment 'sonar_feature_estimator'
 #Syskit.conf.use_deployment 'orientation_correction'
+Syskit.conf.use_deployment 'map_to_gps'
 
-#Syskit.warn "!!!!!!!   Logging disabled       !!!!"
-#Syskit.warn "!!!!!!!   Logging disabled       !!!!"
-#Syskit.conf.disable_logging
+LOG_DISABLED = true
+#LOG_DISABLED = false 
+
+if LOG_DISABLED
+    Syskit.conf.disable_logging
+end
 
 Syskit.conf.exclude_from_log '/canbus/Message'
 Syskit.conf.exclude_from_log '/canbus/Statistics' 
@@ -79,9 +84,9 @@ module Avalon
         
 	def reset_heading
             t = Orocos::TaskContext.get('orientation_estimator')
-            t.resetHeading(-1.26) if t.running? #TODO Halle
+            t.resetHeading(0.31) if t.running? #TODO Halle
             t = Orocos::TaskContext.get('base_orientation_estimator')
-            t.resetHeading(-1.26) if t.running? #TODO halle
+            t.resetHeading(0.31) if t.running? #TODO halle
 	end
 	command :reset_heading, "Reset the orientation to zero -here-"
 	

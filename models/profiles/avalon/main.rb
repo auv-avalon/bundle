@@ -4,6 +4,7 @@ require "models/blueprints/auv"
 require "models/blueprints/pose_auv"
 require "models/blueprints/low_level"
 
+using_task_library 'gps'
 using_task_library 'auv_helper'
 using_task_library 'controldev'
 using_task_library 'canbus'
@@ -49,11 +50,19 @@ module Avalon
                     period(0.2)
 
                 device(Dev::Micron, :as => 'sonar').
-                    #with_conf('default','maritime_hall').
-                    #with_conf('default').
                     frame('sonar').
                     prefer_deployed_tasks("sonar").
                     period(0.1)
+
+                device(Dev::Sensors::GPS, :as => 'gps', :using => Gps::GPSDTask).
+                       with_conf('default').
+                       frame('gps_receiver').
+                       period(0.1).
+                       use_frames(
+                                'map' => 'map_sauce',
+                                'gps_utm_zone' => 'world_utm_sauce'
+                       )
+
 
                 device(Dev::Echosounder, :as => 'altimeter').
                     with_conf('default').
@@ -68,11 +77,6 @@ module Avalon
                     frame('fog').
                     period(0.01)
                 
-#                device(Dev::Micron, :as => 'sonar').
-#                    use_deployments("sonar").
-#                    with_conf('default','testbed').
-#                    period(0.01)
-
                 com_bus(Dev::Bus::CAN, :as => 'can0').
                     prefer_deployed_tasks("can").
                     with_conf('default','can0')

@@ -7,11 +7,11 @@ config:
   right_limit: 
     rad: -0.05 #3.141592653589793
   angular_resolution: 
-    rad: 0.02 #0.08726646259971647
+    rad: 0.05 #0.08726646259971647
   max_distance: 60.0
   min_distance: 0.25
   resolution: 0.1
-  invert: true
+  invert: false
   speed_of_sound: 1539.0
   gain: 0.9
   low_resolution: 0
@@ -32,12 +32,12 @@ config:
   gain: 0.5
   max_distance: 30.0
   resolution: 0.1
---- name:sauce
-config:
-  continous: 1
-  gain: 0.8
-  max_distance: 50.0
-  resolution: 0.02
+#--- name:sauce
+#config:
+#  continous: 1
+#  gain: 0.8
+#  max_distance: 50.0
+#  resolution: 0.04
 --- name:studiobad
 config:
   continous: 1
