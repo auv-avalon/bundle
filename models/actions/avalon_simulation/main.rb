@@ -58,11 +58,11 @@ class Main
     end
     describe("fara")
     state_machine "sim_test_wall" do
-        set = state sim_setter_def(:node => "avalon", :posX => -45, :posY => 25, :posZ => -1.5, :rotZ => 0) 
+        set = state sim_setter_def(:node => "avalon", :posX => -3, :posY => 26.5, :posZ => -1.5, :rotZ => 90) 
         wall = state win(:start_state => "wall")
         start set 
         transition(set.success_event, wall)
-        forward set.success_event, success_event
+        forward wall.success_event, success_event
     end
     describe("foo")
     state_machine "sim_test_blackbox" do
