@@ -62,7 +62,7 @@ Robot.gps_dev!
 
 #Robot.buoy_detector_def!
 #Robot.pipeline_detector_def!
-Robot.localization_detector_def!
+#Robot.localization_detector_def!
 
 
 #bl = Robot.base_loop_def!
