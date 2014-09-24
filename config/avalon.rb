@@ -83,9 +83,9 @@ module Avalon
         
 	def reset_heading
             t = Orocos::TaskContext.get('orientation_estimator')
-            t.resetHeading(-1.26) if t.running? #TODO Halle
+            t.resetHeading(0.31) if t.running? #TODO Halle
             t = Orocos::TaskContext.get('base_orientation_estimator')
-            t.resetHeading(-1.26) if t.running? #TODO halle
+            t.resetHeading(0.31) if t.running? #TODO halle
 	end
 	command :reset_heading, "Reset the orientation to zero -here-"
 	
