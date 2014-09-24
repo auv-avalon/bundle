@@ -55,6 +55,7 @@ Syskit.conf.use_deployment 'localization'
 #Syskit.conf.use_deployment 'battery_management'
 Syskit.conf.use_deployment 'sonar_feature_estimator'
 #Syskit.conf.use_deployment 'orientation_correction'
+Syskit.conf.use_deployment 'map_to_gps'
 
 LOG_DISABLED = true
 #LOG_DISABLED = false 
