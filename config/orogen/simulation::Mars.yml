@@ -24,21 +24,42 @@ positions:
 - nodename: 'Cylinder' #The pipeline
   posx: -80
   posy: 50
-  posz: -10
+  posz: -20
   rotx: 0 
   roty: 0
   rotz: 0
 - nodename: 'assambly' #Der pipeline-tannenbaum
-  posx: -45
-  posy: 25
-  posz: -10
+  posx: -21
+  posy: 26
+  posz: -8
   rotx: 0 
   roty: 0
   rotz: 0
 - nodename: 'avalon' #This is a really fancy thing
-  posx: -45.0
+  posx: -20.0
   posy: 2.5
   posz: 0
   rotx: 0 
   roty: 0
-  rotz: 90.0 
+  rotz: 90.0
+- nodename: 'BuoyWall'
+  posx: -2.0
+  posy: 40
+  posz: 0
+  rotx: 0 
+  roty: 0
+  rotz: 90.0
+- nodename: 'BuoyGate1'
+  posx: -10.0
+  posy: 25.0
+  posz: 0
+  rotx: 0 
+  roty: 0
+  rotz: 90.0
+- nodename: 'BuoyGate2'
+  posx: -10.0
+  posy: 27.0
+  posz: 0
+  rotx: 0 
+  roty: 0
+  rotz: 90.0
