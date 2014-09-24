@@ -146,7 +146,7 @@ use_parallel_pid_settings: true
 parallel_pid_settings:
   linear:
   - Ts: 0.01
-    Kp: 10.0
+    Kp: 7.0
     Ki: 2.0
     Kd: 0.0
     N: 0.0
