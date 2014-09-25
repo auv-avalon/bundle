@@ -45,7 +45,7 @@ positions:
 - nodename: 'BuoyWall'
   posx: -2.0
   posy: 40
-  posz: 0
+  posz: -1.5
   rotx: 0 
   roty: 0
   rotz: 90.0

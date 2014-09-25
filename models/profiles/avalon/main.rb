@@ -50,8 +50,6 @@ module Avalon
                     period(0.2)
 
                 device(Dev::Micron, :as => 'sonar').
-                    #with_conf('default','maritime_hall').
-                    #with_conf('default').
                     frame('sonar').
                     prefer_deployed_tasks("sonar").
                     period(0.1)
@@ -79,11 +77,6 @@ module Avalon
                     frame('fog').
                     period(0.01)
                 
-#                device(Dev::Micron, :as => 'sonar').
-#                    use_deployments("sonar").
-#                    with_conf('default','testbed').
-#                    period(0.01)
-
                 com_bus(Dev::Bus::CAN, :as => 'can0').
                     prefer_deployed_tasks("can").
                     with_conf('default','can0')
