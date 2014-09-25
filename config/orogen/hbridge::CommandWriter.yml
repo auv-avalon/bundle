@@ -14,7 +14,7 @@ configuration:
         #maxBoardTempCount: 100
         maxCurrent: 3000
         maxCurrentCount: 220
-        timeout: 2000
+        timeout: 8000
         pwmStepPerMs: 20
         controllerInputEncoder: :INTERNAL
     - actuator:
@@ -27,7 +27,7 @@ configuration:
         #maxBoardTempCount: 0
         maxCurrent: 3000
         maxCurrentCount: 220
-        timeout: 2000
+        timeout: 8000
         pwmStepPerMs: 20
         controllerInputEncoder: :INTERNAL
     - actuator:
@@ -40,7 +40,7 @@ configuration:
         #maxBoardTempCount: 100
         maxCurrent: 3000
         maxCurrentCount: 220
-        timeout: 2000
+        timeout: 8000
         pwmStepPerMs: 20
         controllerInputEncoder: :INTERNAL
     - actuator:
@@ -53,7 +53,7 @@ configuration:
         #maxBoardTempCount: 100
         maxCurrent: 3000
         maxCurrentCount: 220
-        timeout: 2000
+        timeout: 8000
         pwmStepPerMs: 20
         controllerInputEncoder: :INTERNAL
     - actuator:
@@ -66,7 +66,7 @@ configuration:
         #maxBoardTempCount: 100
         maxCurrent: 3000
         maxCurrentCount: 220
-        timeout: 2000
+        timeout: 8000
         pwmStepPerMs: 20
         controllerInputEncoder: :INTERNAL
     - actuator:
@@ -79,7 +79,7 @@ configuration:
         #maxBoardTempCount: 100
         maxCurrent: 3000
         maxCurrentCount: 220
-        timeout: 2000
+        timeout: 8000
         pwmStepPerMs: 20
         controllerInputEncoder: :INTERNAL
 # no documentation available for this property

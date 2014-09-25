@@ -186,7 +186,8 @@ module Avalon
                 "orientation" => depth_fusion_def,
                 "thruster_feedback" => thrusters_def,
                 "motion_model" => motion_model_def,
-                "depth" => depth_reader_dev
+                "depth" => depth_reader_dev,
+		'altimeter' => altimeter_dev
 
 
             # Set local frame names

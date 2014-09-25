@@ -59,8 +59,8 @@ Syskit.conf.use_deployment 'sonar_feature_estimator'
 #Syskit.conf.use_deployment 'orientation_correction'
 Syskit.conf.use_deployment 'map_to_gps'
 
-LOG_DISABLED = true
-#LOG_DISABLED = false 
+#LOG_DISABLED = true
+LOG_DISABLED = false 
 
 if LOG_DISABLED
     Syskit.conf.disable_logging
