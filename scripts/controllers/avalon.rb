@@ -3,31 +3,14 @@
 
 
 using_task_library "auv_helper"
+using_task_library "orientation_estimator"
 
 require 'scripts/controllers/main'
 require 'models/profiles/avalon/main'
 require 'scripts/controllers/auto_starter'
     
 
-#class AuvHelper::DepthAndOrientationFusion
-#    on :start do |event|
-#        @pose_reader = data_reader :pose_samples
-#    end
-#    poll do
-#        if @pose_reader 
-#            if rbs = @pose_reader.read
-#               State.pose.orientation = rbs.orientation
-#               if !State.pose.respond_to?(:position)
-#                   State.pose.position = Eigen::Vector3.new(0, 0, 0)
-#               end
-#               State.pose.position[2] = rbs.position[2]
-#               State.pose.orientation= rbs.orientation
-#            end
-#        end
-#    end
-#end
-
-class PoseEstimation::UWPoseEstimator
+class AuvHelper::DepthAndOrientationFusion
     on :start do |event|
         @pose_reader = data_reader :pose_samples
     end
@@ -44,6 +27,38 @@ class PoseEstimation::UWPoseEstimator
         end
     end
 end
+
+class PoseEstimation::UWPoseEstimator
+    on :start do |event|
+        @pose_reader = data_reader :pose_samples
+    end
+    poll do
+        if @pose_reader 
+            if rbs = @pose_reader.read
+               #State.pose.orientation = rbs.orientation
+               if !State.pose.respond_to?(:position)
+                   State.pose.position = Eigen::Vector3.new(0, 0, 0)
+               end
+            end
+        end
+    end
+end
+
+#class OrientationEstimator::BaseEstimator
+#    on :start do |event|
+#        @pose_reader = data_reader :attitude_b_g
+#    end
+#    poll do
+#        if @pose_reader 
+ #           if rbs = @pose_reader.read
+#                if(State.pos.position)
+#                    State.pose.position[2] = rbs.position[2]
+#                end
+#               State.pose.orientation= rbs.orientation
+#            end
+#        end
+#    end
+#end
 
 Robot.battery_dev!
 Robot.sysmon_dev!
