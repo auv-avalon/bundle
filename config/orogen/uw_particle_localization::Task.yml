@@ -25,8 +25,6 @@ buoy_cam_rotation:
 buoy_covariance: 1.0
 # sets importance ratio for buoy detection updates
 buoy_importance: 0.5
-# minimum time, in s, between two sequential samples arrive on buoy_samples
-buoy_samples_period: 0.1
 # write all debug informations to output ports
 debug: true
 # minimum time, in s, between two sequential samples arrive on echosounder_samples
@@ -421,8 +419,6 @@ buoy_cam_rotation:
 buoy_covariance: 1.0
 # sets importance ratio for buoy detection updates
 buoy_importance: 0.5
-# minimum time, in s, between two sequential samples arrive on buoy_samples
-buoy_samples_period: 0.1
 # write all debug informations to output ports
 debug: true
 # minimum time, in s, between two sequential samples arrive on echosounder_samples
@@ -819,8 +815,6 @@ buoy_cam_rotation:
 buoy_covariance: 1.0
 # sets importance ratio for buoy detection updates
 buoy_importance: 0.5
-# minimum time, in s, between two sequential samples arrive on buoy_samples
-buoy_samples_period: 0.1
 # write all debug informations to output ports
 debug: true
 # minimum time, in s, between two sequential samples arrive on echosounder_samples
@@ -1246,8 +1240,6 @@ buoy_cam_rotation:
 buoy_covariance: 1.0
 # sets importance ratio for buoy detection updates
 buoy_importance: 0.5
-# minimum time, in s, between two sequential samples arrive on buoy_samples
-buoy_samples_period: 0.1
 # write all debug informations to output ports
 debug: true
 # Rotation of the dvl
@@ -1669,8 +1661,6 @@ buoy_cam_rotation:
 buoy_covariance: 1.0
 # sets importance ratio for buoy detection updates
 buoy_importance: 0.5
-# minimum time, in s, between two sequential samples arrive on buoy_samples
-buoy_samples_period: 0.1
 # write all debug informations to output ports
 debug: true
 # minimum time, in s, between two sequential samples arrive on echosounder_samples
