@@ -10,6 +10,7 @@ using_task_library 'controldev'
 using_task_library 'canbus'
 using_task_library 'hbridge'
 using_task_library 'sonar_tritech'
+using_task_library 'sonar_blueview'
 using_task_library 'depth_reader'
 using_task_library 'raw_control_command_converter'
 using_task_library 'avalon_control'
@@ -68,6 +69,11 @@ module Avalon
                     with_conf('default').
                     frame('echosounder').
                     period(0.1)
+                
+                device(Dev::Sensors::BlueView, :as => 'blueview').
+                    with_conf('default').
+                    period(0.1)
+
 
                 device(Dev::Sensors::XsensAHRS, :as => 'imu').
                     frame_transform('imu' => 'imu_nwu').
@@ -107,6 +113,11 @@ module Avalon
                     device(Dev::SystemStatus, :as => 'sysmon').
                         can_id(0x541,0x7FF).
                         period(0.1)
+                    
+                    device(Dev::ASVModem, :as => 'asv_modem', :using => Modemdriver::ModemCanbus).
+                        can_id(0x500,0x7FF).
+                        period(0.1)
+                    
                     
                     device(Dev::Sensors::Modem , :as => 'modem').
                         can_id(0x504,0x7FF).
