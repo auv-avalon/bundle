@@ -191,6 +191,7 @@ module Avalon
 
             define 'bottom_camera', VideoStreamerVlc.stream(bottom_camera_dev, 640, 480, 5004)
             define 'front_camera', VideoStreamerVlc.stream(front_camera_dev, 1200, 600, 5005)
+            define 'blueview', VideoStreamerVlc.stream(blueview_dev, 1200, 600, 5006)
             
             # Load AUV profile
             use_profile ::DFKI::Profiles::PoseEstimation,
@@ -304,7 +305,8 @@ module Avalon
                 "pose_blind" => pose_estimator_blind_def,
                 #"pose" => localization_def,
                 "pose" => pose_estimator_def,
-                "motion_model" => motion_model_def
+                "motion_model" => motion_model_def,
+                'map' => localization_def
 
         end
     end

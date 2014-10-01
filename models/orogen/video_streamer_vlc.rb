@@ -14,13 +14,27 @@ module VideoStreamerVlc
             each_data_service do |srv|
                 config = Types::VideoStreamerVlc::PortConfig.new
                 config.port_name = "frame_#{srv.name}" 
-                config.config.fps = 30
+                config.config.fps = 15
                 config.config.frame_width = srv.model.dynamic_service_options[:width]
                 config.config.frame_height = srv.model.dynamic_service_options[:height]
                 config.config.vcodec = "MJPG"
                 config.config.mux = "mpjpeg"
-                config.config.dst= "192.168.128.50:#{srv.model.dynamic_service_options[:port]}/video.mjpg"
-                #config.config.raw_config = "#transcode{vcodec=mjpg,scale=0.5,vb=100,threads=4}:rtp{mux=ts,dst=239.255.12.42,port=#{srv.model.dynamic_service_options[:port]},ttl=30}"
+                dst = "192.168.128.50:#{srv.model.dynamic_service_options[:port]}/video.mjpg"
+                config.config.dst= dst
+                filename = "/mnt/logs/#{Time.new}-#{srv.name}.mp4"
+#                raw = "#transcode{vcodec=mjpg,scale=0.5,vb=100,threads=4}:rtp{mux=ts,dst=239.255.12.42,port=#{srv.model.dynamic_service_options[:port]},ttl=30}"
+                c_config = nil
+                file = "std{access=file, mux=mp4, dst=#{filename}}"
+                stream = "std{access=http{mime=multipart/x-mixed-replace;boundary=--7b3cc56e5f51db803f790dad720ed50a},mux=mpjpeg,dst=#{dst}}"
+                if(srv.name.include?("front"))
+                    c_config = "#transcode{vcodec=MJPG, vb=500, width = 2400, height = 1200}"
+                elsif (srv.name.include?("blue"))
+                    c_config = "#transcode{vcodec=MJPG, vb=500, width = 256, height = 336}"
+                else
+                    c_config = "#transcode{vcodec=MJPG, vb=500, width = 640, height = 480}"
+                end
+                #config.config.raw_config = "#{c_config}:duplicate{dst=#{file},dst=#{stream}}"
+                config.config.raw_config = "#{c_config}:#{file}"
                 orocos_task.createInput(config)
             end
         end

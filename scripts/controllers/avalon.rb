@@ -74,6 +74,7 @@ Robot.front_camera_dev!
 Robot.bottom_camera_dev!
 Robot.sonar_dev!
 Robot.gps_dev!
+Robot.blueview_dev!
 
 #Robot.buoy_detector_def!
 #Robot.pipeline_detector_def!

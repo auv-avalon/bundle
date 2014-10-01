@@ -15,7 +15,7 @@ log:
     levels:
         #        roby/execution_engine: INFO
         #syskit: DEBUG
-                #roby: DEBUG
+        #roby: DEBUG
         #syskit/models: DEBUG
         #syskit/instance_requirements: DEBUG
         #syskit/network_generation: DEBUG
