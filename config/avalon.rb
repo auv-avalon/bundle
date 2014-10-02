@@ -55,15 +55,16 @@ Syskit.conf.use_deployment 'sonar_structure_servoing'
 #Syskit.conf.use_deployment 'audio_reader'
 Syskit.conf.use_deployment 'sonar_feature_estimator'
 Syskit.conf.use_deployment 'taskmon_back'
-Syskit.conf.use_deployment 'localization'
+Syskit.conf.use_deployment 'localization', :on => 'front'
 #Syskit.conf.use_deployment 'battery_management'
 Syskit.conf.use_deployment 'sonar_feature_estimator'
 #Syskit.conf.use_deployment 'orientation_correction'
 Syskit.conf.use_deployment 'map_to_gps'
+Syskit.conf.use_deployment 'waypoint_navigation'
 
 
-LOG_DISABLED = true
-#LOG_DISABLED = false 
+#LOG_DISABLED = true
+LOG_DISABLED = false 
 
 if LOG_DISABLED
     Syskit.conf.disable_logging
