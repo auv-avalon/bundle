@@ -199,7 +199,8 @@ module Avalon
                 "thruster_feedback" => thrusters_def,
                 "motion_model" => motion_model_def,
                 "depth" => depth_reader_dev,
-		'altimeter' => altimeter_dev
+		'altimeter' => altimeter_dev,
+                'gps' => gps_dev
 
 
             # Set local frame names
@@ -282,6 +283,7 @@ module Avalon
             ##### Choose between
             define "pose", pose_estimator_blind_def
             define "pose_blind", pose_estimator_def
+            define "pose_gps", pose_estimator_gps_def
             #### and
             #define "pose", localization_def
             #define "blind_pose", localization_def
@@ -307,7 +309,9 @@ module Avalon
                 "pose" => pose_estimator_def,
                 "motion_model" => motion_model_def,
                 'map' => localization_def,
-                'gps' => gps_dev
+                'gps' => gps_dev,
+                'pose_gps' => pose_gps_def
+              
                 #'orientation_to_correct' => orientation_def
 
         end
