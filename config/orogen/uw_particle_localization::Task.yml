@@ -78,7 +78,7 @@ laser_samples_period: 0.01
 # The maximum difference between the dead reckoning velocity and the randomized particle velocity
 max_velocity_drift: 0.15
 # minimum depth for collecting perception samples
-minimum_depth: 0.0
+minimum_depth: -0.3
 # minimum number of perceptions before starting resampling
 minimum_perceptions: 3
 # minimum time, in s, between two sequential samples arrive on obstacle_samples
@@ -472,7 +472,7 @@ laser_samples_period: 0.01
 # The maximum difference between the dead reckoning velocity and the randomized particle velocity
 max_velocity_drift: 0.1
 # minimum depth for collecting perception samples
-minimum_depth: 0.0
+minimum_depth: -0.3
 # minimum number of perceptions before starting resampling
 minimum_perceptions: 3
 # minimum time, in s, between two sequential samples arrive on obstacle_samples
@@ -868,7 +868,7 @@ laser_samples_period: 0.01
 # The maximum difference between the dead reckoning velocity and the randomized particle velocity
 max_velocity_drift: 0.1
 # minimum depth for collecting perception samples
-minimum_depth: 0.0
+minimum_depth: -0.3
 # minimum number of perceptions before starting resampling
 minimum_perceptions: 3
 # minimum time, in s, between two sequential samples arrive on obstacle_samples
@@ -1300,7 +1300,7 @@ laser_samples_period: 0.01
 # The maximum difference between the dead reckoning velocity and the randomized particle velocity
 max_velocity_drift: 0.3
 # minimum depth for collecting perception samples
-minimum_depth: 0.0
+minimum_depth: -0.3
 # minimum number of perceptions before starting resampling
 minimum_perceptions: 3
 # minimum time, in s, between two sequential samples arrive on obstacle_samples
@@ -1720,7 +1720,7 @@ metadata:
   input_ports: []
   output_ports: []
 # minimum depth for collecting perception samples
-minimum_depth: 0.0
+minimum_depth: -0.3
 # minimum number of perceptions before starting resampling
 minimum_perceptions: 3
 # minimum time, in s, between two sequential samples arrive on obstacle_samples
