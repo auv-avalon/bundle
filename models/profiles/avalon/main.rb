@@ -306,7 +306,9 @@ module Avalon
                 #"pose" => localization_def,
                 "pose" => pose_estimator_def,
                 "motion_model" => motion_model_def,
-                'map' => localization_def
+                'map' => localization_def,
+                'gps' => gps_dev
+                #'orientation_to_correct' => orientation_def
 
         end
     end
