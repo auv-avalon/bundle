@@ -37,7 +37,7 @@ module VideoStreamerVlc
                     c_config = "transcode{vcodec=MJPG, vb=500, width = 640, height = 480}"
                     file_config = "transcode{vcodec=mp4, vb=500, width = 640, height = 480}"
                 end
-                config.config.raw_config = '#duplicate{dst="#{file_config}:#{file}",dst=#{c_config}:#{stream}'
+                #config.config.raw_config = '#duplicate{dst="#{file_config}:#{file}",dst=#{c_config}:#{stream}'
                 #config.config.raw_config = "#{c_config}:duplicate{dst=#{file},dst=#{stream}}"
                 #config.config.raw_config = "#{c_config}:#{file}"
                 orocos_task.createInput(config)
