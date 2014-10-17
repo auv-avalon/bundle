@@ -26,10 +26,19 @@ module VideoStreamerVlc
                 file_config = "std{access=file, mux=mp4, dst=#{filename}}" ##working
                 stream = "rtp{mux=ts,dst=239.255.12.44,port=7775,ttl=500}" 
                 preconfig = "#transcode{vcodec=mjpg,scale=0.5,vb=100,threads=4}"
-                config.config.raw_config = "#{preconfig}:duplicate{dst=#{file},dst=#{stream}}"
+                if(srv.name.include?("front"))
+                    stream = "rtp{mux=ts,dst=239.255.12.40,ttl=100,port=8080}" 
+                elsif (srv.name.include?("blue"))
+                    stream = "rtp{mux=ts,dst=239.255.12.42,ttl=100,port=8080}" 
+                else
+                    stream = "rtp{mux=ts,dst=239.255.12.41,ttl=100,port=8080}" 
+                end
 
-#                file = "std{access=file, mux=mp4, dst=#{filename}}"
-#                stream = "std{access=http{mime=multipart/x-mixed-replace;boundary=--7b3cc56e5f51db803f790dad720ed50a},mux=mpjpeg,dst=#{dst}}"
+                file = "std{access=file, mux=mp4, dst=#{filename}}"
+                #stream = "std{access=http{mime=multipart/x-mixed-replace;boundary=--7b3cc56e5f51db803f790dad720ed50a},mux=mpjpeg,dst=#{dst}}"
+
+
+                config.config.raw_config = "#{preconfig}:duplicate{dst=#{file},dst=#{stream}}"
 #                if(srv.name.include?("front"))
 #                    c_config = "transcode{vcodec=MJPG, vb=500, width = 2400, height = 1200}"
 #                    file_config = "transcode{vcodec=mp4, vb=500, width = 2400, height = 1200}"
