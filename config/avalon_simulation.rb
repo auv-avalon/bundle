@@ -17,3 +17,9 @@ Syskit.conf.disable_logging
 Syskit.conf.disable_conf_logging
 
 
+#LOG_DISABLED = true
+LOG_DISABLED = false 
+
+if LOG_DISABLED
+    Syskit.conf.disable_logging
+end
