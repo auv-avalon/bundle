@@ -31,8 +31,9 @@ module Avalon
     module Profiles
         profile "Avalon" do
             # load static transforms
+            file = Bundles.find_file('config', 'transforms_common.rb')
             transformer do
-                load 'config', 'transforms_common.rb'
+                load file 
             end
 
             tag 'final_orientation', ::Base::OrientationSrv
