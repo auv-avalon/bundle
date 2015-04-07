@@ -4,7 +4,7 @@ require 'scripts/controllers/auto_starter'
 require 'roby/interface'
 require 'roby/robot'
 
-class Simulation::MarsIMU
+class Mars::IMU
     on :start do |event|
         @pose_reader = data_reader 'pose_samples'
     end

@@ -4,7 +4,7 @@ require "models/blueprints/auv"
 require "models/blueprints/pose_auv"
 
 using_task_library 'controldev'
-using_task_library 'simulation'
+using_task_library 'mars'
 using_task_library 'avalon_simulation'
 
 #class Dev::Simulation::Mars::SimulatedDevice
@@ -43,9 +43,9 @@ module Avalon
                 device(Dev::Controldev::Joystick, :as => 'joystick', :using => Controldev::JoystickTask)
             end
 
-            define "sim", ::Simulation::Mars
+            define "sim", ::Mars::Task
             
-            define "sim_setter", ::Simulation::MarsNodePositionSetter
+            define "sim_setter", ::Mars::NodePositionSetter
             
             define "fix_map", ::Localization::FixMapHack
             
