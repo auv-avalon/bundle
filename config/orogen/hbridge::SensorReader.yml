@@ -108,9 +108,3 @@ configuration:
       type: :ENCODER_NONE
 # This parameter defines if the reader task should act as bus master.WARNING, only set this to !0 if there is no mainboard present in your system
 isBusMaster: 0 
-# no documentation available for this property
-#metadata:
-#  metadata: []
-#  properties: []
-#  input_ports: []
-#  output_ports: []

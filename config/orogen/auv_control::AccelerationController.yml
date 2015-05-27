@@ -127,12 +127,6 @@ matrix:
   - 0.0
   - 0.0
   - 0.6
-# no documentation available for this property
-metadata:
-  metadata: []
-  properties: []
-  input_ports: []
-  output_ports: []
 # This property defines the timeout for the cascade input port in seconds. 0
 # means that the timeout would be ignored.
 timeout_cascade: 1.0
@@ -271,12 +265,6 @@ matrix:
   - 0.0
   - 0.0
   - 1.0
-# no documentation available for this property
-metadata:
-  metadata: []
-  properties: []
-  input_ports: []
-  output_ports: []
 # This property defines the timeout for the cascade input port in seconds. 0
 # means that the timeout would be ignored.
 timeout_cascade: 1.0

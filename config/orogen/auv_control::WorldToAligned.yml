@@ -15,12 +15,6 @@ expected_inputs:
 keep_position_on_exception: true
 
 nan_on_keep_position: true
-# no documentation available for this property
-metadata:
-  metadata: []
-  properties: []
-  input_ports: []
-  output_ports: []
 # The domain of what we are converting (true:position or false:velocity or
 # efforts)
 position_control: true

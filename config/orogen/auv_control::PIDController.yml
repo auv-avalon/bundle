@@ -15,12 +15,6 @@ expected_inputs:
 keep_position_on_exception: true
 
 nan_on_keep_position: true    
-# no documentation available for this property
-metadata:
-  metadata: []
-  properties: []
-  input_ports: []
-  output_ports: []
 # This property defines the timeout for the cascade input port in seconds. 0
 # means that the timeout would be ignored.
 timeout_cascade: 1.0
@@ -46,12 +40,6 @@ expected_inputs:
 keep_position_on_exception: true
 
 nan_on_keep_position: true    
-# no documentation available for this property
-metadata:
-  metadata: []
-  properties: []
-  input_ports: []
-  output_ports: []
 # This property defines the timeout for the cascade input port in seconds. 0
 # means that the timeout would be ignored.
 timeout_cascade: 1.0

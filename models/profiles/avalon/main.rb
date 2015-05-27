@@ -157,7 +157,53 @@ module Avalon
             #define "orientation", old_orientation_estimator_def
             define "orientation", ikf_orientation_estimator_def
             #define "orientation",initial_orientation_estimator_def 
+
+            #Test for Constrained based approach, fixind definition to limit searchspace
+            use AuvControl::DepthFusionCmp, AuvControl::DepthFusionCmp.use(
+                'z' => depth_reader_dev,
+                'ori' => orientation_def
+            )
+
+            use LowLevel::Cmp, LowLevel::Cmp.use(
+                'z' => AuvControl::DepthFusionCmp 
+            )
+           
+            use Localization::DeadReckoning, Localization::DeadReckoning.use(
+                'hb' => Hbridge::SensorReader
+            )
+
+            use Localization::ParticleDetector, Localization::ParticleDetector.use(
+                'hb' => Hbridge::SensorReader,
+                'ori' => AuvControl::DepthFusionCmp
+            )
+
+            use PoseAuv::PoseEstimatorCmp, PoseAuv::PoseEstimatorCmp.use(
+                'ori' => AuvControl::DepthFusionCmp
+            )
             
+            use Pipeline::Detector, Pipeline::Detector.use(
+                'camera' => front_camera_dev 
+            )
+            
+            use Pipeline::Follower, Pipeline::Follower.use(
+                'controller' => Pipeline::Detector,
+                'controller_local' => Pipeline::Detector,
+
+            )
+            
+            use PoseAuv::PoseEstimatorBlindCmp, PoseAuv::PoseEstimatorBlindCmp.use(
+                'depth' => AuvControl::DepthFusionCmp,
+                'ori' => AuvControl::DepthFusionCmp
+            )
+            
+            use Wall::Follower, Wall::Follower.use(
+                'controller' => Wall::Detector,
+                'controller_local' => Wall::Detector,
+            )
+            
+            use Wall::Detector, Wall::Detector.use(
+                'orientation_with_z' => AuvControl::DepthFusionCmp
+            )
 
             ### This is optional an can be removed soon:
             define 'depth_fusion',   AuvControl::DepthFusionCmp.use(

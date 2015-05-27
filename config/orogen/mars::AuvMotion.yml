@@ -35,12 +35,6 @@ maximum_thruster_force:
 - 10.0
 - 10.0
 # no documentation available for this property
-metadata:
-  metadata: []
-  properties: []
-  input_ports: []
-  output_ports: []
-# no documentation available for this property
 node_name: avalon
 # Square damping coefficients, in 6 degrees of freedom
 square_damp:

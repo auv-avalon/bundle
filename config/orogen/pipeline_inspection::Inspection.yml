@@ -52,12 +52,6 @@ matcher_value_tolerance: -0.001
 matcher_variance_threshold: 1.0
 # Maximum pipe angle, at which the pipe_detector-status is used
 max_pipe_angle: 1.5
-# no documentation available for this property
-metadata:
-  metadata: []
-  properties: []
-  input_ports: []
-  output_ports: []
 # Minimum pipe confidence, at which the pipe_detector-status is used
 min_pipe_confidence: 0.2
 # Minimizer algorithm for pattern matching, refer to enu nlopt::algorithm

@@ -13,12 +13,6 @@ expected_inputs:
 # If true, the component will send a zero command before getting into an
 # exception state. Otherwise, it will not do anything
 keep_position_on_exception: true
-# no documentation available for this property
-metadata:
-  metadata: []
-  properties: []
-  input_ports: []
-  output_ports: []
 # The optimal orientation of the vehicle, if the target position
 # is on an orientation of 0.0
 optimal_heading: 0.0

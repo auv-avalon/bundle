@@ -1,16 +1,10 @@
 --- name:default
 # the global name that should be used for the internal gps_utm_zone frame
-gps_utm_zone_frame: gps_utm_zone
+#gps_utm_zone_frame: gps_utm_zone
 # hostname where the gps daemon is running
 hostname: localhost
 # the global name that should be used for the internal map frame
-map_frame: map
-# no documentation available for this property
-metadata:
-  metadata: []
-  properties: []
-  input_ports: []
-  output_ports: []
+#map_frame: map
 # Origin in UTM coordinates, that is used for position readings.
 origin:
   data:
@@ -18,13 +12,13 @@ origin:
   - 0.0
   - 0.0
 # list of static transformations
-static_transformations: []
+#static_transformations: []
 # Maximum time in seconds the transformer will wait until it starts dropping samples
-transformer_max_latency: 0.5
+#transformer_max_latency: 0.5
 # Minimum system time in seconds between two updates of the status ports
-transformer_status_period: 1.0
+#transformer_status_period: 1.0
 # use transformation provided by the transformer instead of the origin property.
-use_transformer: true
+#use_transformer: true
 # UTM north for conversion of WGS84 to UTM
 utm_north: true
 # UTM zone for conversion of WGS84 to UTM
